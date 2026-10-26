@@ -1,0 +1,146 @@
+import {defineArrayMember, defineField, defineType} from 'sanity'
+import {HomeIcon} from '@sanity/icons/Home'
+import {CHURCH_KINDS} from '../../lib/constants'
+
+export const church = defineType({
+  name: 'church',
+  title: 'Cerkev',
+  type: 'document',
+  icon: HomeIcon,
+  groups: [
+    {name: 'basic', title: 'Osnovno', default: true},
+    {name: 'content', title: 'Opis in zgodovina'},
+    {name: 'visit', title: 'Obisk in dostop'},
+    {name: 'media', title: 'Slike'},
+    {name: 'seo', title: 'Iskalniki'},
+  ],
+  fields: [
+    defineField({
+      name: 'name',
+      title: 'Ime cerkve',
+      type: 'string',
+      group: 'basic',
+      description: 'Npr. »Župnijska cerkev sv. Križa«',
+      validation: (rule) => rule.required(),
+    }),
+    defineField({
+      name: 'shortName',
+      title: 'Kratko ime',
+      type: 'string',
+      group: 'basic',
+      description: 'Uporabi se v urnikih in na majhnih zaslonih, npr. »Sv. Križ«.',
+      validation: (rule) => rule.required().max(30),
+    }),
+    defineField({
+      name: 'slug',
+      title: 'Spletni naslov',
+      type: 'slug',
+      group: 'basic',
+      options: {source: 'name', maxLength: 80},
+      validation: (rule) => rule.required(),
+    }),
+    defineField({
+      name: 'kind',
+      title: 'Vrsta',
+      type: 'string',
+      group: 'basic',
+      options: {list: [...CHURCH_KINDS], layout: 'radio'},
+      initialValue: 'filial',
+      validation: (rule) => rule.required(),
+    }),
+    defineField({
+      name: 'dedication',
+      title: 'Posvečena',
+      type: 'string',
+      group: 'basic',
+      description: 'Zavetnik ali skrivnost, npr. »sv. Križ« ali »Marijino vnebovzetje«.',
+    }),
+    defineField({
+      name: 'patronFeast',
+      title: 'Žegnanje / farni praznik',
+      type: 'string',
+      group: 'basic',
+      description: 'Npr. »14. september« ali »nedelja po 15. avgustu«.',
+    }),
+    defineField({
+      name: 'order',
+      title: 'Vrstni red',
+      type: 'number',
+      group: 'basic',
+      description: 'Manjša številka je prikazana prej. Župnijska cerkev naj bo 1.',
+      initialValue: 10,
+    }),
+    defineField({
+      name: 'summary',
+      title: 'Kratek opis',
+      type: 'text',
+      rows: 3,
+      group: 'content',
+      description: 'Dve ali tri povedi za sezname in domačo stran.',
+      validation: (rule) => rule.max(300),
+    }),
+    defineField({
+      name: 'description',
+      title: 'Opis',
+      type: 'blockContent',
+      group: 'content',
+    }),
+    defineField({
+      name: 'history',
+      title: 'Zgodovina',
+      type: 'blockContent',
+      group: 'content',
+    }),
+    defineField({name: 'address', title: 'Naslov', type: 'address', group: 'visit'}),
+    defineField({
+      name: 'location',
+      title: 'Lokacija na zemljevidu',
+      type: 'geopoint',
+      group: 'visit',
+      description: 'Uporabi se za povezavo do zemljevida in navigacije.',
+    }),
+    defineField({
+      name: 'accessibility',
+      title: 'Dostopnost',
+      type: 'simpleBlockContent',
+      group: 'visit',
+      description: 'Dostop za invalidske vozičke, stopnice, indukcijska zanka …',
+    }),
+    defineField({
+      name: 'parking',
+      title: 'Parkiranje',
+      type: 'simpleBlockContent',
+      group: 'visit',
+    }),
+    defineField({
+      name: 'visitNotes',
+      title: 'Opombe za obiskovalce',
+      type: 'simpleBlockContent',
+      group: 'visit',
+      description: 'Npr. kdaj je cerkev odprta, kje dobiti ključ.',
+    }),
+    defineField({
+      name: 'image',
+      title: 'Glavna slika',
+      type: 'imageWithAlt',
+      group: 'media',
+    }),
+    defineField({
+      name: 'gallery',
+      title: 'Galerija',
+      type: 'array',
+      group: 'media',
+      of: [defineArrayMember({type: 'imageWithAlt'})],
+      options: {layout: 'grid'},
+    }),
+    defineField({name: 'seo', title: 'Iskalniki in deljenje', type: 'seo', group: 'seo'}),
+  ],
+  orderings: [{title: 'Vrstni red', name: 'order', by: [{field: 'order', direction: 'asc'}]}],
+  preview: {
+    select: {title: 'name', subtitle: 'dedication', media: 'image', kind: 'kind'},
+    prepare({title, subtitle, media, kind}) {
+      const kindLabel = CHURCH_KINDS.find((k) => k.value === kind)?.title
+      return {title, subtitle: [kindLabel, subtitle].filter(Boolean).join(' · '), media}
+    },
+  },
+})

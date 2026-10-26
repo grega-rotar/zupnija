@@ -1,0 +1,291 @@
+@import "tailwindcss";
+
+/*
+ * Design tokens — Župnija Pirniče
+ * ─────────────────────────────────────────────────────────────────────
+ * Paper, stone and moss: lime-washed church walls, the fields under
+ * Šmarna gora, a little gilding. One serif for what is said, one sans
+ * for what is used. Colour is quiet so photography and type carry the page.
+ */
+@theme {
+  --font-serif: var(--font-newsreader), "Iowan Old Style", "Palatino Linotype", Georgia, serif;
+  --font-sans: var(--font-source-sans), "Segoe UI", system-ui, sans-serif;
+
+  --color-paper: #fbfaf7;
+  --color-paper-2: #f3f0e9;
+  --color-paper-3: #e9e5db;
+  --color-stone: #d9d3c5;
+  --color-stone-2: #b9b1a0;
+  --color-ink: #1e2622;
+  --color-ink-2: #4a544e;
+  --color-ink-3: #6f7873;
+  --color-moss: #3d5a47;
+  --color-moss-deep: #2c4234;
+  --color-moss-soft: #e4ebe4;
+  --color-gold: #a8843a;
+  --color-gold-soft: #f3ead6;
+  --color-alert: #8d3a2e;
+  --color-alert-soft: #f6e6e1;
+
+  /* Liturgical accents — used only as thin markers, never as page colour. */
+  --color-season-advent: #5b4a8a;
+  --color-season-christmas: #b08d3a;
+  --color-season-lent: #6b4c8a;
+  --color-season-easter: #c8a94c;
+  --color-season-pentecost: #a63d2f;
+  --color-season-marian: #3f5f8a;
+  --color-season-none: #3d5a47;
+
+  --radius-sm: 0.25rem;
+  --radius-md: 0.5rem;
+  --radius-lg: 0.75rem;
+
+  --shadow-soft: 0 1px 2px rgb(30 38 34 / 0.05), 0 8px 24px -12px rgb(30 38 34 / 0.18);
+
+  --container-content: 72rem;
+  --container-prose: 42rem;
+
+  --ease-out-soft: cubic-bezier(0.22, 1, 0.36, 1);
+
+  --text-display: clamp(2.5rem, 1.5rem + 4vw, 4.75rem);
+  --text-display--line-height: 1;
+  --text-display--letter-spacing: -0.025em;
+  --text-h1: clamp(2.125rem, 1.4rem + 2.8vw, 3.5rem);
+  --text-h1--line-height: 1.04;
+  --text-h1--letter-spacing: -0.02em;
+  --text-h2: clamp(1.75rem, 1.3rem + 1.7vw, 2.5rem);
+  --text-h2--line-height: 1.1;
+  --text-h2--letter-spacing: -0.015em;
+  --text-h3: clamp(1.3125rem, 1.15rem + 0.6vw, 1.625rem);
+  --text-h3--line-height: 1.22;
+  --text-h3--letter-spacing: -0.005em;
+  --text-lede: clamp(1.125rem, 1.05rem + 0.4vw, 1.375rem);
+  --text-lede--line-height: 1.5;
+  --text-body: 1.0625rem;
+  --text-body--line-height: 1.65;
+  --text-small: 0.9375rem;
+  --text-small--line-height: 1.5;
+  --text-meta: 0.8125rem;
+  --text-meta--line-height: 1.4;
+}
+
+@layer base {
+  html {
+    color-scheme: light;
+    -webkit-text-size-adjust: 100%;
+    scroll-behavior: smooth;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    html {
+      scroll-behavior: auto;
+    }
+    *,
+    *::before,
+    *::after {
+      animation-duration: 0.01ms !important;
+      animation-iteration-count: 1 !important;
+      transition-duration: 0.01ms !important;
+    }
+  }
+
+  body {
+    background-color: var(--color-paper);
+    color: var(--color-ink);
+    font-family: var(--font-sans);
+    font-size: var(--text-body);
+    line-height: var(--text-body--line-height);
+    font-feature-settings: "kern", "liga", "calt";
+    text-rendering: optimizeLegibility;
+    -webkit-font-smoothing: antialiased;
+    overflow-x: clip;
+  }
+
+  /* Long Slovenian words on narrow phones must never overflow. */
+  h1,
+  h2,
+  h3,
+  h4,
+  p,
+  li,
+  dt,
+  dd,
+  a {
+    overflow-wrap: break-word;
+  }
+  time {
+    white-space: nowrap;
+  }
+  h1 {
+    hyphens: auto;
+  }
+
+  h1,
+  h2,
+  h3,
+  h4 {
+    font-family: var(--font-serif);
+    font-weight: 400;
+    font-variation-settings: "opsz" 72;
+    color: var(--color-ink);
+    text-wrap: balance;
+  }
+
+  /* Ledes and quiet captions are set in the serif italic — the editorial voice. */
+  .lede {
+    font-family: var(--font-serif);
+    font-style: italic;
+    font-weight: 400;
+    font-variation-settings: "opsz" 24;
+    font-size: var(--text-lede);
+    line-height: 1.45;
+  }
+
+
+  p {
+    text-wrap: pretty;
+  }
+
+  ::selection {
+    background: var(--color-moss-soft);
+    color: var(--color-ink);
+  }
+
+  :focus-visible {
+    outline: 3px solid var(--color-gold);
+    outline-offset: 3px;
+    border-radius: var(--radius-sm);
+  }
+
+  a {
+    text-underline-offset: 0.18em;
+    text-decoration-thickness: 1px;
+    transition: color 150ms, text-decoration-color 150ms, border-color 150ms, background-color 150ms;
+  }
+
+  button,
+  [role="button"] {
+    cursor: pointer;
+  }
+
+  img,
+  video {
+    max-width: 100%;
+    height: auto;
+    display: block;
+  }
+
+  /* Numbers in schedules line up. */
+  time,
+  .tnum {
+    font-variant-numeric: tabular-nums;
+  }
+}
+
+@layer components {
+  /* Editorial rich text (Portable Text). */
+  .prose {
+    font-size: var(--text-body);
+    line-height: 1.65;
+    color: var(--color-ink);
+    max-width: var(--container-prose);
+  }
+  .prose > * + * {
+    margin-top: 1.1em;
+  }
+  .prose h2 {
+    font-size: var(--text-h2);
+    line-height: var(--text-h2--line-height);
+    margin-top: 2em;
+    margin-bottom: 0.5em;
+  }
+  .prose h3 {
+    font-size: var(--text-h3);
+    line-height: var(--text-h3--line-height);
+    margin-top: 1.6em;
+    margin-bottom: 0.4em;
+  }
+  .prose h2 + h3,
+  .prose h2 + p,
+  .prose h3 + p {
+    margin-top: 0.5em;
+  }
+  .prose a {
+    color: var(--color-moss);
+    text-decoration: underline;
+    text-decoration-color: color-mix(in srgb, var(--color-moss) 45%, transparent);
+    transition: text-decoration-color 150ms;
+  }
+  .prose a:hover {
+    text-decoration-color: var(--color-moss);
+  }
+  .prose ul,
+  .prose ol {
+    padding-left: 1.4em;
+  }
+  .prose ul {
+    list-style: disc;
+  }
+  .prose ol {
+    list-style: decimal;
+  }
+  .prose li + li {
+    margin-top: 0.35em;
+  }
+  .prose li::marker {
+    color: var(--color-ink-3);
+  }
+  .prose blockquote {
+    font-family: var(--font-serif);
+    font-style: italic;
+    font-size: 1.25em;
+    line-height: 1.45;
+    color: var(--color-ink-2);
+    padding-left: 1.25rem;
+    border-left: 2px solid var(--color-gold);
+    margin-block: 1.6em;
+  }
+  .prose strong {
+    font-weight: 600;
+  }
+  .prose figure {
+    margin-block: 1.8em;
+  }
+  .prose figcaption {
+    font-size: var(--text-meta);
+    color: var(--color-ink-3);
+    margin-top: 0.6rem;
+  }
+  .prose-lg {
+    font-size: var(--text-lede);
+    line-height: 1.55;
+  }
+  .prose-sm {
+    font-size: var(--text-small);
+    line-height: 1.55;
+  }
+}
+
+/* Single, quiet entrance for the hero. Nothing else animates on load.
+   Transform only: content stays readable even if the animation never runs.
+   (Kept outside @layer: Tailwind drops keyframes it cannot see used.) */
+@keyframes rise {
+  from {
+    transform: translateY(12px);
+  }
+  to {
+    transform: translateY(0);
+  }
+}
+.animate-rise {
+  animation: rise 700ms cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+.animate-rise-late {
+  animation: rise 700ms cubic-bezier(0.22, 1, 0.36, 1) 120ms both;
+}
+@media (prefers-reduced-motion: reduce) {
+  .animate-rise,
+  .animate-rise-late {
+    animation: none;
+  }
+}

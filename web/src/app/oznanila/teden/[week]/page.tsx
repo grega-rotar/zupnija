@@ -1,0 +1,51 @@
+import type { Metadata } from "next";
+import { notFound } from "next/navigation";
+import { getBulletinByWeek, getEventsInRange, getMassDays, getSettings } from "@/sanity/data";
+import { buildMetadata } from "@/lib/seo";
+import { routes } from "@/lib/routes";
+import { formatDateSpan, isIsoDate } from "@/lib/dates";
+import { BulletinView } from "@/components/announcements/BulletinView";
+import { Breadcrumbs, Container, Section } from "@/components/ui/primitives";
+
+type Props = { params: Promise<{ week: string }> };
+
+export async function generateMetadata({ params }: Props): Promise<Metadata> {
+  const { week } = await params;
+  if (!isIsoDate(week)) return {};
+  const [settings, bulletin] = await Promise.all([getSettings(), getBulletinByWeek(week, false)]);
+  if (!bulletin) return {};
+  return buildMetadata({
+    settings,
+    title: `Tedenska oznanila ${formatDateSpan(bulletin.weekStart, bulletin.weekEnd)}`,
+    path: routes.bulletin(week),
+  });
+}
+
+export default async function BulletinPage({ params }: Props) {
+  const { week } = await params;
+  if (!isIsoDate(week)) notFound();
+  const bulletin = await getBulletinByWeek(week);
+  if (!bulletin) notFound();
+  const [massDays, autoEvents] = await Promise.all([
+    getMassDays(bulletin.weekStart, bulletin.weekEnd),
+    getEventsInRange(bulletin.weekStart, bulletin.weekEnd),
+  ]);
+  const pickedIds = new Set((bulletin.events ?? []).map((e) => e._id));
+  const events = [...(bulletin.events ?? []), ...autoEvents.filter((e) => !pickedIds.has(e._id))];
+
+  return (
+    <Section tight>
+      <Container>
+        <Breadcrumbs
+          className="mb-8 text-ink-3"
+          items={[
+            { label: "Oznanila", href: routes.announcements },
+            { label: "Tedenska oznanila", href: routes.bulletins },
+            { label: formatDateSpan(bulletin.weekStart, bulletin.weekEnd) },
+          ]}
+        />
+        <BulletinView bulletin={bulletin} massDays={massDays} events={events} headingLevel="h1" />
+      </Container>
+    </Section>
+  );
+}
