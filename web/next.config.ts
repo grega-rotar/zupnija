@@ -2,6 +2,8 @@ import path from "node:path";
 import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
+  // Runs as a long-lived Node server in Docker on t4a (infra/compose.yml).
+  output: "standalone",
   // The monorepo root is one level up; keeps Turbopack from scanning $HOME.
   turbopack: { root: path.join(__dirname, "..") },
   images: {

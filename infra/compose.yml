@@ -1,0 +1,19 @@
+# Lives in /srv/zupnija on t4a; the deploy job copies it there (docs/TECHNICAL.md, "Deployment").
+# The server-wide Traefik in /srv/edge (etiam-si/jakamarinko, infra/edge) routes $DOMAIN here.
+name: zupnija
+
+services:
+  web:
+    image: ghcr.io/grega-rotar/zupnija-web:${IMAGE_TAG:-latest}
+    restart: unless-stopped
+    env_file: .env
+    networks:
+      - edge
+    labels:
+      - traefik.enable=true
+      - traefik.http.routers.zupnija.rule=Host(`${DOMAIN}`) || Host(`www.${DOMAIN}`)
+      - traefik.http.services.zupnija.loadbalancer.server.port=3000
+
+networks:
+  edge:
+    external: true

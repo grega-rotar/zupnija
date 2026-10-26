@@ -5,7 +5,7 @@ Monorepo:
 | Folder | What | Run |
 |---|---|---|
 | `studio/` | Standalone Sanity Studio (content editing) | `cd studio && npm run dev` → http://localhost:3333 |
-| `web/` | Next.js public website | `cd web && npm run dev` → http://localhost:3000 |
+| `web/` | Next.js public website (Docker on t4a, see `infra/`) | `cd web && npm run dev` → http://localhost:3000 |
 | `docs/` | Documentation | — |
 
 - Editors (Slovenian): [`docs/NAVODILA-ZA-UREJANJE.md`](docs/NAVODILA-ZA-UREJANJE.md)
