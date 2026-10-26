@@ -12,7 +12,7 @@ import {
 } from "@/sanity/data";
 import { buildMetadata } from "@/lib/seo";
 import { routes } from "@/lib/routes";
-import { dateOf, formatDate, formatDateSpan, formatDayNumber, formatMonthShort, formatTime, timeOf } from "@/lib/dates";
+import { dateOf, formatDate, formatDayNumber, formatMonthShort, formatTime, formatWeekSpan, timeOf } from "@/lib/dates";
 import { clean } from "@/lib/clean";
 import { ANNOUNCEMENT_CATEGORY_LABEL } from "@/lib/labels";
 import { hrefFor, isExternalHref } from "@/lib/links";
@@ -165,50 +165,49 @@ export default async function AnnouncementsPage({ searchParams }: Props) {
 
             {/* Sidebar */}
             <aside className="space-y-6 lg:pt-14">
-              <div className="rounded-md border border-stone bg-paper-2 p-6 sm:p-7">
-                <div className="flex items-start gap-5">
-                  <Icon name="document" size={40} className="shrink-0 text-ink" />
-                  <div>
-                    <h2 className="text-h3">Tedenska oznanila{bulletinPdf ? " v PDF" : ""}</h2>
-                    <p className="mt-1.5 text-body text-ink-2">
-                      {bulletin ? (
-                        <>
-                          Oznanila za teden <span className="whitespace-nowrap">{formatDateSpan(bulletin.weekStart, bulletin.weekEnd)}</span>.
-                        </>
-                      ) : (
-                        "Tedenska oznanila se objavijo ob nedeljah."
-                      )}
-                    </p>
-                  </div>
-                </div>
+              <section aria-labelledby="tedenska-pdf" className="rounded-md border border-stone bg-paper-2 p-6 sm:p-7">
+                <h2 id="tedenska-pdf" className="flex items-center gap-2 font-sans text-[0.75rem] font-semibold uppercase tracking-[0.14em] text-ink-3">
+                  <Icon name="document" size={16} className="shrink-0" />
+                  Tedenska oznanila
+                </h2>
+                {bulletin ? (
+                  <>
+                    <p className="mt-4 whitespace-nowrap font-serif text-h2 text-ink lg:text-[1.75rem] xl:text-h2">{formatWeekSpan(bulletin.weekStart, bulletin.weekEnd)}</p>
+                    <p className="mt-1 text-small text-ink-3">{bulletin.weekStart.slice(0, 4)}</p>
+                  </>
+                ) : (
+                  <p className="mt-4 text-body text-ink-2">Tedenska oznanila se objavijo ob nedeljah.</p>
+                )}
                 {bulletinPdf?.file?.asset?.url ? (
                   <a
                     href={`${bulletinPdf.file.asset.url}?dl=`}
-                    className="mt-5 inline-flex min-h-12 w-full items-center justify-center gap-2.5 rounded-sm bg-moss px-5 py-2.5 text-center font-medium text-paper hover:bg-moss-deep"
+                    className="mt-6 flex min-h-12 w-full items-center gap-3 rounded-sm bg-moss px-4 font-medium text-paper hover:bg-moss-deep"
                   >
                     <Icon name="download" size={18} className="shrink-0" />
-                    <span>
-                      Prenesi oznanila
-                      {bulletinPdf.file.asset.size ? <span className="whitespace-nowrap text-paper/70"> (PDF, {formatFileSize(bulletinPdf.file.asset.size)})</span> : null}
-                    </span>
+                    <span className="flex-1 whitespace-nowrap">Prenesi PDF</span>
+                    {bulletinPdf.file.asset.size ? <span className="tnum whitespace-nowrap text-small text-paper/70">{formatFileSize(bulletinPdf.file.asset.size)}</span> : null}
                   </a>
-                ) : bulletin ? (
-                  <a href="#tedenska" className="mt-5 inline-flex min-h-12 w-full items-center justify-center gap-2.5 rounded-sm bg-moss px-5 font-medium text-paper hover:bg-moss-deep">
-                    Preberi tedenska oznanila
+                ) : null}
+                {bulletin ? (
+                  <a href="#tedenska" className="mt-3 inline-flex min-h-10 items-center gap-2 text-small text-ink-2 underline decoration-stone-2 underline-offset-4 hover:text-ink">
+                    Preberi na tej strani
                   </a>
                 ) : null}
                 {olderBulletins.length ? (
-                  <ul className="mt-4 flex flex-wrap gap-x-4 gap-y-1 text-small">
-                    {olderBulletins.map((b) => (
-                      <li key={b._id}>
-                        <Link href={routes.bulletin(b.weekStart)} className="text-ink-2 underline decoration-stone-2 underline-offset-4 hover:text-ink">
-                          {formatDateSpan(b.weekStart, b.weekEnd)}
-                        </Link>
-                      </li>
-                    ))}
-                  </ul>
+                  <div className="mt-5 border-t border-stone pt-4">
+                    <h3 className="text-meta text-ink-3">Prejšnji tedni</h3>
+                    <ul className="mt-2 flex flex-wrap gap-x-4 gap-y-1 text-small">
+                      {olderBulletins.map((b) => (
+                        <li key={b._id}>
+                          <Link href={routes.bulletin(b.weekStart)} className="whitespace-nowrap text-ink-2 underline decoration-stone-2 underline-offset-4 hover:text-ink">
+                            {formatWeekSpan(b.weekStart, b.weekEnd)}
+                          </Link>
+                        </li>
+                      ))}
+                    </ul>
+                  </div>
                 ) : null}
-              </div>
+              </section>
 
               {home?.tile?.text ? (
                 <figure className="rounded-md border border-stone bg-paper-2 px-6 py-7 text-center">
