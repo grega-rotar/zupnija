@@ -100,14 +100,12 @@ export default async function AnnouncementsPage({ searchParams }: Props) {
                     const ctaHref = hrefFor(a.cta);
                     return (
                       <li key={a._id} className="overflow-hidden rounded-md border border-stone bg-paper">
-                        <article className="grid gap-5 p-4 sm:grid-cols-[16rem_1fr] sm:gap-6 sm:p-5">
+                        <article className={cn("grid gap-5 p-4 sm:gap-6 sm:p-5", hasImage(a.image) && "sm:grid-cols-[16rem_1fr]")}>
                           {hasImage(a.image) ? (
                             <Link href={routes.announcement(a.slug)} className="block" tabIndex={-1} aria-hidden="true">
                               <SanityImage image={a.image} aspect={4 / 3} sizes="(min-width: 640px) 16rem, 100vw" maxWidth={800} decorative className="rounded-sm" />
                             </Link>
-                          ) : (
-                            <div className="hidden aspect-[4/3] rounded-sm bg-paper-2 sm:block" aria-hidden="true" />
-                          )}
+                          ) : null}
                           <div className="flex min-w-0 flex-col">
                             <div className="flex flex-wrap items-center gap-2">
                               <Tag tone={importance === "urgent" ? "alert" : importance === "important" ? "gold" : "moss"}>
@@ -173,20 +171,26 @@ export default async function AnnouncementsPage({ searchParams }: Props) {
                   <div>
                     <h2 className="text-h3">Tedenska oznanila{bulletinPdf ? " v PDF" : ""}</h2>
                     <p className="mt-1.5 text-body text-ink-2">
-                      {bulletin
-                        ? `Oznanila za teden ${formatDateSpan(bulletin.weekStart, bulletin.weekEnd)}.`
-                        : "Tedenska oznanila se objavijo ob nedeljah."}
+                      {bulletin ? (
+                        <>
+                          Oznanila za teden <span className="whitespace-nowrap">{formatDateSpan(bulletin.weekStart, bulletin.weekEnd)}</span>.
+                        </>
+                      ) : (
+                        "Tedenska oznanila se objavijo ob nedeljah."
+                      )}
                     </p>
                   </div>
                 </div>
                 {bulletinPdf?.file?.asset?.url ? (
                   <a
                     href={`${bulletinPdf.file.asset.url}?dl=`}
-                    className="mt-5 inline-flex min-h-12 w-full items-center justify-center gap-2.5 rounded-sm bg-moss px-5 font-medium text-paper hover:bg-moss-deep"
+                    className="mt-5 inline-flex min-h-12 w-full items-center justify-center gap-2.5 rounded-sm bg-moss px-5 py-2.5 text-center font-medium text-paper hover:bg-moss-deep"
                   >
-                    <Icon name="download" size={18} />
-                    Prenesi zadnja oznanila
-                    {bulletinPdf.file.asset.size ? <span className="text-paper/70">({formatFileSize(bulletinPdf.file.asset.size)})</span> : null}
+                    <Icon name="download" size={18} className="shrink-0" />
+                    <span>
+                      Prenesi oznanila
+                      {bulletinPdf.file.asset.size ? <span className="whitespace-nowrap text-paper/70"> (PDF, {formatFileSize(bulletinPdf.file.asset.size)})</span> : null}
+                    </span>
                   </a>
                 ) : bulletin ? (
                   <a href="#tedenska" className="mt-5 inline-flex min-h-12 w-full items-center justify-center gap-2.5 rounded-sm bg-moss px-5 font-medium text-paper hover:bg-moss-deep">
