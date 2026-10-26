@@ -205,20 +205,25 @@ GitHub repo settings (Settings → Secrets and variables → Actions):
 | secret | `DEPLOY_SSH_KEY` | private key whose public half is in `~deploy/.ssh/authorized_keys` on t4a |
 | secret | `DEPLOY_KNOWN_HOSTS` | `ssh-keyscan 77.42.42.60` |
 | secret | `SANITY_AUTH_TOKEN` | Deploy Studio token (sanity.io/manage → API → Tokens), for the studio job |
-| variable | `SITE_URL` | `https://zupnija-pirnice.si` (no trailing slash) |
+| variable | `SITE_URL` | now `https://zupnija.etiam.si`; later the real domain (no trailing slash) |
 | variable | `STUDIO_URL` | e.g. `https://zupnija-pirnice.sanity.studio` |
 | variable | `STUDIO_DEPLOY` | `true` once the first manual Studio deploy is done |
 
 On t4a, `/srv/zupnija/.env` (owner `deploy`, mode 600) holds the runtime values:
 
 ```
-DOMAIN=zupnija-pirnice.si
+DOMAIN=zupnija.etiam.si
 SANITY_API_READ_TOKEN=...
 RESEND_API_KEY=...
 CONTACT_FROM_EMAIL=...
 ```
 
 `DOMAIN` is used by the Traefik labels (the router matches it and `www.` too).
+
+Until `zupnija-pirnice.si` is registered, the site runs on `zupnija.etiam.si`
+(proxied `A` record in the `etiam.si` zone; the `*.etiam.si` origin cert already
+covers it). To move: change `DOMAIN` in `/srv/zupnija/.env` and the `SITE_URL`
+variable, then redeploy (the URL is baked into the image).
 Cloudflare: proxied `A` records for the domain and `www` → `77.42.42.60`,
 SSL mode Full (strict), and an Origin Certificate in
 `/srv/edge/certs/<zone>/origin.{pem,key}`, listed in `infra/edge/dynamic/tls.yml`
