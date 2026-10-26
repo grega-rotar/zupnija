@@ -180,6 +180,14 @@ export function formatDateSpan(from: IsoDate, to: IsoDate): string {
   return sameYear ? `${a} – ${b}` : `${formatDate(from)} – ${b}`;
 }
 
+/** Week without the year, as a heading: "25.–31. oktober", across months "28. sep – 4. okt". */
+export function formatWeekSpan(from: IsoDate, to: IsoDate): string {
+  const day = (d: IsoDate) => formatDayNumber(d);
+  if (from === to) return `${day(from)}. ${fmt({ month: "long", timeZone: "UTC" }).format(toUtcNoon(from))}`;
+  if (from.slice(0, 7) === to.slice(0, 7)) return `${day(from)}.–${day(to)}. ${fmt({ month: "long", timeZone: "UTC" }).format(toUtcNoon(to))}`;
+  return `${day(from)}. ${formatMonthShort(from)} – ${day(to)}. ${formatMonthShort(to)}`;
+}
+
 /** "Nedelja, 14. september ob 10.00" (Slovenian time uses a dot). */
 export function formatDateTime(datetime: string, allDay = false): string {
   const day = formatDayHeading(datetime, true);
