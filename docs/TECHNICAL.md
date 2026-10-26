@@ -8,7 +8,7 @@ For developers taking over the project. Editor documentation (Slovenian) is in
 ```
 zupnija/
 ├── studio/   Sanity Studio v6 (standalone, Vite)   → sanity.studio hosting
-├── web/      Next.js 16 App Router (React 19)      → Vercel
+├── web/      Next.js 16 App Router (React 19)      → Docker on t4a
 └── docs/
 ```
 
@@ -172,23 +172,73 @@ TypeGen config is in `studio/sanity.cli.ts` (`typegen.path` → `../web/src`,
 
 ## 7. Deployment
 
-### Website → Vercel
+### Website → t4a (Docker, GitHub Actions)
 
-- Root directory: `web`. Framework: Next.js. Node 22.
-- Environment variables: see table above (`NEXT_PUBLIC_SITE_URL` =
-  `https://zupnija-pirnice.si`, `NEXT_PUBLIC_SANITY_STUDIO_URL` = Studio URL,
-  `SANITY_API_READ_TOKEN`, `RESEND_API_KEY`, `CONTACT_FROM_EMAIL`).
-- Add the production origin to Sanity CORS (with credentials).
-- In the Studio, set `settings.siteUrl` to the production URL.
+```
+Browser ─HTTPS─> Cloudflare (proxy) ─HTTPS, origin cert─> Traefik :443 (/srv/edge) ──> web:3000
+```
+
+Same setup as rokomet-stats and jakamarinko on the shared server `t4a`
+(`77.42.42.60`). The Traefik in `/srv/edge` belongs to the jakamarinko repo
+(`etiam-si/jakamarinko`, `infra/edge/`) and owns :443. This app joins its
+external `edge` network and routes itself with the `traefik.*` labels in
+`infra/compose.yml`.
+
+`.github/workflows/deploy.yml`, on every push to `main`:
+
+1. **check** (web and studio): `npm ci`, lint, `tsc --noEmit`, build. Pull requests run only this.
+2. **image**: `web/Dockerfile` (context = repo root, because the Turbopack root
+   is one level up) → `ghcr.io/grega-rotar/zupnija-web:<sha>` and `:latest`.
+   `NEXT_PUBLIC_*` are build args, since Next inlines them into the browser bundle.
+3. **deploy**: scp `infra/compose.yml` to `/srv/zupnija/`, then as `deploy`:
+   `docker compose pull && up -d`. Then poll `$SITE_URL/api/health` and `/` for 60 s.
+4. **studio** (only when the variable `STUDIO_DEPLOY` is `true`): `sanity deploy`.
+
+Rollback: run the workflow by hand with `tag=<older sha>`, or on the server
+`cd /srv/zupnija && IMAGE_TAG=<sha> docker compose up -d`.
+
+GitHub repo settings (Settings → Secrets and variables → Actions):
+
+| Kind | Name | Value |
+|---|---|---|
+| secret | `DEPLOY_HOST` | `77.42.42.60` |
+| secret | `DEPLOY_SSH_KEY` | private key whose public half is in `~deploy/.ssh/authorized_keys` on t4a |
+| secret | `DEPLOY_KNOWN_HOSTS` | `ssh-keyscan 77.42.42.60` |
+| secret | `SANITY_AUTH_TOKEN` | Deploy Studio token (sanity.io/manage → API → Tokens), for the studio job |
+| variable | `SITE_URL` | `https://zupnija-pirnice.si` (no trailing slash) |
+| variable | `STUDIO_URL` | e.g. `https://zupnija-pirnice.sanity.studio` |
+| variable | `STUDIO_DEPLOY` | `true` once the first manual Studio deploy is done |
+
+On t4a, `/srv/zupnija/.env` (owner `deploy`, mode 600) holds the runtime values:
+
+```
+DOMAIN=zupnija-pirnice.si
+SANITY_API_READ_TOKEN=...
+RESEND_API_KEY=...
+CONTACT_FROM_EMAIL=...
+```
+
+`DOMAIN` is used by the Traefik labels (the router matches it and `www.` too).
+Cloudflare: proxied `A` records for the domain and `www` → `77.42.42.60`,
+SSL mode Full (strict), and an Origin Certificate in
+`/srv/edge/certs/<zone>/origin.{pem,key}`, listed in `infra/edge/dynamic/tls.yml`
+of the jakamarinko repo.
+
+Also add the production origin to Sanity CORS (with credentials), and in the
+Studio set `settings.siteUrl` to the production URL.
 
 ### Studio → Sanity hosting
 
+First time, by hand:
+
 ```bash
 cd studio
-SANITY_STUDIO_PREVIEW_ORIGIN=https://zupnija-pirnice.si npm run deploy
+SANITY_STUDIO_PREVIEW_ORIGIN=https://zupnija-pirnice.si npx sanity deploy
 ```
 
-`sanity deploy` asks for a hostname the first time (e.g. `zupnija-pirnice`).
+It asks for a hostname (e.g. `zupnija-pirnice`) and prints a
+`deployment.appId` to add to `sanity.cli.ts`. Commit that, then set
+`STUDIO_DEPLOY=true` so CI deploys the Studio on every push to `main`.
 Auto-updates are enabled (`deployment.autoUpdates`).
 
 ### After deployment checklist
