@@ -5,7 +5,7 @@ import { EVENT_CATEGORY_LABEL } from "@/lib/labels";
 import { clean } from "@/lib/clean";
 import { routes } from "@/lib/routes";
 import { cn } from "@/lib/utils";
-import { SanityImage, hasImage } from "@/components/sanity/SanityImage";
+import { SanityImage, hasImage, ImagePlaceholder } from "@/components/sanity/SanityImage";
 import { EmptyState } from "@/components/ui/primitives";
 
 export type EventCardData = UPCOMING_EVENTS_QUERY_RESULT[number];
@@ -73,7 +73,7 @@ export function EventCard({ event, priority }: { event: EventCardData; priority?
         {hasImage(event.image) ? (
           <SanityImage image={event.image} aspect={4 / 3} sizes="(min-width: 1024px) 24rem, (min-width: 640px) 50vw, 100vw" maxWidth={900} priority={priority} decorative className="rounded-sm" imgClassName="transition-transform duration-700 ease-out-soft group-hover:scale-[1.02] motion-reduce:transform-none" />
         ) : (
-          <div className="aspect-[4/3] rounded-sm bg-paper-2" aria-hidden="true" />
+          <ImagePlaceholder className="aspect-[4/3] rounded-sm" />
         )}
         <div className="mt-5 flex items-start gap-4 border-t border-stone pt-4">
           <DateLeaf start={event.start} end={event.end} />

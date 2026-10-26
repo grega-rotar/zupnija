@@ -10,7 +10,7 @@ import { clean } from "@/lib/clean";
 import { EVENT_CATEGORY_LABEL } from "@/lib/labels";
 import { urlFor } from "@/sanity/image";
 import { Attachments, RichText } from "@/components/sanity/RichText";
-import { SanityImage, hasImage } from "@/components/sanity/SanityImage";
+import { SanityImage, hasImage, ImagePlaceholder } from "@/components/sanity/SanityImage";
 import { GalleryCard } from "@/components/gallery/GalleryCard";
 import { Icon, type IconName } from "@/components/ui/Icon";
 import { Breadcrumbs, Container, JsonLdScript, Section, Tag } from "@/components/ui/primitives";
@@ -143,7 +143,7 @@ export default async function EventPage({ params }: Props) {
               {hasImage(event.image) ? (
                 <SanityImage image={event.image} aspect={4 / 3} sizes="(min-width: 1024px) 40rem, 100vw" maxWidth={1400} priority className="rounded-md" />
               ) : (
-                <div className="aspect-[4/3] rounded-md bg-paper-2" aria-hidden="true" />
+                <ImagePlaceholder className="aspect-[4/3] rounded-md" />
               )}
               {home?.tile?.text ? (
                 <figure className="flex flex-col items-center justify-center rounded-md border border-stone bg-paper-2 p-6 text-center">

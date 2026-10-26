@@ -23,6 +23,26 @@ export function Container({ width = "content", className, ...rest }: ContainerPr
   );
 }
 
+type SplitProps = { title?: string | null; titleId?: string; titleClassName?: string; className?: string; children: ReactNode };
+
+/**
+ * Text block that lines up with the page title: heading in the left third,
+ * text in the right two thirds on large screens, stacked on phones.
+ * Without a title the text starts at the left edge.
+ */
+export function Split({ title, titleId, titleClassName, className, children }: SplitProps) {
+  return (
+    <Container className={cn("lg:grid lg:grid-cols-12 lg:gap-x-12", className)}>
+      {title ? (
+        <h2 id={titleId} className={cn("mb-5 text-h2 lg:col-span-4 lg:mb-0", titleClassName)}>
+          {title}
+        </h2>
+      ) : null}
+      <div className="min-w-0 max-w-prose lg:col-span-8 lg:max-w-3xl">{children}</div>
+    </Container>
+  );
+}
+
 type SectionProps = ComponentProps<"section"> & { tone?: "paper" | "paper-2" | "ink"; tight?: boolean };
 
 /** Vertical rhythm for page sections. */

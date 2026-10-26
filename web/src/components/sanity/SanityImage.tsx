@@ -1,6 +1,7 @@
 import Image from "next/image";
 import { urlFor } from "@/sanity/image";
 import { cn } from "@/lib/utils";
+import { ChurchMark } from "@/components/ui/ChurchMark";
 
 /** Shape returned by `imageFragment`. */
 export type SanityImageValue = {
@@ -38,6 +39,15 @@ type Props = {
 
 export function hasImage(image: SanityImageValue): image is NonNullable<SanityImageValue> & { asset: NonNullable<NonNullable<SanityImageValue>["asset"]> } {
   return Boolean(image?.asset?._id);
+}
+
+/** Stand-in for a missing photo in image grids, so cards keep one height. */
+export function ImagePlaceholder({ className }: { className?: string }) {
+  return (
+    <div className={cn("flex items-center justify-center bg-paper-3", className)} aria-hidden="true">
+      <ChurchMark className="h-12 w-auto text-stone-2" />
+    </div>
+  );
 }
 
 /**

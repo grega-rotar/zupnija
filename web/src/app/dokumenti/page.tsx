@@ -6,7 +6,7 @@ import { formatDate } from "@/lib/dates";
 import { clean } from "@/lib/clean";
 import { DOCUMENT_CATEGORY_LABEL } from "@/lib/labels";
 import { AttachmentLink } from "@/components/sanity/RichText";
-import { Breadcrumbs, Container, EmptyState, PageHeader, Section } from "@/components/ui/primitives";
+import { Breadcrumbs, Container, EmptyState, PageHeader, Section, Split } from "@/components/ui/primitives";
 
 export async function generateMetadata(): Promise<Metadata> {
   const settings = await getSettings();
@@ -32,14 +32,11 @@ export default async function DocumentsPage() {
         eyebrow={<Breadcrumbs items={[{ label: "Župnija", href: routes.parish }, { label: "Dokumenti" }]} />}
       />
       <Section tight tone="paper-2">
-        <Container width="prose" className="max-w-3xl">
-          {ordered.length ? (
-            <div className="space-y-12">
-              {ordered.map((cat) => (
-                <section key={cat} aria-labelledby={`dok-${cat}`}>
-                  <h2 id={`dok-${cat}`} className="mb-4 text-h3">
-                    {DOCUMENT_CATEGORY_LABEL[cat] ?? cat}
-                  </h2>
+        {ordered.length ? (
+          <div className="space-y-12 lg:space-y-16">
+            {ordered.map((cat) => (
+              <section key={cat} aria-labelledby={`dok-${cat}`}>
+                <Split title={DOCUMENT_CATEGORY_LABEL[cat] ?? cat} titleId={`dok-${cat}`} titleClassName="text-h3">
                   <ul className="space-y-2">
                     {groups.get(cat)!.map((d) => (
                       <li key={d._id}>
@@ -54,13 +51,15 @@ export default async function DocumentsPage() {
                       </li>
                     ))}
                   </ul>
-                </section>
-              ))}
-            </div>
-          ) : (
+                </Split>
+              </section>
+            ))}
+          </div>
+        ) : (
+          <Container>
             <EmptyState title="Dokumentov še ni" />
-          )}
-        </Container>
+          </Container>
+        )}
       </Section>
     </>
   );

@@ -44,7 +44,7 @@ export default async function SearchPage({ searchParams }: Props) {
         </form>
       </PageHeader>
       <Section tight>
-        <Container width="prose" className="max-w-3xl">
+        <Container className="[&>*]:max-w-3xl">
           {!term ? (
             <p className="text-body text-ink-2">Iščete lahko po oznanilih, dogodkih, novicah, straneh in dokumentih.</p>
           ) : results.length ? (

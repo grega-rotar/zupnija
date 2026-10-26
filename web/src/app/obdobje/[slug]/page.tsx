@@ -49,7 +49,7 @@ export default async function SpecialPeriodPage({ params }: Props) {
       ) : null}
 
       <Section tight>
-        <Container width="prose" className="max-w-3xl">
+        <Container className="[&>*]:max-w-3xl">
           <RichText value={period.message} size="lg" />
           <Attachments items={period.attachments} />
         </Container>

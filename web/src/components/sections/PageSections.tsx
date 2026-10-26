@@ -15,7 +15,7 @@ import { ScheduleTable } from "@/components/masses/ScheduleTable";
 import { ContactBlock } from "@/components/contact/ContactBlock";
 import { ContactForm } from "@/components/forms/ContactForm";
 import { Faq } from "@/components/ui/Faq";
-import { Button, Container, Section, TextLink } from "@/components/ui/primitives";
+import { Button, Container, Section, Split, TextLink } from "@/components/ui/primitives";
 
 type Sections = NonNullable<NonNullable<PAGE_QUERY_RESULT>["sections"]>;
 type SectionOf<T extends Sections[number]["_type"]> = Extract<Sections[number], { _type: T }>;
@@ -89,10 +89,9 @@ function HeroSection({ section }: { section: SectionOf<"sectionHero"> }) {
 function RichTextSection({ section }: { section: SectionOf<"sectionRichText"> }) {
   return (
     <Section tight>
-      <Container width="prose" className="max-w-3xl">
-        <SectionTitle title={section.title} className="mb-5" />
+      <Split title={section.title}>
         <RichText value={section.body} size="lg" />
-      </Container>
+      </Split>
     </Section>
   );
 }
@@ -123,8 +122,8 @@ function TextImageSection({ section }: { section: SectionOf<"sectionTextImage"> 
 function QuoteSection({ section }: { section: SectionOf<"sectionQuote"> }) {
   return (
     <Section tight>
-      <Container width="prose" className="max-w-3xl">
-        <figure className="border-l-2 border-gold pl-6 sm:pl-8">
+      <Container>
+        <figure className="max-w-3xl border-l-2 border-gold pl-6 sm:pl-8">
           <blockquote className="font-serif text-h3 leading-snug text-ink sm:text-h2 sm:leading-snug">{section.quote}</blockquote>
           {section.source ? <figcaption className="mt-3 text-small text-ink-3">{section.source}</figcaption> : null}
         </figure>
@@ -226,10 +225,9 @@ function ChurchesSection({ section }: { section: SectionOf<"sectionChurches"> })
 function FaqSection({ section }: { section: SectionOf<"sectionFaq"> }) {
   return (
     <Section tight>
-      <Container width="prose" className="max-w-3xl">
-        <SectionTitle title={section.title} />
+      <Split title={section.title}>
         <Faq items={section.items ?? []} />
-      </Container>
+      </Split>
     </Section>
   );
 }
@@ -239,8 +237,7 @@ function DocumentsSection({ section }: { section: SectionOf<"sectionDocuments"> 
   if (!docs.length) return null;
   return (
     <Section tight>
-      <Container width="prose" className="max-w-3xl">
-        <SectionTitle title={section.title} />
+      <Split title={section.title}>
         <ul className="grid gap-2">
           {docs.map((d) => (
             <li key={d._id}>
@@ -249,7 +246,7 @@ function DocumentsSection({ section }: { section: SectionOf<"sectionDocuments"> 
             </li>
           ))}
         </ul>
-      </Container>
+      </Split>
     </Section>
   );
 }
