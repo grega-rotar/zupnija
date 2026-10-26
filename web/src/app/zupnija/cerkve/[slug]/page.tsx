@@ -9,7 +9,7 @@ import { cn } from "@/lib/utils";
 import { CHURCH_KIND_LABEL } from "@/lib/labels";
 import { urlFor } from "@/sanity/image";
 import { RichText } from "@/components/sanity/RichText";
-import { SanityImage, hasImage } from "@/components/sanity/SanityImage";
+import { SanityImage, hasImage, ImagePlaceholder } from "@/components/sanity/SanityImage";
 import { PhotoGrid } from "@/components/gallery/PhotoGrid";
 import { ScheduleTable } from "@/components/masses/ScheduleTable";
 import { Icon, type IconName } from "@/components/ui/Icon";
@@ -104,7 +104,7 @@ export default async function ChurchPage({ params }: Props) {
                 {hasImage(church.image) ? (
                   <SanityImage image={church.image} aspect={3 / 2} sizes="(min-width: 1024px) 40rem, 100vw" maxWidth={1600} priority className="rounded-md" />
                 ) : (
-                  <div className="aspect-[3/2] rounded-md bg-paper-2" aria-hidden="true" />
+                  <ImagePlaceholder className="aspect-[3/2] rounded-md" />
                 )}
                 {thumbs.length ? (
                   <PhotoGrid images={gallery} title={church.name} variant="thumbs" thumbs={thumbs.length} extra={extra} />

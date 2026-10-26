@@ -19,7 +19,7 @@ import { CHURCH_KIND_LABEL } from "@/lib/labels";
 import { PageHero } from "@/components/layout/PageHero";
 import { ScheduleMatrix } from "@/components/masses/ScheduleMatrix";
 import { MassRow, WeekGrid } from "@/components/masses/MassList";
-import { SanityImage, hasImage } from "@/components/sanity/SanityImage";
+import { SanityImage, hasImage, ImagePlaceholder } from "@/components/sanity/SanityImage";
 import { Icon, type IconName } from "@/components/ui/Icon";
 import { Container, EmptyState, Notice, Section } from "@/components/ui/primitives";
 
@@ -197,7 +197,7 @@ export default async function MassesPage() {
                         imgClassName="transition-transform duration-700 ease-out-soft group-hover:scale-[1.02] motion-reduce:transform-none"
                       />
                     ) : (
-                      <div className="aspect-[4/3] bg-paper-2" aria-hidden="true" />
+                      <ImagePlaceholder className="aspect-[4/3]" />
                     )}
                     <div className="p-4 sm:p-5">
                       <h3 className="font-serif text-h3 leading-tight text-ink group-hover:underline">{c.name}</h3>
