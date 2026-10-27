@@ -11,7 +11,7 @@ import { SkipLink } from "@/components/layout/SkipLink";
 import { UrgentBanner } from "@/components/layout/UrgentBanner";
 import { DisableDraftMode } from "@/components/layout/DisableDraftMode";
 import { JsonLdScript } from "@/components/ui/primitives";
-import "./globals.css";
+import "../globals.css";
 
 const newsreader = Newsreader({
   variable: "--font-newsreader",

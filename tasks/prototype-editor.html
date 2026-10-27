@@ -1,0 +1,1515 @@
+<!doctype html>
+<html lang="sl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>Urejanje · Župnija Pirniče</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,500;1,6..72,400&family=Source+Sans+3:wght@400;500;600;700&family=Caveat:wght@500;600&display=swap">
+<style>
+/* Urejanje — the parish's own editor (variant C: "Opravila").
+   Site tokens: paper, stone, moss, a little gold. Newsreader for what is said,
+   Source Sans 3 for what is used. The one bold object is the bulletin itself:
+   a handwritten sheet that sits next to Claude's draft while you check it. */
+:root {
+  --paper: #fbfaf7; --paper-2: #f3f0e9; --paper-3: #e9e5db;
+  --stone: #ddd7ca; --stone-2: #b9b1a0;
+  --ink: #1e2622; --ink-2: #4a544e; --ink-3: #6f7873;
+  --moss: #3d5a47; --moss-deep: #2c4234; --moss-soft: #e4ebe4; --on-moss: #fbfaf7;
+  --gold: #a8843a; --gold-ink: #7a5f22; --gold-soft: #f5eddb;
+  --alert: #8d3a2e; --alert-soft: #f6e6e1;
+  --bench: #e6e1d5; --scrim: rgb(24 30 26 / .38);
+  --shadow-1: 0 1px 2px rgb(30 38 34 / .06);
+  --shadow-2: 0 1px 2px rgb(30 38 34 / .05), 0 12px 32px -14px rgb(30 38 34 / .28);
+  --serif: "Newsreader", "Iowan Old Style", "Palatino Linotype", Georgia, serif;
+  --sans: "Source Sans 3", "Segoe UI", system-ui, sans-serif;
+  --hand: "Caveat", "Segoe Print", "Bradley Hand", cursive;
+  --ease: cubic-bezier(.22, 1, .36, 1);
+}
+@media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) {
+  --paper: #161b18; --paper-2: #1c231f; --paper-3: #252e29;
+  --stone: #323d37; --stone-2: #4d5953;
+  --ink: #ece9e1; --ink-2: #c3c6bf; --ink-3: #939a94;
+  --moss: #93b89e; --moss-deep: #23382b; --moss-soft: #21312a; --on-moss: #0f1611;
+  --gold: #d2ae64; --gold-ink: #e3c486; --gold-soft: #322a1b;
+  --alert: #e59c8e; --alert-soft: #3a221e;
+  --bench: #0e1210; --scrim: rgb(0 0 0 / .55);
+  --shadow-1: 0 1px 2px rgb(0 0 0 / .3);
+  --shadow-2: 0 1px 2px rgb(0 0 0 / .3), 0 14px 36px -12px rgb(0 0 0 / .7);
+  color-scheme: dark;
+} }
+:root[data-theme="dark"] {
+  --paper: #161b18; --paper-2: #1c231f; --paper-3: #252e29;
+  --stone: #323d37; --stone-2: #4d5953;
+  --ink: #ece9e1; --ink-2: #c3c6bf; --ink-3: #939a94;
+  --moss: #93b89e; --moss-deep: #23382b; --moss-soft: #21312a; --on-moss: #0f1611;
+  --gold: #d2ae64; --gold-ink: #e3c486; --gold-soft: #322a1b;
+  --alert: #e59c8e; --alert-soft: #3a221e;
+  --bench: #0e1210; --scrim: rgb(0 0 0 / .55);
+  --shadow-1: 0 1px 2px rgb(0 0 0 / .3);
+  --shadow-2: 0 1px 2px rgb(0 0 0 / .3), 0 14px 36px -12px rgb(0 0 0 / .7);
+  color-scheme: dark;
+}
+html { font-size: 100%; -webkit-text-size-adjust: 100%; }
+html.big { font-size: 112.5%; }
+* { box-sizing: border-box; }
+body { margin: 0; background: var(--bench); color: var(--ink); font: 400 1.0625rem/1.55 var(--sans); -webkit-font-smoothing: antialiased; height: 100dvh; display: grid; grid-template-rows: auto 1fr; overflow: hidden; }
+button, input, textarea, select { font: inherit; color: inherit; }
+button { cursor: pointer; background: none; border: 0; padding: 0; text-align: inherit; }
+:focus-visible { outline: 2px solid var(--gold); outline-offset: 2px; border-radius: 6px; }
+h1, h2, h3 { font-family: var(--serif); font-weight: 400; margin: 0; text-wrap: balance; }
+p { margin: 0; text-wrap: pretty; }
+ul, ol { list-style: none; margin: 0; padding: 0; }
+[hidden] { display: none !important; }
+.i { width: 1.25rem; height: 1.25rem; fill: none; stroke: currentColor; stroke-width: 1.8; stroke-linecap: round; stroke-linejoin: round; flex: none; }
+.tnum { font-variant-numeric: tabular-nums; }
+.sr { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
+
+/* ── Prototype strip (not part of the app) ── */
+.bench { display: flex; flex-wrap: wrap; align-items: center; gap: 8px 18px; padding: 8px max(16px, env(safe-area-inset-right, 0px)) 8px max(16px, env(safe-area-inset-left, 0px)); font-size: .85rem; color: var(--ink-2); border-bottom: 1px solid var(--stone); }
+.bench b { font-weight: 700; letter-spacing: .08em; text-transform: uppercase; font-size: .7rem; color: var(--ink-3); }
+.bench label { display: inline-flex; align-items: center; gap: 6px; }
+.bench select { padding: 4px 8px; border-radius: 7px; border: 1px solid var(--stone); background: var(--paper); font-size: .85rem; }
+.bseg { display: inline-flex; background: var(--paper-3); border-radius: 7px; padding: 2px; }
+.bseg button { padding: 3px 10px; border-radius: 5px; font-size: .85rem; color: var(--ink-2); }
+.bseg button[aria-pressed="true"] { background: var(--paper); color: var(--ink); font-weight: 600; box-shadow: var(--shadow-1); }
+.bench .reset { margin-left: auto; text-decoration: underline; text-underline-offset: 3px; color: var(--ink-3); }
+
+.stage { min-height: 0; display: grid; place-items: stretch; }
+.stage.phone { place-items: center; padding: 16px; overflow: auto; }
+.app { container-type: inline-size; position: relative; overflow: hidden; background: var(--paper); min-height: 0; height: 100%; width: 100%; }
+.stage.phone .app { width: 390px; max-width: 100%; height: min(820px, 100%); border-radius: 34px; border: 8px solid #1b211d; box-shadow: var(--shadow-2); }
+
+/* ── Shell ── */
+.shell { display: grid; grid-template-columns: 264px minmax(0, 1fr); height: 100%; }
+.side { background: var(--paper-2); border-right: 1px solid var(--stone); display: grid; grid-template-rows: auto 1fr auto; min-height: 0; }
+.brand { display: flex; gap: 12px; align-items: center; padding: 20px 20px 18px; }
+.mark { width: 38px; height: 38px; border-radius: 50%; background: var(--moss); color: var(--on-moss); display: grid; place-items: center; flex: none; }
+.mark .i { width: 18px; height: 18px; stroke-width: 2; }
+.brand b { display: block; font-family: var(--serif); font-weight: 500; font-size: 1.15rem; line-height: 1.15; }
+.brand small { display: block; color: var(--ink-3); font-size: .82rem; }
+.nav { display: grid; gap: 2px; padding: 4px 12px; align-content: start; overflow-y: auto; }
+.nav a, .nav button { display: flex; align-items: center; gap: 12px; padding: 10px 12px; border-radius: 10px; color: var(--ink-2); text-decoration: none; font-weight: 500; min-height: 46px; width: 100%; }
+.nav a:hover { background: var(--paper-3); color: var(--ink); }
+.nav a[aria-current="page"] { background: var(--paper); color: var(--moss); box-shadow: var(--shadow-1); }
+.nav .count { margin-left: auto; min-width: 22px; height: 22px; padding: 0 6px; border-radius: 11px; background: var(--gold); color: var(--paper); font-size: .78rem; font-weight: 700; display: grid; place-items: center; }
+.nav .sep { height: 1px; background: var(--stone); margin: 8px 12px; }
+.me { display: flex; align-items: center; gap: 10px; margin: 12px; padding: 10px; border-radius: 12px; width: calc(100% - 24px); }
+.me:hover { background: var(--paper-3); }
+.me b { display: block; font-weight: 600; font-size: .95rem; line-height: 1.2; }
+.me small { display: block; color: var(--ink-3); font-size: .82rem; }
+.me > div { min-width: 0; }
+.me b, .me small { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.avatar { width: 36px; height: 36px; border-radius: 50%; display: grid; place-items: center; font-weight: 700; font-size: .82rem; flex: none; background: var(--gold-soft); color: var(--gold-ink); letter-spacing: .02em; }
+.avatar.moss { background: var(--moss-soft); color: var(--moss); }
+.avatar.lg { width: 48px; height: 48px; font-size: 1rem; }
+
+.mainwrap { display: grid; grid-template-rows: auto minmax(0, 1fr) auto auto; min-height: 0; position: relative; }
+.phonebar { display: none; }
+.scroll { overflow-y: auto; overscroll-behavior: contain; min-height: 0; scroll-padding-top: 16px; }
+.page { max-width: 780px; margin: 0 auto; padding: 36px 32px 40px; display: grid; gap: 28px; }
+.page.wide { max-width: 1180px; }
+.page.enter { animation: pagein .35s var(--ease) both; }
+@keyframes pagein { from { opacity: 0; transform: translateY(6px); } }
+.phead { display: flex; flex-wrap: wrap; align-items: end; gap: 12px 20px; }
+.phead > div { min-width: 0; flex: 1 1 280px; display: grid; gap: 4px; }
+.phead h1 { font-size: 2.25rem; line-height: 1.05; letter-spacing: -.02em; }
+.phead p { color: var(--ink-2); }
+.eyebrow { font-size: .74rem; text-transform: uppercase; letter-spacing: .1em; font-weight: 700; color: var(--ink-3); }
+.back { display: inline-flex; align-items: center; gap: 4px; color: var(--ink-2); font-weight: 500; margin-left: -6px; padding: 4px 6px; border-radius: 8px; }
+.back:hover { color: var(--moss); }
+
+/* ask bar */
+.askbar { padding: 12px 32px 16px; background: linear-gradient(to top, var(--paper) 70%, transparent); }
+.askbar .inner { max-width: 716px; margin: 0 auto; display: flex; gap: 8px; }
+.ask { flex: 1; min-width: 0; display: flex; align-items: center; gap: 12px; min-height: 56px; padding: 0 18px; border-radius: 16px; border: 1px solid var(--stone-2); background: var(--paper); color: var(--ink-3); font-size: 1.04rem; box-shadow: var(--shadow-2); transition: border-color .15s; }
+.ask:hover { border-color: var(--moss); color: var(--ink-2); }
+.ask .i { color: var(--moss); }
+.ask span { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.cam { width: 56px; height: 56px; border-radius: 16px; background: var(--moss); color: var(--on-moss); display: grid; place-items: center; flex: none; box-shadow: var(--shadow-2); }
+.cam:hover { background: color-mix(in srgb, var(--moss) 84%, var(--ink)); }
+.cam .i { width: 24px; height: 24px; }
+.tabbar { display: none; }
+
+/* ── Buttons, inputs ── */
+.btn { display: inline-flex; align-items: center; justify-content: center; gap: 8px; min-height: 46px; padding: 0 18px; border-radius: 12px; border: 1px solid var(--stone); background: var(--paper); font-weight: 600; font-size: 1rem; line-height: 1.15; text-align: center; transition: background .15s, border-color .15s; white-space: nowrap; }
+.btn:hover { background: var(--paper-2); border-color: var(--stone-2); }
+.btn.primary { background: var(--moss); border-color: var(--moss); color: var(--on-moss); }
+.btn.primary:hover { background: color-mix(in srgb, var(--moss) 84%, var(--ink)); border-color: transparent; }
+.btn.ghost { border-color: transparent; background: none; color: var(--ink-2); }
+.btn.ghost:hover { background: var(--paper-3); color: var(--ink); }
+.btn.danger { color: var(--alert); }
+.btn.danger:hover { background: var(--alert-soft); border-color: transparent; }
+.btn.lg { min-height: 56px; font-size: 1.06rem; padding: 0 24px; border-radius: 14px; }
+.btn.sm { min-height: 38px; padding: 0 12px; font-size: .92rem; border-radius: 10px; }
+.btn:disabled { opacity: .5; cursor: not-allowed; }
+.btn.block { width: 100%; }
+.iconbtn { width: 42px; height: 42px; border-radius: 12px; display: grid; place-items: center; color: var(--ink-2); flex: none; }
+.iconbtn:hover { background: var(--paper-3); color: var(--ink); }
+.field { display: grid; gap: 6px; min-width: 0; }
+.field > span { font-weight: 600; font-size: .95rem; }
+.field small { color: var(--ink-3); font-size: .86rem; }
+.input, .field input:not([type=checkbox]), .field select, .field textarea { width: 100%; min-height: 48px; padding: 10px 14px; border-radius: 12px; border: 1px solid var(--stone-2); background: var(--paper); font-size: 1.04rem; transition: border-color .15s, box-shadow .15s; }
+.field textarea { min-height: 96px; resize: vertical; line-height: 1.45; }
+.input:focus, .field input:focus, .field select:focus, .field textarea:focus { outline: none; border-color: var(--moss); box-shadow: 0 0 0 3px var(--moss-soft); }
+.row2 { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+.chips { display: flex; flex-wrap: wrap; gap: 8px; }
+.chip { min-height: 40px; padding: 0 14px; border-radius: 999px; border: 1px solid var(--stone-2); background: var(--paper); font-size: .96rem; font-weight: 500; display: inline-flex; align-items: center; gap: 6px; }
+.chip:hover { border-color: var(--moss); }
+.chip[aria-pressed="true"] { background: var(--moss); border-color: var(--moss); color: var(--on-moss); }
+.pill { display: inline-flex; align-items: center; gap: 4px; border-radius: 999px; padding: 1px 10px; font-size: .8rem; font-weight: 600; background: var(--moss-soft); color: var(--moss); white-space: nowrap; line-height: 1.6; }
+.pill.gold { background: var(--gold-soft); color: var(--gold-ink); }
+.pill.alert { background: var(--alert-soft); color: var(--alert); }
+.pill.line { background: none; box-shadow: inset 0 0 0 1px var(--stone-2); color: var(--ink-3); }
+.switch { display: flex; align-items: center; justify-content: space-between; gap: 16px; padding: 12px 0; border-top: 1px solid var(--stone); cursor: pointer; }
+.switch:first-child { border-top: 0; }
+.switch > div { display: grid; gap: 2px; min-width: 0; }
+.switch b { font-weight: 600; }
+.switch small { color: var(--ink-3); font-size: .88rem; }
+.switch input { appearance: none; width: 48px; height: 28px; border-radius: 14px; background: var(--stone-2); position: relative; flex: none; cursor: pointer; transition: background .2s; margin: 0; }
+.switch input::after { content: ""; position: absolute; top: 3px; left: 3px; width: 22px; height: 22px; border-radius: 50%; background: var(--paper); box-shadow: var(--shadow-1); transition: transform .2s var(--ease); }
+.switch input:checked { background: var(--moss); }
+.switch input:checked::after { transform: translateX(20px); }
+.switch input:disabled { opacity: .5; }
+
+/* ── Home ── */
+.hello { display: grid; gap: 6px; }
+.hello h1 { font-size: 2.6rem; line-height: 1.02; letter-spacing: -.025em; }
+.hello p { color: var(--ink-2); font-size: 1.08rem; }
+.hero { background: var(--moss-deep); color: #f3f1ea; border-radius: 20px; padding: 22px 24px; display: grid; grid-template-columns: auto 1fr auto; gap: 6px 22px; align-items: center; position: relative; overflow: hidden; text-align: left; width: 100%; }
+.hero:hover { filter: brightness(1.04); }
+.hero::after { content: ""; position: absolute; right: -40px; top: -60px; width: 220px; height: 220px; border-radius: 50%; border: 1px solid rgb(255 255 255 / .08); box-shadow: 0 0 0 28px rgb(255 255 255 / .025), 0 0 0 56px rgb(255 255 255 / .02); pointer-events: none; }
+.hero .when { grid-row: span 2; font-family: var(--serif); font-size: 3.6rem; line-height: .9; letter-spacing: -.03em; color: #fff; }
+.hero .lbl { font-size: .74rem; letter-spacing: .1em; text-transform: uppercase; font-weight: 700; color: #d9c08a; }
+.hero .what { font-size: 1.12rem; font-weight: 500; }
+.hero .what span { opacity: .7; font-weight: 400; }
+.hero .int { grid-column: 2; font-family: var(--serif); font-style: italic; font-size: 1.1rem; color: rgb(243 241 234 / .85); }
+.hero .go { grid-row: 1 / span 3; grid-column: 3; width: 44px; height: 44px; border-radius: 50%; background: rgb(255 255 255 / .1); display: grid; place-items: center; }
+.sect { display: grid; gap: 12px; }
+.sect-h { display: flex; align-items: baseline; justify-content: space-between; gap: 12px; }
+.sect-h h2 { font-size: 1.45rem; letter-spacing: -.01em; }
+.sect-h .btn { margin-right: -10px; }
+.tasks { display: grid; gap: 10px; }
+.task { display: grid; grid-template-columns: 44px minmax(0, 1fr); gap: 4px 16px; padding: 18px 20px; border-radius: 16px; background: var(--paper); border: 1px solid var(--stone); }
+.task .ic { width: 44px; height: 44px; border-radius: 50%; display: grid; place-items: center; background: var(--gold-soft); color: var(--gold-ink); grid-row: span 2; }
+.task .ic .i { width: 22px; height: 22px; }
+.task h3 { font-family: var(--sans); font-weight: 600; font-size: 1.12rem; line-height: 1.3; padding-top: 2px; }
+.task p { color: var(--ink-2); font-size: .98rem; }
+.task .acts { grid-column: 2; display: flex; flex-wrap: wrap; gap: 8px; padding-top: 10px; }
+.task.approve { background: var(--gold-soft); border-color: transparent; }
+.task.approve .ic { background: var(--gold); color: var(--paper); }
+.task.wait .ic { background: var(--paper-3); color: var(--ink-2); }
+.appr-list { grid-column: 1 / -1; display: grid; gap: 0; margin-top: 10px; background: var(--paper); border-radius: 12px; overflow: hidden; }
+.appr { display: grid; grid-template-columns: minmax(0, 1fr) auto; gap: 8px 14px; align-items: center; padding: 14px 16px; border-top: 1px solid var(--stone); }
+.appr:first-child { border-top: 0; }
+.appr b { font-weight: 600; }
+.appr small { display: block; color: var(--ink-3); font-size: .88rem; margin-top: 2px; }
+.appr .note { display: block; font-family: var(--serif); font-style: italic; color: var(--ink-2); margin-top: 4px; }
+.appr .acts { display: flex; gap: 6px; }
+.quick { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 10px; }
+.qt { display: grid; gap: 10px; align-content: start; padding: 16px; min-height: 112px; border-radius: 16px; border: 1px solid var(--stone); background: var(--paper); font-weight: 600; line-height: 1.25; transition: border-color .15s, transform .15s var(--ease); }
+.qt:hover { border-color: var(--moss); transform: translateY(-1px); }
+.qt .i { width: 26px; height: 26px; color: var(--moss); }
+.qt small { display: block; font-weight: 400; color: var(--ink-3); font-size: .86rem; margin-top: 2px; }
+.done { border-top: 1px solid var(--stone); padding-top: 4px; }
+.done summary { list-style: none; cursor: pointer; display: flex; align-items: center; gap: 8px; padding: 10px 0; color: var(--ink-2); font-weight: 600; }
+.done summary::-webkit-details-marker { display: none; }
+.done summary .i { transition: transform .2s; }
+.done[open] summary .i { transform: rotate(90deg); }
+.done li { display: flex; gap: 12px; align-items: baseline; padding: 6px 0 6px 2px; color: var(--ink-2); }
+.done li .i { color: var(--moss); width: 18px; height: 18px; transform: translateY(3px); }
+.calm { display: grid; justify-items: start; gap: 6px; padding: 22px 24px; border-radius: 16px; background: var(--moss-soft); }
+.calm h3 { font-size: 1.35rem; }
+.calm p { color: var(--ink-2); }
+
+/* ── Week ── */
+.weekbar { display: flex; flex-wrap: wrap; align-items: center; gap: 10px 14px; position: sticky; top: 0; z-index: 3; background: var(--paper); padding: 12px 0; margin: -12px 0 -8px; border-bottom: 1px solid transparent; }
+.wnav { display: inline-flex; align-items: center; gap: 2px; background: var(--paper-2); border-radius: 12px; padding: 3px; }
+.wnav button { width: 38px; height: 38px; border-radius: 9px; display: grid; place-items: center; color: var(--ink-2); }
+.wnav button:hover:not(:disabled) { background: var(--paper); color: var(--ink); }
+.wnav button:disabled { opacity: .35; cursor: default; }
+.wnav strong { padding: 0 10px; font-family: var(--serif); font-weight: 500; font-size: 1.12rem; white-space: nowrap; }
+.wsum { color: var(--ink-3); font-size: .94rem; }
+.wsum b { color: var(--gold-ink); font-weight: 600; }
+.seg { display: inline-flex; background: var(--paper-2); border-radius: 12px; padding: 3px; margin-left: auto; }
+.seg button { min-height: 38px; padding: 0 14px; border-radius: 9px; font-weight: 600; font-size: .92rem; color: var(--ink-2); display: inline-flex; align-items: center; gap: 6px; }
+.seg button[aria-pressed="true"] { background: var(--paper); color: var(--ink); box-shadow: var(--shadow-1); }
+.days { display: grid; }
+.day { display: grid; grid-template-columns: 8.5rem minmax(0, 1fr); gap: 8px 20px; padding: 18px 0; border-top: 1px solid var(--stone); }
+.dl { display: grid; align-content: start; gap: 1px; }
+.dl b { font-weight: 600; font-size: 1.04rem; text-transform: capitalize; }
+.dl span { color: var(--ink-3); font-size: .92rem; }
+.dl .feast { font-family: var(--serif); font-style: italic; color: var(--gold-ink); font-size: 1rem; line-height: 1.25; margin-top: 2px; }
+.dl .today { justify-self: start; margin-top: 4px; }
+.mlist { display: grid; gap: 6px; min-width: 0; }
+.mrow { display: grid; grid-template-columns: 4.6rem minmax(0, 1fr) auto; gap: 4px 14px; padding: 10px 12px; margin: 0 -12px; border-radius: 12px; align-items: start; width: calc(100% + 24px); transition: background .15s; }
+.mrow:hover { background: var(--paper-2); }
+.mrow time { font-family: var(--serif); font-size: 1.75rem; line-height: 1; letter-spacing: -.02em; color: var(--moss); padding-top: 3px; }
+.mrow .mb { display: grid; gap: 6px; min-width: 0; }
+.mrow .mw { display: flex; flex-wrap: wrap; align-items: center; gap: 4px 8px; font-weight: 500; }
+.mrow .chev { color: var(--stone-2); padding-top: 6px; }
+.mrow:hover .chev { color: var(--moss); }
+.mrow.off time, .mrow.off .mw > span:first-child { text-decoration: line-through; text-decoration-thickness: 1px; color: var(--ink-3); }
+.mrow .reason { font-size: .94rem; color: var(--alert); }
+.ints { display: grid; gap: 3px; font-size: 1rem; color: var(--ink-2); }
+.ints li { display: flex; gap: 8px; align-items: baseline; flex-wrap: wrap; }
+.ints .pre { width: 12px; flex: none; text-align: center; color: var(--gold); font-weight: 600; }
+.ints .none { font-family: var(--serif); font-style: italic; color: var(--ink-3); }
+.ints li.pend > span:nth-child(2) { border-bottom: 1.5px dashed var(--gold); }
+.notice { display: flex; flex-wrap: wrap; gap: 14px 20px; align-items: center; justify-content: space-between; padding: 18px 20px; border-radius: 16px; background: var(--moss-soft); }
+.notice p { max-width: 48ch; color: var(--ink); }
+.notice .acts { display: flex; gap: 8px; flex-wrap: wrap; }
+.preview { border: 1px solid var(--stone); border-radius: 18px; overflow: hidden; }
+.browser { display: flex; align-items: center; gap: 8px; padding: 10px 14px; background: var(--paper-2); border-bottom: 1px solid var(--stone); font-size: .86rem; color: var(--ink-3); }
+.browser i { width: 9px; height: 9px; border-radius: 50%; background: var(--stone-2); }
+.browser span { margin-left: 8px; background: var(--paper); border-radius: 7px; padding: 2px 10px; flex: 1; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.pv { padding: 28px 28px 12px; display: grid; gap: 4px; }
+.pv h2 { font-size: 2.1rem; letter-spacing: -.02em; }
+.pv .lede { font-family: var(--serif); font-style: italic; color: var(--ink-2); font-size: 1.15rem; }
+.pv .day { grid-template-columns: 1fr; }
+.pv .dl { grid-auto-flow: column; justify-content: start; gap: 10px; align-items: baseline; }
+.pv .mrow { cursor: default; }
+.pv .mrow:hover { background: none; }
+
+/* ── Bulletins ── */
+.blist { display: grid; gap: 12px; }
+.bcard { display: grid; grid-template-columns: minmax(0, 1fr) auto; gap: 6px 16px; align-items: center; padding: 18px 20px; border-radius: 16px; border: 1px solid var(--stone); }
+.bcard h3 { font-size: 1.35rem; }
+.bcard p { color: var(--ink-2); font-size: .97rem; }
+.bcard .meta { display: flex; flex-wrap: wrap; gap: 6px 12px; align-items: center; }
+.bcard.missing { border: 1.5px dashed var(--gold); background: var(--gold-soft); grid-template-columns: 1fr; padding: 22px; gap: 10px; }
+.bcard.missing .acts { display: flex; flex-wrap: wrap; gap: 8px; padding-top: 6px; }
+
+/* ── Upload flow ── */
+.steps { display: flex; gap: 6px; align-items: center; flex-wrap: wrap; }
+.steps li { display: flex; align-items: center; gap: 8px; color: var(--ink-3); font-size: .92rem; font-weight: 600; }
+.steps li + li::before { content: ""; width: 22px; height: 1px; background: var(--stone-2); margin-right: 2px; }
+.steps .n { width: 24px; height: 24px; border-radius: 50%; display: grid; place-items: center; font-size: .78rem; box-shadow: inset 0 0 0 1.5px var(--stone-2); }
+.steps li.on { color: var(--ink); }
+.steps li.on .n { background: var(--moss); color: var(--on-moss); box-shadow: none; }
+.steps li.ok .n { background: var(--moss-soft); color: var(--moss); box-shadow: none; }
+.drop { border: 2px dashed var(--stone-2); border-radius: 22px; padding: 44px 24px; display: grid; justify-items: center; gap: 18px; text-align: center; background: var(--paper-2); transition: border-color .15s, background .15s; }
+.drop.over { border-color: var(--moss); background: var(--moss-soft); }
+.drop h2 { font-size: 1.8rem; letter-spacing: -.015em; }
+.drop p { color: var(--ink-2); max-width: 44ch; }
+.drop .acts { display: flex; gap: 10px; flex-wrap: wrap; justify-content: center; }
+.drop .big-ic { width: 64px; height: 64px; border-radius: 50%; background: var(--paper); display: grid; place-items: center; color: var(--moss); box-shadow: var(--shadow-1); }
+.drop .big-ic .i { width: 30px; height: 30px; }
+.samples { display: flex; flex-wrap: wrap; gap: 8px; justify-content: center; align-items: center; font-size: .9rem; color: var(--ink-3); }
+.samples button { text-decoration: underline; text-underline-offset: 3px; color: var(--ink-2); }
+.promise { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 18px; }
+.promise div { display: grid; gap: 4px; }
+.promise b { font-weight: 600; }
+.promise p { color: var(--ink-2); font-size: .95rem; }
+.split { display: grid; grid-template-columns: minmax(0, 5fr) minmax(0, 6fr); gap: 28px; align-items: start; }
+.split > .src-col { position: sticky; top: 0; display: grid; gap: 10px; }
+.srcmeta { display: flex; justify-content: space-between; gap: 10px; align-items: center; font-size: .9rem; color: var(--ink-3); }
+.srcmeta b { color: var(--ink); font-weight: 600; }
+
+/* the bulletin sheet: a physical object, keeps its own light colours in both themes */
+.sheetpaper { position: relative; background: #fbf7ea; color: #23305e; border-radius: 4px; padding: 26px 26px 30px 44px; box-shadow: 0 1px 1px rgb(0 0 0 / .08), 0 18px 40px -18px rgb(0 0 0 / .45); transform: rotate(-.6deg); font-family: var(--hand); font-size: 1.45rem; line-height: 1.6; background-image: linear-gradient(to bottom, transparent calc(1.6em - 1px), rgb(110 140 190 / .28) calc(1.6em - 1px), rgb(110 140 190 / .28) 1.6em, transparent 1.6em); background-size: 100% 1.6em; background-position: 0 1.05em; overflow: hidden; }
+.sheetpaper::before { content: ""; position: absolute; left: 30px; top: 0; bottom: 0; width: 1px; background: rgb(196 92 92 / .35); }
+.sheetpaper .t { font-size: 1.75rem; font-weight: 600; text-decoration: underline; text-decoration-thickness: 1.5px; text-underline-offset: 5px; }
+.sheetpaper li { position: relative; }
+.sheetpaper .pd { display: inline-block; min-width: 5.4em; }
+.sheetpaper .smudge { filter: blur(1.6px); opacity: .85; }
+.sheetpaper .hl { background: rgb(230 190 90 / .32); border-radius: 4px; margin: 0 -6px; padding: 0 6px; box-shadow: 0 0 0 1.5px rgb(168 132 58 / .7); }
+.sheetpaper .hl.ok { background: rgb(120 160 130 / .18); box-shadow: 0 0 0 1.5px rgb(61 90 71 / .4); }
+.sheetpaper .badge { position: absolute; left: -34px; top: .35em; width: 22px; height: 22px; border-radius: 50%; background: #a8843a; color: #fff; font: 700 .72rem/22px var(--sans); text-align: center; }
+.sheetpaper .hl.ok .badge { background: #3d5a47; }
+.sheetpaper .ann { margin-top: .2em; }
+.sheetpaper.blurred { filter: blur(2.2px) brightness(.82) contrast(.9); }
+.sheetpaper.blurred::after { content: ""; position: absolute; inset: 40% 0 0; background: linear-gradient(to bottom, transparent, rgb(30 30 20 / .45)); }
+.sheetpaper.photo { padding: 0; background: #000; transform: none; }
+.sheetpaper.photo img { display: block; width: 100%; height: auto; }
+.scanline { position: absolute; left: 0; right: 0; height: 70px; top: -70px; background: linear-gradient(to bottom, transparent, rgb(61 90 71 / .22), transparent); border-bottom: 2px solid rgb(61 90 71 / .55); animation: scan 2.2s var(--ease) infinite; pointer-events: none; }
+@keyframes scan { to { top: 100%; } }
+.reading { display: grid; gap: 18px; align-content: start; }
+.reading h2 { font-size: 1.7rem; }
+.reading .found { display: grid; gap: 10px; }
+.reading .found li { display: flex; gap: 12px; align-items: center; font-size: 1.02rem; animation: rise .45s var(--ease) both; }
+.reading .found li .i { color: var(--moss); }
+.reading .found li.w { color: var(--ink-3); }
+.reading .found li.w .i { animation: spin 1.1s linear infinite; color: var(--ink-3); }
+@keyframes spin { to { transform: rotate(360deg); } }
+@keyframes rise { from { opacity: 0; transform: translateY(6px); } }
+.skel { display: grid; gap: 10px; }
+.skel i { height: 14px; border-radius: 7px; background: linear-gradient(90deg, var(--paper-3), var(--paper-2), var(--paper-3)); background-size: 200% 100%; animation: shimmer 1.4s linear infinite; }
+.skel i:nth-child(2n) { width: 72%; } .skel i:nth-child(3n) { width: 86%; }
+@keyframes shimmer { to { background-position: -200% 0; } }
+.draft { display: grid; gap: 22px; align-content: start; }
+.dsum { display: flex; flex-wrap: wrap; gap: 6px; }
+.drows { display: grid; }
+.drow { display: grid; grid-template-columns: 5.4rem 3.6rem minmax(0, 1fr); gap: 4px 12px; padding: 11px 0; border-top: 1px solid var(--stone); align-items: baseline; }
+.drow .d { color: var(--ink-2); font-size: .95rem; }
+.drow time { font-family: var(--serif); font-size: 1.3rem; color: var(--moss); }
+.drow .t { min-width: 0; }
+.drow .t small { display: block; color: var(--ink-3); font-size: .86rem; }
+.drow.flag { background: var(--gold-soft); border-radius: 14px; padding: 14px; border-top-color: transparent; margin: 4px 0; position: relative; }
+.drow.flag + .drow { border-top-color: transparent; }
+.drow.fixed .t::after { content: "preverjeno"; margin-left: 8px; font-size: .74rem; font-weight: 700; color: var(--moss); background: var(--moss-soft); border-radius: 999px; padding: 1px 8px; vertical-align: 2px; }
+.qn { display: inline-grid; place-items: center; width: 22px; height: 22px; border-radius: 50%; background: var(--gold); color: var(--paper); font-size: .72rem; font-weight: 700; margin-right: 8px; vertical-align: 1px; }
+.qbox { grid-column: 1 / -1; display: grid; gap: 10px; padding-top: 6px; }
+.qbox p { font-weight: 500; }
+.qbox .chips .chip { border-color: var(--gold); }
+.qbox .fixrow { display: flex; gap: 8px; }
+.news { display: grid; gap: 8px; }
+.news textarea { width: 100%; border: 1px solid transparent; background: var(--paper-2); border-radius: 12px; padding: 10px 14px; font-size: 1rem; line-height: 1.45; resize: none; field-sizing: content; min-height: 0; }
+.news textarea:hover { border-color: var(--stone); }
+.news textarea:focus { outline: none; border-color: var(--moss); background: var(--paper); box-shadow: 0 0 0 3px var(--moss-soft); }
+.addline { justify-self: start; color: var(--moss); font-weight: 600; display: inline-flex; gap: 6px; align-items: center; padding: 6px 0; }
+.actionbar { position: sticky; bottom: 0; z-index: 4; display: flex; flex-wrap: wrap; gap: 10px; align-items: center; padding: 14px 0 6px; background: linear-gradient(to top, var(--paper) 78%, transparent); }
+.actionbar small { color: var(--ink-3); font-size: .9rem; }
+.errcard { border-radius: 18px; background: var(--alert-soft); padding: 24px; display: grid; gap: 14px; align-content: start; }
+.errcard h2 { font-size: 1.6rem; color: var(--alert); }
+.errcard ul { display: grid; gap: 6px; }
+.errcard li { display: flex; gap: 10px; color: var(--ink-2); }
+.errcard li .i { color: var(--alert); transform: translateY(3px); width: 18px; height: 18px; }
+.errcard .acts { display: flex; gap: 8px; flex-wrap: wrap; }
+.success { display: grid; justify-items: center; text-align: center; gap: 14px; padding: 36px 20px; }
+.success .seal { width: 84px; height: 84px; border-radius: 50%; background: var(--moss); color: var(--on-moss); display: grid; place-items: center; animation: pop .5s var(--ease) both; }
+.success .seal .i { width: 40px; height: 40px; stroke-width: 2.2; }
+@keyframes pop { from { transform: scale(.6); opacity: 0; } }
+.success h2 { font-size: 2.1rem; letter-spacing: -.02em; }
+.success p { color: var(--ink-2); max-width: 46ch; }
+.success .acts { display: flex; gap: 10px; flex-wrap: wrap; justify-content: center; padding-top: 6px; }
+.showsrc { display: none; }
+
+/* ── Events, groups, people, history ── */
+.evlist { display: grid; gap: 4px; }
+.month { font-family: var(--serif); font-style: italic; color: var(--ink-3); font-size: 1.1rem; padding: 14px 0 6px; text-transform: capitalize; }
+.ev { display: grid; grid-template-columns: 64px minmax(0, 1fr) auto; gap: 16px; align-items: center; padding: 12px; margin: 0 -12px; border-radius: 14px; width: calc(100% + 24px); }
+.ev:hover { background: var(--paper-2); }
+.datebox { width: 64px; height: 68px; border-radius: 12px; border: 1px solid var(--stone); display: grid; place-items: center; align-content: center; background: var(--paper); }
+.datebox b { font-family: var(--serif); font-size: 1.85rem; font-weight: 400; line-height: 1; color: var(--moss); }
+.datebox span { font-size: .74rem; text-transform: uppercase; letter-spacing: .08em; font-weight: 700; color: var(--ink-3); }
+.ev h3 { font-family: var(--sans); font-weight: 600; font-size: 1.1rem; }
+.ev p { color: var(--ink-2); font-size: .95rem; display: flex; flex-wrap: wrap; gap: 4px 10px; align-items: center; }
+.ev .chev { color: var(--stone-2); }
+.groups { display: grid; gap: 12px; }
+.group { display: grid; grid-template-columns: minmax(0, 1fr) auto; gap: 8px 16px; padding: 20px; border-radius: 16px; border: 1px solid var(--stone); align-items: center; }
+.group h3 { font-size: 1.45rem; }
+.group p { color: var(--ink-2); }
+.group .msg { grid-column: 1 / -1; font-family: var(--serif); font-style: italic; color: var(--alert); }
+.group.off h3 { text-decoration: line-through; text-decoration-thickness: 1px; color: var(--ink-3); }
+.people { display: grid; }
+.person { display: grid; grid-template-columns: 48px minmax(0, 1fr) auto; gap: 14px; align-items: center; padding: 16px 12px; margin: 0 -12px; border-radius: 14px; width: calc(100% + 24px); border-top: 1px solid var(--stone); }
+.person:first-child { border-top: 0; }
+.person:hover { background: var(--paper-2); }
+.person b { font-weight: 600; font-size: 1.06rem; }
+.person p { color: var(--ink-3); font-size: .92rem; }
+.person .secs { display: flex; flex-wrap: wrap; gap: 4px; margin-top: 6px; }
+.person .chev { color: var(--stone-2); }
+.hist { display: grid; }
+.hday { font-family: var(--serif); font-style: italic; color: var(--ink-3); font-size: 1.1rem; padding: 16px 0 4px; }
+.hrow { display: grid; grid-template-columns: 3.4rem 36px minmax(0, 1fr) auto; gap: 12px; align-items: center; padding: 12px 0; border-top: 1px solid var(--stone); }
+.hrow time { color: var(--ink-3); font-size: .9rem; }
+.hrow .avatar { width: 32px; height: 32px; font-size: .74rem; }
+.hrow b { font-weight: 600; }
+.hrow p { color: var(--ink-3); font-size: .9rem; }
+
+/* ── Overlays ── */
+.scrim { position: absolute; inset: 0; background: var(--scrim); z-index: 30; }
+.scrim.enter { animation: fade .25s ease both; }
+@keyframes fade { from { opacity: 0; } }
+.panel { position: absolute; top: 0; right: 0; bottom: 0; width: min(480px, 100%); background: var(--paper); z-index: 31; display: grid; grid-template-rows: auto minmax(0, 1fr) auto; box-shadow: var(--shadow-2); border-left: 1px solid var(--stone); }
+.panel.enter { animation: slidein .35s var(--ease) both; }
+@keyframes slidein { from { transform: translateX(40px); opacity: 0; } }
+.panel-h { display: flex; align-items: flex-start; gap: 12px; padding: 18px 20px 14px; border-bottom: 1px solid var(--stone); }
+.panel-h > div { flex: 1; min-width: 0; display: grid; gap: 2px; }
+.panel-h h2 { font-size: 1.6rem; line-height: 1.15; letter-spacing: -.01em; }
+.panel-h p { color: var(--ink-2); }
+.panel-b { overflow-y: auto; padding: 20px; display: grid; gap: 22px; align-content: start; }
+.panel-f { padding: 14px 20px 18px; border-top: 1px solid var(--stone); display: flex; gap: 8px; flex-wrap: wrap; background: var(--paper); }
+.panel-f .btn.primary { flex: 1; }
+.banner { border-radius: 14px; padding: 14px 16px; display: grid; gap: 8px; }
+.banner.alert { background: var(--alert-soft); }
+.banner.alert b { color: var(--alert); }
+.banner.gold { background: var(--gold-soft); }
+.banner.gold b { color: var(--gold-ink); }
+.banner p { color: var(--ink-2); }
+.banner .acts { display: flex; gap: 8px; flex-wrap: wrap; }
+.blk { display: grid; gap: 10px; }
+.blk > h3 { font-family: var(--sans); font-weight: 700; font-size: .78rem; text-transform: uppercase; letter-spacing: .1em; color: var(--ink-3); }
+.ilist { display: grid; border: 1px solid var(--stone); border-radius: 14px; overflow: hidden; }
+.ilist li { display: flex; align-items: center; gap: 10px; padding: 10px 8px 10px 14px; border-top: 1px solid var(--stone); min-height: 52px; }
+.ilist li:first-child { border-top: 0; }
+.ilist li .pre { color: var(--gold); width: 12px; text-align: center; font-weight: 600; }
+.ilist li > span:nth-child(2) { flex: 1; min-width: 0; }
+.ilist li.empty { color: var(--ink-3); font-family: var(--serif); font-style: italic; }
+.addbox { display: grid; gap: 10px; padding: 14px; border-radius: 14px; background: var(--paper-2); }
+.addbox .r { display: flex; gap: 8px; }
+.addbox .r .input { flex: 1; min-width: 0; }
+.menu { display: grid; gap: 2px; }
+.menu a, .menu button { display: flex; align-items: center; gap: 14px; padding: 14px 12px; border-radius: 12px; font-weight: 500; font-size: 1.05rem; color: var(--ink); text-decoration: none; width: 100%; }
+.menu a:hover, .menu button:hover { background: var(--paper-2); }
+.menu .i { color: var(--ink-2); }
+
+/* assistant */
+.chat { display: grid; grid-template-rows: minmax(0, 1fr) auto; min-height: 0; }
+.thread { overflow-y: auto; padding: 20px 20px 8px; display: flex; flex-direction: column; gap: 16px; }
+.msg { max-width: 90%; display: grid; gap: 10px; }
+.msg.me { align-self: flex-end; background: var(--moss); color: var(--on-moss); padding: 11px 16px; border-radius: 18px 18px 6px 18px; font-size: 1.02rem; }
+.msg.ai { align-self: flex-start; font-size: 1.04rem; }
+.msg.ai.enter, .msg.me.enter { animation: rise .35s var(--ease) both; }
+.msg.ai .by { font-size: .74rem; letter-spacing: .1em; text-transform: uppercase; font-weight: 700; color: var(--ink-3); display: flex; align-items: center; gap: 6px; }
+.msg.ai .by i { width: 8px; height: 8px; border-radius: 50%; background: var(--moss); }
+.msg.ai.no > p { border-left: 3px solid var(--alert); padding-left: 12px; }
+.typing { display: inline-flex; gap: 4px; padding: 6px 0; }
+.typing i { width: 7px; height: 7px; border-radius: 50%; background: var(--ink-3); animation: blink 1.2s infinite; }
+.typing i:nth-child(2) { animation-delay: .2s; } .typing i:nth-child(3) { animation-delay: .4s; }
+@keyframes blink { 0%, 80%, 100% { opacity: .25; } 40% { opacity: 1; } }
+.card { border: 1px solid var(--stone); border-radius: 16px; background: var(--paper); box-shadow: var(--shadow-2); overflow: hidden; }
+.card-h { padding: 10px 16px; background: var(--paper-2); border-bottom: 1px solid var(--stone); display: flex; justify-content: space-between; align-items: center; gap: 8px; }
+.card-b { padding: 14px 16px; display: grid; gap: 12px; }
+.card-f { display: flex; gap: 8px; padding: 0 16px 16px; flex-wrap: wrap; }
+.card-f .btn.primary { flex: 1; }
+.card.closed { box-shadow: none; }
+.card.closed .card-h { background: var(--moss-soft); }
+.card.gone { opacity: .55; box-shadow: none; }
+.chg { display: grid; grid-template-columns: 18px minmax(0, 1fr); gap: 2px 10px; }
+.chg .s { font-family: var(--serif); font-size: 1.35rem; line-height: 1.1; color: var(--moss); text-align: center; }
+.chg.minus .s { color: var(--alert); }
+.chg b { font-weight: 600; }
+.chg small { grid-column: 2; color: var(--ink-3); font-size: .92rem; }
+.q { background: var(--gold-soft); border-radius: 12px; padding: 12px; display: grid; gap: 10px; }
+.q p { font-weight: 500; font-size: .98rem; }
+.q .chip { border-color: var(--gold); min-height: 36px; font-size: .92rem; }
+.composer { border-top: 1px solid var(--stone); padding: 12px 16px 16px; display: grid; gap: 10px; background: var(--paper); }
+.sugg { display: flex; gap: 8px; overflow-x: auto; padding-bottom: 2px; scrollbar-width: none; }
+.sugg button { flex: none; border: 1px solid var(--stone); background: var(--paper-2); border-radius: 999px; padding: 7px 14px; font-size: .92rem; color: var(--ink-2); }
+.sugg button:hover { border-color: var(--moss); color: var(--moss); }
+.cin { display: flex; gap: 8px; align-items: flex-end; }
+.cin textarea { flex: 1; min-width: 0; resize: none; border: 1px solid var(--stone-2); border-radius: 16px; padding: 13px 16px; min-height: 52px; max-height: 140px; font-size: 1.04rem; line-height: 1.4; background: var(--paper); field-sizing: content; }
+.cin textarea:focus { outline: none; border-color: var(--moss); box-shadow: 0 0 0 3px var(--moss-soft); }
+.cin .iconbtn { width: 52px; height: 52px; border-radius: 16px; border: 1px solid var(--stone); }
+.cin .send { background: var(--moss); color: var(--on-moss); border-color: var(--moss); }
+.cin .send:hover { background: color-mix(in srgb, var(--moss) 84%, var(--ink)); color: var(--on-moss); }
+
+.toast { position: absolute; left: 50%; bottom: 96px; transform: translateX(-50%); z-index: 50; display: flex; align-items: center; gap: 16px; background: #1e2622; color: #fbfaf7; padding: 12px 14px 12px 18px; border-radius: 14px; box-shadow: var(--shadow-2); max-width: calc(100% - 32px); width: max-content; font-size: .98rem; }
+.toast.enter { animation: toastin .35s var(--ease) both; }
+@keyframes toastin { from { opacity: 0; transform: translate(-50%, 10px); } }
+.toast .i { color: #d9b86c; }
+.toast button { color: #d9b86c; font-weight: 700; padding: 6px 8px; border-radius: 8px; }
+.toast button:hover { background: rgb(255 255 255 / .08); }
+
+/* ── Login ── */
+.login { height: 100%; display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); }
+.login .art { background: var(--moss-deep); color: #f1efe7; padding: 48px; display: grid; align-content: space-between; position: relative; overflow: hidden; }
+.login .art::after { content: ""; position: absolute; right: -120px; bottom: -120px; width: 420px; height: 420px; border-radius: 50%; border: 1px solid rgb(255 255 255 / .08); box-shadow: 0 0 0 40px rgb(255 255 255 / .025), 0 0 0 80px rgb(255 255 255 / .02); }
+.login .art blockquote { margin: 0; font-family: var(--serif); font-size: 2.2rem; line-height: 1.15; letter-spacing: -.015em; max-width: 16ch; }
+.login .art small { color: rgb(241 239 231 / .7); }
+.login .form { display: grid; place-items: center; padding: 32px 24px; }
+.login .box { width: 100%; max-width: 380px; display: grid; gap: 22px; }
+.login .box h1 { font-size: 2.2rem; letter-spacing: -.02em; }
+.login .box > p { color: var(--ink-2); }
+.or { display: flex; align-items: center; gap: 12px; color: var(--ink-3); font-size: .88rem; }
+.or::before, .or::after { content: ""; flex: 1; height: 1px; background: var(--stone); }
+.g { width: 18px; height: 18px; }
+.sent { display: grid; gap: 14px; justify-items: start; }
+.sent .seal { width: 64px; height: 64px; border-radius: 50%; background: var(--moss-soft); color: var(--moss); display: grid; place-items: center; }
+.sent .seal .i { width: 30px; height: 30px; }
+.sent p { color: var(--ink-2); }
+.fine { color: var(--ink-3); font-size: .86rem; }
+.fine button { text-decoration: underline; text-underline-offset: 3px; }
+
+/* ── Phone / narrow ── */
+@container (max-width: 1000px) {
+  .quick { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .split { grid-template-columns: 1fr; }
+  .split > .src-col { position: static; }
+  .showsrc { display: inline-flex; }
+  .split > .src-col.collapsed .sheetwrap { display: none; }
+}
+@container (max-width: 820px) {
+  .shell { grid-template-columns: 1fr; }
+  .side { display: none; }
+  .phonebar { display: flex; align-items: center; gap: 10px; padding: 12px 16px 10px; border-bottom: 1px solid var(--stone); background: var(--paper); }
+  .phonebar .mark { width: 32px; height: 32px; }
+  .phonebar b { font-family: var(--serif); font-weight: 500; font-size: 1.15rem; flex: 1; min-width: 0; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .phonebar .avatar { width: 34px; height: 34px; }
+  .page { padding: 22px 16px 28px; gap: 24px; }
+  .askbar { padding: 8px 12px 8px; }
+  .ask, .cam { min-height: 52px; height: 52px; border-radius: 14px; }
+  .cam { width: 52px; }
+  .tabbar { display: grid; grid-auto-flow: column; grid-auto-columns: 1fr; border-top: 1px solid var(--stone); background: var(--paper-2); padding: 4px 4px max(6px, env(safe-area-inset-bottom, 0px)); }
+  .tabbar a, .tabbar button { display: grid; justify-items: center; gap: 2px; padding: 6px 2px 4px; font-size: .74rem; font-weight: 600; color: var(--ink-3); text-decoration: none; border-radius: 10px; position: relative; }
+  .tabbar .i { width: 24px; height: 24px; }
+  .tabbar [aria-current="page"] { color: var(--moss); }
+  .tabbar .dot { position: absolute; top: 4px; left: calc(50% + 8px); min-width: 16px; height: 16px; border-radius: 8px; background: var(--gold); color: var(--paper); font-size: .66rem; display: grid; place-items: center; padding: 0 4px; }
+  .phead h1, .hello h1 { font-size: 2rem; }
+  .hero { padding: 18px; grid-template-columns: auto 1fr; gap: 4px 16px; border-radius: 18px; }
+  .hero .when { font-size: 2.8rem; }
+  .hero .go { display: none; }
+  .hero .int { grid-column: 1 / -1; padding-top: 6px; }
+  .task { grid-template-columns: 40px minmax(0, 1fr); padding: 16px; gap: 4px 12px; }
+  .task .ic { width: 40px; height: 40px; }
+  .task .acts { grid-column: 1 / -1; }
+  .task .acts .btn { flex: 1; }
+  .appr { grid-template-columns: 1fr; }
+  .day { grid-template-columns: 1fr; gap: 6px; padding: 14px 0; }
+  .dl { grid-auto-flow: column; justify-content: start; gap: 10px; align-items: baseline; }
+  .dl .today { margin-top: 0; }
+  .mrow { grid-template-columns: 3.9rem minmax(0, 1fr) auto; }
+  .mrow time { font-size: 1.45rem; }
+  .seg { margin-left: 0; }
+  .weekbar { gap: 8px; }
+  .panel { top: auto; width: 100%; max-height: 94%; border-radius: 22px 22px 0 0; border-left: 0; }
+  .panel.full { top: 0; max-height: none; border-radius: 0; }
+  .panel.enter { animation-name: sheetup; }
+  @keyframes sheetup { from { transform: translateY(60px); opacity: 0; } }
+  .panel-h { padding: 16px 16px 12px; }
+  .panel-b { padding: 16px; }
+  .panel-f { padding: 12px 16px max(16px, env(safe-area-inset-bottom, 0px)); }
+  .panel-f .btn { flex: 1; }
+  .toast { bottom: 150px; }
+  .promise { grid-template-columns: 1fr; gap: 12px; }
+  .drop { padding: 28px 18px; }
+  .drop .acts .btn { width: 100%; }
+  .drow { grid-template-columns: 4.6rem 3.2rem minmax(0, 1fr); }
+  .actionbar { gap: 4px 8px; padding-top: 10px; }
+  .actionbar .btn.lg { flex: 1 1 100%; }
+  .actionbar .btn.ghost { flex: 1; min-height: 40px; }
+  .sheetpaper { font-size: 1.2rem; padding: 18px 16px 22px 36px; }
+  .sheetpaper::before { left: 24px; }
+  .sheetpaper .badge { left: -30px; }
+  .row2 { grid-template-columns: 1fr; }
+  .login { grid-template-columns: 1fr; grid-template-rows: auto 1fr; }
+  .login .art { padding: 24px 20px; gap: 18px; }
+  .login .art blockquote { font-size: 1.5rem; }
+  .ev { grid-template-columns: 56px minmax(0, 1fr) auto; gap: 12px; }
+  .datebox { width: 56px; height: 60px; }
+  .hrow { grid-template-columns: 3rem minmax(0, 1fr) auto; }
+  .hrow .avatar { display: none; }
+  .group { grid-template-columns: 1fr; }
+}
+@media (prefers-reduced-motion: reduce) { *, *::before, *::after { animation: none !important; transition: none !important; } }
+</style>
+</head>
+<body>
+<div class="bench" id="bench"></div>
+<div class="stage" id="stage"><div class="app" id="app"></div></div>
+<input type="file" id="file-photo" accept="image/*" capture="environment" hidden>
+<input type="file" id="file-any" accept="image/*,application/pdf,.xlsx,.xls,.csv,.ods" hidden>
+
+<script>
+(() => {
+// ── Icons (Lucide-style strokes) ──
+const P = {
+  home: '<path d="m3 10 9-7 9 7v9a2 2 0 0 1-2 2h-4v-7H9v7H5a2 2 0 0 1-2-2z"/>',
+  cal: '<rect x="3" y="4" width="18" height="18" rx="2"/><path d="M16 2v4M8 2v4M3 10h18"/>',
+  file: '<path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><path d="M14 2v6h6M8 13h8M8 17h5"/>',
+  star: '<rect x="3" y="4" width="18" height="18" rx="2"/><path d="M16 2v4M8 2v4"/><path d="m12 10 1.4 2.8 3 .4-2.2 2.1.5 3-2.7-1.4-2.7 1.4.5-3-2.2-2.1 3-.4z"/>',
+  book: '<path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20V2H6.5A2.5 2.5 0 0 0 4 4.5z"/><path d="M4 19.5A2.5 2.5 0 0 0 6.5 22H20v-5"/>',
+  users: '<path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M22 21v-2a4 4 0 0 0-3-3.87M16 3.13a4 4 0 0 1 0 7.75"/>',
+  hist: '<path d="M3 12a9 9 0 1 0 3-6.7L3 8"/><path d="M3 3v5h5M12 7v5l3 2"/>',
+  check: '<path d="M20 6 9 17l-5-5"/>',
+  x: '<path d="M18 6 6 18M6 6l12 12"/>',
+  l: '<path d="m15 18-6-6 6-6"/>',
+  r: '<path d="m9 18 6-6-6-6"/>',
+  plus: '<path d="M12 5v14M5 12h14"/>',
+  undo: '<path d="M9 14 4 9l5-5"/><path d="M4 9h10.5a5.5 5.5 0 0 1 0 11H11"/>',
+  send: '<path d="M5 12h14M13 6l6 6-6 6"/>',
+  cam: '<path d="M14.5 4h-5L7 7H4a2 2 0 0 0-2 2v9a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V9a2 2 0 0 0-2-2h-3z"/><circle cx="12" cy="13" r="3"/>',
+  up: '<path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4M17 8l-5-5-5 5M12 3v12"/>',
+  msg: '<path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/>',
+  eye: '<path d="M2 12s3.5-7 10-7 10 7 10 7-3.5 7-10 7S2 12 2 12z"/><circle cx="12" cy="12" r="3"/>',
+  pen: '<path d="M12 20h9"/><path d="M16.5 3.5a2.1 2.1 0 0 1 3 3L7 19l-4 1 1-4z"/>',
+  pin: '<path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0z"/><circle cx="12" cy="10" r="3"/>',
+  clock: '<circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/>',
+  trash: '<path d="M3 6h18M8 6V4h8v2M19 6l-1 14H6L5 6"/>',
+  out: '<path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4M16 17l5-5-5-5M21 12H9"/>',
+  mail: '<rect x="2" y="4" width="20" height="16" rx="2"/><path d="m22 7-10 6L2 7"/>',
+  alert: '<circle cx="12" cy="12" r="10"/><path d="M12 8v4M12 16h.01"/>',
+  more: '<circle cx="5" cy="12" r="1"/><circle cx="12" cy="12" r="1"/><circle cx="19" cy="12" r="1"/>',
+  cross: '<path d="M12 2.5v19M6.5 8h11"/>',
+  inbox: '<path d="M22 12h-6l-2 3h-4l-2-3H2"/><path d="M5.45 5.11 2 12v6a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2v-6l-3.45-6.89A2 2 0 0 0 16.76 4H7.24a2 2 0 0 0-1.79 1.11z"/>',
+  loader: '<path d="M21 12a9 9 0 1 1-6.2-8.56"/>',
+  text: '<path d="M4 7V4h16v3M9 20h6M12 4v16"/>',
+  move: '<path d="M5 12h14M13 6l6 6-6 6"/>',
+  ban: '<circle cx="12" cy="12" r="10"/><path d="m4.9 4.9 14.2 14.2"/>',
+  user: '<circle cx="12" cy="8" r="4"/><path d="M4 21v-1a6 6 0 0 1 6-6h4a6 6 0 0 1 6 6v1"/>',
+  shield: '<path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>',
+};
+const I = (n, c = "") => `<svg class="i ${c}" viewBox="0 0 24 24" aria-hidden="true">${P[n]}</svg>`;
+const GOOGLE = `<svg class="g" viewBox="0 0 24 24" aria-hidden="true"><path fill="#4285F4" d="M23.5 12.3c0-.8-.1-1.6-.2-2.3H12v4.4h6.5a5.6 5.6 0 0 1-2.4 3.6v3h3.9c2.3-2.1 3.5-5.2 3.5-8.7z"/><path fill="#34A853" d="M12 24c3.2 0 6-1.1 8-2.9l-3.9-3c-1.1.7-2.5 1.2-4.1 1.2-3.1 0-5.8-2.1-6.7-5H1.3v3.1A12 12 0 0 0 12 24z"/><path fill="#FBBC05" d="M5.3 14.3a7.2 7.2 0 0 1 0-4.6V6.6h-4a12 12 0 0 0 0 10.8z"/><path fill="#EA4335" d="M12 4.8c1.8 0 3.3.6 4.6 1.8l3.4-3.4A12 12 0 0 0 1.3 6.6l4 3.1c.9-2.9 3.6-4.9 6.7-4.9z"/></svg>`;
+
+// ── Dates and words ──
+const TODAY = "2026-10-27", NOW = "10:00";
+const WD = ["nedelja", "ponedeljek", "torek", "sreda", "četrtek", "petek", "sobota"];
+const WD_ACC = ["nedeljo", "ponedeljek", "torek", "sredo", "četrtek", "petek", "soboto"];
+const WD_S = ["ned", "pon", "tor", "sre", "čet", "pet", "sob"];
+const MON = ["januar", "februar", "marec", "april", "maj", "junij", "julij", "avgust", "september", "oktober", "november", "december"];
+const MON_S = ["jan", "feb", "mar", "apr", "maj", "jun", "jul", "avg", "sep", "okt", "nov", "dec"];
+const FEAST = { "2026-11-01": "Vsi sveti", "2026-11-02": "Spomin vseh vernih rajnih" };
+const WEEKS = ["2026-10-26", "2026-11-02"];
+const CH = { kriz: "Sv. Križ", marija: "Marijina cerkev", tomaz: "Sv. Tomaž" };
+const PLACES = ["Marijina cerkev", "Sv. Križ", "Sv. Tomaž", "Pokopališče Pirniče", "Mežnarija v Spodnjih Pirničah", "Veroučna učilnica v župnišču"];
+const addDays = (iso, n) => { const d = new Date(iso + "T12:00:00Z"); d.setUTCDate(d.getUTCDate() + n); return d.toISOString().slice(0, 10); };
+const wdOf = (iso) => new Date(iso + "T12:00:00Z").getUTCDay();
+const dnum = (iso) => Number(iso.slice(8, 10));
+const mon = (iso) => MON[Number(iso.slice(5, 7)) - 1];
+const monS = (iso) => MON_S[Number(iso.slice(5, 7)) - 1];
+const fT = (t) => `${Number(t.slice(0, 2))}.${t.slice(3)}`;
+const fDay = (iso) => `${WD[wdOf(iso)]}, ${dnum(iso)}. ${mon(iso)}`;
+const fDayS = (iso) => `${WD_S[wdOf(iso)]} ${dnum(iso)}. ${monS(iso)}.`;
+const fSpan = (a) => { const b = addDays(a, 6); return mon(a) === mon(b) ? `${dnum(a)}.–${dnum(b)}. ${mon(b)}` : `${dnum(a)}. ${monS(a)} – ${dnum(b)}. ${monS(b)}`; };
+const fRel = (iso) => iso === TODAY ? "danes" : iso === addDays(TODAY, 1) ? "jutri" : WD[wdOf(iso)];
+// Slovenian number forms: 1 maša, 2 maši, 3 maše, 5 maš.
+const pl = (n, f) => { const k = n % 100; return `${n} ${f[k === 1 ? 0 : k === 2 ? 1 : k === 3 || k === 4 ? 2 : 3]}`; };
+const MAS = ["maša", "maši", "maše", "maš"];
+const NAM = ["namen", "namena", "nameni", "namenov"];
+const esc = (s) => String(s ?? "").replace(/[&<>"']/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" })[c]);
+const clone = (o) => JSON.parse(JSON.stringify(o));
+let uid = 100; const nid = (p) => `${p}${++uid}`;
+const pre = (k) => (k === "deceased" ? "†" : "·");
+const KINDS = [["deceased", "† Za pokojne"], ["thanksgiving", "Zahvala"], ["other", "Za žive / drugo"]];
+let clock = 10 * 60 + 4;
+const stamp = () => { clock += 2 + (uid % 3); return `${Math.floor(clock / 60)}.${String(clock % 60).padStart(2, "0")}`; };
+
+// ── Seed data ──
+const SCHEDULE = [ // studio/scripts/seed-parish-data.ts, 0 = Sunday
+  { wd: [0], time: "08:00", church: "kriz", type: "sunday" },
+  { wd: [0], time: "10:00", church: "marija", type: "sunday" },
+  { wd: [6], time: "18:30", church: "marija", type: "sunday" },
+  { wd: [1, 5], time: "18:30", church: "kriz", type: "regular" },
+  { wd: [2, 3], time: "18:30", church: "marija", type: "regular" },
+  { wd: [4], time: "07:00", church: "marija", type: "regular" },
+];
+const OCT = { // October 2026 bulletin
+  "2026-10-26": ["deceased", "iz družin Pretnar in Jesihar"],
+  "2026-10-27": ["deceased", "Štefan Hrovat"],
+  "2026-10-28": ["deceased", "Branko Babnik"],
+  "2026-10-29": ["thanksgiving", "v zahvalo"],
+  "2026-10-30": ["other", "na čast Svetemu Duhu"],
+  "2026-10-31": ["deceased", "iz družin Bezlaj in Jamnik"],
+};
+function seed() {
+  const masses = [];
+  for (const start of WEEKS) for (let i = 0; i < 7; i++) {
+    const date = addDays(start, i);
+    for (const e of SCHEDULE) if (e.wd.includes(wdOf(date))) {
+      const m = { id: nid("m"), date, time: e.time, church: e.church, type: e.type, status: "on", reason: "", intents: [] };
+      if (OCT[date]) m.intents.push({ id: nid("i"), kind: OCT[date][0], text: OCT[date][1] });
+      masses.push(m);
+    }
+  }
+  masses.sort((a, b) => (a.date + a.time).localeCompare(b.date + b.time));
+  masses.find((m) => m.date === "2026-11-01" && m.time === "08:00").intents.push({ id: nid("i"), kind: "deceased", text: "Ivana Kos", pending: { by: "marta", at: "včeraj ob 19.42" } });
+  return {
+    masses,
+    events: [
+      { id: "e1", title: "Molitev za rajne na pokopališču", date: "2026-11-01", time: "14:00", place: "Pokopališče Pirniče", desc: "Po molitvi blagoslov grobov.", front: true },
+      { id: "e2", title: "Uradne ure Karitas", date: "2026-11-02", time: "17:00", place: "Mežnarija v Spodnjih Pirničah", desc: "Vsak prvi ponedeljek v mesecu od 17. do 18. ure.", front: false },
+      { id: "e3", title: "Čiščenje Marijine cerkve", date: "2026-11-07", time: "09:00", place: "Marijina cerkev", desc: "Pred zahvalno nedeljo. Prinesite krpe in vedra.", front: false, pending: { by: "marta", at: "danes ob 8.15", isNew: true } },
+      { id: "e4", title: "Srečanje staršev birmancev", date: "2026-11-13", time: "19:00", place: "Veroučna učilnica v župnišču", desc: "", front: false },
+    ],
+    verouk: [
+      { id: "g1", name: "1.–3. razred", date: "2026-10-27", time: "16:00", place: "Veroučna učilnica v župnišču", kids: 14, status: "on", msg: "" },
+      { id: "g2", name: "4.–6. razred", date: "2026-10-28", time: "16:30", place: "Veroučna učilnica v župnišču", kids: 17, status: "on", msg: "" },
+      { id: "g3", name: "7.–9. razred, birmanci", date: "2026-10-30", time: "17:30", place: "Mežnarija v Spodnjih Pirničah", kids: 11, status: "on", msg: "" },
+    ],
+    people: [
+      { id: "blaz", name: "msgr. dr. Blaž Jezeršek", short: "BJ", title: "Župnik", email: "zupirnice@gmail.com", owner: true, sections: ["mase", "oznanila", "dogodki", "verouk"], approval: false, seen: "danes" },
+      { id: "marta", name: "Marta Zupan", short: "MZ", title: "Tajnica", email: "marta@example.com", sections: ["mase", "oznanila", "dogodki"], approval: true, seen: "danes ob 8.15" },
+      { id: "ana", name: "Ana Rozman", short: "AR", title: "Katehistinja", email: "ana@example.com", sections: ["verouk"], approval: false, seen: "pred 3 dnevi" },
+      { id: "tone", name: "Tone Kralj", short: "TK", title: "Zborovodja", email: "tone@example.com", sections: ["dogodki"], approval: true, invited: true, seen: "" },
+    ],
+    bulletins: [
+      { id: "b3", week: "2026-11-02", status: "missing" },
+      { id: "b2", week: "2026-10-26", status: "published", at: "ned 25. okt.", by: "blaz", src: "PDF, 1 stran", n: 6, news: 3 },
+      { id: "b1", week: "2026-10-19", status: "published", at: "ned 18. okt.", by: "blaz", src: "fotografija, 2 strani", n: 7, news: 4 },
+    ],
+  };
+}
+const SECTIONS = { mase: "Maše in nameni", oznanila: "Oznanila", dogodki: "Dogodki", verouk: "Verouk" };
+const PRESETS = { Tajnica: ["mase", "oznanila", "dogodki"], Katehist: ["verouk"], Zborovodja: ["dogodki"], Karitas: ["dogodki"] };
+const SEED_HISTORY = [
+  { at: "8.15", day: "Danes", who: "marta", label: "Nov dogodek: Čiščenje Marijine cerkve", note: "čaka potrditev" },
+  { at: "19.42", day: "Včeraj", who: "marta", label: "Nov namen † Ivana Kos", note: "čaka potrditev" },
+  { at: "18.05", day: "Nedelja, 25. oktober", who: "blaz", label: "Objava oznanil 26. okt – 1. nov", note: "6 namenov, 3 obvestila" },
+  { at: "17.40", day: "Nedelja, 25. oktober", who: "ana", label: "Prostor za 7.–9. razred: Mežnarija" },
+];
+
+// The bulletin Claude "reads" (sample for the prototype).
+const PAPER = {
+  title: "Oznanila 2.–8. 11.",
+  lines: [
+    ["pon 2.11.", "18.30 Križ † vsi rajni župljani"],
+    ["tor 3.11.", '18.30 † Jože No<span class="smudge">v</span>ak', "name"],
+    ["sre 4.11.", "18.30 † Marija in Franc Kralj"],
+    ["čet 5.11.", "7.00 za zdravje v družini"],
+    ["pet 6.11.", "17.30 Križ v zahvalo – 50 let por.", "time"],
+    ["sob 7.11.", "18.30 † druž. Vidmar"],
+    ["ned 8.11.", "8.00 Križ za žive in rajne žup."],
+    ["", "10.00 † Ana Kos"],
+  ],
+  notes: ["– 2.11. po maši molitev na pokopališču", "– ključarji v čet. po jutranji maši", "– nabirka: potrebe župnije"],
+};
+const DRAFT = [
+  { date: "2026-11-02", time: "18:30", church: "kriz", kind: "deceased", text: "vsi rajni župljani" },
+  { date: "2026-11-03", time: "18:30", church: "marija", kind: "deceased", text: "Jože Novak", flag: { key: "name", n: 1, q: "Priimek je slabo čitljiv. Piše Novak ali Nosak?", opts: ["Jože Novak", "Jože Nosak"] } },
+  { date: "2026-11-04", time: "18:30", church: "marija", kind: "deceased", text: "Marija in Franc Kralj" },
+  { date: "2026-11-05", time: "07:00", church: "marija", kind: "other", text: "za zdravje v družini" },
+  { date: "2026-11-06", time: "18:30", church: "kriz", kind: "thanksgiving", text: "v zahvalo za 50 let poroke", flag: { key: "time", n: 2, q: "Na listu piše 17.30, po urniku je petkova maša ob 18.30. Kdaj bo?", opts: ["17.30, kot piše", "18.30, po urniku"] } },
+  { date: "2026-11-07", time: "18:30", church: "marija", kind: "deceased", text: "iz družine Vidmar" },
+  { date: "2026-11-08", time: "08:00", church: "kriz", kind: "other", text: "za žive in rajne župljane" },
+  { date: "2026-11-08", time: "10:00", church: "marija", kind: "deceased", text: "Ana Kos" },
+];
+const DRAFT_NEWS = [
+  "V ponedeljek, 2. novembra, je spomin vseh vernih rajnih. Po večerni maši molimo na pokopališču.",
+  "Ključarji se zberejo v četrtek, 5. novembra, po jutranji maši.",
+  "Nabirka prihodnje nedelje je za potrebe župnije. Bog povrni za vaše darove.",
+];
+
+// ── State ──
+const S = Object.assign(seed(), {
+  user: "blaz", loggedIn: true, route: "domov", phone: false, big: false,
+  week: 0, view: "edit", history: [], chat: [], chatOpen: false, typing: false,
+  panel: null, form: {}, up: null, toast: null, login: { stage: "form", email: "" },
+  srcOpen: false, scenario: "",
+});
+const fx = { page: true, panel: false, toast: false, msgs: 0 };
+let lastRoute = null, toastTimer = null, readTimer = null;
+
+const me = () => S.people.find((p) => p.id === S.user);
+const who = (id) => S.people.find((p) => p.id === id) || { name: id, short: "?" };
+const first = (id) => who(id).name.split(" ").slice(-2, -1)[0] || who(id).name;
+const can = (sec) => me().owner || me().sections.includes(sec);
+const pend = () => (me().approval ? { by: me().id, at: `danes ob ${stamp()}` } : null);
+const weekMasses = (w = S.week) => S.masses.filter((m) => m.date >= WEEKS[w] && m.date <= addDays(WEEKS[w], 6));
+const massById = (id) => S.masses.find((m) => m.id === id);
+const upcoming = () => S.masses.filter((m) => m.date > TODAY || (m.date === TODAY && m.time > NOW));
+const firstName = (p) => p.name.replace(/^msgr\. dr\. /, "").split(" ")[0];
+
+function commit(label, fn, note) {
+  const before = clone({ masses: S.masses, events: S.events, verouk: S.verouk, people: S.people, bulletins: S.bulletins });
+  fn();
+  S.history.unshift({ id: nid("h"), label, note, who: me().id, at: stamp(), before });
+}
+function undo() {
+  const h = S.history.shift(); if (!h) return;
+  Object.assign(S, h.before);
+  toast(`Razveljavljeno: ${h.label}`);
+}
+function toast(text, undoable) {
+  S.toast = { text, undoable }; fx.toast = true;
+  clearTimeout(toastTimer); toastTimer = setTimeout(() => { S.toast = null; render(); }, 5200);
+}
+
+// ── Actions (all permission and approval rules live here) ──
+const A = {
+  addIntent(mid, text, kind) {
+    const m = massById(mid), p = pend();
+    commit(`Nov namen ${pre(kind)} ${text}`, () => m.intents.push({ id: nid("i"), kind, text, ...(p ? { pending: p } : {}) }), p ? "čaka potrditev" : "");
+    toast(p ? "Poslano župniku v potrditev." : "Shranjeno. Namen je že na strani.", true);
+  },
+  removeIntent(mid, iid) {
+    const m = massById(mid), i = m.intents.find((x) => x.id === iid);
+    commit(`Odstranjen namen ${pre(i.kind)} ${i.text}`, () => { m.intents = m.intents.filter((x) => x.id !== iid); });
+    toast("Namen je odstranjen.", true);
+  },
+  cancelMass(mid, reason, move) {
+    const m = massById(mid), p = pend();
+    const label = `Odpoved maše: ${fRel(m.date)}, ${fT(m.time)}, ${CH[m.church]}`;
+    if (p) { commit(label, () => { m.pendingCancel = { ...p, reason, move }; }, "čaka potrditev"); return toast("Predlog odpovedi je poslan župniku.", true); }
+    commit(label, () => applyCancel(m, reason, move));
+    toast("Shranjeno. Maša je na strani označena, da odpade.", true);
+  },
+  restoreMass(mid) {
+    const m = massById(mid);
+    commit(`Maša spet na urniku: ${fRel(m.date)}, ${fT(m.time)}`, () => { m.status = "on"; m.reason = ""; });
+    toast("Maša je spet na urniku.", true);
+  },
+  saveEvent(f, id) {
+    const p = pend(), data = { title: f.title.trim(), date: f.date, time: f.time, place: f.place, desc: f.desc || "", front: !!f.front };
+    if (id) {
+      const ev = S.events.find((e) => e.id === id);
+      commit(`Sprememba dogodka: ${data.title}`, () => Object.assign(ev, data, p ? { pending: { ...p, isNew: false } } : {}), p ? "čaka potrditev" : "");
+    } else {
+      commit(`Nov dogodek: ${data.title}`, () => S.events.push({ id: nid("e"), ...data, ...(p ? { pending: { ...p, isNew: true } } : {}) }), p ? "čaka potrditev" : "");
+    }
+    S.events.sort((a, b) => (a.date + a.time).localeCompare(b.date + b.time));
+    toast(p ? "Poslano župniku v potrditev." : "Shranjeno. Dogodek je na strani.", true);
+  },
+  deleteEvent(id) {
+    const ev = S.events.find((e) => e.id === id);
+    commit(`Izbrisan dogodek: ${ev.title}`, () => { S.events = S.events.filter((e) => e.id !== id); });
+    toast("Dogodek je izbrisan.", true);
+  },
+  cancelGroup(gid, msg) {
+    const g = S.verouk.find((x) => x.id === gid);
+    commit(`Verouk ${g.name} odpade`, () => { g.status = "off"; g.msg = msg; });
+    toast("Shranjeno. Starši bodo obvestilo videli na strani Verouk.", true);
+  },
+  restoreGroup(gid) {
+    const g = S.verouk.find((x) => x.id === gid);
+    commit(`Verouk ${g.name} spet na urniku`, () => { g.status = "on"; g.msg = ""; });
+    toast("Ura verouka je spet na urniku.", true);
+  },
+  savePerson(id, f) {
+    const p = S.people.find((x) => x.id === id);
+    commit(`Dostop za ${p.name}`, () => { p.sections = [...f.sections]; p.approval = !!f.approval; });
+    toast("Shranjeno. Spremembe veljajo ob naslednjem kliku.", true);
+  },
+  removePerson(id) {
+    const p = S.people.find((x) => x.id === id);
+    commit(`Odvzet dostop: ${p.name}`, () => { S.people = S.people.filter((x) => x.id !== id); });
+    toast(`${p.name} nima več dostopa.`, true);
+  },
+  invite(f) {
+    const short = f.name.trim().split(/\s+/).map((w) => w[0]).join("").slice(0, 2).toUpperCase();
+    commit(`Povabilo: ${f.name.trim()}`, () => S.people.push({ id: nid("p"), name: f.name.trim(), short, title: f.title || "Sodelavec", email: f.email.trim(), sections: [...f.sections], approval: !!f.approval, invited: true, seen: "" }));
+    toast(`Povabilo je poslano na ${f.email.trim()}.`, true);
+  },
+};
+function applyCancel(m, reason, move) {
+  m.status = "off"; m.reason = reason || ""; delete m.pendingCancel;
+  if (move === "next" && m.intents.length) {
+    const next = S.masses.find((x) => (x.date + x.time) > (m.date + m.time) && x.status !== "off");
+    if (next) { next.intents.push(...m.intents.map((i) => ({ ...i, id: nid("i"), moved: true }))); m.intents = []; }
+  }
+}
+function applyDraft(picks) {
+  for (const r of DRAFT) {
+    const m = S.masses.find((x) => x.date === r.date && x.church === r.church); if (!m) continue;
+    let text = r.text;
+    if (r.flag?.key === "name") text = picks.name;
+    if (r.flag?.key === "time" && picks.time.startsWith("17")) m.time = "17:30";
+    m.intents.push({ id: nid("i"), kind: r.kind, text });
+  }
+}
+
+// Everything waiting for the priest, as one list.
+function approvals() {
+  const out = [];
+  for (const m of S.masses) {
+    for (const i of m.intents) if (i.pending) out.push({ id: i.id, by: i.pending.by, at: i.pending.at,
+      what: `Nov namen ${pre(i.kind)} ${i.text}`, where: `${fDay(m.date)}, ${fT(m.time)}, ${CH[m.church]}`,
+      ok: () => { delete i.pending; }, no: () => { m.intents = m.intents.filter((x) => x !== i); } });
+    if (m.pendingCancel) { const pc = m.pendingCancel; out.push({ id: m.id + "c", by: pc.by, at: pc.at,
+      what: "Odpoved maše", where: `${fDay(m.date)}, ${fT(m.time)}, ${CH[m.church]}`, note: pc.reason,
+      ok: () => applyCancel(m, pc.reason, pc.move), no: () => { delete m.pendingCancel; } }); }
+  }
+  for (const e of S.events) if (e.pending) out.push({ id: e.id, by: e.pending.by, at: e.pending.at,
+    what: `${e.pending.isNew ? "Nov dogodek" : "Sprememba dogodka"}: ${e.title}`, where: `${fDay(e.date)}, ${fT(e.time)}, ${e.place}`,
+    ok: () => { delete e.pending; }, no: () => { if (e.pending.isNew) S.events = S.events.filter((x) => x !== e); else delete e.pending; } });
+  for (const b of S.bulletins) if (b.status === "pending") out.push({ id: b.id, by: b.by, at: b.at,
+    what: `Oznanila za ${fSpan(b.week)}`, where: `${pl(8, NAM)}, ${b.news} obvestila`,
+    ok: () => { applyDraft(b.picks); b.status = "published"; b.n = 8; b.at = "danes"; }, no: () => { b.status = "missing"; } });
+  return out;
+}
+function decide(id, yes) {
+  const a = approvals().find((x) => x.id === id); if (!a) return;
+  commit(`${yes ? "Potrjeno" : "Zavrnjeno"}: ${a.what}`, yes ? a.ok : a.no);
+  toast(yes ? "Potrjeno in objavljeno." : `Zavrnjeno. ${first(a.by)} bo to videla na svojem začetnem zaslonu.`, true);
+}
+function decideAll() {
+  const list = approvals(); if (!list.length) return;
+  commit(`Potrjenih ${list.length} sprememb`, () => list.forEach((a) => a.ok()));
+  toast("Vse je potrjeno in objavljeno.", true);
+}
+
+// ── Navigation ──
+const NAV = [
+  { r: "domov", label: "Domov", ic: "home", ok: () => true },
+  { r: "teden", label: "Maše in nameni", short: "Maše", ic: "cal", ok: () => can("mase") },
+  { r: "oznanila", label: "Oznanila", ic: "file", ok: () => can("oznanila") },
+  { r: "dogodki", label: "Dogodki", ic: "star", ok: () => can("dogodki") },
+  { r: "verouk", label: "Verouk", ic: "book", ok: () => can("verouk") },
+  { r: "ljudje", label: "Ljudje in dostop", short: "Ljudje", ic: "users", ok: () => me().owner },
+  { r: "zgodovina", label: "Zgodovina", ic: "hist", ok: () => true },
+];
+const allowed = (r) => r === "nalaganje" ? can("oznanila") : (NAV.find((n) => n.r === r)?.ok() ?? false);
+function go(r) {
+  if (!allowed(r)) r = "domov";
+  if (S.route !== r) { S.route = r; fx.page = true; }
+  S.panel = null;
+  try { history.replaceState(null, "", "#" + r); } catch {}
+}
+
+// ── Assistant (scripted for the prototype) ──
+const DAYS = [[/ponedelj/, 1], [/nedelj/, 0], [/tor(ek|ka)/, 2], [/sred/, 3], [/četrt|cetrt/, 4], [/pet(ek|ka)/, 5], [/sobot/, 6], [/danes/, wdOf(TODAY)], [/jutri/, wdOf(addDays(TODAY, 1))]];
+const NAMEFIX = { "jožeta novaka": "Jože Novak", "jozeta novaka": "Jože Novak", "ane kos": "Ana Kos", "marije kralj": "Marija Kralj" };
+const parseDay = (t) => { for (const [re, d] of DAYS) if (re.test(t)) return d; return null; };
+const parseTime = (t) => { const m = t.match(/ob\s*(\d{1,2})(?:[.:]\s*(\d{2}))?/) || t.match(/(\d{1,2})\s*h\b/); return m ? `${m[1].padStart(2, "0")}:${m[2] || "00"}` : null; };
+const ai = (text, extra = {}) => S.chat.push({ who: "ai", text, ...extra });
+function greet() {
+  if (S.chat.length) return;
+  const u = me();
+  if (!can("mase")) return ai(`Pozdravljeni, ${firstName(u)}. Pri verouku vam lahko odpovem uro ali pripravim sporočilo staršem.`, { sugg: ["Odpovej verouk za 4.–6. razred v sredo"] });
+  const live = weekMasses(0).filter((m) => m.status !== "off"), empty = live.filter((m) => !m.intents.length).length;
+  const a = approvals().length;
+  let t = `${u.owner ? "Dober dan." : `Dober dan, ${firstName(u)}.`} Ta teden je ${pl(live.length, MAS)}${empty ? `, brez namena ${empty === 1 ? "je še ena" : `jih je še ${empty}`}` : ""}.`;
+  if (u.owner && a) t += ` ${pl(a, ["sprememba čaka", "spremembi čakata", "spremembe čakajo", "sprememb čaka"])} vašo potrditev.`;
+  if (u.approval) t += " Vse, kar spremenite, pred objavo pregleda župnik.";
+  ai(t);
+}
+function suggestions() {
+  if (!can("mase")) return ["Odpovej verouk za 4.–6. razred v sredo", "Odpovej mašo v sredo"];
+  return ["Odpovej mašo v sredo", "Dodaj namen za Jožeta Novaka v nedeljo ob 8h", "Kaj je ta teden?", "Naloži oznanila"];
+}
+function ask(text) {
+  S.chat.push({ who: "me", text });
+  S.typing = true; render();
+  setTimeout(() => { S.typing = false; answer(text.toLowerCase()); render(); }, 650);
+}
+function answer(t) {
+  if (/oznanil|naloži|nalozi|fotografir/.test(t) && !/odpov/.test(t)) {
+    if (!can("oznanila")) return ai("Oznanila ureja župnik, zato jih ne morem naložiti v vašem imenu.", { no: true });
+    ai("Odprl sem nalaganje. Fotografirajte list ali izberite datoteko, jaz ga preberem in pripravim osnutek.");
+    S.chatOpen = false; S.up = { stage: "pick" }; go("nalaganje"); return;
+  }
+  if (/verouk|razred|skupin/.test(t)) {
+    if (!can("verouk")) return ai("Verouk ureja katehistinja Ana Rozman. Tega ne morem spremeniti.", { no: true });
+    const d = parseDay(t), g = S.verouk.find((g) => g.status === "on" && (d == null || wdOf(g.date) === d));
+    if (!g) return ai("Ta dan ni verouka. Skupine so v torek, sredo in petek.");
+    return ai("Pripravil sem odpoved. Sporočilo bodo starši videli na strani Verouk.", { card: { id: nid("c"), type: "group", gid: g.id, msg: "", st: "open" } });
+  }
+  if (/ta teden|povzetek|kaj je|pregled/.test(t)) {
+    if (!can("mase")) return ai("Ta teden imate tri skupine verouka: torek, sreda in petek.");
+    const live = weekMasses(0).filter((m) => m.status !== "off"), e = live.filter((m) => !m.intents.length && m.date >= TODAY);
+    return ai(`Ta teden je ${pl(live.length, MAS)}. ${e.length ? `Brez namena: ${e.map((m) => `${WD[wdOf(m.date)]} ${fT(m.time)} (${CH[m.church]})`).join(", ")}.` : "Vse imajo namen."} V nedeljo so Vsi sveti, ob 14.00 je molitev na pokopališču.`);
+  }
+  if (!can("mase") && /maš|mas|namen/.test(t)) return ai("Maše in namene ureja župnik, zato jih ne morem spremeniti. Lahko mu pošljete sporočilo.", { no: true });
+  const d = parseDay(t), tm = parseTime(t);
+  const pick = () => { let ms = weekMasses(S.week === 1 && d != null ? 1 : 0).filter((m) => d == null || wdOf(m.date) === d); if (tm) ms = ms.filter((m) => m.time === tm); return ms; };
+  if (/odpov|odpade/.test(t)) {
+    if (d == null) return ai("Za kateri dan? Na primer: »odpovej mašo v sredo«.");
+    const ms = pick().filter((m) => m.status !== "off");
+    if (!ms.length) return ai(`V ${WD_ACC[d]} ta teden ni maše, ki bi jo lahko odpovedal.`);
+    const m = ms[0];
+    return ai(me().approval ? "Pripravil sem predlog. Po potrditvi ga dobi župnik." : "Tole bi spremenil. Preverite in potrdite.", { card: { id: nid("c"), type: "cancel", mid: m.id, reason: "", move: m.intents.length ? null : "none", st: "open" } });
+  }
+  if (/namen/.test(t)) {
+    if (d == null) return ai("Za kateri dan in uro? Na primer: »dodaj namen za Jožeta Novaka v nedeljo ob 8h«.");
+    const ms = pick();
+    if (!ms.length) return ai(`Ob tej uri v ${WD_ACC[d]} ni maše. Ta dan so maše ob ${weekMasses(0).filter((m) => wdOf(m.date) === d).map((m) => fT(m.time)).join(" in ") || "—"}.`);
+    const raw = ((t.match(/za\s+(.+?)(?:\s+v\s+|\s+ob\s+|$)/) || [])[1] || "").trim();
+    const name = NAMEFIX[raw] || raw.replace(/(^|\s)\p{L}/gu, (c) => c.toUpperCase());
+    return ai("Tole bi dodal. Preverite in potrdite.", { card: { id: nid("c"), type: "intent", mid: ms[0].id, text: name || "…", kind: "deceased", guess: true, st: "open" } });
+  }
+  if (/dogod/.test(t)) {
+    if (!can("dogodki")) return ai("Dogodkov ne urejate vi, zato ga ne morem dodati.", { no: true });
+    const title = ((t.match(/dogod\w*\s*:?\s*(.+)/) || [])[1] || "").replace(/^\p{L}/u, (c) => c.toUpperCase());
+    openPanel("event", null, { title });
+    S.chatOpen = false; return;
+  }
+  ai("Tega še ne znam. Lahko odpovem mašo, dodam namen, naložim oznanila, dodam dogodek ali povem, kaj je ta teden.", { sugg: suggestions().slice(0, 3) });
+}
+function confirmCard(c) {
+  if (c.type === "cancel") A.cancelMass(c.mid, c.reason, c.move);
+  if (c.type === "intent") A.addIntent(c.mid, c.text, c.kind);
+  if (c.type === "group") A.cancelGroup(c.gid, c.msg);
+  c.st = "done";
+}
+
+// ── Upload flow ──
+const SAMPLES = {
+  photo: { name: "oznanila-8-nov.jpg", meta: "Fotografija · 2 strani · ročno pisano" },
+  pdf: { name: "oznanila-8-nov.pdf", meta: "PDF · 1 stran" },
+  sheet: { name: "nameni-november.xlsx", meta: "Tabela · 9 vrstic" },
+  blur: { name: "IMG_2041.jpg", meta: "Fotografija · 1 stran", bad: true },
+};
+function startReading(file) {
+  S.up = { stage: "reading", file, picks: {}, fixing: {}, news: [...DRAFT_NEWS] };
+  go("nalaganje"); clearTimeout(readTimer);
+  readTimer = setTimeout(() => { if (S.up?.stage === "reading") { S.up.stage = file.bad ? "error" : "review"; fx.page = true; render(); } }, 4400);
+}
+function publishUpload() {
+  const b = S.bulletins.find((x) => x.week === "2026-11-02"), u = S.up, p = pend();
+  if (p) {
+    commit("Oznanila za 2.–8. november", () => Object.assign(b, { status: "pending", by: me().id, at: `danes ob ${stamp()}`, picks: { ...u.picks }, news: u.news.length }), "čaka potrditev");
+    S.up = { ...u, stage: "done", sent: true };
+  } else {
+    commit("Objava oznanil 2.–8. november", () => { applyDraft(u.picks); Object.assign(b, { status: "published", by: me().id, at: "danes", src: u.file.meta, n: 8, news: u.news.length }); }, `${pl(8, NAM)}, ${u.news.length} obvestila`);
+    S.up = { ...u, stage: "done" };
+  }
+  fx.page = true;
+}
+
+// ── Panels ──
+function openPanel(type, id, preset = {}) {
+  const f = {};
+  if (type === "mass") Object.assign(f, { text: "", kind: "deceased", cancel: false, reason: "", move: null });
+  if (type === "intent") Object.assign(f, { mid: upcoming().find((m) => m.status !== "off")?.id, text: "", kind: "deceased" });
+  if (type === "event") { const e = id && S.events.find((x) => x.id === id); Object.assign(f, e ? clone(e) : { title: "", date: "2026-11-08", time: "", place: PLACES[0], desc: "", front: false }, preset); }
+  if (type === "group") Object.assign(f, { msg: "" });
+  if (type === "person") { const p = S.people.find((x) => x.id === id); Object.assign(f, { sections: [...p.sections], approval: p.approval }); }
+  if (type === "invite") Object.assign(f, { name: "", email: "", title: "Tajnica", sections: [...PRESETS.Tajnica], approval: true });
+  S.panel = { type, id }; S.form = f; fx.panel = true;
+}
+
+// ── Views ──
+function intentLis(m, editable) {
+  if (!m.intents.length) return `<li><span class="pre"></span><span class="none">brez namena</span></li>`;
+  return m.intents.map((i) => `<li class="${i.pending ? "pend" : ""}"><span class="pre">${pre(i.kind)}</span><span>${esc(i.text)}</span>${i.pending ? `<span class="pill gold">${i.pending.by === S.user ? "čaka župnika" : `čaka potrditev · ${esc(first(i.pending.by))}`}</span>` : ""}${i.moved ? '<span class="pill line">prestavljen</span>' : ""}</li>`).join("");
+}
+function massRow(m, preview) {
+  const off = m.status === "off";
+  const ints = preview ? { ...m, intents: m.intents.filter((i) => !i.pending) } : m;
+  const inner = `<time class="tnum">${fT(m.time)}</time>
+    <div class="mb">
+      <p class="mw"><span>${m.type === "sunday" ? "Nedeljska maša" : "Sveta maša"}</span><span class="pill">${CH[m.church]}</span>${off ? '<span class="pill alert">Odpade</span>' : ""}${!preview && m.pendingCancel ? '<span class="pill gold">odpoved čaka župnika</span>' : ""}</p>
+      ${off && m.reason ? `<p class="reason">${esc(m.reason)}</p>` : ""}
+      ${off ? "" : preview && !ints.intents.length ? "" : `<ul class="ints">${intentLis(ints)}</ul>`}
+    </div>`;
+  if (preview) return `<div class="mrow ${off ? "off" : ""}">${inner}</div>`;
+  return `<button class="mrow ${off ? "off" : ""}" data-act="mass" data-id="${m.id}" aria-label="${fDay(m.date)}, ${fT(m.time)}, ${CH[m.church]}">${inner}<span class="chev">${I("r")}</span></button>`;
+}
+
+function vHome() {
+  const u = me();
+  const parts = [`<div class="hello"><p class="eyebrow">${fDay(TODAY)}</p><h1>Dober dan, ${esc(u.owner ? "gospod župnik" : firstName(u))}.</h1><p>${u.owner ? "Tole je na vrsti ta teden." : can("mase") ? "Tole je na vrsti ta teden. Spremembe pregleda župnik." : "Tole je na vrsti pri verouku."}</p></div>`];
+  if (can("mase")) {
+    const n = upcoming().find((m) => m.status !== "off");
+    if (n) parts.push(`<button class="hero" data-act="mass" data-id="${n.id}"><span class="when tnum">${fT(n.time)}</span><span class="lbl">Naslednja maša · ${fRel(n.date)}</span><span class="what">${CH[n.church]} <span>· ${n.type === "sunday" ? "nedeljska" : "sveta maša"}</span></span>${n.intents.length ? `<span class="int">${n.intents.map((i) => `${pre(i.kind)} ${esc(i.text)}`).join(" · ")}</span>` : '<span class="int">še brez namena</span>'}<span class="go">${I("r")}</span></button>`);
+  } else if (can("verouk")) {
+    const g = S.verouk.find((x) => x.status === "on" && (x.date > TODAY || (x.date === TODAY && x.time > NOW)));
+    if (g) parts.push(`<button class="hero" data-act="nav" data-r="verouk"><span class="when tnum">${fT(g.time)}</span><span class="lbl">Naslednja ura verouka · ${fRel(g.date)}</span><span class="what">${g.name} <span>· ${pl(g.kids, ["otrok", "otroka", "otroci", "otrok"])}</span></span><span class="int">${g.place}</span><span class="go">${I("r")}</span></button>`);
+  }
+  const tasks = [];
+  const ap = approvals();
+  if (u.owner && ap.length) tasks.push(`<li class="task approve"><span class="ic">${I("inbox")}</span><h3>${pl(ap.length, ["sprememba čaka", "spremembi čakata", "spremembe čakajo", "sprememb čaka"])} vašo potrditev</h3><p>Pomočniki so jih vpisali, na strani bodo, ko jih potrdite.</p>
+    <ul class="appr-list">${ap.map((a) => `<li class="appr"><div><b>${esc(a.what)}</b><small>${esc(a.where)} · ${esc(who(a.by).name)}, ${esc(a.at)}</small>${a.note ? `<span class="note">»${esc(a.note)}«</span>` : ""}</div><div class="acts"><button class="btn sm primary" data-act="ok" data-id="${a.id}">${I("check")}Potrdi</button><button class="btn sm ghost" data-act="no" data-id="${a.id}">Zavrni</button></div></li>`).join("")}</ul>
+    ${ap.length > 1 ? `<div class="acts"><button class="btn primary" data-act="okall">Potrdi vse (${ap.length})</button></div>` : ""}</li>`);
+  const mine = ap.filter((a) => a.by === S.user);
+  if (!u.owner && mine.length) tasks.push(`<li class="task wait"><span class="ic">${I("clock")}</span><h3>${pl(mine.length, ["sprememba je", "spremembi sta", "spremembe so", "sprememb je"])} pri župniku</h3><p>Na strani bodo, ko jih potrdi.</p><ul class="appr-list">${mine.map((a) => `<li class="appr"><div><b>${esc(a.what)}</b><small>${esc(a.where)} · poslano ${esc(a.at)}</small></div></li>`).join("")}</ul></li>`);
+  const b3 = S.bulletins.find((b) => b.week === "2026-11-02");
+  if (can("oznanila") && (b3.status === "missing" || b3.status === "draft")) tasks.push(`<li class="task"><span class="ic">${I("file")}</span><h3>${b3.status === "draft" ? "Osnutek oznanil za 2.–8. november čaka pregled" : "Oznanila za 2.–8. november še niso naložena"}</h3><p>${b3.status === "draft" ? "Shranili ste ga za pozneje. Preverite označena polja in ga objavite." : "Fotografirajte list ali izberite datoteko. Claude ga prebere, vi preverite in objavite."}</p><div class="acts">${b3.status === "draft" ? `<button class="btn primary lg" data-act="resume">${I("pen")}Nadaljuj pregled</button>` : `<button class="btn primary lg" data-act="photo">${I("cam")}Fotografiraj oznanila</button><button class="btn lg" data-act="choose">${I("up")}Izberi datoteko</button>`}</div></li>`);
+  if (can("mase")) {
+    const e = weekMasses(0).filter((m) => m.status !== "off" && !m.intents.length && (m.date + m.time) > (TODAY + NOW));
+    if (e.length) tasks.push(`<li class="task"><span class="ic">${I("cal")}</span><h3>${e.length === 1 ? "Ena maša ta teden je brez namena" : `Brez namena ta teden: ${pl(e.length, MAS)}`}</h3><p>${e.map((m) => `${WD[wdOf(m.date)]} ${fT(m.time)}, ${CH[m.church]}`).join(" · ")}</p><div class="acts"><button class="btn lg" data-act="intent">${I("plus")}Dodaj namen</button><button class="btn ghost lg" data-act="nav" data-r="teden">Odpri teden</button></div></li>`);
+  }
+  if (can("verouk") && !can("mase")) {
+    const off = S.verouk.filter((g) => g.status === "off");
+    if (off.length) tasks.push(`<li class="task wait"><span class="ic">${I("ban")}</span><h3>${pl(off.length, ["ura odpade", "uri odpadeta", "ure odpadejo", "ur odpade"])} ta teden</h3><p>${off.map((g) => `${g.name}, ${WD[wdOf(g.date)]}`).join(" · ")}. Starši vidijo obvestilo na strani.</p></li>`);
+  }
+  parts.push(tasks.length ? `<section class="sect"><div class="sect-h"><h2>Na vrsti</h2></div><ul class="tasks">${tasks.join("")}</ul></section>`
+    : `<div class="calm"><h3>Vse je urejeno.</h3><p>Ko bo kaj novega, bo tukaj. Za spremembo lahko pišete pomočniku spodaj.</p></div>`);
+  const q = [];
+  if (can("oznanila")) q.push(["photo", "cam", "Fotografiraj oznanila", "Claude jih prebere"]);
+  if (can("mase")) q.push(["intent", "plus", "Dodaj namen", "k izbrani maši"]);
+  if (can("dogodki")) q.push(["event", "star", "Nov dogodek", "na strani in koledarju"]);
+  if (can("verouk") && !can("mase")) q.push(["nav-verouk", "book", "Odpovej uro verouka", "z obvestilom staršem"]);
+  q.push(["chat", "msg", "Vprašaj pomočnika", "napišite po domače"]);
+  parts.push(`<section class="sect"><div class="sect-h"><h2>Hitro</h2></div><div class="quick">${q.map(([a, ic, t, s]) => `<button class="qt" data-act="${a}">${I(ic)}<span>${t}<small>${s}</small></span></button>`).join("")}</div></section>`);
+  const done = [];
+  for (const b of S.bulletins) if (b.status === "published" && b.week >= "2026-10-26") done.push(`Oznanila za ${fSpan(b.week)} so objavljena`);
+  if (can("verouk")) done.push("Prostor za 7.–9. razred je posodobljen");
+  if (can("mase")) done.push("Redni urnik maš velja do preklica");
+  if (done.length) parts.push(`<details class="done"><summary>${I("r")}Urejeno (${done.length})</summary><ul>${done.map((d) => `<li>${I("check")}${esc(d)}</li>`).join("")}</ul></details>`);
+  return `<div class="page">${parts.join("")}</div>`;
+}
+
+function vWeek() {
+  const w = S.week, list = weekMasses(w), live = list.filter((m) => m.status !== "off");
+  const empty = live.filter((m) => !m.intents.length).length, isEmpty = live.every((m) => !m.intents.length);
+  const days = [...new Set(list.map((m) => m.date))];
+  const bar = `<div class="weekbar"><div class="wnav"><button data-act="week" data-v="0" aria-label="Prejšnji teden" ${w === 0 ? "disabled" : ""}>${I("l")}</button><strong>${fSpan(WEEKS[w])}</strong><button data-act="week" data-v="1" aria-label="Naslednji teden" ${w === 1 ? "disabled" : ""}>${I("r")}</button></div>
+    <span class="wsum">${w === 0 ? "ta teden" : "naslednji teden"} · ${pl(live.length, MAS)}${empty ? ` · <b>${empty} brez namena</b>` : ""}</span>
+    <div class="seg" role="group" aria-label="Pogled"><button data-act="view" data-v="edit" aria-pressed="${S.view === "edit"}">${I("pen")}Urejanje</button><button data-act="view" data-v="preview" aria-pressed="${S.view === "preview"}">${I("eye")}Na strani</button></div></div>`;
+  const head = `<div class="phead"><div><h1>Maše in nameni</h1><p>Tapnite mašo, da dodate namen ali jo odpoveste.</p></div><button class="btn primary" data-act="intent">${I("plus")}Dodaj namen</button></div>`;
+  if (S.view === "preview") return `<div class="page">${head}${bar}<div class="preview"><div class="browser"><i></i><i></i><i></i><span>zupnija-pirnice.si/svete-mase</span></div><div class="pv"><h2>Svete maše ${w === 0 ? "ta teden" : "naslednji teden"}</h2><p class="lede">${fSpan(WEEKS[w])}</p><div class="days">${days.map((d) => `<div class="day"><div class="dl"><b>${fDay(d)}</b>${FEAST[d] ? `<span class="feast">${FEAST[d]}</span>` : ""}</div><div class="mlist">${list.filter((m) => m.date === d).map((m) => massRow(m, true)).join("")}</div></div>`).join("")}</div></div></div></div>`;
+  const notice = isEmpty && can("oznanila") ? `<div class="notice"><p>Redne maše so že vpisane po urniku. Manjkajo nameni in obvestila. Naložite oznanila ali vpišite namene ročno.</p><div class="acts"><button class="btn primary" data-act="photo">${I("cam")}Fotografiraj oznanila</button><button class="btn" data-act="choose">Izberi datoteko</button></div></div>` : "";
+  return `<div class="page">${head}${bar}${notice}<div class="days">${days.map((d) => `<div class="day"><div class="dl"><b>${WD[wdOf(d)]}</b><span>${dnum(d)}. ${mon(d)}</span>${FEAST[d] ? `<span class="feast">${FEAST[d]}</span>` : ""}${d === TODAY ? '<span class="pill today">danes</span>' : ""}</div><div class="mlist">${list.filter((m) => m.date === d).map((m) => massRow(m)).join("")}</div></div>`).join("")}</div></div>`;
+}
+
+function vBulletins() {
+  const cards = S.bulletins.map((b) => {
+    if (b.status === "missing" || b.status === "draft") return `<div class="bcard missing"><div class="meta"><span class="pill gold">${b.status === "draft" ? "osnutek" : "manjka"}</span><span class="eyebrow">prihodnja nedelja</span></div><h3>${fSpan(b.week)}</h3><p>${b.status === "draft" ? "Osnutek je shranjen. Preverite označena polja in ga objavite." : "Fotografirajte list z oznanili ali izberite PDF ali tabelo. Claude jih prebere in pripravi osnutek. Nič ni objavljeno, dokler ne potrdite."}</p><div class="acts">${b.status === "draft" ? `<button class="btn primary lg" data-act="resume">${I("pen")}Nadaljuj pregled</button>` : `<button class="btn primary lg" data-act="photo">${I("cam")}Fotografiraj</button><button class="btn lg" data-act="choose">${I("up")}Izberi datoteko</button>`}</div></div>`;
+    if (b.status === "pending") return `<div class="bcard"><div><div class="meta"><span class="pill gold">pri župniku</span></div><h3>${fSpan(b.week)}</h3><p>Poslala ${esc(who(b.by).name)}, ${esc(b.at)} · ${pl(8, NAM)}, ${b.news} obvestila</p></div></div>`;
+    return `<div class="bcard"><div><div class="meta"><span class="pill">${I("check")}objavljeno</span><span class="wsum">${esc(b.at)}</span></div><h3>${fSpan(b.week)}</h3><p>${pl(b.n, NAM)}, ${b.news} obvestila · iz datoteke: ${esc(b.src)}</p></div><button class="btn ghost" data-act="nav-week" data-v="${b.week}">${I("eye")}Poglej</button></div>`;
+  }).join("");
+  return `<div class="page"><div class="phead"><div><h1>Oznanila</h1><p>Vsak teden en list. Claude ga prebere, vi preverite in objavite.</p></div></div><div class="blist">${cards}</div></div>`;
+}
+
+function paperEl(u, mode) {
+  if (u.file?.url) return `<div class="sheetpaper photo">${mode === "reading" ? '<div class="scanline"></div>' : ""}<img src="${u.file.url}" alt="Naložena fotografija"></div>`;
+  const lines = PAPER.lines.map(([d, t, key]) => {
+    const fl = key && mode === "review" ? `<span class="badge">${key === "name" ? 1 : 2}</span>` : "";
+    const cls = key && (mode === "review" || mode === "error") ? `hl ${u.picks?.[key] ? "ok" : ""}` : "";
+    return `<li class="${cls}">${fl}<span class="pd">${d}</span>${t}</li>`;
+  }).join("");
+  return `<div class="sheetpaper ${mode === "error" ? "blurred" : ""}" role="img" aria-label="Ročno pisana oznanila">${mode === "reading" ? '<div class="scanline"></div>' : ""}<p class="t">${PAPER.title}</p><ol>${lines}</ol><ol class="ann">${PAPER.notes.map((n) => `<li>${n}</li>`).join("")}</ol></div>`;
+}
+function vUpload() {
+  const u = S.up || { stage: "pick" };
+  const order = ["pick", "reading", "review", "done"], at = order.indexOf(u.stage === "error" ? "reading" : u.stage);
+  const steps = `<ol class="steps">${["Naloži", "Claude bere", "Preverite", "Objavljeno"].map((s, i) => `<li class="${i === at ? "on" : i < at ? "ok" : ""}"><span class="n">${i < at ? I("check") : i + 1}</span>${s}</li>`).join("")}</ol>`;
+  const head = `<button class="back" data-act="nav" data-r="oznanila">${I("l")}Oznanila</button><div class="phead"><div><h1>${u.stage === "done" ? "Oznanila" : "Naloži oznanila"} za 2.–8. november</h1></div></div>${steps}`;
+  if (u.stage === "pick") return `<div class="page">${head}
+    <div class="drop" id="drop"><span class="big-ic">${I("cam")}</span><h2>Fotografirajte list z oznanili</h2><p>Ali izberite PDF ali tabelo. Lahko tudi povlečete datoteko sem. Ročna pisava je v redu.</p>
+      <div class="acts"><button class="btn primary lg" data-act="photo">${I("cam")}Fotografiraj</button><button class="btn lg" data-act="choose">${I("up")}Izberi datoteko</button></div>
+      <p class="samples">Primeri za prototip: <button data-act="sample" data-v="photo">rokopis</button> · <button data-act="sample" data-v="pdf">PDF</button> · <button data-act="sample" data-v="sheet">tabela</button> · <button data-act="sample" data-v="blur">zamegljena fotografija</button></p></div>
+    <div class="promise"><div><b>Nič se ne objavi samo.</b><p>Claude pripravi osnutek. Na strani je šele, ko ga potrdite.</p></div><div><b>Negotova mesta so označena.</b><p>Imena in ure, ki jih ne prebere zanesljivo, morate preveriti vi.</p></div><div><b>Vedno lahko razveljavite.</b><p>Vsaka objava je v zgodovini in jo lahko umaknete.</p></div></div></div>`;
+  const srcCol = (mode) => `<div class="src-col ${S.srcOpen ? "" : "collapsed"}"><div class="srcmeta"><span><b>${esc(u.file.name)}</b> · ${esc(u.file.meta)}</span><button class="btn sm ghost showsrc" data-act="srctoggle">${S.srcOpen ? "Skrij izvirnik" : "Pokaži izvirnik"}</button></div><div class="sheetwrap">${paperEl(u, mode)}</div></div>`;
+  if (u.stage === "reading") {
+    const found = ["Teden: 2.–8. november", "8 maš po rednem urniku", "8 namenov", "3 obvestila"];
+    return `<div class="page wide">${head}<div class="split">${srcCol("reading")}<div class="reading"><h2>Claude bere oznanila …</h2><p class="wsum">Rokopis traja do pol minute. Lahko zaprete to okno, osnutek vas bo počakal.</p>
+      <ul class="found">${found.map((f, i) => `<li style="animation-delay:${0.5 + i * 0.7}s">${I("check")}${f}</li>`).join("")}<li class="w" style="animation-delay:3.3s">${I("loader")}Preverjam imena in ure z rednim urnikom</li></ul>
+      <div class="skel"><i></i><i></i><i></i><i></i><i></i></div></div></div></div>`;
+  }
+  if (u.stage === "error") return `<div class="page wide">${head}<div class="split">${srcCol("error")}<div class="errcard"><h2>Tega lista ni mogoče prebrati</h2><p>Spodnja polovica fotografije je zamegljena in v senci, zato imen in ur ne preberem zanesljivo. Nič ni spremenjeno.</p>
+    <ul><li>${I("r")}Fotografirajte znova pri dnevni svetlobi, list naj leži ravno.</li><li>${I("r")}Telefon držite nad listom, ne pod kotom.</li><li>${I("r")}Če imate oznanila v PDF ali tabeli, izberite raje to.</li></ul>
+    <div class="acts"><button class="btn primary lg" data-act="photo">${I("cam")}Fotografiraj znova</button><button class="btn lg" data-act="choose">Izberi drugo datoteko</button><button class="btn ghost lg" data-act="manual">Vpiši ročno</button></div></div></div></div>`;
+  if (u.stage === "done") {
+    const sent = u.sent;
+    return `<div class="page">${head}<div class="success"><span class="seal">${I(sent ? "send" : "check")}</span><h2>${sent ? "Poslano župniku" : "Oznanila so objavljena"}</h2><p>${sent ? "Oznanila za 2.–8. november bo pregledal župnik. Ko jih potrdi, bodo na strani." : `${pl(8, NAM)} in ${u.news.length} obvestila so na strani. Če ste se zmotili, objavo lahko razveljavite.`}</p>
+      <div class="acts">${sent ? "" : `<button class="btn primary lg" data-act="nav-week" data-v="2026-11-02">${I("cal")}Poglej teden</button>`}<button class="btn lg" data-act="nav" data-r="domov">Na začetek</button>${S.history[0] ? `<button class="btn ghost lg" data-act="undo">${I("undo")}Razveljavi</button>` : ""}</div></div></div>`;
+  }
+  // review
+  const flags = DRAFT.filter((r) => r.flag), open = flags.filter((r) => !u.picks[r.flag.key]).length;
+  const rows = DRAFT.map((r) => {
+    const f = r.flag, pick = f && u.picks[f.key];
+    let text = r.text, time = r.time;
+    if (f?.key === "name" && pick) text = pick;
+    if (f?.key === "time" && pick) time = pick.startsWith("17") ? "17:30" : "18:30";
+    const fixing = f && u.fixing[f.key] != null;
+    return `<div class="drow ${f && !pick ? "flag" : ""} ${f && pick ? "fixed" : ""}"><span class="d">${fDayS(r.date)}</span><time class="tnum">${fT(time)}</time><span class="t">${pre(r.kind)} ${esc(text)}<small>${CH[r.church]}</small></span>
+      ${f && !pick ? `<div class="qbox"><p><span class="qn">${f.n}</span>${f.q}</p>${fixing ? `<div class="fixrow"><label class="sr" for="fix-${f.key}">Popravek</label><input class="input" id="fix-${f.key}" data-fix="${f.key}" value="${esc(u.fixing[f.key])}"><button class="btn primary" data-act="fixsave" data-k="${f.key}">Uporabi</button></div>` : `<div class="chips">${f.opts.map((o) => `<button class="chip" data-act="flag" data-k="${f.key}" data-v="${esc(o)}">${esc(o)}</button>`).join("")}<button class="chip" data-act="fixopen" data-k="${f.key}">${I("pen")}Popravi sam</button></div>`}</div>` : ""}</div>`;
+  }).join("");
+  return `<div class="page wide">${head}<div class="split">${srcCol("review")}<div class="draft">
+    <div class="dsum"><span class="pill">${fSpan(DRAFT[0].date)}</span><span class="pill line">${pl(8, NAM)}</span><span class="pill line">${u.news.length} obvestila</span>${open ? `<span class="pill gold">${open === 1 ? "1 mesto za preveriti" : `${open} mesti za preveriti`}</span>` : `<span class="pill">${I("check")}vse preverjeno</span>`}</div>
+    ${u.file.url ? '<p class="wsum">V prototipu je osnutek vedno isti vzorec, ne glede na to, kaj naložite.</p>' : ""}
+    <div class="drows">${rows}</div>
+    <div class="blk"><h3>Obvestila</h3><div class="news">${u.news.map((n, i) => `<label class="sr" for="news-${i}">Obvestilo ${i + 1}</label><textarea id="news-${i}" data-news="${i}" rows="2">${esc(n)}</textarea>`).join("")}<button class="addline" data-act="addnews">${I("plus")}Dodaj obvestilo</button></div></div>
+    <div class="actionbar"><button class="btn primary lg" data-act="publish" ${open ? "disabled" : ""}>${open ? `Najprej preverite ${open === 1 ? "označeno mesto" : `${open} označeni mesti`}` : me().approval ? `${I("send")}Pošlji župniku` : `${I("check")}Objavi oznanila`}</button><button class="btn ghost" data-act="savedraft">Shrani za pozneje</button><button class="btn ghost danger" data-act="discard">Zavrzi</button></div>
+  </div></div></div>`;
+}
+
+function vEvents() {
+  const months = {};
+  for (const e of S.events) (months[mon(e.date)] ||= []).push(e);
+  return `<div class="page"><div class="phead"><div><h1>Dogodki</h1><p>Kar ni maša: srečanja, molitve, delovne akcije.</p></div><button class="btn primary" data-act="event">${I("plus")}Nov dogodek</button></div>
+    <div class="evlist">${Object.entries(months).map(([m, list]) => `<p class="month">${m}</p>${list.map((e) => `<button class="ev" data-act="editevent" data-id="${e.id}"><span class="datebox"><b>${dnum(e.date)}</b><span>${WD_S[wdOf(e.date)]}</span></span><span><h3>${esc(e.title)}</h3><p><span>${fT(e.time)}</span><span>· ${esc(e.place)}</span>${e.front ? '<span class="pill">na prvi strani</span>' : ""}${e.pending ? `<span class="pill gold">${e.pending.by === S.user ? "čaka župnika" : `čaka potrditev · ${esc(first(e.pending.by))}`}</span>` : ""}</p></span><span class="chev">${I("r")}</span></button>`).join("")}`).join("")}</div></div>`;
+}
+function vVerouk() {
+  return `<div class="page"><div class="phead"><div><h1>Verouk</h1><p>Teden ${fSpan(WEEKS[0])}. Če ura odpade, starši to vidijo na strani.</p></div></div>
+    <div class="groups">${S.verouk.map((g) => `<div class="group ${g.status === "off" ? "off" : ""}"><div><h3>${g.name}</h3><p>${fDay(g.date)}, ${fT(g.time)} · ${g.place}</p><p class="wsum">${pl(g.kids, ["otrok", "otroka", "otroci", "otrok"])}${g.status === "off" ? ' · <span class="pill alert">Odpade</span>' : ""}</p></div>
+      ${g.status === "off" ? `<button class="btn" data-act="grestore" data-id="${g.id}">${I("undo")}Vrni uro</button>` : `<button class="btn" data-act="group" data-id="${g.id}">${I("ban")}Ta teden odpade</button>`}${g.msg ? `<p class="msg">»${esc(g.msg)}«</p>` : ""}</div>`).join("")}</div></div>`;
+}
+function vPeople() {
+  return `<div class="page"><div class="phead"><div><h1>Ljudje in dostop</h1><p>Kdo sme kaj urejati. Vsak vidi samo svoje razdelke.</p></div><button class="btn primary" data-act="invite">${I("plus")}Povabi osebo</button></div>
+    <div class="people">${S.people.map((p) => `<button class="person" data-act="${p.owner ? "noop" : "person"}" data-id="${p.id}" ${p.owner ? "disabled" : ""}><span class="avatar lg ${p.owner ? "moss" : ""}">${p.short}</span><span><b>${esc(p.name)}</b><p>${esc(p.title)} · ${p.invited ? "povabilo poslano, še ni prijavljen" : p.owner ? "ureja vse" : `nazadnje ${esc(p.seen)}`}</p><span class="secs">${p.owner ? '<span class="pill">vse</span>' : p.sections.map((s) => `<span class="pill line">${SECTIONS[s]}</span>`).join("")}${!p.owner && p.approval ? '<span class="pill gold">potrjujete vi</span>' : ""}</span></span>${p.owner ? "" : `<span class="chev">${I("r")}</span>`}</button>`).join("")}</div></div>`;
+}
+function vHistory() {
+  const live = S.history.map((h, i) => `<div class="hrow"><time class="tnum">${h.at}</time><span class="avatar ${who(h.who).owner ? "moss" : ""}">${who(h.who).short}</span><div><b>${esc(h.label)}</b><p>${esc(who(h.who).name)}${h.note ? ` · ${esc(h.note)}` : ""}</p></div>${i === 0 ? `<button class="btn sm" data-act="undo">${I("undo")}Razveljavi</button>` : "<span></span>"}</div>`).join("");
+  const groups = {};
+  for (const h of SEED_HISTORY) (groups[h.day] ||= []).push(h);
+  const seeded = Object.entries(groups).map(([d, list]) => `<p class="hday">${d}</p>${list.map((h) => `<div class="hrow"><time class="tnum">${h.at}</time><span class="avatar ${who(h.who).owner ? "moss" : ""}">${who(h.who).short}</span><div><b>${esc(h.label)}</b><p>${esc(who(h.who).name)}${h.note ? ` · ${esc(h.note)}` : ""}</p></div><span></span></div>`).join("")}`).join("");
+  return `<div class="page"><div class="phead"><div><h1>Zgodovina</h1><p>Vsaka sprememba, kdo jo je naredil in kdaj. Zadnjo lahko razveljavite.</p></div></div><div class="hist">${live ? `<p class="hday">Danes, v tej seji</p>${live}` : ""}${seeded}</div></div>`;
+}
+
+// ── Panels ──
+function pMass(m) {
+  const f = S.form, off = m.status === "off", edit = can("mase"), owner = me().owner;
+  const body = [];
+  if (m.pendingCancel) body.push(`<div class="banner gold"><b>Odpoved čaka potrditev</b><p>${esc(who(m.pendingCancel.by).name)}${m.pendingCancel.reason ? `: »${esc(m.pendingCancel.reason)}«` : ""}</p></div>`);
+  if (off) body.push(`<div class="banner alert"><b>Ta maša odpade</b>${m.reason ? `<p>${esc(m.reason)}</p>` : ""}${owner ? `<div class="acts"><button class="btn sm" data-act="restore" data-id="${m.id}">${I("undo")}Vrni mašo na urnik</button></div>` : ""}</div>`);
+  if (!off) {
+    body.push(`<div class="blk"><h3>Nameni</h3><ul class="ilist">${m.intents.length ? m.intents.map((i) => `<li><span class="pre">${pre(i.kind)}</span><span>${esc(i.text)}</span>${i.pending ? '<span class="pill gold">čaka</span>' : ""}${(owner && !i.pending) || (i.pending && i.pending.by === S.user) ? `<button class="iconbtn" data-act="rmintent" data-id="${i.id}" aria-label="Odstrani namen ${esc(i.text)}">${I("x")}</button>` : ""}</li>`).join("") : '<li class="empty">Ta maša še nima namena.</li>'}</ul></div>`);
+    if (edit) body.push(`<div class="addbox"><label class="field"><span>Nov namen</span><input id="f-text" data-f="text" value="${esc(f.text)}" placeholder="npr. Jože Novak" autocomplete="off"></label><div class="chips" role="group" aria-label="Vrsta namena">${KINDS.map(([v, l]) => `<button class="chip" data-act="fkind" data-v="${v}" aria-pressed="${f.kind === v}">${l}</button>`).join("")}</div><button class="btn primary" data-act="addintent">${me().approval ? `${I("send")}Pošlji v potrditev` : `${I("plus")}Dodaj namen`}</button></div>`);
+  }
+  if (edit && !off && !m.pendingCancel && f.cancel) body.push(`<div class="banner alert"><b>Odpoved maše</b><label class="field"><span>Razlog, ki bo na strani</span><input id="f-reason" data-f="reason" value="${esc(f.reason)}" placeholder="npr. Župnik je na duhovnih vajah."><small>Ni obvezno.</small></label>${m.intents.length ? `<div class="field"><span>Kaj naj bo z namenom?</span><div class="chips"><button class="chip" data-act="fmove" data-v="next" aria-pressed="${f.move === "next"}">Prestavi na naslednjo mašo</button><button class="chip" data-act="fmove" data-v="keep" aria-pressed="${f.move === "keep"}">Pusti, dogovorim se sam</button></div></div>` : ""}<div class="acts"><button class="btn danger" style="background:var(--paper)" data-act="docancel" ${m.intents.length && !f.move ? "disabled" : ""}>${me().approval ? "Predlagaj odpoved" : "Potrdi odpoved"}</button><button class="btn ghost" data-act="fcancel" data-v="0">Nazaj</button></div></div>`);
+  const foot = edit && !off && !m.pendingCancel && !f.cancel ? `<div class="panel-f"><button class="btn danger" data-act="fcancel" data-v="1">${I("ban")}${me().approval ? "Predlagaj odpoved" : "Odpovej mašo"}</button><button class="btn ghost" data-act="close">Zapri</button></div>` : "";
+  return panel(`${FEAST[m.date] ? `${FEAST[m.date]} · ` : ""}${fDay(m.date)}`, `${fT(m.time)} · ${CH[m.church]}`, m.type === "sunday" ? "Nedeljska sveta maša" : "Sveta maša", body.join(""), foot);
+}
+function pIntent() {
+  const f = S.form, opts = upcoming().filter((m) => m.status !== "off");
+  const byDay = {}; for (const m of opts) (byDay[m.date] ||= []).push(m);
+  return panel("Maše in nameni", "Nov namen", "Izberite mašo in vpišite, za koga se daruje.",
+    `<label class="field"><span>Maša</span><select id="f-mid" data-f="mid">${Object.entries(byDay).map(([d, ms]) => `<optgroup label="${fDay(d)}">${ms.map((m) => `<option value="${m.id}" ${f.mid === m.id ? "selected" : ""}>${fT(m.time)} · ${CH[m.church]}${m.intents.length ? ` (${m.intents.length})` : " · brez namena"}</option>`).join("")}</optgroup>`).join("")}</select></label>
+     <label class="field"><span>Za koga</span><input id="f-text" data-f="text" value="${esc(f.text)}" placeholder="npr. Jože Novak" autocomplete="off"></label>
+     <div class="field"><span>Vrsta</span><div class="chips">${KINDS.map(([v, l]) => `<button class="chip" data-act="fkind" data-v="${v}" aria-pressed="${f.kind === v}">${l}</button>`).join("")}</div></div>
+     ${me().approval ? '<div class="banner gold"><p>Namen bo na strani, ko ga potrdi župnik.</p></div>' : ""}`,
+    `<div class="panel-f"><button class="btn primary lg" data-act="saveintent">${me().approval ? "Pošlji v potrditev" : "Dodaj namen"}</button><button class="btn ghost lg" data-act="close">Prekliči</button></div>`);
+}
+function pEvent(id) {
+  const f = S.form, ev = id && S.events.find((e) => e.id === id);
+  return panel("Dogodki", ev ? "Uredi dogodek" : "Nov dogodek", ev?.pending ? `Čaka potrditev · ${who(ev.pending.by).name}` : "Pokaže se na strani Dogodki in v koledarju.",
+    `<label class="field"><span>Naslov</span><input id="f-title" data-f="title" value="${esc(f.title)}" placeholder="npr. Srečanje ključarjev"></label>
+     <div class="row2"><label class="field"><span>Datum</span><input id="f-date" type="date" data-f="date" value="${esc(f.date)}"></label><label class="field"><span>Ura</span><input id="f-time" type="time" data-f="time" value="${esc(f.time)}"></label></div>
+     <label class="field"><span>Kraj</span><select id="f-place" data-f="place">${PLACES.map((p) => `<option ${f.place === p ? "selected" : ""}>${p}</option>`).join("")}</select></label>
+     <label class="field"><span>Opis</span><textarea id="f-desc" data-f="desc" placeholder="Kaj naj ljudje vedo? Ni obvezno.">${esc(f.desc)}</textarea></label>
+     <label class="switch"><div><b>Pokaži na prvi strani</b><small>Med novicami na začetni strani.</small></div><input type="checkbox" id="f-front" data-f="front" ${f.front ? "checked" : ""}></label>
+     ${me().approval ? '<div class="banner gold"><p>Dogodek bo na strani, ko ga potrdi župnik.</p></div>' : ""}`,
+    `<div class="panel-f"><button class="btn primary lg" data-act="saveevent" data-id="${id || ""}">${me().approval ? "Pošlji v potrditev" : ev ? "Shrani" : "Dodaj dogodek"}</button>${ev && me().owner ? `<button class="btn danger lg" data-act="delevent" data-id="${id}">${I("trash")}Izbriši</button>` : `<button class="btn ghost lg" data-act="close">Prekliči</button>`}</div>`);
+}
+function pGroup(id) {
+  const g = S.verouk.find((x) => x.id === id), f = S.form;
+  return panel("Verouk", `${g.name} odpade`, `${fDay(g.date)}, ${fT(g.time)}`,
+    `<label class="field"><span>Sporočilo staršem</span><textarea id="f-msg" data-f="msg" placeholder="npr. Zaradi jesenskih počitnic se vidimo naslednji teden.">${esc(f.msg)}</textarea><small>Starši ga vidijo na strani Verouk pri tej skupini.</small></label>`,
+    `<div class="panel-f"><button class="btn primary lg" data-act="docgroup" data-id="${id}">Potrdi odpoved</button><button class="btn ghost lg" data-act="close">Prekliči</button></div>`);
+}
+function secSwitches(f) {
+  return `<div class="blk"><h3>Kaj sme urejati</h3><div>${Object.entries(SECTIONS).map(([k, l]) => `<label class="switch"><div><b>${l}</b></div><input type="checkbox" data-sec="${k}" ${f.sections.includes(k) ? "checked" : ""}></label>`).join("")}</div></div>
+    <div class="blk"><h3>Objava</h3><label class="switch"><div><b>Spremembe potrdim jaz</b><small>Na strani so šele, ko jih potrdite. Priporočeno za nove sodelavce.</small></div><input type="checkbox" data-f="approval" ${f.approval ? "checked" : ""}></label></div>`;
+}
+function pPerson(id) {
+  const p = S.people.find((x) => x.id === id);
+  return panel(p.title, esc(p.name), `${esc(p.email)}${p.invited ? " · povabilo poslano" : ""}`, secSwitches(S.form),
+    `<div class="panel-f"><button class="btn primary lg" data-act="saveperson" data-id="${id}">Shrani</button><button class="btn danger lg" data-act="rmperson" data-id="${id}">Odvzemi dostop</button></div>`);
+}
+function pInvite() {
+  const f = S.form;
+  return panel("Ljudje in dostop", "Povabi osebo", "Dobila bo e-pošto s povezavo za prijavo. Gesla ne potrebuje.",
+    `<label class="field"><span>Ime in priimek</span><input id="f-name" data-f="name" value="${esc(f.name)}" autocomplete="off"></label>
+     <label class="field"><span>E-pošta</span><input id="f-email" type="email" data-f="email" value="${esc(f.email)}" autocomplete="off"></label>
+     <div class="field"><span>Vloga</span><div class="chips">${Object.keys(PRESETS).map((k) => `<button class="chip" data-act="preset" data-v="${k}" aria-pressed="${f.title === k}">${k}</button>`).join("")}</div></div>
+     ${secSwitches(f)}`,
+    `<div class="panel-f"><button class="btn primary lg" data-act="doinvite" ${!f.name.trim() || !/@/.test(f.email) || !f.sections.length ? "disabled" : ""}>${I("mail")}Pošlji povabilo</button><button class="btn ghost lg" data-act="close">Prekliči</button></div>`);
+}
+function pMore() {
+  const rest = NAV.filter((n) => n.ok()).slice(3);
+  return panel("", "Več", "", `<nav class="menu">${rest.map((n) => `<a href="#${n.r}" data-act="nav" data-r="${n.r}">${I(n.ic)}${n.label}</a>`).join("")}</nav>`, "", true);
+}
+function pProfile() {
+  const u = me();
+  return panel(u.title, esc(u.name), esc(u.email),
+    `<div><label class="switch"><div><b>Večje črke</b><small>Vse besedilo malo večje.</small></div><input type="checkbox" data-act-change="big" ${S.big ? "checked" : ""}></label></div>
+     <nav class="menu"><button data-act="nav" data-r="zgodovina">${I("hist")}Moje spremembe</button><button data-act="logout">${I("out")}Odjava</button></nav>`, "", true);
+}
+function panel(eyebrow, title, sub, body, foot, compact) {
+  return `<div class="scrim ${fx.panel ? "enter" : ""}" data-act="close"></div><section class="panel ${fx.panel ? "enter" : ""}" role="dialog" aria-modal="true" aria-label="${esc(title).replace(/<[^>]+>/g, "")}"><div class="panel-h"><div>${eyebrow ? `<p class="eyebrow">${eyebrow}</p>` : ""}<h2>${title}</h2>${sub ? `<p>${sub}</p>` : ""}</div><button class="iconbtn" data-act="close" aria-label="Zapri">${I("x")}</button></div><div class="panel-b">${body}</div>${foot || ""}</section>`;
+}
+
+function cardEl(c) {
+  const m = c.mid && massById(c.mid), closed = c.st !== "open";
+  let b = "", ok = true;
+  if (c.type === "cancel") {
+    b = `<div class="chg minus"><span class="s">−</span><b>Maša odpade</b><small>${fDay(m.date)}, ${fT(m.time)}, ${CH[m.church]}</small></div>
+      ${closed ? (c.reason ? `<p class="wsum">»${esc(c.reason)}«</p>` : "") : `<label class="field"><span>Razlog na strani (ni obvezno)</span><input id="cr-${c.id}" data-card-f="reason" data-card="${c.id}" value="${esc(c.reason)}" placeholder="npr. Župnik je odsoten."></label>`}
+      ${!closed && m.intents.length ? `<div class="q"><p>Maša ima namen ${pre(m.intents[0].kind)} ${esc(m.intents[0].text)}. Kaj naj bo z njim?</p><div class="chips"><button class="chip" data-act="cmove" data-card="${c.id}" data-v="next" aria-pressed="${c.move === "next"}">Prestavi na naslednjo mašo</button><button class="chip" data-act="cmove" data-card="${c.id}" data-v="keep" aria-pressed="${c.move === "keep"}">Pusti</button></div></div>` : ""}`;
+    ok = !!c.move;
+  } else if (c.type === "intent") {
+    b = `<div class="chg"><span class="s">+</span><b>${pre(c.kind)} ${esc(c.text)}</b><small>${fDay(m.date)}, ${fT(m.time)}, ${CH[m.church]}</small></div>
+      ${!closed && c.guess ? `<div class="q"><p>Sem prav razumel, da je za pokojnega?</p><div class="chips">${KINDS.map(([v, l]) => `<button class="chip" data-act="ckind" data-card="${c.id}" data-v="${v}" aria-pressed="${c.kind === v}">${l}</button>`).join("")}</div></div>` : ""}`;
+  } else if (c.type === "group") {
+    const g = S.verouk.find((x) => x.id === c.gid);
+    b = `<div class="chg minus"><span class="s">−</span><b>Verouk ${g.name} odpade</b><small>${fDay(g.date)}, ${fT(g.time)}</small></div>${closed ? "" : `<label class="field"><span>Sporočilo staršem</span><input id="cr-${c.id}" data-card-f="msg" data-card="${c.id}" value="${esc(c.msg)}" placeholder="npr. Zaradi počitnic."></label>`}`;
+  }
+  const label = me().approval && c.type !== "group" ? "Pošlji v potrditev" : "Potrdi";
+  return `<div class="card ${c.st === "done" ? "closed" : c.st === "gone" ? "gone" : ""}"><div class="card-h"><span class="eyebrow">${c.st === "done" ? "Shranjeno" : c.st === "gone" ? "Preklicano" : "Predlog"}</span>${closed ? "" : '<span class="pill line">še ni shranjeno</span>'}</div><div class="card-b">${b}</div>${closed ? "" : `<div class="card-f"><button class="btn primary" data-act="cok" data-card="${c.id}" ${ok ? "" : "disabled"}>${ok ? label : "Najprej izberite zgoraj"}</button><button class="btn ghost" data-act="cno" data-card="${c.id}">Prekliči</button></div>`}</div>`;
+}
+function chatPanel() {
+  const n = S.chat.length, enterFrom = fx.msgs;
+  const thread = S.chat.map((m, i) => {
+    const en = i >= enterFrom ? "enter" : "";
+    if (m.who === "me") return `<div class="msg me ${en}">${esc(m.text)}</div>`;
+    return `<div class="msg ai ${m.no ? "no" : ""} ${en}"><span class="by"><i></i>Pomočnik</span><p>${esc(m.text)}</p>${m.card ? cardEl(m.card) : ""}${m.sugg ? `<div class="chips">${m.sugg.map((s) => `<button class="chip" data-act="say" data-v="${esc(s)}">${esc(s)}</button>`).join("")}</div>` : ""}</div>`;
+  }).join("") + (S.typing ? `<div class="msg ai"><span class="by"><i></i>Pomočnik</span><span class="typing"><i></i><i></i><i></i></span></div>` : "");
+  fx.msgs = n;
+  return `<div class="scrim ${fx.panel ? "enter" : ""}" data-act="chatclose"></div><section class="panel full ${fx.panel ? "enter" : ""}" role="dialog" aria-label="Pomočnik">
+    <div class="panel-h"><div><p class="eyebrow">Pomočnik</p><h2>Kaj naj spremenim?</h2><p>Predlaga spremembe, shrani jih šele, ko potrdite.</p></div><button class="iconbtn" data-act="chatclose" aria-label="Zapri">${I("x")}</button></div>
+    <div class="chat"><div class="thread" id="thread">${thread}</div>
+    <form class="composer" data-form="chat"><div class="sugg">${suggestions().map((s) => `<button type="button" data-act="say" data-v="${esc(s)}">${esc(s)}</button>`).join("")}</div>
+      <div class="cin">${can("oznanila") ? `<button type="button" class="iconbtn" data-act="photo" aria-label="Fotografiraj oznanila">${I("cam")}</button>` : ""}<label class="sr" for="chat-in">Sporočilo</label><textarea id="chat-in" rows="1" placeholder="npr. odpovej mašo v sredo"></textarea><button class="iconbtn send" type="submit" aria-label="Pošlji">${I("send")}</button></div></form></div></section>`;
+}
+
+function vLogin() {
+  const L = S.login;
+  const form = L.stage === "sent"
+    ? `<div class="sent"><span class="seal">${I("mail")}</span><h1>Preverite e-pošto</h1><p>Na <b>${esc(L.email)}</b> smo poslali povezavo za prijavo. Odprite jo na tej napravi. Velja 15 minut.</p><button class="btn primary lg block" data-act="magic">Odpri povezavo (prototip)</button><p class="fine">Ni sporočila? Poglejte med neželeno pošto ali <button data-act="loginback">vpišite drug naslov</button>.</p></div>`
+    : `<form class="box" data-form="login"><div style="display:grid;gap:8px"><span class="mark">${I("cross")}</span><h1>Prijava v urejanje</h1></div><p>Vpišite e-pošto. Poslali vam bomo povezavo za prijavo, gesla ne potrebujete.</p>
+       <label class="field"><span>E-pošta</span><input id="login-email" type="email" data-login="email" value="${esc(L.email)}" placeholder="ime@primer.si" autocomplete="email" required></label>
+       <button class="btn primary lg block" type="submit">${I("mail")}Pošlji povezavo</button><div class="or">ali</div><button type="button" class="btn lg block" data-act="magic">${GOOGLE}Nadaljuj z Googlom</button>
+       <p class="fine">Dostop dodeli župnik. Če ga še nimate, ga prosite za povabilo.</p></form>`;
+  return `<div class="login"><div class="art"><div style="display:flex;gap:12px;align-items:center"><span class="mark" style="background:rgb(255 255 255 / .12)">${I("cross")}</span><b style="font-family:var(--serif);font-weight:500;font-size:1.2rem">Župnija Pirniče</b></div><blockquote>Oznanila, maše in nameni na enem mestu.</blockquote><small>urejanje.zupnija-pirnice.si</small></div><div class="form">${L.stage === "sent" ? `<div class="box">${form}</div>` : form}</div></div>`;
+}
+
+function shell() {
+  const u = me(), items = NAV.filter((n) => n.ok()), ap = u.owner ? approvals().length : 0;
+  const pageView = { domov: vHome, teden: vWeek, oznanila: vBulletins, nalaganje: vUpload, dogodki: vEvents, verouk: vVerouk, ljudje: vPeople, zgodovina: vHistory }[S.route] || vHome;
+  const tabs = items.length <= 4 ? items : [...items.slice(0, 3), { r: "_more", label: "Več", ic: "more" }];
+  const cur = NAV.find((n) => n.r === S.route) || (S.route === "nalaganje" ? NAV[2] : NAV[0]);
+  let html = `<div class="shell">
+    <aside class="side"><div class="brand"><span class="mark">${I("cross")}</span><div><b>Župnija Pirniče</b><small>urejanje</small></div></div>
+      <nav class="nav" aria-label="Razdelki">${items.map((n) => `${n.r === "zgodovina" ? '<div class="sep"></div>' : ""}<a href="#${n.r}" data-act="nav" data-r="${n.r}" ${cur.r === n.r ? 'aria-current="page"' : ""}>${I(n.ic)}${n.label}${n.r === "domov" && ap ? `<span class="count">${ap}</span>` : ""}</a>`).join("")}</nav>
+      <button class="me" data-act="profile"><span class="avatar ${u.owner ? "moss" : ""}">${u.short}</span><div><b>${esc(u.name)}</b><small>${esc(u.title)}</small></div></button></aside>
+    <div class="mainwrap">
+      <header class="phonebar"><span class="mark">${I("cross")}</span><b>${S.route === "domov" ? "Župnija Pirniče" : cur.label}</b><button class="avatar ${u.owner ? "moss" : ""}" data-act="profile" aria-label="Profil">${u.short}</button></header>
+      <main class="scroll" id="scroll">${pageView()}</main>
+      ${S.route === "nalaganje" ? "<div></div>" : `<div class="askbar"><div class="inner"><button class="ask" data-act="chat">${I("msg")}<span>Napišite, kaj naj spremenim …</span></button>${can("oznanila") ? `<button class="cam" data-act="photo" aria-label="Fotografiraj oznanila">${I("cam")}</button>` : ""}</div></div>`}
+      <nav class="tabbar" aria-label="Razdelki">${tabs.map((n) => n.r === "_more" ? `<button data-act="more" ${!tabs.slice(0, 3).some((t) => t.r === cur.r) ? 'aria-current="page"' : ""}>${I(n.ic)}${n.label}</button>` : `<a href="#${n.r}" data-act="nav" data-r="${n.r}" ${cur.r === n.r ? 'aria-current="page"' : ""}>${I(n.ic)}${n.short || n.label}${n.r === "domov" && ap ? `<span class="dot">${ap}</span>` : ""}</a>`).join("")}</nav>
+    </div></div>`;
+  if (S.chatOpen) html += chatPanel();
+  else if (S.panel) {
+    const { type, id } = S.panel;
+    html += type === "mass" ? pMass(massById(id)) : type === "intent" ? pIntent() : type === "event" ? pEvent(id) : type === "group" ? pGroup(id) : type === "person" ? pPerson(id) : type === "invite" ? pInvite() : type === "more" ? pMore() : pProfile();
+  }
+  if (S.toast) html += `<div class="toast ${fx.toast ? "enter" : ""}" role="status">${I("check")}<span>${esc(S.toast.text)}</span>${S.toast.undoable && S.history.length ? `<button data-act="undo">Razveljavi</button>` : ""}</div>`;
+  return html;
+}
+
+// ── Prototype strip ──
+const SCN = [["", "Skoči na …"], ["home", "Začetni zaslon"], ["empty", "Prazen teden"], ["reading", "Claude bere oznanila"], ["review", "Preverjanje negotovih mest"], ["error", "Lista ni mogoče prebrati"], ["approval", "Sprememba čaka župnika"], ["restricted", "Omejen pogled (katehistinja)"], ["login", "Prijava"]];
+function bench() {
+  return `<b>Prototip</b>
+    <label>Prijavljen: <select id="b-user">${S.people.filter((p) => !p.invited).map((p) => `<option value="${p.id}" ${S.user === p.id ? "selected" : ""}>${esc(p.name)} · ${esc(p.title)}</option>`).join("")}</select></label>
+    <label>Stanje: <select id="b-scn">${SCN.map(([v, l]) => `<option value="${v}">${l}</option>`).join("")}</select></label>
+    <span class="bseg" role="group" aria-label="Zaslon"><button data-b="phone" data-v="0" aria-pressed="${!S.phone}">Računalnik</button><button data-b="phone" data-v="1" aria-pressed="${S.phone}">Telefon</button></span>
+    <button class="reset" data-b="reset" title="Maše 26. 10.–1. 11. so iz oznanil za oktober 2026. Ostalo so primeri.">Ponastavi</button>`;
+}
+function scenario(v) {
+  clearTimeout(readTimer); S.chatOpen = false; S.panel = null; S.loggedIn = true;
+  if (v === "home") go("domov");
+  if (v === "empty") { if (S.user === "ana") S.user = "blaz"; S.week = 1; S.view = "edit"; go("teden"); }
+  if (v === "reading" || v === "review" || v === "error") {
+    if (!can("oznanila")) S.user = "blaz";
+    const file = v === "error" ? SAMPLES.blur : SAMPLES.photo;
+    S.up = { stage: v === "reading" ? "reading" : v, file, picks: {}, fixing: {}, news: [...DRAFT_NEWS] }; go("nalaganje");
+    if (v === "reading") readTimer = setTimeout(() => { if (S.up?.stage === "reading") { S.up.stage = "review"; fx.page = true; render(); } }, 4400);
+  }
+  if (v === "approval") { S.user = "blaz"; go("domov"); }
+  if (v === "restricted") { S.user = "ana"; S.chat = []; go("domov"); }
+  if (v === "login") { S.loggedIn = false; S.login = { stage: "form", email: "" }; }
+  fx.page = true;
+}
+
+// ── Render ──
+function render() {
+  const keep = {}; for (const id of ["scroll", "thread"]) { const el = document.getElementById(id); if (el) keep[id] = el.scrollTop; }
+  const ae = document.activeElement, focus = ae && ae.id && ae.tagName !== "BUTTON" ? { id: ae.id, v: ae.value, s: ae.selectionStart } : null;
+  document.documentElement.classList.toggle("big", S.big);
+  document.getElementById("bench").innerHTML = bench();
+  document.getElementById("stage").className = "stage" + (S.phone ? " phone" : "");
+  const app = document.getElementById("app");
+  const routeChanged = lastRoute !== S.route; lastRoute = S.route;
+  app.innerHTML = S.loggedIn ? shell() : vLogin();
+  if (S.loggedIn && fx.page) document.querySelector(".page")?.classList.add("enter");
+  const sc = document.getElementById("scroll"); if (sc) sc.scrollTop = routeChanged || fx.page ? 0 : keep.scroll || 0;
+  const th = document.getElementById("thread"); if (th) th.scrollTop = th.scrollHeight;
+  if (focus) { const el = document.getElementById(focus.id); if (el && "value" in el) { el.value = focus.v; el.focus(); try { el.setSelectionRange(focus.s, focus.s); } catch {} } }
+  fx.page = false; fx.panel = false; fx.toast = false;
+  bindDrop();
+}
+function bindDrop() {
+  const d = document.getElementById("drop"); if (!d) return;
+  d.ondragover = (e) => { e.preventDefault(); d.classList.add("over"); };
+  d.ondragleave = () => d.classList.remove("over");
+  d.ondrop = (e) => { e.preventDefault(); d.classList.remove("over"); const f = e.dataTransfer.files[0]; if (f) takeFile(f); };
+}
+function takeFile(f) {
+  const meta = `${f.type.startsWith("image/") ? "Fotografija" : f.type === "application/pdf" ? "PDF" : "Tabela"} · ${Math.max(1, Math.round(f.size / 1024))} KB`;
+  const file = { name: f.name, meta };
+  if (f.type.startsWith("image/")) {
+    const r = new FileReader(); r.onload = () => { file.url = r.result; startReading(file); render(); }; r.readAsDataURL(f);
+  } else { startReading(file); render(); }
+}
+
+// ── Events ──
+document.addEventListener("click", (e) => {
+  const bb = e.target.closest("[data-b]");
+  if (bb) {
+    if (bb.dataset.b === "phone") S.phone = bb.dataset.v === "1";
+    if (bb.dataset.b === "reset") { Object.assign(S, seed(), { history: [], chat: [], up: null, panel: null, chatOpen: false, week: 0, view: "edit", user: "blaz", loggedIn: true }); go("domov"); }
+    return render();
+  }
+  const b = e.target.closest("[data-act]"); if (!b) return;
+  const act = b.dataset.act, id = b.dataset.id, v = b.dataset.v;
+  if (b.tagName === "A") e.preventDefault();
+  const card = b.dataset.card && S.chat.map((m) => m.card).find((c) => c && c.id === b.dataset.card);
+  const f = S.form;
+  switch (act) {
+    case "nav": go(b.dataset.r); break;
+    case "nav-verouk": go("verouk"); break;
+    case "nav-week": S.week = v === WEEKS[1] ? 1 : 0; S.view = "edit"; go("teden"); break;
+    case "more": openPanel("more"); break;
+    case "profile": openPanel("profile"); break;
+    case "close": S.panel = null; break;
+    case "noop": return;
+    case "chat": S.chatOpen = true; S.panel = null; fx.panel = true; greet(); fx.msgs = S.chat.length; render(); document.getElementById("chat-in")?.focus(); return;
+    case "chatclose": S.chatOpen = false; break;
+    case "say": ask(v); return;
+    case "cok": confirmCard(card); break;
+    case "cno": card.st = "gone"; break;
+    case "cmove": card.move = v; break;
+    case "ckind": card.kind = v; break;
+    case "mass": openPanel("mass", id); break;
+    case "intent": openPanel("intent"); break;
+    case "event": openPanel("event"); break;
+    case "editevent": openPanel("event", id); break;
+    case "group": openPanel("group", id); break;
+    case "person": openPanel("person", id); break;
+    case "invite": openPanel("invite"); break;
+    case "fkind": f.kind = v; break;
+    case "fmove": f.move = v; break;
+    case "fcancel": f.cancel = v === "1"; break;
+    case "addintent": if (!f.text.trim()) { document.getElementById("f-text")?.focus(); return; } A.addIntent(S.panel.id, f.text.trim(), f.kind); f.text = ""; break;
+    case "rmintent": A.removeIntent(S.panel.id, id); break;
+    case "docancel": A.cancelMass(S.panel.id, f.reason, f.move || "none"); S.panel = null; break;
+    case "restore": A.restoreMass(id); break;
+    case "saveintent": if (!f.text.trim()) { document.getElementById("f-text")?.focus(); return; } A.addIntent(f.mid, f.text.trim(), f.kind); S.panel = null; break;
+    case "saveevent": if (!f.title.trim() || !f.date || !f.time) { document.getElementById(!f.title.trim() ? "f-title" : !f.date ? "f-date" : "f-time")?.focus(); return; } A.saveEvent(f, id || null); S.panel = null; break;
+    case "delevent": A.deleteEvent(id); S.panel = null; break;
+    case "docgroup": A.cancelGroup(id, f.msg); S.panel = null; break;
+    case "grestore": A.restoreGroup(id); break;
+    case "saveperson": A.savePerson(id, f); S.panel = null; break;
+    case "rmperson": A.removePerson(id); S.panel = null; break;
+    case "preset": f.title = v; f.sections = [...PRESETS[v]]; break;
+    case "doinvite": A.invite(f); S.panel = null; break;
+    case "ok": decide(id, true); break;
+    case "no": decide(id, false); break;
+    case "okall": decideAll(); break;
+    case "undo": undo(); break;
+    case "week": S.week = Number(v); break;
+    case "view": S.view = v; break;
+    case "photo": S.chatOpen = false; S.panel = null; document.getElementById("file-photo").click(); if (S.route !== "nalaganje" || S.up?.stage !== "pick") { S.up = { stage: "pick" }; go("nalaganje"); } break;
+    case "choose": document.getElementById("file-any").click(); if (S.route !== "nalaganje") { S.up = { stage: "pick" }; go("nalaganje"); } break;
+    case "sample": startReading(SAMPLES[v]); break;
+    case "resume": go("nalaganje"); fx.page = true; break;
+    case "manual": S.up = null; S.week = 1; S.view = "edit"; go("teden"); break;
+    case "srctoggle": S.srcOpen = !S.srcOpen; break;
+    case "flag": S.up.picks[b.dataset.k] = v; break;
+    case "fixopen": { const r = DRAFT.find((x) => x.flag?.key === b.dataset.k); S.up.fixing[b.dataset.k] = r.flag.key === "name" ? r.text : r.flag.opts[0]; render(); document.getElementById(`fix-${b.dataset.k}`)?.focus(); return; }
+    case "fixsave": { const k = b.dataset.k, val = (S.up.fixing[k] || "").trim(); if (!val) return; S.up.picks[k] = k === "time" ? (val.startsWith("17") ? "17.30" : "18.30") : val; delete S.up.fixing[k]; break; }
+    case "addnews": S.up.news.push(""); render(); document.getElementById(`news-${S.up.news.length - 1}`)?.focus(); return;
+    case "publish": S.up.news = S.up.news.filter((n) => n.trim()); publishUpload(); break;
+    case "savedraft": { const bl = S.bulletins.find((x) => x.week === "2026-11-02"); bl.status = "draft"; go("oznanila"); toast("Osnutek je shranjen. Najdete ga pri Oznanilih."); break; }
+    case "discard": { const bl = S.bulletins.find((x) => x.week === "2026-11-02"); if (bl.status === "draft") bl.status = "missing"; S.up = null; go("oznanila"); toast("Osnutek je zavržen. Nič ni bilo objavljeno."); break; }
+    case "logout": S.loggedIn = false; S.panel = null; S.login = { stage: "form", email: "" }; break;
+    case "magic": S.loggedIn = true; go("domov"); fx.page = true; break;
+    case "loginback": S.login.stage = "form"; break;
+  }
+  render();
+});
+document.addEventListener("input", (e) => {
+  const t = e.target;
+  if (t.dataset.f) S.form[t.dataset.f] = t.type === "checkbox" ? t.checked : t.value;
+  if (t.dataset.sec) { const s = new Set(S.form.sections); t.checked ? s.add(t.dataset.sec) : s.delete(t.dataset.sec); S.form.sections = Object.keys(SECTIONS).filter((k) => s.has(k)); }
+  if (t.dataset.news != null) S.up.news[Number(t.dataset.news)] = t.value;
+  if (t.dataset.fix) S.up.fixing[t.dataset.fix] = t.value;
+  if (t.dataset.login) S.login.email = t.value;
+  if (t.dataset.cardF) { const c = S.chat.map((m) => m.card).find((x) => x && x.id === t.dataset.card); if (c) c[t.dataset.cardF] = t.value; }
+  if (S.panel?.type === "invite" && (t.dataset.f || t.dataset.sec)) { const btn = document.querySelector('[data-act="doinvite"]'); if (btn) btn.disabled = !S.form.name.trim() || !/@/.test(S.form.email) || !S.form.sections.length; }
+});
+document.addEventListener("change", (e) => {
+  const t = e.target;
+  if (t.id === "b-user") { S.user = t.value; S.chat = []; S.panel = null; S.chatOpen = false; S.loggedIn = true; if (!allowed(S.route)) go("domov"); fx.page = true; render(); }
+  if (t.id === "b-scn") { scenario(t.value); render(); }
+  if (t.dataset.actChange === "big") { S.big = t.checked; render(); }
+  if (t.id === "file-photo" || t.id === "file-any") { const f = t.files[0]; t.value = ""; if (f) takeFile(f); }
+  if (t.tagName === "SELECT" && t.dataset.f) S.form[t.dataset.f] = t.value;
+});
+document.addEventListener("submit", (e) => {
+  e.preventDefault();
+  const f = e.target;
+  if (f.dataset.form === "chat") { const ta = f.querySelector("textarea"), t = ta.value.trim(); if (!t) return; ta.value = ""; ask(t); }
+  if (f.dataset.form === "login") { if (!/@/.test(S.login.email)) return; S.login.stage = "sent"; render(); }
+});
+document.addEventListener("keydown", (e) => {
+  if (e.target.id === "chat-in" && e.key === "Enter" && !e.shiftKey) { e.preventDefault(); e.target.form.requestSubmit(); }
+  if (e.target.dataset?.fix && e.key === "Enter") { e.preventDefault(); document.querySelector(`[data-act="fixsave"][data-k="${e.target.dataset.fix}"]`)?.click(); }
+  if (e.key === "Escape" && (S.panel || S.chatOpen)) { S.panel = null; S.chatOpen = false; render(); }
+});
+window.addEventListener("hashchange", () => { const r = location.hash.slice(1); if (r && r !== S.route) { go(r); render(); } });
+
+const start = location.hash.slice(1);
+if (start) go(start);
+render();
+})();
+</script>
+</body>
+</html>
