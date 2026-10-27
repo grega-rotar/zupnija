@@ -1,9 +1,11 @@
 import type { Metadata } from "next";
 import { getCatechesis, getSettings } from "@/sanity/data";
+import { getCatechesisGroups, type PublicCatechesisGroup } from "@/lib/data/verouk";
 import { buildMetadata } from "@/lib/seo";
 import { routes } from "@/lib/routes";
-import { WEEKDAY_LABEL, formatTime, type Weekday } from "@/lib/dates";
+import { WEEKDAY_LABEL, formatDayHeading, formatTime, type Weekday } from "@/lib/dates";
 import { clean } from "@/lib/clean";
+import { cn } from "@/lib/utils";
 import { AttachmentLink, RichText } from "@/components/sanity/RichText";
 import { SanityImage, hasImage } from "@/components/sanity/SanityImage";
 import { PersonCard } from "@/components/sections/PageSections";
@@ -23,7 +25,7 @@ export async function generateMetadata(): Promise<Metadata> {
 }
 
 export default async function CatechesisPage() {
-  const [settings, { page, groups }] = await Promise.all([getSettings(), getCatechesis()]);
+  const [settings, { page }, groups] = await Promise.all([getSettings(), getCatechesis(), getCatechesisGroups()]);
   const docs = (page?.documents ?? []).filter((d) => d.file?.asset?.url);
 
   return (
@@ -55,15 +57,8 @@ export default async function CatechesisPage() {
                           <dd className="text-ink-2">{g.sessions.map((x) => x.location).filter(Boolean).join(", ")}</dd>
                         </>
                       ) : null}
-                      {g.catechist?.name || g.catechistName ? (
-                        <>
-                          <dt className="text-ink-3">Katehet</dt>
-                          <dd className="text-ink-2">{g.catechist?.name ?? g.catechistName}</dd>
-                        </>
-                      ) : null}
                     </dl>
-                    {g.notes?.length ? <RichText value={g.notes} size="sm" className="mt-2 text-ink-2" /> : null}
-                    <GroupDocuments docs={g.documents} />
+                    <Cancellations items={g.cancellations} className="mt-2" />
                   </li>
                 ))}
               </ul>
@@ -78,11 +73,8 @@ export default async function CatechesisPage() {
                     <th scope="col" className="py-2 pr-4 font-medium">
                       Termin
                     </th>
-                    <th scope="col" className="py-2 pr-4 font-medium">
-                      Prostor
-                    </th>
                     <th scope="col" className="py-2 font-medium">
-                      Katehet
+                      Prostor
                     </th>
                   </tr>
                 </thead>
@@ -91,8 +83,7 @@ export default async function CatechesisPage() {
                     <tr key={g._id} className="align-top [&>*]:py-4">
                       <th scope="row" className="py-3 pr-4 font-serif text-lede font-medium text-ink">
                         {g.title}
-                        {g.notes?.length ? <RichText value={g.notes} size="sm" className="mt-1 font-sans text-ink-2" /> : null}
-                        <GroupDocuments docs={g.documents} />
+                        <Cancellations items={g.cancellations} className="mt-1 font-sans" />
                       </th>
                       <td className="py-3 pr-4 text-body">
                         {g.sessions?.length ? (
@@ -108,10 +99,9 @@ export default async function CatechesisPage() {
                           <span className="text-ink-3">po dogovoru</span>
                         )}
                       </td>
-                      <td className="py-3 pr-4 text-body text-ink-2">
+                      <td className="py-3 text-body text-ink-2">
                         {g.sessions?.map((x) => x.location).filter(Boolean).join(", ") || "—"}
                       </td>
-                      <td className="py-3 text-body text-ink-2">{g.catechist?.name ?? g.catechistName ?? "—"}</td>
                     </tr>
                   ))}
                 </tbody>
@@ -171,8 +161,7 @@ export default async function CatechesisPage() {
   );
 }
 
-type Session = { _key: string; weekday: string; time: string; location: string | null };
-type GroupDoc = { _id: string; title: string; file: { asset: { url: string; extension: string | null } | null } | null };
+type Session = PublicCatechesisGroup["sessions"][number];
 
 function sessionsLine(sessions: Session[] | null): string {
   if (!sessions?.length) return "po dogovoru";
@@ -184,16 +173,15 @@ function sessionsLine(sessions: Session[] | null): string {
     .join(", ");
 }
 
-function GroupDocuments({ docs }: { docs: GroupDoc[] | null }) {
-  const list = (docs ?? []).filter((d) => d.file?.asset?.url);
-  if (!list.length) return null;
+/** Lessons cancelled in the editor ("Ta teden odpade"), with the message for parents. */
+function Cancellations({ items, className }: { items: PublicCatechesisGroup["cancellations"]; className?: string }) {
+  if (!items.length) return null;
   return (
-    <ul className="mt-1 space-y-0.5 font-sans text-meta">
-      {list.map((d) => (
-        <li key={d._id}>
-          <a href={`${d.file!.asset!.url}?dl=`} className="text-moss underline underline-offset-4">
-            {d.title}
-          </a>
+    <ul className={cn("space-y-0.5 text-small font-normal", className)}>
+      {items.map((c) => (
+        <li key={c.date} className="text-alert">
+          {formatDayHeading(c.date)}: odpade.
+          {c.message ? <em className="ml-1 text-ink-2">{c.message}</em> : null}
         </li>
       ))}
     </ul>

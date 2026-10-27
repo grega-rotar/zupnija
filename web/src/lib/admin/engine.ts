@@ -97,7 +97,8 @@ export class Tracker {
 }
 
 // ── Actions ─────────────────────────────────────────────────────────────────
-export type ActionCtx = { actor: Actor; track: Tracker; tx: Tx };
+/** `requestedBy` is the helper whose change request is being approved (else the actor). */
+export type ActionCtx = { actor: Actor; track: Tracker; tx: Tx; requestedBy: string };
 
 export type ActionDef<P> = {
   name: string;
@@ -148,11 +149,11 @@ function parse<P>(def: ActionDef<P>, payload: unknown): P {
   return r.data;
 }
 
-async function applyNow<P>(dbx: Db, actor: Actor, def: ActionDef<P>, p: P, labelPrefix = "", note?: string) {
+async function applyNow<P>(dbx: Db, actor: Actor, def: ActionDef<P>, p: P, labelPrefix = "", note?: string, requestedBy = actor.id) {
   const out = await dbx.transaction(async (tx) => {
     await def.check?.(p, tx);
     const track = new Tracker(tx);
-    const result = await def.apply(p, { actor, track, tx });
+    const result = await def.apply(p, { actor, track, tx, requestedBy });
     const label = labelPrefix + (await def.label(p, tx));
     const [h] = await tx
       .insert(schema.history)
@@ -194,7 +195,7 @@ export async function approve(owner: Actor, id: number, dbx: Db = defaultDb): Pr
   const cr = await pendingRequest(dbx, id);
   const def = getAction(cr.action);
   const p = parse(def, cr.payload);
-  const { historyId } = await applyNow(dbx, owner, def, p, "Potrjeno: ", `predlog: ${cr.createdBy}`);
+  const { historyId } = await applyNow(dbx, owner, def, p, "Potrjeno: ", `predlog: ${cr.createdBy}`, cr.createdBy);
   await dbx
     .update(schema.changeRequests)
     .set({ status: "approved", decidedBy: owner.id, decidedAt: now() })

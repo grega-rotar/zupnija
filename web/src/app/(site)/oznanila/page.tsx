@@ -1,22 +1,16 @@
 import type { Metadata } from "next";
 import Link from "next/link";
-import {
-  getBulletinList,
-  getCurrentAnnouncements,
-  getCurrentBulletin,
-  getEventsInRange,
-  getHomePage,
-  getMassDays,
-  getSettings,
-  getUpcomingEvents,
-} from "@/sanity/data";
+import { getCurrentAnnouncements, getHomePage, getSettings } from "@/sanity/data";
+import { getBulletinList, getCurrentBulletin } from "@/lib/data/bulletins";
+import { getEventsInRange, getUpcomingEvents } from "@/lib/data/events";
+import { getMassDays } from "@/lib/data/masses";
 import { buildMetadata } from "@/lib/seo";
 import { routes } from "@/lib/routes";
 import { dateOf, formatDate, formatDayNumber, formatMonthShort, formatTime, formatWeekSpan, timeOf } from "@/lib/dates";
 import { clean } from "@/lib/clean";
 import { ANNOUNCEMENT_CATEGORY_LABEL } from "@/lib/labels";
 import { hrefFor, isExternalHref } from "@/lib/links";
-import { cn, formatFileSize } from "@/lib/utils";
+import { cn } from "@/lib/utils";
 import { PageHero } from "@/components/layout/PageHero";
 import { BulletinView } from "@/components/announcements/BulletinView";
 import { SanityImage, hasImage } from "@/components/sanity/SanityImage";
@@ -53,19 +47,16 @@ export default async function AnnouncementsPage({ searchParams }: Props) {
     getUpcomingEvents(3),
     getHomePage(),
   ]);
-  const [massDays, autoEvents] = bulletin
+  const [massDays, weekEvents] = bulletin
     ? await Promise.all([getMassDays(bulletin.weekStart, bulletin.weekEnd), getEventsInRange(bulletin.weekStart, bulletin.weekEnd)])
     : [[], []];
-  const pickedIds = new Set((bulletin?.events ?? []).map((e) => e._id));
-  const weekEvents = [...(bulletin?.events ?? []), ...autoEvents.filter((e) => !pickedIds.has(e._id))];
 
   const usedCategories = new Set(announcements.map((a) => clean(a.category) ?? "notice"));
   const filters = FILTERS.filter((f) => !f.key || usedCategories.has(f.key));
   const filter = filters.some((f) => f.key === vrsta) ? vrsta : "";
   const shown = filter ? announcements.filter((a) => clean(a.category) === filter) : announcements;
 
-  const bulletinPdf = bulletin?.attachments?.find((a) => a.file?.asset?.url);
-  const olderBulletins = list.filter((b) => b._id !== bulletin?._id).slice(0, 5);
+  const olderBulletins = list.filter((b) => b.id !== bulletin?.id).slice(0, 5);
 
   return (
     <>
@@ -178,16 +169,6 @@ export default async function AnnouncementsPage({ searchParams }: Props) {
                 ) : (
                   <p className="mt-4 text-body text-ink-2">Tedenska oznanila se objavijo ob nedeljah.</p>
                 )}
-                {bulletinPdf?.file?.asset?.url ? (
-                  <a
-                    href={`${bulletinPdf.file.asset.url}?dl=`}
-                    className="mt-6 flex min-h-12 w-full items-center gap-3 rounded-sm bg-moss px-4 font-medium text-paper hover:bg-moss-deep"
-                  >
-                    <Icon name="download" size={18} className="shrink-0" />
-                    <span className="flex-1 whitespace-nowrap">Prenesi PDF</span>
-                    {bulletinPdf.file.asset.size ? <span className="tnum whitespace-nowrap text-small text-paper/70">{formatFileSize(bulletinPdf.file.asset.size)}</span> : null}
-                  </a>
-                ) : null}
                 {bulletin ? (
                   <a href="#tedenska" className="mt-3 inline-flex min-h-10 items-center gap-2 text-small text-ink-2 underline decoration-stone-2 underline-offset-4 hover:text-ink">
                     Preberi na tej strani
@@ -198,7 +179,7 @@ export default async function AnnouncementsPage({ searchParams }: Props) {
                     <h3 className="text-meta text-ink-3">Prejšnji tedni</h3>
                     <ul className="mt-2 flex flex-wrap gap-x-4 gap-y-1 text-small">
                       {olderBulletins.map((b) => (
-                        <li key={b._id}>
+                        <li key={b.id}>
                           <Link href={routes.bulletin(b.weekStart)} className="whitespace-nowrap text-ink-2 underline decoration-stone-2 underline-offset-4 hover:text-ink">
                             {formatWeekSpan(b.weekStart, b.weekEnd)}
                           </Link>

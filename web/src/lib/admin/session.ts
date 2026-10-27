@@ -1,14 +1,15 @@
 /**
- * Who is signed in, as an Actor. OWNED BY THE AUTH WORK: replace the TODO
- * with the Better Auth session lookup. Keep the exported signatures.
+ * Who is signed in, as an Actor: the Better Auth session → loadActor.
+ * A disabled user (or one whose row is gone) is signed out (null).
  *
- * Development shortcut: DEV_ACTOR=<user id> in .env.local signs in as that
- * user (never in production). The prototype-style user switch relies on it.
+ * Development shortcut: DEV_ACTOR=<user id> in .env.local, or the dev_actor
+ * cookie set by /dev/kot/<id>, signs in as that user (never in production).
  */
 import "server-only";
-import { cookies } from "next/headers";
+import { cookies, headers } from "next/headers";
 import { redirect } from "next/navigation";
 import { db } from "@/db";
+import { auth } from "@/lib/auth";
 import { loadActor } from "./actor";
 import { ForbiddenError } from "./errors";
 import { can, type Actor, type Area } from "./sections";
@@ -18,8 +19,9 @@ export async function getActor(): Promise<Actor | null> {
     const dev = (await cookies()).get("dev_actor")?.value ?? process.env.DEV_ACTOR;
     if (dev) return loadActor(db, dev);
   }
-  // TODO(auth): Better Auth session → user id → loadActor(db, id)
-  return null;
+  const s = await auth.api.getSession({ headers: await headers() });
+  if (!s) return null;
+  return loadActor(db, s.user.id);
 }
 
 /** For pages: redirect to /prijava when signed out. */

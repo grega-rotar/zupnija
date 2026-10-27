@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
-import { getPastEvents, getSettings } from "@/sanity/data";
+import { getSettings } from "@/sanity/data";
+import { getPastEvents } from "@/lib/data/events";
 import { buildMetadata } from "@/lib/seo";
 import { routes } from "@/lib/routes";
 import { EventList } from "@/components/events/EventCard";

@@ -3,9 +3,9 @@
  * Each feature adds exactly one import line for its actions module.
  */
 import "server-only";
-// import "@/lib/masses/actions";
-// import "@/lib/events/actions";
-// import "@/lib/verouk/actions";
-// import "@/lib/bulletin/actions";
-// import "@/lib/people/actions";
+import "@/lib/mase/actions";
+import "@/lib/dogodki/actions";
+import "@/lib/verouk/actions";
+import "@/lib/bulletin/actions";
+import "@/lib/ljudje/actions";
 export * from "./engine";

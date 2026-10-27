@@ -1,14 +1,7 @@
 import type { Metadata } from "next";
 import Link from "next/link";
-import {
-  getActiveSpecialPeriod,
-  getChurchesBrief,
-  getCurrentSchedules,
-  getHomePage,
-  getMassDays,
-  getSettings,
-  getUpcomingMasses,
-} from "@/sanity/data";
+import { getActiveSpecialPeriod, getChurchesBrief, getCurrentSchedules, getHomePage, getSettings } from "@/sanity/data";
+import { getMassDays, getUpcomingMasses } from "@/lib/data/masses";
 import { buildMetadata } from "@/lib/seo";
 import { routes } from "@/lib/routes";
 import { addDays, compareTime, formatDayHeading, formatDayNumber, formatMonthShort, formatTime, today } from "@/lib/dates";

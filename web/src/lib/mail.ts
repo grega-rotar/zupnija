@@ -1,11 +1,12 @@
 import "server-only";
 
 /**
- * Outbound e-mail boundary. The site only ever sends contact-form
- * messages to the parish. The provider (Resend over plain HTTPS) is
- * isolated here so it can be swapped without touching the form.
+ * Outbound e-mail boundary: contact-form messages to the parish and the
+ * editor's sign-in links. The provider (Resend over plain HTTPS) is isolated
+ * here so it can be swapped without touching callers.
  *
- * Without RESEND_API_KEY (local development) messages are logged instead.
+ * Without RESEND_API_KEY (local development, tests) messages are logged and
+ * kept in an in-memory outbox instead; /dev/outbox shows it.
  */
 
 export type ContactMessage = {
@@ -35,6 +36,7 @@ export async function sendContactMessage(to: string, msg: ContactMessage): Promi
 
   if (!apiKey) {
     console.info("[kontakt] RESEND_API_KEY ni nastavljen — sporočilo ni bilo poslano:\n", { to, subject, text });
+    keep({ to, subject, text });
     return { ok: true, delivered: false };
   }
 
@@ -52,6 +54,58 @@ export async function sendContactMessage(to: string, msg: ContactMessage): Promi
     return { ok: true, delivered: true };
   } catch (err) {
     console.error("[kontakt] send failed", err);
+    return { ok: false, error: "Pošiljanje ni uspelo." };
+  }
+}
+
+
+// ── Generic messages (sign-in links, invitations) ──────────────────────────
+
+export type OutgoingMail = { to: string; subject: string; text: string; html?: string };
+export type OutboxEntry = OutgoingMail & { at: string };
+
+const OUTBOX_MAX = 50;
+const g = globalThis as unknown as { __zupnijaOutbox?: OutboxEntry[] };
+
+function keep(mail: OutgoingMail) {
+  const box = (g.__zupnijaOutbox ??= []);
+  box.unshift({ ...mail, at: new Date().toISOString() });
+  box.length = Math.min(box.length, OUTBOX_MAX);
+}
+
+/** Messages "sent" without RESEND_API_KEY, newest first (development and tests). */
+export function devOutbox(): OutboxEntry[] {
+  return g.__zupnijaOutbox ?? [];
+}
+
+export function clearDevOutbox(): void {
+  g.__zupnijaOutbox = [];
+}
+
+export async function sendMail(mail: OutgoingMail): Promise<SendResult> {
+  const apiKey = process.env.RESEND_API_KEY;
+  const from = process.env.CONTACT_FROM_EMAIL || "spletna-stran@zupnija-pirnice.si";
+
+  if (!apiKey) {
+    keep(mail);
+    if (process.env.NODE_ENV === "development") console.info(`[mail] ni poslano (brez RESEND_API_KEY): ${mail.to} — ${mail.subject}`);
+    return { ok: true, delivered: false };
+  }
+
+  try {
+    const res = await fetch("https://api.resend.com/emails", {
+      method: "POST",
+      headers: { Authorization: `Bearer ${apiKey}`, "Content-Type": "application/json" },
+      body: JSON.stringify({ from, to: [mail.to], subject: mail.subject, text: mail.text, html: mail.html }),
+    });
+    if (!res.ok) {
+      const body = await res.text().catch(() => "");
+      console.error("[mail] Resend error", res.status, body);
+      return { ok: false, error: `Ponudnik pošte je vrnil napako (${res.status}).` };
+    }
+    return { ok: true, delivered: true };
+  } catch (err) {
+    console.error("[mail] send failed", err);
     return { ok: false, error: "Pošiljanje ni uspelo." };
   }
 }

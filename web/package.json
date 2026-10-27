@@ -13,7 +13,9 @@
     "db:push": "drizzle-kit push",
     "db:generate": "drizzle-kit generate",
     "db:migrate": "drizzle-kit migrate",
-    "db:seed": "tsx --env-file=.env.local scripts/seed.ts"
+    "db:seed": "tsx --env-file=.env.local scripts/seed.ts",
+    "eval:bulletin": "tsx --conditions=react-server --env-file=.env.local scripts/eval-bulletin.ts",
+    "eval:assistant": "tsx --conditions=react-server --env-file=.env.local scripts/eval-assistant.ts"
   },
   "dependencies": {
     "better-auth": "^1.7.14",

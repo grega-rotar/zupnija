@@ -3,16 +3,16 @@ import Link from "next/link";
 import {
   getActiveSpecialPeriod,
   getChurches,
-  getCurrentBulletin,
   getHomeAnnouncements,
   getHomeArticles,
-  getHomeEvents,
   getHomeGalleries,
   getHomePage,
   getHomeSpecialPeriod,
   getSettings,
-  getUpcomingMasses,
 } from "@/sanity/data";
+import { getUpcomingMasses } from "@/lib/data/masses";
+import { getCurrentBulletin } from "@/lib/data/bulletins";
+import { getHomeEvents } from "@/lib/data/events";
 import { buildMetadata } from "@/lib/seo";
 import { hrefFor, isExternalHref } from "@/lib/links";
 import { routes } from "@/lib/routes";

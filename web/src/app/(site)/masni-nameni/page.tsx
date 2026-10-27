@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import Link from "next/link";
-import { getMassWeek, getSettings } from "@/sanity/data";
+import { getSettings } from "@/sanity/data";
+import { getMassWeek } from "@/lib/data/masses";
 import { addDays, formatDateSpan, isIsoDate, startOfWeek, today } from "@/lib/dates";
 import { buildMetadata } from "@/lib/seo";
 import { routes } from "@/lib/routes";

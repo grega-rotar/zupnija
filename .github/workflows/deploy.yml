@@ -1,4 +1,4 @@
-# check -> image -> deploy to t4a (+ Studio to sanity.studio), see docs/TECHNICAL.md "Deployment".
+# check (lint, typecheck, tests, build) -> image -> deploy to t4a (+ Studio to sanity.studio), see docs/TECHNICAL.md "Deployment".
 # Rollback: run by hand with `tag` = an older sha; that skips check and image.
 name: deploy
 
@@ -31,6 +31,20 @@ jobs:
     env:
       NEXT_PUBLIC_SANITY_PROJECT_ID: hnwav9pa
       NEXT_PUBLIC_SANITY_DATASET: production
+    # Postgres for web's integration tests, same port and login as local development
+    # (web/compose.dev.yml); the vitest global setup creates zupnija_test in it. Empty image = none for studio.
+    services:
+      postgres:
+        image: ${{ matrix.app == 'web' && 'postgres:17' || '' }}
+        env:
+          POSTGRES_USER: zupnija
+          POSTGRES_PASSWORD: dev
+          POSTGRES_DB: zupnija
+        ports:
+          - 5433:5432
+        options: >-
+          --health-cmd "pg_isready -U zupnija -d zupnija"
+          --health-interval 5s --health-timeout 5s --health-retries 20
     steps:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
       - uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1 # v7.1.0
@@ -40,8 +54,17 @@ jobs:
           cache-dependency-path: ${{ matrix.app }}/package-lock.json
       - run: npm ci
       - run: npm run lint
-      - run: npx tsc --noEmit
+      - if: matrix.app == 'web'
+        run: npm run typecheck
+      - if: matrix.app != 'web'
+        run: npx tsc --noEmit
+      # Never spawns claude-pool: runClaude is mocked in tests (PRD, FR-9).
+      - if: matrix.app == 'web'
+        run: npm test
       - run: npm run build
+        env:
+          # src/db/index.ts needs it on import; nothing connects during the build.
+          DATABASE_URL: postgres://build:build@127.0.0.1:1/build
 
   image:
     if: ${{ github.event_name != 'pull_request' && !inputs.tag }}
@@ -103,9 +126,9 @@ jobs:
           echo "${{ secrets.DEPLOY_SSH_KEY }}" > ~/.ssh/id_ed25519
           echo "${{ secrets.DEPLOY_KNOWN_HOSTS }}" > ~/.ssh/known_hosts
           chmod 600 ~/.ssh/id_ed25519
-      - name: Copy compose.yml
+      - name: Copy compose.yml and the backup scripts
         if: steps.newest.outputs.stale != 'true'
-        run: scp infra/compose.yml deploy@${{ secrets.DEPLOY_HOST }}:/srv/zupnija/
+        run: scp -r infra/compose.yml scripts deploy@${{ secrets.DEPLOY_HOST }}:/srv/zupnija/
       # The job's own token logs in for the pull (works while the GHCR package is private), in a
       # docker config of its own so the expired token never breaks other apps' pulls on the server.
       - name: Pull and restart

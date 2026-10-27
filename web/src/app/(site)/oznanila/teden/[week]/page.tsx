@@ -1,6 +1,9 @@
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
-import { getBulletinByWeek, getEventsInRange, getMassDays, getSettings } from "@/sanity/data";
+import { getSettings } from "@/sanity/data";
+import { getBulletinByWeek } from "@/lib/data/bulletins";
+import { getEventsInRange } from "@/lib/data/events";
+import { getMassDays } from "@/lib/data/masses";
 import { buildMetadata } from "@/lib/seo";
 import { routes } from "@/lib/routes";
 import { formatDateSpan, isIsoDate } from "@/lib/dates";
@@ -12,7 +15,7 @@ type Props = { params: Promise<{ week: string }> };
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { week } = await params;
   if (!isIsoDate(week)) return {};
-  const [settings, bulletin] = await Promise.all([getSettings(), getBulletinByWeek(week, false)]);
+  const [settings, bulletin] = await Promise.all([getSettings(), getBulletinByWeek(week)]);
   if (!bulletin) return {};
   return buildMetadata({
     settings,
@@ -26,12 +29,10 @@ export default async function BulletinPage({ params }: Props) {
   if (!isIsoDate(week)) notFound();
   const bulletin = await getBulletinByWeek(week);
   if (!bulletin) notFound();
-  const [massDays, autoEvents] = await Promise.all([
+  const [massDays, events] = await Promise.all([
     getMassDays(bulletin.weekStart, bulletin.weekEnd),
     getEventsInRange(bulletin.weekStart, bulletin.weekEnd),
   ]);
-  const pickedIds = new Set((bulletin.events ?? []).map((e) => e._id));
-  const events = [...(bulletin.events ?? []), ...autoEvents.filter((e) => !pickedIds.has(e._id))];
 
   return (
     <Section tight>

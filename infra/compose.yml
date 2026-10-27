@@ -1,5 +1,6 @@
 # Lives in /srv/zupnija on t4a; the deploy job copies it there (docs/TECHNICAL.md, "Deployment").
 # The server-wide Traefik in /srv/edge (etiam-si/jakamarinko, infra/edge) routes $DOMAIN here.
+# The editor (admin host) is the same web service on a second router (docs/TECHNICAL.md, "Urejevalnik").
 name: zupnija
 
 services:
@@ -7,12 +8,65 @@ services:
     image: ghcr.io/grega-rotar/zupnija-web:${IMAGE_TAG:-latest}
     restart: unless-stopped
     env_file: .env
+    environment:
+      # Built here so the password lives in one place (.env); keep it URL-safe (openssl rand -hex 24).
+      DATABASE_URL: postgres://zupnija:${POSTGRES_PASSWORD:?set POSTGRES_PASSWORD in .env}@db:5432/zupnija
+      ADMIN_HOST: ${ADMIN_HOST:-admin.${DOMAIN}}
+      UPLOAD_DIR: /data/uploads
+      CLAUDE_POOL_DIR: /etc/claude-pool
+      CLAUDE_POOL_STATE: /data/claude/state/usage.json
+      CLAUDE_CONFIG_DIR: /data/claude/config
+    # The host's claude-pool group (getent group claude-pool), so the node user can read the
+    # 640 token files in /etc/claude-pool.
+    group_add:
+      - ${CLAUDE_POOL_GID:?set CLAUDE_POOL_GID in .env}
+    volumes:
+      - uploads:/data/uploads
+      - claude:/data/claude
+      - /etc/claude-pool:/etc/claude-pool:ro
+    depends_on:
+      db:
+        condition: service_healthy
     networks:
       - edge
+      - default
     labels:
       - traefik.enable=true
+      # Two networks, so tell Traefik which one it shares with this container.
+      - traefik.docker.network=edge
       - traefik.http.routers.zupnija.rule=Host(`${DOMAIN}`) || Host(`www.${DOMAIN}`)
+      - traefik.http.routers.zupnija.service=zupnija
+      - traefik.http.routers.zupnija-admin.rule=Host(`${ADMIN_HOST:-admin.${DOMAIN}}`)
+      - traefik.http.routers.zupnija-admin.service=zupnija
       - traefik.http.services.zupnija.loadbalancer.server.port=3000
+
+  # Only on the project's default network: no ports, no Traefik.
+  db:
+    image: postgres:17
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER: zupnija
+      POSTGRES_DB: zupnija
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:?set POSTGRES_PASSWORD in .env}
+    volumes:
+      - db:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U zupnija -d zupnija"]
+      interval: 10s
+      timeout: 5s
+      retries: 10
+      start_period: 30s
+    networks:
+      - default
+
+# Fixed names, so scripts/backup.sh and restore.sh can find them.
+volumes:
+  db:
+    name: zupnija_db
+  uploads:
+    name: zupnija_uploads
+  claude:
+    name: zupnija_claude
 
 networks:
   edge:

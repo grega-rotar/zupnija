@@ -1,6 +1,7 @@
 import Link from "next/link";
 import type { PAGE_QUERY_RESULT } from "@/sanity/types.generated";
-import { getActiveSpecialPeriod, getCurrentSchedules, getSettings, getUpcomingEvents } from "@/sanity/data";
+import { getActiveSpecialPeriod, getCurrentSchedules, getSettings } from "@/sanity/data";
+import { getUpcomingEvents } from "@/lib/data/events";
 import { hrefFor, isExternalHref } from "@/lib/links";
 import { clean } from "@/lib/clean";
 import { personRole } from "@/lib/labels";

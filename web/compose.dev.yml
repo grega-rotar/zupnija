@@ -1,0 +1,28 @@
+# Local Postgres for development and tests (docs/TECHNICAL.md, "Urejevalnik" → "Local development").
+#   docker compose -f compose.dev.yml up -d
+# Same as the container used so far:
+#   docker run --name zupnija-pg -e POSTGRES_USER=zupnija -e POSTGRES_PASSWORD=dev -e POSTGRES_DB=zupnija \
+#     -p 5433:5432 -d postgres:17
+# Use one or the other: both want port 5433.
+# DATABASE_URL=postgres://zupnija:dev@localhost:5433/zupnija; tests create zupnija_test on the same server.
+name: zupnija-dev
+
+services:
+  db:
+    image: postgres:17
+    environment:
+      POSTGRES_USER: zupnija
+      POSTGRES_PASSWORD: dev
+      POSTGRES_DB: zupnija
+    ports:
+      - "127.0.0.1:5433:5432"
+    volumes:
+      - pg:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U zupnija -d zupnija"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+
+volumes:
+  pg:

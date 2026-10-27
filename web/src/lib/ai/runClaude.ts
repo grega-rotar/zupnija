@@ -45,11 +45,18 @@ export function buildArgs(o: RunClaudeOptions): string[] {
   return args;
 }
 
+/** Only what claude-pool needs: app secrets (database, auth, Google) never reach the model's process. */
+export function childEnv(env: NodeJS.ProcessEnv = process.env): NodeJS.ProcessEnv {
+  const keep = (k: string) =>
+    ["PATH", "HOME", "LANG", "TZ", "TMPDIR", "DISABLE_AUTOUPDATER"].includes(k) || k.startsWith("CLAUDE") || k.startsWith("ANTHROPIC_");
+  return Object.fromEntries(Object.entries(env).filter(([k]) => keep(k))) as NodeJS.ProcessEnv;
+}
+
 async function spawnClaude(o: RunClaudeOptions): Promise<RunClaudeResult> {
   const started = Date.now();
   const bin = process.env.CLAUDE_POOL_BIN ?? "claude-pool";
   return new Promise((resolve, reject) => {
-    const child = spawn(bin, buildArgs(o), { cwd: o.cwd, env: process.env, stdio: ["ignore", "pipe", "pipe"] });
+    const child = spawn(bin, buildArgs(o), { cwd: o.cwd, env: childEnv(), stdio: ["ignore", "pipe", "pipe"] });
     let out = "", err = "";
     child.stdout.on("data", (d) => (out += d));
     child.stderr.on("data", (d) => (err += d));
