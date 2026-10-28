@@ -1,5 +1,5 @@
 {
-  "id": "dcde15ad-68ac-4e4b-92ce-38d055348df8",
+  "id": "c74a03cc-482a-4c65-9700-8372e0893825",
   "prevId": "00000000-0000-0000-0000-000000000000",
   "version": "7",
   "dialect": "postgresql",
@@ -645,6 +645,12 @@
           "notNull": true,
           "default": false
         },
+        "legacy_slug": {
+          "name": "legacy_slug",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
         "created_by": {
           "name": "created_by",
           "type": "text",
@@ -699,7 +705,15 @@
         }
       },
       "compositePrimaryKeys": {},
-      "uniqueConstraints": {},
+      "uniqueConstraints": {
+        "events_legacy_slug_unique": {
+          "name": "events_legacy_slug_unique",
+          "nullsNotDistinct": false,
+          "columns": [
+            "legacy_slug"
+          ]
+        }
+      },
       "policies": {},
       "checkConstraints": {},
       "isRLSEnabled": false

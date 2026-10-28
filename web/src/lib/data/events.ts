@@ -110,8 +110,21 @@ export async function getEventsInRange(from: IsoDate, to: IsoDate): Promise<Publ
   return inRange(from, to);
 }
 
-/** One event by its slug ("...-12"); null when the slug has no id or the event doesn't exist. */
+const idByLegacySlug = cached(
+  async (slug: string): Promise<string | null> => {
+    const [row] = await db.select({ id: e.id }).from(e).where(eq(e.legacySlug, slug));
+    return row ? String(row.id) : null;
+  },
+  "events:legacy",
+  ["events"],
+);
+
+/**
+ * One event by its slug ("...-12"); null when the slug has no id or the event doesn't exist.
+ * Old Sanity slugs are checked first: they can end in digits too ("seja-zps-2026-11"),
+ * which must not be read as an id.
+ */
 export async function getEvent(slug: string): Promise<PublicEventDetail | null> {
-  const id = /(?:^|-)(\d{1,9})$/.exec(slug)?.[1];
+  const id = (await idByLegacySlug(slug)) ?? /(?:^|-)(\d{1,9})$/.exec(slug)?.[1];
   return id ? byId(id) : null;
 }

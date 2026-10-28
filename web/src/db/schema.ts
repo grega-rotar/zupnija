@@ -175,6 +175,8 @@ export const events = pgTable(
     place: text("place").notNull(),
     description: text("description").notNull().default(""),
     onFrontPage: boolean("on_front_page").notNull().default(false),
+    /** The Sanity slug of an imported event, so old /dogodki/<slug> links still resolve. */
+    legacySlug: text("legacy_slug").unique(),
     createdBy: text("created_by").references(() => user.id, { onDelete: "set null" }),
     createdAt: created(),
     updatedAt: updated(),

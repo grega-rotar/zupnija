@@ -91,9 +91,11 @@ CREATE TABLE "events" (
 	"place" text NOT NULL,
 	"description" text DEFAULT '' NOT NULL,
 	"on_front_page" boolean DEFAULT false NOT NULL,
+	"legacy_slug" text,
 	"created_by" text,
 	"created_at" timestamp with time zone DEFAULT now() NOT NULL,
-	"updated_at" timestamp with time zone DEFAULT now() NOT NULL
+	"updated_at" timestamp with time zone DEFAULT now() NOT NULL,
+	CONSTRAINT "events_legacy_slug_unique" UNIQUE("legacy_slug")
 );
 --> statement-breakpoint
 CREATE TABLE "history" (

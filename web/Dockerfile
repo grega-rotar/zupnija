@@ -54,6 +54,9 @@ COPY --from=build --chown=node:node /app/web/node_modules/drizzle-orm ./node_mod
 COPY --from=build --chown=node:node /app/web/node_modules/postgres ./node_modules/postgres
 COPY --from=build --chown=node:node /app/web/drizzle ./web/drizzle
 COPY --from=build --chown=node:node /app/web/scripts/migrate.mjs ./web/scripts/migrate.mjs
+# One-time steps of the first editor deploy, run by hand (docs/TECHNICAL.md §8), never on start:
+# the Sanity import (needs only postgres + fetch) and the owner bootstrap.
+COPY --from=build --chown=node:node /app/web/scripts/import-sanity.mjs /app/web/scripts/import-sanity-lib.mjs /app/web/scripts/bootstrap-owner.mjs ./web/scripts/
 USER node
 ENV NODE_ENV=production \
     NEXT_TELEMETRY_DISABLED=1 \

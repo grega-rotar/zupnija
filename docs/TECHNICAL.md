@@ -358,6 +358,54 @@ covered by the `zupnija-pirnice.si` + `*.zupnija-pirnice.si` origin cert in
 `ADMIN_HOST=admin.zupnija-pirnice.si` and
 `BETTER_AUTH_URL=https://admin.zupnija-pirnice.si`.
 
+### First deploy of the editor
+
+Production Postgres starts empty, and the public Masses, intentions, events,
+Verouk groups and weekly bulletins now come from it, so the first deploy of
+this branch shows empty pages until the content is imported from Sanity.
+Nothing runs automatically on start; do this once, by hand, right after the
+deploy job has finished (the pages are empty for those few minutes):
+
+```bash
+# as deploy on t4a; .env already has POSTGRES_PASSWORD, CLAUDE_POOL_GID, BETTER_AUTH_SECRET, ADMIN_HOST (above)
+cd /srv/zupnija
+docker compose exec web node web/scripts/import-sanity.mjs --dry-run   # prints what it would add, rolls back
+docker compose exec web node web/scripts/import-sanity.mjs             # one transaction; prints counts
+docker compose exec web node web/scripts/bootstrap-owner.mjs --email <župnik's e-mail> --name "msgr. dr. Blaž Jezeršek" --title "Župnik"
+docker compose up -d --force-recreate web   # drops the public pages' cached (empty) reads
+scripts/backup.sh                           # a backup of the imported state, before anyone edits
+```
+
+- `import-sanity.mjs` (mapping in `import-sanity-lib.mjs`) reads Sanity's
+  public query API (no token, read-only) and imports churches, every
+  `massSchedule` entry, `massDay` Masses with intentions (a Mass the schedule
+  generates anyway gets `source = schedule`, like `ensureMasses`), events,
+  Verouk groups and weekly bulletins (published, one notice per item: title
+  and body as two paragraphs). Portable Text becomes plain paragraphs.
+- It is insert-only on natural keys (church slug, Mass date+time+church,
+  intention text per Mass, event title+date+time, group name, bulletin week),
+  so a second run adds nothing and never changes existing rows. It refuses
+  when the editor has been used (any `history` row); `--force` then adds only
+  what is missing (e.g. after something new was entered in Sanity by mistake).
+- It prints what Postgres has no place for (event images, categories, end
+  times, organizers; catechist names; the bulletin's liturgical note and PDF …),
+  with the number of documents. That content stays in Sanity, unused.
+- Imported events from today on are marked "Pokaži na prvi strani", because
+  the old homepage listed the next four events whether featured or not.
+- A Verouk group without a session in Sanity gets Monday 00:00 and the place
+  "Termin še ni določen", with a warning; fix it in the editor.
+- `bootstrap-owner.mjs` creates the owner (or makes an existing user with that
+  e-mail the owner: `is_owner`, no approval, enabled) and is idempotent. It
+  refuses if someone else is already the owner. Sign-in never creates users,
+  so everyone else is invited from the editor (Ljudje).
+- The import bypasses the editor's engine, so it doesn't revalidate the public
+  cache tags: recreate the `web` container afterwards (a plain `restart` keeps
+  the cache on the container's disk).
+- From then on, Masses, events, Verouk groups and bulletins are edited only
+  in the editor; edits to those document types in Sanity no longer show.
+- Locally: `DATABASE_URL=postgres://zupnija:dev@localhost:5433/<db> node scripts/import-sanity.mjs`
+  (after `node scripts/migrate.mjs`).
+
 ### Backups
 
 `scripts/backup.sh` (copied to `/srv/zupnija/scripts/` by every deploy) writes
