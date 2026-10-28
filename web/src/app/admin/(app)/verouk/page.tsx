@@ -1,8 +1,7 @@
 import Link from "next/link";
 import { Icon } from "@/components/admin/Icon";
 import { CancelPanel, RestoreButton } from "@/components/admin/verouk/LessonControls";
-import { PageHead, Pill } from "@/components/admin/ui";
-import s from "@/components/admin/verouk/verouk.module.css";
+import { btnClass, PageHead, Pill } from "@/components/admin/ui";
 import { requirePageArea } from "@/lib/admin/next";
 import { pl } from "@/lib/assistant/greeting";
 import { weekStart } from "@/lib/clock";
@@ -50,7 +49,7 @@ function LessonCard({ l, me }: { l: Lesson; me: string }) {
       {p ? null : l.cancelled ? (
         <RestoreButton groupId={l.groupId} date={l.date} />
       ) : (
-        <Link href={`/verouk?odpade=${l.groupId}`} className={`btn ${s.link}`} scroll={false} prefetch={false}>
+        <Link href={`/verouk?odpade=${l.groupId}`} className={btnClass()} scroll={false} prefetch={false}>
           <Icon name="ban" />
           Ta teden odpade
         </Link>

@@ -294,6 +294,7 @@ export function UploadFlow({ initial, week: defaultWeek, churches, approval, bus
       </Link>
       <div className="phead">
         <div>
+          <span className="rule" aria-hidden="true" />
           <h1>
             {stage === "done" ? "Oznanila" : "Naloži oznanila"} za {fSpan(week)}
           </h1>

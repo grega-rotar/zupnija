@@ -2,6 +2,8 @@
  * The only source of "now" for editor code, so tests and the dev seed can pin
  * the date (TEST_NOW=2026-10-27T10:00:00+01:00). Dates are Europe/Ljubljana.
  */
+import { startOfWeek } from "@/lib/dates";
+
 let pinned: Date | null = process.env.TEST_NOW ? new Date(process.env.TEST_NOW) : null;
 
 export function now(): Date {
@@ -25,10 +27,11 @@ export function nowTime(): string {
   return hm.format(now());
 }
 
-/** Monday of the week containing `iso` ("2026-10-27" → "2026-10-26"). */
+/**
+ * Sunday that starts the week containing `iso` ("2026-10-27" → "2026-10-25").
+ * Weeks run Sunday–Saturday everywhere (site, editor, bulletins): the
+ * bulletin read on Sunday covers that Sunday through Saturday.
+ */
 export function weekStart(iso: string = today()): string {
-  const d = new Date(`${iso}T12:00:00Z`);
-  const back = (d.getUTCDay() + 6) % 7;
-  d.setUTCDate(d.getUTCDate() - back);
-  return d.toISOString().slice(0, 10);
+  return startOfWeek(iso);
 }

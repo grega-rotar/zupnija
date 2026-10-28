@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { getSettings } from "@/sanity/data";
 import { getMassWeek } from "@/lib/data/masses";
-import { addDays, formatDateSpan, isIsoDate, startOfWeek, today } from "@/lib/dates";
+import { addDays, formatWeekSpan, isIsoDate, startOfWeek, today } from "@/lib/dates";
 import { buildMetadata } from "@/lib/seo";
 import { routes } from "@/lib/routes";
 import { DayCard } from "@/components/masses/MassList";
@@ -47,7 +47,7 @@ export default async function IntentionsPage({ searchParams }: Props) {
             Prejšnji teden
           </Link>
           <p className="min-w-0 px-1 font-serif text-h3 text-ink">
-            {formatDateSpan(week.from, week.to)}
+            {formatWeekSpan(week.from, week.to)}
             {isCurrent ? <span className="ml-2 text-small text-ink-3">ta teden</span> : null}
           </p>
           <Link href={routes.intentionsWeek(next)} className={navButton}>

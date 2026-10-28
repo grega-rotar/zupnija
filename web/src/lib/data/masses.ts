@@ -14,8 +14,8 @@
 import "server-only";
 import { and, asc, eq, gte, inArray, lte } from "drizzle-orm";
 import { db, schema } from "@/db";
-import { today, nowTime, weekStart as mondayOf } from "@/lib/clock";
-import { addDays, dateRange, startOfWeek, type IsoDate } from "@/lib/dates";
+import { today, nowTime, weekStart } from "@/lib/clock";
+import { addDays, dateRange, type IsoDate } from "@/lib/dates";
 import type { Mass, MassDay } from "@/lib/masses";
 import { ensureMasses } from "@/lib/mase/ensure";
 import { FEASTS } from "@/lib/mase/format";
@@ -88,15 +88,14 @@ export async function getUpcomingMasses(days = 7) {
   return { today: from, time: nowTime(), days: list };
 }
 
-/** The week (Sunday → Saturday) that contains `date`, as on /masni-nameni. */
+/** The week (Sunday → Saturday) that contains `date`, as on /masni-nameni and in the editor. */
 export async function getMassWeek(date: IsoDate) {
-  const from = startOfWeek(date);
+  const from = weekStart(date);
   const to = addDays(from, 6);
   return { from, to, days: await getMassDays(from, to) };
 }
 
-/** The editor's week: Monday → Sunday of the week containing `date`, the same Masses and published intentions as the editor shows. */
+/** The days of getMassWeek: the same Masses and published intentions as the editor's week. */
 export async function getWeekMasses(date: IsoDate): Promise<MassDay[]> {
-  const monday = mondayOf(date);
-  return getMassDays(monday, addDays(monday, 6));
+  return (await getMassWeek(date)).days;
 }

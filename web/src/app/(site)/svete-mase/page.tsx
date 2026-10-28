@@ -248,7 +248,7 @@ function SpecialRow({ date, mass }: { date: string; mass: Mass }) {
       </div>
       <div className="min-w-0">
         <p className="font-medium text-ink">{MASS_TYPE_LABEL[clean(mass.type)] ?? MASS_TYPE_LABEL.regular}</p>
-        <p className="text-small text-ink-2">{mass.church?.name ?? mass.church?.shortName}</p>
+        <p className="text-small text-ink-2">{mass.church?.shortName ?? mass.church?.name}</p>
         <p className="text-small text-ink-3">
           ob {formatTime(mass.time)}
           {mass.note ? ` · ${mass.note}` : ""}

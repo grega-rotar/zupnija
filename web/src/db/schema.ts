@@ -229,7 +229,7 @@ export const bulletinStatusEnum = pgEnum("bulletin_status", [
 
 export const bulletins = pgTable("bulletins", {
   id: serial("id").primaryKey(),
-  weekStart: date("week_start").notNull().unique(), // a Monday
+  weekStart: date("week_start").notNull().unique(), // a Sunday (weeks run Sunday–Saturday)
   status: bulletinStatusEnum("status").notNull(),
   uploadId: integer("upload_id").references(() => uploads.id, { onDelete: "set null" }),
   /** BulletinDraft (src/lib/bulletin/types.ts) while reading/draft/pending. */

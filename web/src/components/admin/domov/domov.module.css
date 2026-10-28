@@ -1,7 +1,0 @@
-/* Domov uses the prototype's classes from admin.css. Its hero, tiles and
-   task buttons are links here (buttons in the prototype), so drop the
-   browser's link colour and underline without outranking any class. */
-:where(.home) a {
-  color: inherit;
-  text-decoration: none;
-}

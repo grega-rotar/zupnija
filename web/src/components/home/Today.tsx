@@ -1,7 +1,7 @@
 import Link from "next/link";
 import type { HOME_PAGE_QUERY_RESULT } from "@/sanity/types.generated";
 import type { PublicBulletin } from "@/lib/data/bulletins";
-import { formatDateSpan, formatDayHeading, formatTime, type IsoDate } from "@/lib/dates";
+import { formatDayHeading, formatWeekSpan, formatTime, type IsoDate } from "@/lib/dates";
 import { MASS_TYPE_LABEL, pickTodayOrNext, type MassDay } from "@/lib/masses";
 import { routes } from "@/lib/routes";
 import { clean } from "@/lib/clean";
@@ -48,7 +48,7 @@ export function Today({ days, today, time, bulletin, tile }: Props) {
                           {MASS_TYPE_LABEL[clean(m.type)] ?? MASS_TYPE_LABEL.regular}
                         </p>
                         <p className="text-small text-ink-2">
-                          {m.church?.name ?? m.church?.shortName}
+                          {m.church?.shortName ?? m.church?.name}
                           {cancelled ? <span className="text-alert"> — odpade</span> : null}
                         </p>
                       </div>
@@ -81,7 +81,7 @@ export function Today({ days, today, time, bulletin, tile }: Props) {
           ) : null}
 
           {/* Weekly bulletin */}
-          <Card icon="document" title="Tedenska oznanila" subtitle={bulletin ? formatDateSpan(bulletin.weekStart, bulletin.weekEnd) : "Ta teden"}>
+          <Card icon="document" title="Tedenska oznanila" subtitle={bulletin ? formatWeekSpan(bulletin.weekStart, bulletin.weekEnd) : "Ta teden"}>
             <p className="mt-4 text-body text-ink-2">
               {bulletinText
                 ? truncateWords(bulletinText, 26)

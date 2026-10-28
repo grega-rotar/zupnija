@@ -1,15 +1,31 @@
-/* Small additions to admin.css for the Dogodki screen. */
+/* Small additions to admin.css for the Dogodki screen. Site tokens only. */
 
 /* The event rows are links (deep-linkable panels), not buttons. */
-.link { color: inherit; text-decoration: none; }
+.link {
+  color: inherit;
+  text-decoration: none;
+}
 
 /* Inline validation under a field. Doubled class beats `.field small`. */
-.err.err { color: var(--alert); font-weight: 600; }
-.form.form :is(input, select, textarea)[aria-invalid="true"] { border-color: var(--alert); }
-.form.form :is(input, select, textarea)[aria-invalid="true"]:focus { box-shadow: 0 0 0 3px var(--alert-soft); }
-.form { display: grid; gap: 22px; }
-.form :disabled { opacity: .75; }
+.err.err {
+  color: var(--color-alert);
+  font-weight: 600;
+}
+.form.form :is(input, select, textarea)[aria-invalid="true"] {
+  border-color: var(--color-alert);
+}
+.form {
+  display: grid;
+  gap: 1.375rem;
+}
+.form :disabled {
+  opacity: 0.75;
+}
 
 /* Empty list: the button sits a little apart from the sentence. */
-.calmAct { margin-top: 10px; }
-.whenErr { margin-top: -16px; }
+.calmAct {
+  margin-top: 0.625rem;
+}
+.whenErr {
+  margin-top: -1rem;
+}

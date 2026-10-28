@@ -22,12 +22,13 @@ export type UploadInput = File | { name: string; type: string; bytes: Uint8Array
 export type Upload = typeof schema.uploads.$inferSelect;
 
 export function uploadDir(): string {
-  return path.resolve(process.env.UPLOAD_DIR ?? "./.uploads");
+  // A runtime folder (/data/uploads in production), so the build must not trace it.
+  return path.resolve(/*turbopackIgnore: true*/ process.env.UPLOAD_DIR ?? "./.uploads");
 }
 
 /** Absolute path of a stored upload. */
 export function uploadPath(u: Pick<Upload, "path">): string {
-  return path.join(uploadDir(), u.path);
+  return path.join(/*turbopackIgnore: true*/ uploadDir(), u.path);
 }
 
 /** Validate and store an upload. Throws UserError for size or type. */
@@ -40,8 +41,8 @@ export async function saveUpload(file: UploadInput, actor: { id: string }): Prom
   if (bytes.byteLength > MAX_UPLOAD_BYTES) throw new UserError(TOO_BIG);
 
   const sha256 = createHash("sha256").update(bytes).digest("hex");
-  const rel = path.join(sha256.slice(0, 2), `${sha256}.${kind}`);
-  const abs = path.join(uploadDir(), rel);
+  const rel = path.join(/*turbopackIgnore: true*/ sha256.slice(0, 2), `${sha256}.${kind}`);
+  const abs = path.join(/*turbopackIgnore: true*/ uploadDir(), rel);
   await mkdir(path.dirname(abs), { recursive: true });
   await writeFile(abs, bytes);
 

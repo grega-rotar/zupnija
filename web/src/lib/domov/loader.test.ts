@@ -1,4 +1,5 @@
 import { beforeEach, describe, expect, it } from "vitest";
+import { eq } from "drizzle-orm";
 import { db, schema } from "@/db";
 import { loadActor } from "@/lib/admin/actor";
 import { perform } from "@/lib/admin/engine";
@@ -20,7 +21,7 @@ describe("Domov loader (US-004)", () => {
     s = await seedParish(db);
   });
 
-  it("Blaž: next Mass, 2 approvals, missing bulletin, 1 Mass without intention", async () => {
+  it("Blaž: next Mass, 2 approvals, missing bulletin, every Mass left this week has an intention", async () => {
     const h = await loadHome(await actor("blaz"));
     expect(h.greeting).toMatchObject({ eyebrow: "torek, 27. oktober", name: "gospod župnik", sub: "Tole je na vrsti ta teden." });
     expect(h.nextMass).toMatchObject({ date: "2026-10-27", time: "18:30", church: "Marijina cerkev", intentions: ["† Štefan Hrovat"] });
@@ -31,12 +32,12 @@ describe("Domov loader (US-004)", () => {
       ["Nov dogodek: Čiščenje Marijine cerkve", "sobota, 7. november, 9.00, Marijina cerkev", "Marta Zupan", "danes ob 8.15"],
     ]);
     expect(h.mine).toEqual([]);
-    expect(h.bulletinMissing).toEqual({ week: "2026-11-02" });
-    expect(h.bulletin).toMatchObject({ status: "missing", span: "2.–8. november" });
-    expect(h.massesWithoutIntention).toHaveLength(1);
-    expect(h.massesWithoutIntention[0]).toMatchObject({ id: s.masses["2026-11-01 10:00"], date: "2026-11-01", time: "10:00", line: "nedelja 10.00, Marijina cerkev" });
+    expect(h.bulletinMissing).toEqual({ week: "2026-11-01" });
+    expect(h.bulletin).toMatchObject({ status: "missing", span: "1.–7. november" });
+    // This week is Sunday 25 – Saturday 31 October; last Sunday's Masses are past.
+    expect(h.massesWithoutIntention).toEqual([]);
     expect(h.cancelledLessons).toEqual([]);
-    expect(h.done).toEqual(["Oznanila za 26. okt – 1. nov so objavljena", "Urnik verouka velja do preklica", "Redni urnik maš velja do preklica"]);
+    expect(h.done).toEqual(["Oznanila za 25.–31. oktober so objavljena", "Urnik verouka velja do preklica", "Redni urnik maš velja do preklica"]);
   });
 
   it("Marta: no approvals, her own 2 items wait for the priest", async () => {
@@ -45,7 +46,7 @@ describe("Domov loader (US-004)", () => {
     expect(h.approvals).toEqual([]);
     expect(h.mine).toHaveLength(2);
     expect(h.mine.map((a) => a.what)).toEqual(["Nov namen † Ivana Kos", "Nov dogodek: Čiščenje Marijine cerkve"]);
-    expect(h.bulletinMissing).toEqual({ week: "2026-11-02" });
+    expect(h.bulletinMissing).toEqual({ week: "2026-11-01" });
     expect(h.can).toEqual({ mase: true, oznanila: true, dogodki: true, verouk: false });
   });
 
@@ -76,18 +77,22 @@ describe("Domov loader (US-004)", () => {
     expect(row).toMatchObject({ where: "sreda, 28. oktober, 18.30, Marijina cerkev", note: "Župnik je na duhovnih vajah.", at: "danes ob 10.00" });
   });
 
-  it("a pending intention fills its Mass; once every Mass has one, the task is gone", async () => {
+  it("a Mass left this week without intention is a task; a pending intention fills it", async () => {
+    await db.delete(schema.intentions).where(eq(schema.intentions.massId, s.masses["2026-10-31 18:30"]));
+    const before = await loadHome(await actor("blaz"));
+    expect(before.massesWithoutIntention).toHaveLength(1);
+    expect(before.massesWithoutIntention[0]).toMatchObject({ id: s.masses["2026-10-31 18:30"], date: "2026-10-31", time: "18:30", line: "sobota 18.30, Marijina cerkev" });
     const marta = await actor("marta");
-    await perform(marta, "intention.add", { massId: s.masses["2026-11-01 10:00"], text: "Ana Kos", kind: "deceased" });
+    await perform(marta, "intention.add", { massId: s.masses["2026-10-31 18:30"], text: "Ana Kos", kind: "deceased" });
     const h = await loadHome(await actor("blaz"));
     expect(h.massesWithoutIntention).toEqual([]);
     expect(h.approvals).toHaveLength(3);
   });
 
   it("a draft for next week replaces the missing bulletin", async () => {
-    await db.insert(schema.bulletins).values({ weekStart: "2026-11-02", status: "draft", draft: { readable: true, items: [], notices: [] } });
+    await db.insert(schema.bulletins).values({ weekStart: "2026-11-01", status: "draft", draft: { readable: true, items: [], notices: [] } });
     const h = await loadHome(await actor("blaz"));
-    expect(h.bulletin).toMatchObject({ status: "draft", week: "2026-11-02" });
+    expect(h.bulletin).toMatchObject({ status: "draft", week: "2026-11-01" });
     expect(h.bulletinMissing).toBeNull();
   });
 });

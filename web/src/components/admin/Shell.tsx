@@ -5,6 +5,7 @@ import { usePathname } from "next/navigation";
 import { useEffect, useState } from "react";
 import { useAssistant } from "./AssistantContext";
 import { Icon } from "./Icon";
+import { ChurchMark } from "@/components/ui/ChurchMark";
 import { MoreSheet, ProfileSheet } from "./sheets";
 import { currentItem, editorPath, navFor, type ShellUser } from "./nav";
 
@@ -17,7 +18,6 @@ export function Shell({ me, approvals, children }: { me: ShellUser; approvals: n
   const path = editorPath(usePathname() ?? "/");
   const items = navFor(me);
   const cur = currentItem(items, path);
-  const isHome = path === "/";
   const canUpload = me.isOwner || me.sections.includes("oznanila");
   const badge = me.isOwner && approvals > 0 ? approvals : 0;
   const { openAssistant } = useAssistant();
@@ -41,11 +41,9 @@ export function Shell({ me, approvals, children }: { me: ShellUser; approvals: n
     <div className="shell">
       <aside className="side">
         <div className="brand">
-          <span className="mark">
-            <Icon name="cross" />
-          </span>
+          <ChurchMark />
           <div>
-            <b>Župnija Pirniče</b>
+            <Wordmark />
             <small>urejanje</small>
           </div>
         </div>
@@ -73,10 +71,8 @@ export function Shell({ me, approvals, children }: { me: ShellUser; approvals: n
 
       <div className="mainwrap">
         <header className="phonebar">
-          <span className="mark">
-            <Icon name="cross" />
-          </span>
-          <b>{isHome ? "Župnija Pirniče" : cur.label}</b>
+          <ChurchMark />
+          <Wordmark />
           <button type="button" className={avatarCls} onClick={() => setSheet({ kind: "profile", at: path })} aria-label="Profil">
             {me.short}
           </button>
@@ -126,6 +122,17 @@ export function Shell({ me, approvals, children }: { me: ShellUser; approvals: n
       {open === "more" ? <MoreSheet items={more} current={cur.href} onClose={close} /> : null}
       {open === "profile" ? <ProfileSheet me={me} onClose={close} /> : null}
     </div>
+  );
+}
+
+/** The site header's wordmark: letter-spaced caps on two lines. */
+function Wordmark() {
+  return (
+    <span className="wordmark">
+      Župnija
+      <br />
+      Pirniče
+    </span>
   );
 }
 

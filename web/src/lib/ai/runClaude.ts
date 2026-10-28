@@ -56,7 +56,7 @@ async function spawnClaude(o: RunClaudeOptions): Promise<RunClaudeResult> {
   const started = Date.now();
   const bin = process.env.CLAUDE_POOL_BIN ?? "claude-pool";
   return new Promise((resolve, reject) => {
-    const child = spawn(bin, buildArgs(o), { cwd: o.cwd, env: childEnv(), stdio: ["ignore", "pipe", "pipe"] });
+    const child = spawn(/*turbopackIgnore: true*/ bin, buildArgs(o), { cwd: o.cwd, env: childEnv(), stdio: ["ignore", "pipe", "pipe"] });
     let out = "", err = "";
     child.stdout.on("data", (d) => (out += d));
     child.stderr.on("data", (d) => (err += d));

@@ -1,6 +1,7 @@
 "use client";
 
 import { kindPrefix } from "@/lib/mase/format";
+import { btnClass, Pill } from "@/components/admin/ui";
 import type { Proposal } from "@/lib/assistant/schema";
 import type { CardProposal } from "./types";
 
@@ -183,17 +184,17 @@ export function ProposalCard({ card, approval, onChange, onConfirm, onCancel }: 
     <div className={`card${card.st === "done" ? " closed" : card.st === "gone" ? " gone" : ""}`}>
       <div className="card-h">
         <span className="eyebrow">{card.st === "done" ? "Shranjeno" : card.st === "gone" ? "Preklicano" : "Predlog"}</span>
-        {closed ? null : <span className="pill line">še ni shranjeno</span>}
+        {closed ? null : <Pill tone="line">še ni shranjeno</Pill>}
       </div>
       <div className="card-b">
         <Body c={card} p={card.proposal} closed={closed} onChange={onChange} />
       </div>
       {closed ? null : (
         <div className="card-f">
-          <button type="button" className="btn primary" onClick={onConfirm} disabled={blocked || busy} aria-busy={busy || undefined}>
+          <button type="button" className={btnClass({ variant: "primary" })} onClick={onConfirm} disabled={blocked || busy} aria-busy={busy || undefined}>
             {label}
           </button>
-          <button type="button" className="btn ghost" onClick={onCancel} disabled={busy}>
+          <button type="button" className={btnClass({ variant: "ghost" })} onClick={onCancel} disabled={busy}>
             Prekliči
           </button>
         </div>

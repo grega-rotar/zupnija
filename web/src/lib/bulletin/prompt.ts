@@ -119,10 +119,10 @@ export async function extractDraft(input: ExtractInput): Promise<ExtractOutcome>
     if (sheet) {
       csv = sheetToCsv(input.bytes, input.kind as "xlsx" | "ods" | "csv");
       fileName = "oznanila.csv";
-      await writeFile(path.join(tmp, fileName), csv);
+      await writeFile(path.join(/*turbopackIgnore: true*/ tmp, fileName), csv);
     } else {
       fileName = `oznanila.${input.kind}`;
-      await writeFile(path.join(tmp, fileName), input.bytes);
+      await writeFile(path.join(/*turbopackIgnore: true*/ tmp, fileName), input.bytes);
     }
     const prompt = buildPrompt({ fileName, csv, weekStart: input.weekStart, masses: input.masses, churches: input.churches });
 

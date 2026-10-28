@@ -122,7 +122,7 @@ export function PersonPanel({ person, onClose }: { person: PersonView; onClose: 
           <b>Res odvzamem dostop?</b>
           <p>{person.name} se odjavi takoj in ne more več urejati. Dostop lahko vrnete v Zgodovini z »Razveljavi«.</p>
           <div className="acts">
-            <Button variant="danger" style={{ background: "var(--paper)" }} onClick={revoke} disabled={pending}>
+            <Button variant="danger" onClick={revoke} disabled={pending}>
               Potrdi
             </Button>
             <Button variant="ghost" onClick={() => setConfirming(false)} disabled={pending}>

@@ -1,7 +1,13 @@
-/* Small additions to admin.css for the Verouk screen. */
-.form { display: grid; gap: 22px; }
+/* Small additions to admin.css for the Verouk screen. Site tokens only. */
+.form {
+  display: grid;
+  gap: 1.375rem;
+}
 /* Inline validation under the message. Doubled class beats `.field small`. */
-.err.err { color: var(--alert); font-weight: 600; }
-.form.form textarea[aria-invalid="true"] { border-color: var(--alert); }
-.form.form textarea[aria-invalid="true"]:focus { box-shadow: 0 0 0 3px var(--alert-soft); }
-.link { color: inherit; text-decoration: none; }
+.err.err {
+  color: var(--color-alert);
+  font-weight: 600;
+}
+.form.form textarea[aria-invalid="true"] {
+  border-color: var(--color-alert);
+}

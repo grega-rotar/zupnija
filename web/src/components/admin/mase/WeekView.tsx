@@ -3,8 +3,10 @@
 import { useRouter } from "next/navigation";
 import { useTransition } from "react";
 import { Icon } from "@/components/admin/Icon";
-import { Button, PageHead } from "@/components/admin/ui";
+import { Button, PageHead, Pill } from "@/components/admin/ui";
+import { ChurchPill, DayLeaf, StatusPill } from "@/components/masses/MassList";
 import { dayLabel } from "@/lib/mase/format";
+import { cn } from "@/lib/utils";
 import type { MassView, Week } from "@/lib/mase/queries";
 import { firstName, fT, kindPrefix, MAS, pl, typeShort, weekWord } from "./format";
 import { IntentionPanel, type UpcomingMass } from "./IntentionPanel";
@@ -16,8 +18,10 @@ export type Viewer = { id: string; isOwner: boolean; approval: boolean; canUploa
 /** `w` for the week link (null = this week, no parameter). */
 export type WeekLink = { w: string | null } | null;
 
-export function WeekView({ viewer, today, week, span, offset, prev, next, extraMass, upcoming }: {
+export function WeekView({ viewer, today, week, span, offset, prev, next, extraMass, upcoming, sitePreview }: {
   viewer: Viewer;
+  /** "Na strani": the public Mašni nameni page for this week, rendered on the server (SitePreview). */
+  sitePreview: React.ReactNode;
   today: string;
   week: Week;
   /** "26. okt – 1. nov" */
@@ -100,27 +104,9 @@ export function WeekView({ viewer, today, week, span, offset, prev, next, extraM
             <i />
             <i />
             <i />
-            <span>zupnija-pirnice.si/svete-mase</span>
+            <span>zupnija-pirnice.si/masni-nameni</span>
           </div>
-          <div className="pv">
-            <h2>{offset <= 1 ? `Svete maše ${word}` : "Svete maše"}</h2>
-            <p className="lede">{span}</p>
-            <div className="days">
-              {days.map((d) => (
-                <div className="day" key={d.date}>
-                  <div className="dl">
-                    <b>{d.label}</b>
-                    {d.feast ? <span className="feast">{d.feast}</span> : null}
-                  </div>
-                  <div className="mlist">
-                    {d.masses.map((m) => (
-                      <MassRow key={m.id} m={m} viewer={viewer} preview />
-                    ))}
-                  </div>
-                </div>
-              ))}
-            </div>
-          </div>
+          {sitePreview}
         </div>
       ) : (
         <>
@@ -135,21 +121,30 @@ export function WeekView({ viewer, today, week, span, offset, prev, next, extraM
               </div>
             </div>
           ) : null}
+          {/* Each day is the site's DayCard (leaf, serif weekday, feast); each row its MassRow. */}
           <div className="days" style={busy}>
             {days.map((d) => (
-              <div className="day" key={d.date}>
-                <div className="dl">
-                  <b>{d.weekday}</b>
-                  <span>{d.label.slice(d.label.indexOf(", ") + 2)}</span>
-                  {d.feast ? <span className="feast">{d.feast}</span> : null}
-                  {d.date === today ? <span className="pill today">danes</span> : null}
+              <section key={d.date} aria-labelledby={`dan-${d.date}`} className="rounded-md border border-stone bg-paper p-4 sm:p-5">
+                <div className="flex items-center gap-4 border-b border-stone pb-4">
+                  <DayLeaf date={d.date} />
+                  <div className="min-w-0">
+                    <h2 id={`dan-${d.date}`} className="font-serif text-h3 leading-tight text-ink capitalize">
+                      {d.weekday}
+                    </h2>
+                    {d.feast ? <p className="mt-1 text-small text-ink-2">{d.feast}</p> : null}
+                  </div>
+                  {d.date === today ? (
+                    <Pill className="ml-auto self-start">danes</Pill>
+                  ) : null}
                 </div>
-                <div className="mlist">
+                <ul className="divide-y divide-stone">
                   {d.masses.map((m) => (
-                    <MassRow key={m.id} m={m} viewer={viewer} onOpen={() => url.openMass(m.id)} />
+                    <li key={m.id}>
+                      <MassRow m={m} viewer={viewer} onOpen={() => url.openMass(m.id)} />
+                    </li>
                   ))}
-                </div>
-              </div>
+                </ul>
+              </section>
             ))}
           </div>
         </>
@@ -169,59 +164,72 @@ function findMass(week: Week, id: number): PanelMass | null {
   return null;
 }
 
-function MassRow({ m, viewer, preview, onOpen }: { m: MassView; viewer: Viewer; preview?: boolean; onOpen?: () => void }) {
+/**
+ * One Mass, laid out exactly like the site's MassRow (components/masses/MassList.tsx):
+ * large serif time, type, outlined church pill, status pills, intentions with
+ * the gold prefix. As a button it opens the Mass panel; pending intentions and
+ * "brez namena" are the editor's additions.
+ */
+function MassRow({ m, viewer, onOpen }: { m: MassView; viewer: Viewer; onOpen: () => void }) {
   const off = m.status === "cancelled";
-  const pending = preview ? [] : m.pending;
-  const none = !m.intentions.length && !pending.length;
-  const inner = (
-    <>
-      <time className="tnum">{fT(m.time)}</time>
-      <div className="mb">
-        <p className="mw">
-          <span>{typeShort(m.type)}</span>
-          <span className="pill">{m.church}</span>
-          {off ? <span className="pill alert">Odpade</span> : null}
-          {!preview && m.pendingCancel ? <span className="pill gold">odpoved čaka župnika</span> : null}
+  const none = !m.intentions.length && !m.pending.length;
+  return (
+    <button
+      type="button"
+      className="mrow grid grid-cols-[4.75rem_minmax(0,1fr)_auto] gap-x-5 py-4"
+      onClick={onOpen}
+      aria-label={`${dayLabel(m.date)}, ${fT(m.time)}, ${m.church}`}
+    >
+      <time
+        dateTime={m.time}
+        className={cn(
+          "whitespace-nowrap font-serif text-[1.625rem] leading-none tracking-[-0.02em]",
+          off ? "text-ink-3 line-through decoration-1" : "text-moss",
+        )}
+      >
+        {fT(m.time)}
+      </time>
+      <div className="min-w-0 pt-1">
+        <p className="flex flex-wrap items-center gap-x-2.5 gap-y-1.5 text-body">
+          <span className={cn("font-medium", off && "text-ink-3 line-through")}>{typeShort(m.type)}</span>
+          <ChurchPill name={m.church} dark={false} muted={off} />
+          {off ? (
+            <StatusPill tone="alert" dark={false}>
+              Odpade
+            </StatusPill>
+          ) : null}
+          {m.pendingCancel ? (
+            <StatusPill tone="gold" dark={false}>
+              odpoved čaka župnika
+            </StatusPill>
+          ) : null}
         </p>
-        {off && m.cancelReason ? <p className="reason">{m.cancelReason}</p> : null}
-        {off || (preview && none) ? null : (
-          <ul className="ints">
+        {off && m.cancelReason ? <p className="mt-1.5 text-small text-alert">{m.cancelReason}</p> : null}
+        {off ? null : (
+          <ul className="ints mt-2.5 space-y-1 text-small text-ink-2">
             {none ? (
-              <li>
-                <span className="pre" />
-                <span className="none">brez namena</span>
+              <li className="flex gap-2">
+                <span className="w-3 shrink-0" aria-hidden="true" />
+                <span className="font-serif italic text-ink-3">brez namena</span>
               </li>
             ) : null}
             {m.intentions.map((i) => (
-              <li key={i.id}>
-                <span className="pre">{kindPrefix(i.kind)}</span>
+              <li key={i.id} className="flex flex-wrap items-baseline gap-x-2 gap-y-1">
+                <span className="w-3 shrink-0 text-center text-gold">{kindPrefix(i.kind)}</span>
                 <span>{i.text}</span>
-                {i.movedFromMassId ? <span className="pill line">prestavljen</span> : null}
+                {i.movedFromMassId ? <Pill tone="line">prestavljen</Pill> : null}
               </li>
             ))}
-            {pending.map((p) => (
-              <li key={`p${p.changeRequestId}`} className="pend">
-                <span className="pre">{kindPrefix(p.kind)}</span>
+            {m.pending.map((p) => (
+              <li key={`p${p.changeRequestId}`} className="pend flex flex-wrap items-baseline gap-x-2 gap-y-1">
+                <span className="w-3 shrink-0 text-center text-gold">{kindPrefix(p.kind)}</span>
                 <span>{p.text}</span>
-                <span className="pill gold">
-                  {p.createdBy === viewer.id ? "čaka župnika" : `čaka potrditev · ${firstName(p.createdByName)}`}
-                </span>
+                <Pill tone="gold">{p.createdBy === viewer.id ? "čaka župnika" : `čaka potrditev · ${firstName(p.createdByName)}`}</Pill>
               </li>
             ))}
           </ul>
         )}
       </div>
-    </>
-  );
-  if (preview) return <div className={`mrow${off ? " off" : ""}`}>{inner}</div>;
-  return (
-    <button
-      type="button"
-      className={`mrow${off ? " off" : ""}`}
-      onClick={onOpen}
-      aria-label={`${dayLabel(m.date)}, ${fT(m.time)}, ${m.church}`}
-    >
-      {inner}
       <span className="chev">
         <Icon name="r" />
       </span>

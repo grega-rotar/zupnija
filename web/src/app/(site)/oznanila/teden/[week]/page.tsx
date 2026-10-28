@@ -6,7 +6,7 @@ import { getEventsInRange } from "@/lib/data/events";
 import { getMassDays } from "@/lib/data/masses";
 import { buildMetadata } from "@/lib/seo";
 import { routes } from "@/lib/routes";
-import { formatDateSpan, isIsoDate } from "@/lib/dates";
+import { formatWeekSpan, isIsoDate } from "@/lib/dates";
 import { BulletinView } from "@/components/announcements/BulletinView";
 import { Breadcrumbs, Container, Section } from "@/components/ui/primitives";
 
@@ -19,7 +19,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   if (!bulletin) return {};
   return buildMetadata({
     settings,
-    title: `Tedenska oznanila ${formatDateSpan(bulletin.weekStart, bulletin.weekEnd)}`,
+    title: `Tedenska oznanila ${formatWeekSpan(bulletin.weekStart, bulletin.weekEnd, true)}`,
     path: routes.bulletin(week),
   });
 }
@@ -42,7 +42,7 @@ export default async function BulletinPage({ params }: Props) {
           items={[
             { label: "Oznanila", href: routes.announcements },
             { label: "Tedenska oznanila", href: routes.bulletins },
-            { label: formatDateSpan(bulletin.weekStart, bulletin.weekEnd) },
+            { label: formatWeekSpan(bulletin.weekStart, bulletin.weekEnd, true) },
           ]}
         />
         <BulletinView bulletin={bulletin} massDays={massDays} events={events} headingLevel="h1" />

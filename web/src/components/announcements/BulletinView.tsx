@@ -1,6 +1,6 @@
 import Link from "next/link";
 import type { PublicBulletin } from "@/lib/data/bulletins";
-import { formatDateSpan, today } from "@/lib/dates";
+import { formatWeekSpan, today } from "@/lib/dates";
 import type { MassDay } from "@/lib/masses";
 import { routes } from "@/lib/routes";
 import { RichText } from "@/components/sanity/RichText";
@@ -32,7 +32,7 @@ export function BulletinView({ bulletin, massDays, events, headingLevel = "h2" }
     <article>
       <header className="max-w-3xl">
         <p className="text-small font-medium text-ink-3">Tedenska oznanila</p>
-        <Heading className="mt-2 text-display">{formatDateSpan(bulletin.weekStart, bulletin.weekEnd)}</Heading>
+        <Heading className="mt-2 text-display">{formatWeekSpan(bulletin.weekStart, bulletin.weekEnd, true)}</Heading>
       </header>
 
       <div className="mt-12 grid gap-14 lg:grid-cols-[minmax(0,7fr)_minmax(0,5fr)] lg:gap-24">

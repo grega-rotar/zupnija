@@ -27,12 +27,12 @@ export async function greeting(actor: Actor, dbx: Db = defaultDb): Promise<strin
     return `Pozdravljeni, ${first}.${what ? ` Lahko vam ${what}.` : ""}`;
   }
 
-  const mon = weekStart(today());
+  const start = weekStart(today());
   const m = schema.masses;
   const live = await dbx
     .select({ id: m.id })
     .from(m)
-    .where(and(gte(m.date, mon), lte(m.date, addDays(mon, 6)), ne(m.status, "cancelled")));
+    .where(and(gte(m.date, start), lte(m.date, addDays(start, 6)), ne(m.status, "cancelled")));
   const ids = live.map((r) => r.id);
   const withIntention = ids.length
     ? new Set((await dbx.selectDistinct({ id: schema.intentions.massId }).from(schema.intentions).where(inArray(schema.intentions.massId, ids))).map((r) => r.id))

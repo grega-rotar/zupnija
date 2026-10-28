@@ -1,8 +1,9 @@
 "use client";
 
 import { Icon } from "@/components/admin/Icon";
+import { btnClass } from "@/components/admin/ui";
 import type { ReadableDraft } from "@/lib/bulletin/types";
-import { fileMeta, fSheetDay, fT, pre } from "./format";
+import { fileMeta, fSheetDay, fSpan, fT, pre } from "./format";
 
 export type SourceFile = { name: string; mime: string; size: number; /** Inline image (object URL or the upload endpoint). */ img?: string; /** Link to the original. */ href?: string };
 export type SourceMode = "reading" | "review" | "error";
@@ -48,9 +49,7 @@ const SPLIT = /^((?:pon|tor|sre|čet|pet|sob|ned)[a-zčšž]*\.?,?\s+\d{1,2}\.\s
  */
 function Transcript({ draft, picks, week }: { draft: ReadableDraft; picks: Record<string, string>; week: string }) {
   let n = 0;
-  const end = new Date(`${week}T12:00:00Z`);
-  end.setUTCDate(end.getUTCDate() + 6);
-  const title = `Oznanila ${Number(week.slice(8))}.–${end.getUTCDate()}. ${end.getUTCMonth() + 1}.`;
+  const title = `Oznanila ${fSpan(week)}`;
   return (
     <div className="sheetpaper" role="img" aria-label="Prepis lista z oznanili">
       <p className="t">{title}</p>
@@ -96,7 +95,7 @@ export function SourceColumn({ file, mode, open, onToggle, draft, picks, week }:
         <span>
           <b>{file.name}</b> · {fileMeta(file.mime, file.size)}
         </span>
-        <button type="button" className="btn sm ghost showsrc" onClick={onToggle} aria-expanded={open}>
+        <button type="button" className={btnClass({ variant: "ghost", size: "sm" }, "showsrc")} onClick={onToggle} aria-expanded={open}>
           {open ? "Skrij izvirnik" : "Pokaži izvirnik"}
         </button>
       </div>

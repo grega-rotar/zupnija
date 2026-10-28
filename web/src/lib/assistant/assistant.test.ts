@@ -146,7 +146,8 @@ describe("assistant", () => {
     expect(pl(2, ["maša", "maši", "maše", "maš"])).toBe("2 maši");
     expect(pl(4, ["maša", "maši", "maše", "maš"])).toBe("4 maše");
     expect(pl(8, ["maša", "maši", "maše", "maš"])).toBe("8 maš");
-    expect(await greeting(blaz)).toBe("Dober dan. Ta teden je 3 maše, brez namena jih je še 2.");
+    // This week is Sunday 25 – Saturday 31 October: only Wednesday's Mass; Sunday 1 November is next week.
+    expect(await greeting(blaz)).toBe("Dober dan. Ta teden je 1 maša, brez namena je še ena.");
     await db.insert(schema.changeRequests).values([1, 2].map(() => ({ section: "mase" as const, action: "intention.add", payload: {}, label: "x", createdBy: ana.id })));
     expect(await greeting(blaz)).toContain("2 spremembi čakata vašo potrditev.");
     expect(await greeting(ana)).toBe("Pozdravljeni, Ana. Pri verouku vam lahko odpovem uro ali pripravim sporočilo staršem.");

@@ -28,8 +28,9 @@ beforeEach(async () => {
 });
 
 describe("masses", () => {
-  it("getWeekMasses(2026-10-26) matches the editor's week: 8 masses, the 6 published intentions", async () => {
-    const [days, editor] = await Promise.all([getWeekMasses("2026-10-26"), getWeek("2026-10-26")]);
+  it("getWeekMasses(2026-10-27) matches the editor's week (Sunday 25 – Saturday 31): 8 masses, the 6 published intentions", async () => {
+    const [days, editor] = await Promise.all([getWeekMasses("2026-10-27"), getWeek("2026-10-27")]);
+    expect([days[0].date, days[6].date]).toEqual(["2026-10-25", "2026-10-31"]);
     expect(days.map((d) => d.date)).toEqual(editor.days.map((d) => d.date));
     const pub = days.flatMap((d) => d.masses.map((m) => [d.date, m.time, m.church?.shortName, m.status, m.intentions.map((i) => i.text)]));
     const ed = editor.days.flatMap((d) => d.masses.map((m) => [d.date, m.time, m.church, m.status, m.intentions.map((i) => i.text)]));
@@ -39,7 +40,7 @@ describe("masses", () => {
   });
 
   it("maps rows into the Mass/MassDay shape the components use", async () => {
-    const days = await getWeekMasses("2026-10-26");
+    const days = await getWeekMasses("2026-10-27");
     const wed = days.find((d) => d.date === "2026-10-28")!;
     expect(wed.hasExplicitDay).toBe(true);
     expect(wed.masses[0]).toEqual({
@@ -54,12 +55,12 @@ describe("masses", () => {
       intentions: [expect.objectContaining({ kind: "deceased", text: "Branko Babnik" })],
       recurring: true,
     });
-    expect(days.find((d) => d.date === "2026-11-01")!.liturgicalTitle).toBe("Vsi sveti");
+    expect((await getWeekMasses("2026-11-01"))[0].liturgicalTitle).toBe("Vsi sveti");
     expect(days.find((d) => d.date === "2026-10-31")!.masses[0]).toMatchObject({ type: "sunday", note: "nedeljska maša v soboto zvečer" });
   });
 
   it("never shows Marta's pending Ivana Kos intention", async () => {
-    const days = await getWeekMasses("2026-10-26");
+    const days = await getWeekMasses("2026-11-01");
     const sun8 = days.find((d) => d.date === "2026-11-01")!.masses.find((m) => m.time === "08:00")!;
     expect(sun8.intentions).toEqual([]);
     expect(JSON.stringify(days)).not.toContain("Ivana Kos");
@@ -80,7 +81,7 @@ describe("masses", () => {
 
   it("week 2 has the scheduled Masses and no intentions", async () => {
     const days = await getWeekMasses("2026-11-04");
-    expect(days[0].date).toBe("2026-11-02");
+    expect(days[0].date).toBe("2026-11-01");
     expect(days.flatMap((d) => d.masses)).toHaveLength(8);
     expect(days.some((d) => d.hasExplicitDay)).toBe(false);
   });
@@ -128,17 +129,17 @@ describe("events", () => {
 describe("bulletins", () => {
   it("shows published bulletins only, with their notices", async () => {
     await db.insert(schema.bulletinNotices).values([
-      { bulletinId: s.bulletins.w1026, position: 1, text: "Druga" },
-      { bulletinId: s.bulletins.w1026, position: 0, text: "Prva" },
+      { bulletinId: s.bulletins.w1025, position: 1, text: "Druga" },
+      { bulletinId: s.bulletins.w1025, position: 0, text: "Prva" },
     ]);
-    await db.insert(schema.bulletins).values({ weekStart: "2026-11-02", status: "pending" });
+    await db.insert(schema.bulletins).values({ weekStart: "2026-11-01", status: "pending" });
     const cur = await getCurrentBulletin();
-    expect(cur).toMatchObject({ weekStart: "2026-10-26", weekEnd: "2026-11-01" });
+    expect(cur).toMatchObject({ weekStart: "2026-10-25", weekEnd: "2026-10-31" });
     expect(cur!.notices.map((n) => n.text)).toEqual(["Prva", "Druga"]);
-    expect(await getBulletinByWeek("2026-11-02")).toBeNull();
+    expect(await getBulletinByWeek("2026-11-01")).toBeNull();
     expect((await getBulletinList()).map((b) => [b.weekStart, b.itemCount])).toEqual([
-      ["2026-10-26", 2],
-      ["2026-10-19", 0],
+      ["2026-10-25", 2],
+      ["2026-10-18", 0],
     ]);
   });
 });

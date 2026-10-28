@@ -17,7 +17,7 @@ export type SeededParish = {
   masses: Record<string, number>;
   groups: { g13: number; g46: number; g79: number };
   changeRequests: { ivanaKos: number; ciscenje: number };
-  bulletins: { w1019: number; w1026: number };
+  bulletins: { w1018: number; w1025: number };
 };
 
 export async function seedParish(dbx: Db | Tx): Promise<SeededParish> {
@@ -55,8 +55,8 @@ export async function seedParish(dbx: Db | Tx): Promise<SeededParish> {
     { weekdays: [4], time: "07:00", churchId: churches.marija, type: "regular" },
   ]);
 
-  // ── Masses: two weeks, 16 rows ──
-  await ensureMasses(dbx, "2026-10-26", "2026-11-08");
+  // ── Masses: two weeks (Sunday–Saturday), 16 rows ──
+  await ensureMasses(dbx, "2026-10-25", "2026-11-07");
   const masses: Record<string, number> = {};
   for (const r of await dbx.select().from(schema.masses)) masses[`${r.date} ${r.time.slice(0, 5)}`] = r.id;
 
@@ -70,7 +70,7 @@ export async function seedParish(dbx: Db | Tx): Promise<SeededParish> {
     ["2026-10-31 18:30", "deceased", "iz družin Bezlaj in Jamnik"],
   ];
   await dbx.insert(schema.intentions).values(
-    oct.map(([k, kind, text]) => ({ massId: masses[k], kind, text, createdBy: "blaz", createdAt: at("2026-10-25T18:05:00+01:00") })),
+    oct.map(([k, kind, text]) => ({ massId: masses[k], kind, text, createdBy: "blaz", createdAt: at("2026-10-24T18:05:00+02:00") })),
   );
 
   // ── Events ──
@@ -121,12 +121,12 @@ export async function seedParish(dbx: Db | Tx): Promise<SeededParish> {
     ])
     .returning();
 
-  // ── Bulletins: two published weeks; 2026-11-02 has no row (missing) ──
+  // ── Bulletins: two published weeks (week_start is a Sunday); 2026-11-01 has no row (missing) ──
   const b = await dbx
     .insert(schema.bulletins)
     .values([
-      { weekStart: "2026-10-19", status: "published", publishedAt: at("2026-10-18T18:00:00+02:00"), publishedBy: "blaz" },
-      { weekStart: "2026-10-26", status: "published", publishedAt: at("2026-10-25T18:05:00+01:00"), publishedBy: "blaz" },
+      { weekStart: "2026-10-18", status: "published", publishedAt: at("2026-10-17T18:00:00+02:00"), publishedBy: "blaz" },
+      { weekStart: "2026-10-25", status: "published", publishedAt: at("2026-10-24T18:05:00+02:00"), publishedBy: "blaz" },
     ])
     .returning();
 
@@ -135,6 +135,6 @@ export async function seedParish(dbx: Db | Tx): Promise<SeededParish> {
     masses,
     groups: { g13: g[0].id, g46: g[1].id, g79: g[2].id },
     changeRequests: { ivanaKos: ivana.id, ciscenje: ciscenje.id },
-    bulletins: { w1019: b[0].id, w1026: b[1].id },
+    bulletins: { w1018: b[0].id, w1025: b[1].id },
   };
 }

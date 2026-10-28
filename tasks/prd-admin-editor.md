@@ -29,6 +29,8 @@ Content the editor manages moves from Sanity to our own Postgres database. The p
 
 Fixed test clock for every criterion below: **Tuesday 2026-10-27, 10:00 Europe/Ljubljana**, injected through `src/lib/clock.ts`. Seed data is defined in §10, "Test data setup".
 
+Weeks run **Sunday–Saturday** everywhere (site, editor, `bulletins.week_start`, Domov, assistant): the bulletin read on Sunday covers that Sunday through Saturday. `clock.weekStart()` is the one definition.
+
 ### US-001: Database and seed
 
 **Description:** As a developer, I need the editor's content in Postgres so that the editor and the public site share one source of truth.
@@ -37,8 +39,8 @@ Fixed test clock for every criterion below: **Tuesday 2026-10-27, 10:00 Europe/L
 - [integration] After `npm run db:migrate && npm run db:seed` against an empty database, these hold:
   - `churches` has exactly 3 rows: `Marijina cerkev`, `Sv. Križ`, `Sv. Tomaž`.
   - `mass_schedule_entries` has exactly 6 rows, matching `studio/scripts/seed-parish-data.ts`.
-  - `masses` has exactly 8 rows for 2026-10-26 … 2026-11-01.
-- [integration] `ensureMasses("2026-11-02", "2026-11-08")` creates exactly 8 rows. Calling it a second time creates 0 rows: it is idempotent, through a unique key on (date, time, church_id).
+  - `masses` has exactly 8 rows for 2026-10-25 … 2026-10-31.
+- [integration] `ensureMasses("2026-11-01", "2026-11-07")` creates exactly 8 rows. Calling it a second time creates 0 rows: it is idempotent, through a unique key on (date, time, church_id).
 - [integration] The mass on 2026-10-28 at 18:30 in `Marijina cerkev` has exactly one intention: kind `deceased`, text `Branko Babnik`.
 - [unit] `ensureMasses` never creates a mass on a date that has a row in `mass_day_overrides` with `replaces_schedule = true`.
 
@@ -82,8 +84,8 @@ Fixed test clock for every criterion below: **Tuesday 2026-10-27, 10:00 Europe/L
 - [integration] The Domov loader for Blaž returns:
   - `nextMass` = 2026-10-27 18:30, Marijina cerkev, intention `Štefan Hrovat`.
   - `approvals.length` = 2.
-  - `bulletinMissing` = `{week: "2026-11-02"}`.
-  - `massesWithoutIntention` = exactly 1, the 2026-11-01 10:00 mass. A pending intention counts as an intention.
+  - `bulletinMissing` = `{week: "2026-11-01"}`.
+  - `massesWithoutIntention` = [] (the Masses still ahead this week, Wednesday to Saturday, all have one). With the 2026-10-31 18:30 intention removed it is exactly that Mass; a pending intention counts as an intention.
 - [integration] For Marta the same loader returns `approvals` = [] and `mine.length` = 2: her own items waiting for the priest.
 - [browser] Blaž at 1440px:
   - The hero shows `18.30` and `Naslednja maša · danes`.
@@ -99,9 +101,9 @@ Fixed test clock for every criterion below: **Tuesday 2026-10-27, 10:00 Europe/L
 **Description:** As the priest or secretary, I want to see the week's Masses with their intentions and how they will look on the website.
 
 **Acceptance criteria:**
-- [integration] GET `/teden?w=2026-10-26` returns 8 masses in 7 day groups. 2026-11-01 carries the feast label `Vsi sveti`.
-- [integration] GET `/teden?w=2026-11-02` (after `ensureMasses`) returns 8 masses with 0 intentions. The loader flag `isEmpty` is true.
-- [browser] `/teden` shows the range `26. okt – 1. nov`. Clicking `›` changes it to `2.–8. november` and shows the banner text `Redne maše so že vpisane po urniku.`
+- [integration] GET `/teden?w=2026-10-25` returns 8 masses in 7 day groups, Sunday 2026-10-25 first. In the next week, Sunday 2026-11-01 carries the feast label `Vsi sveti` and the pending `Ivana Kos`.
+- [integration] GET `/teden?w=2026-11-08` (after `ensureMasses`) returns 8 masses with 0 intentions. The loader flag `isEmpty` is true.
+- [browser] `/teden` shows the range `25.–31. oktober` (the same as the public `/masni-nameni`). Clicking `›` changes it to `1.–7. november` and shows the banner text `Redne maše so že vpisane po urniku.`
 - [browser] Clicking `Na strani` shows the browser frame `zupnija-pirnice.si/svete-mase`, and the pending intention `Ivana Kos` is not in it. Clicking `Urejanje` shows it again, with the label `čaka potrditev · Marta`.
 - [browser] At 390px the page has no horizontal scroll: `document.documentElement.scrollWidth <= 390`.
 
@@ -145,7 +147,7 @@ Fixed test clock for every criterion below: **Tuesday 2026-10-27, 10:00 Europe/L
 **Description:** As the priest, I want to photograph the handwritten oznanila and have them on the website after checking only what's uncertain.
 
 **Acceptance criteria:**
-- [integration] Uploading `fixtures/oznanila-rokopis.jpg` stores the file under `UPLOAD_DIR` with its sha256 and creates a `bulletins` row with week_start `2026-11-02` and status `reading`. It calls `runClaude` once.
+- [integration] Uploading `fixtures/oznanila-rokopis.jpg` stores the file under `UPLOAD_DIR` with its sha256 and creates a `bulletins` row with week_start `2026-11-01` and status `reading`. It calls `runClaude` once.
 - [integration] That `runClaude` call spawns `claude-pool` with:
   - `-p`, `--output-format json` and `--model claude-opus-5-5`;
   - `--allowedTools Read` and `--disallowedTools Bash,Edit,Write,WebFetch,WebSearch`;
@@ -156,17 +158,17 @@ Fixed test clock for every criterion below: **Tuesday 2026-10-27, 10:00 Europe/L
 - [unit] `flagScheduleMismatches(draft, schedule)` flags every item whose time doesn't match a regular-schedule mass on that date and church, even when the model returned no flag for it.
 - [integration] `publishBulletin` while any flag is unresolved returns `Najprej preverite označena mesta.` and publishes nothing.
 - [integration] With the flags resolved, `publishBulletin` by Blaž does all of the following:
-  - creates 8 intentions in week 2026-11-02;
+  - creates 8 intentions in week 2026-11-01;
   - changes the 2026-11-06 mass time to 17:30 when that option was chosen;
   - stores 3 `bulletin_notices`;
-  - sets status `published` and writes one history row `Objava oznanil 2.–8. november`.
+  - sets status `published` and writes one history row `Objava oznanil 1.–7. november`.
 - [integration] The same action by Marta creates one change request `bulletin.publish` and sets the bulletin status to `pending`.
 - [integration] With the extractor returning `{readable: false, reason: "blurry"}`, the bulletin gets status `unreadable` and no draft. No content rows change.
 - [integration] When the reply is not valid JSON for the draft schema (zod), `runClaude` is retried exactly once. If the second reply is also invalid, the bulletin gets status `unreadable`.
 - [integration] When `claude-pool` exits with code `75` (every account full), the bulletin gets status `ai_busy` and the page shows `Pomočnik je trenutno zaseden. Poskusite čez nekaj minut ali vpišite ročno.` No content rows change.
 - [integration] An upload over 20 MB, or of a type outside jpeg/png/heic/webp/pdf/xlsx/csv/ods, is rejected with `Datoteka je prevelika (največ 20 MB).` or `Te vrste datoteke ne znam prebrati.`
 - [browser] On `/oznanila/nalozi`, choosing the fixture image shows the step `Claude bere` and the handwritten preview. Within 60 s it shows `2 mesti za preveriti`, and the publish button reads `Najprej preverite 2 označeni mesti` and is disabled.
-- [browser] Clicking `Jože Novak`, then `18.30, po urniku`, enables `Objavi oznanila`. Clicking it shows `Oznanila so objavljena`, and `/teden?w=2026-11-02` lists `Jože Novak` on Tuesday.
+- [browser] Clicking `Jože Novak`, then `18.30, po urniku`, enables `Objavi oznanila`. Clicking it shows `Oznanila so objavljena`, and `/teden?w=2026-11-01` lists `Jože Novak` on Tuesday.
 - [browser] With the unreadable fixture, the page shows `Tega lista ni mogoče prebrati` and the buttons `Fotografiraj znova`, `Izberi drugo datoteko`, `Vpiši ročno`.
 - [browser] Review at 1440px matches the prototype: the sheet on the left, the draft on the right, numbered flags in gold, the sticky action bar.
 
@@ -246,7 +248,7 @@ Fixed test clock for every criterion below: **Tuesday 2026-10-27, 10:00 Europe/L
 **Description:** As a parishioner, I want the website to show what the priest published, right away.
 
 **Acceptance criteria:**
-- [integration] `getWeekMasses("2026-10-26")` (public data layer) returns the same 8 masses and published intentions as the editor loader. It never returns a pending intention or a pending event.
+- [integration] `getWeekMasses("2026-10-27")` (public data layer, week 2026-10-25 … 31) returns the same 8 masses and published intentions as the editor loader. It never returns a pending intention or a pending event.
 - [integration] After `publishBulletin`, `revalidateTag("masses")` and `revalidateTag("bulletins")` are called once each.
 - [browser] After Blaž cancels Wednesday 18.30 in the editor, reloading the public `/svete-mase` within 5 seconds shows `Odpade` on that mass, with the reason.
 - [browser] The public pages `/`, `/svete-mase`, `/oznanila`, `/dogodki` and `/verouk` return 200 with zero console errors after the switch.
@@ -291,7 +293,7 @@ Fixed test clock for every criterion below: **Tuesday 2026-10-27, 10:00 Europe/L
 - FR-14: The public site reads masses, intentions, bulletins, events and Verouk from Postgres through `web/src/lib/data/*`. Every editor write calls `revalidateTag` for the affected tag.
 - FR-15: Uploads are stored on disk under `UPLOAD_DIR`, up to 20 MB, as jpeg/png/heic/webp/pdf/xlsx/csv/ods. They are served to the editor only, never publicly.
 - FR-16: The UI is in Slovenian, follows prototype C, has 44 px minimum tap targets, and has a per-user "Večje črke" setting (root font size 112.5 %) stored on the user row.
-- FR-17: Times are shown as `18.30` and dates as `sreda, 28. oktober`, using the existing helpers in `web/src/lib/dates.ts`.
+- FR-17: Times are shown as `18.30` and dates as `sreda, 28. oktober`, using the existing helpers in `web/src/lib/dates.ts`. A week reads `25.–31. oktober` (`formatWeekSpan`) on both sides; short days in tight rows read `tor 3. nov` (`formatDayShort`). Churches use the short name (`Marijina cerkev`) in lists, rows and pills, and the full name only on the church's own page and church headings.
 
 ## 5. Non-goals (v1)
 
@@ -375,7 +377,7 @@ Fixed test clock for every criterion below: **Tuesday 2026-10-27, 10:00 Europe/L
 - [ ] Frontend: 4-step indicator, reading state, numbered flags, disabled publish, error card
 - [ ] Validation: size and type limits; publishing with open flags
 - [ ] Backend: upload stored with sha256; draft JSON; schedule-mismatch flags; publish writes 8 intentions and 3 notices
-- [ ] Round-trip: publish → `/teden?w=2026-11-02` → public `/oznanila`
+- [ ] Round-trip: publish → `/teden?w=2026-11-01` → public `/oznanila`
 - [ ] Edge cases: unreadable fixture; xlsx fixture; a re-upload for the same week replaces the draft but not a published bulletin
 - [ ] Role scoping: Marta → change request; Ana can't see the route
 
@@ -387,9 +389,9 @@ Fixed test clock for every criterion below: **Tuesday 2026-10-27, 10:00 Europe/L
 `npm run db:seed:test` creates exactly the following. The clock is fixed to 2026-10-27 10:00.
 
 - **Churches:** 3. **Schedule entries:** 6, as in `studio/scripts/seed-parish-data.ts`.
-- **Masses:** 16, covering 2026-10-26 … 2026-11-08.
-  - Week 1 has 6 published intentions from the October bulletin, plus 1 pending (`Ivana Kos`, 2026-11-01 08:00, created by Marta).
-  - Week 2 has none.
+- **Masses:** 16, covering 2026-10-25 … 2026-11-07 (two Sunday–Saturday weeks).
+  - Week 1 has 6 published intentions from the October bulletin (Monday to Saturday).
+  - Week 2 has none published, and 1 pending (`Ivana Kos`, 2026-11-01 08:00, created by Marta).
 - **Users:**
   - `blaz@example.com`: owner;
   - `marta@example.com`: mase, oznanila, dogodki; requires approval;
@@ -399,9 +401,9 @@ Fixed test clock for every criterion below: **Tuesday 2026-10-27, 10:00 Europe/L
 - **Events:** 4 (1, 2, 7 and 13 November). The 7 November event is pending, created by Marta.
 - **Verouk:** 3 groups, on Tuesday 16.00, Wednesday 16.30 and Friday 17.30.
 - **Bulletins:**
-  - week 2026-10-19: published;
-  - week 2026-10-26: published;
-  - week 2026-11-02: no row, so it counts as missing.
+  - week 2026-10-18: published;
+  - week 2026-10-25: published;
+  - week 2026-11-01: no row, so it counts as missing.
 - **Fixtures:**
   - `oznanila-rokopis.jpg` and `extract-rokopis.json` (2 flags);
   - `oznanila.pdf` and `extract-pdf.json` (0 flags);
@@ -409,7 +411,7 @@ Fixed test clock for every criterion below: **Tuesday 2026-10-27, 10:00 Europe/L
   - `zamegljena.jpg` and `extract-unreadable.json`.
 - **Divergent counts:**
   - approvals for Blaž = 2, for Marta = 0;
-  - masses without intention this week = 1;
+  - masses without intention still ahead this week = 0;
   - next week = 8.
 - **Cleanup:** the test database is truncated per test file. The dev seed persists.
 

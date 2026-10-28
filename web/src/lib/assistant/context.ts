@@ -52,8 +52,8 @@ export type AssistantContext = {
 
 const hm = (t: string) => t.slice(0, 5);
 const wd = (d: string) => WEEKDAY_LABEL[weekdayOf(d)];
-/** catechesis_groups.weekday is 0 = Sunday; weeks start on Monday. */
-const offsetInWeek = (weekday: number) => (weekday + 6) % 7;
+/** catechesis_groups.weekday is 0 = Sunday, and weeks start on Sunday, so it is the offset in the week. */
+const offsetInWeek = (weekday: number) => weekday;
 
 export function allowedTypes(actor: Actor): ProposalType[] {
   const out: ProposalType[] = [];
@@ -67,18 +67,18 @@ export function allowedTypes(actor: Actor): ProposalType[] {
 export async function buildContext(actor: Actor, dbx: Db = defaultDb): Promise<AssistantContext> {
   const day = today();
   const time = nowTime();
-  const mon = weekStart(day);
-  const sun = addDays(mon, 6);
-  const nextMon = addDays(mon, 7);
-  const nextSun = addDays(mon, 13);
+  const start = weekStart(day);
+  const end = addDays(start, 6);
+  const nextStart = addDays(start, 7);
+  const nextEnd = addDays(start, 13);
   const isPast = (date: string, t: string) => date < day || (date === day && hm(t) < time);
 
   const ctx: AssistantContext = {
     today: day,
     weekday: wd(day),
     time,
-    thisWeek: { from: mon, to: sun },
-    nextWeek: { from: nextMon, to: nextSun },
+    thisWeek: { from: start, to: end },
+    nextWeek: { from: nextStart, to: nextEnd },
     allowed: allowedTypes(actor),
   };
 
@@ -88,7 +88,7 @@ export async function buildContext(actor: Actor, dbx: Db = defaultDb): Promise<A
       .select({ id: m.id, date: m.date, time: m.time, status: m.status, cancelReason: m.cancelReason, church: schema.churches.shortName })
       .from(m)
       .innerJoin(schema.churches, eq(schema.churches.id, m.churchId))
-      .where(and(gte(m.date, mon), lte(m.date, nextSun)))
+      .where(and(gte(m.date, start), lte(m.date, nextEnd)))
       .orderBy(asc(m.date), asc(m.time), asc(schema.churches.position));
     const ids = rows.map((r) => r.id);
     const ints = ids.length
@@ -114,11 +114,11 @@ export async function buildContext(actor: Actor, dbx: Db = defaultDb): Promise<A
   if (can(actor, "verouk")) {
     const groups = await dbx.select().from(schema.catechesisGroups).orderBy(asc(schema.catechesisGroups.position), asc(schema.catechesisGroups.id));
     const c = schema.catechesisCancellations;
-    const cancels = await dbx.select({ groupId: c.groupId, date: c.date }).from(c).where(and(gte(c.date, mon), lte(c.date, nextSun)));
+    const cancels = await dbx.select({ groupId: c.groupId, date: c.date }).from(c).where(and(gte(c.date, start), lte(c.date, nextEnd)));
     const lessons: CtxLesson[] = [];
-    for (const start of [mon, nextMon]) {
+    for (const from of [start, nextStart]) {
       for (const g of groups) {
-        const date = addDays(start, offsetInWeek(g.weekday));
+        const date = addDays(from, offsetInWeek(g.weekday));
         lessons.push({
           groupId: g.id,
           name: g.name,

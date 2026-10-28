@@ -7,7 +7,7 @@
  */
 import { and, asc, eq, gt, gte, inArray, lte, or, sql } from "drizzle-orm";
 import { db as defaultDb, schema, type Db } from "@/db";
-import { today, nowTime, weekStart as mondayOf } from "@/lib/clock";
+import { today, nowTime, weekStart as weekStartOf } from "@/lib/clock";
 import { addDays, dateRange } from "@/lib/dates";
 import { ensureMasses } from "./ensure";
 import { dayLabel, FEASTS, hhmm, weekdayLabel, type IntentionKind } from "./format";
@@ -137,9 +137,9 @@ async function hydrate(dbx: Db, rows: MassRow[]): Promise<MassView[]> {
 
 const hasIntention = (x: MassView) => x.intentions.length > 0 || x.pending.length > 0;
 
-/** The week starting on Monday `weekStart` (any date in the week works). Generates missing Masses first. */
+/** The week (Sunday–Saturday) containing `weekStart` (any date in the week works). Generates missing Masses first. */
 export async function getWeek(weekStart: string, dbx: Db = defaultDb): Promise<Week> {
-  const start = mondayOf(weekStart);
+  const start = weekStartOf(weekStart);
   const end = addDays(start, 6);
   await ensureMasses(dbx, start, end);
   const rows = await massSelect(dbx)

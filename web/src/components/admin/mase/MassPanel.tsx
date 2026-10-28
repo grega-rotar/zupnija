@@ -4,7 +4,7 @@ import { useRef, useState, useTransition } from "react";
 import { addIntention, cancelMass, removeIntention, restoreMass, withdrawIntention, type MassChange } from "@/app/admin/(app)/teden/actions";
 import { Panel } from "@/components/admin/Panel";
 import { useToast } from "@/components/admin/Toast";
-import { Button, Chip, IconButton } from "@/components/admin/ui";
+import { Button, Chip, IconButton, Pill } from "@/components/admin/ui";
 import type { ActionResult } from "@/lib/admin/errors";
 import type { IntentionKind } from "@/lib/mase/format";
 import type { MassView } from "@/lib/mase/queries";
@@ -125,7 +125,7 @@ export function MassPanel({ mass: m, viewer, onClose }: { mass: PanelMass; viewe
             <li key={`p${p.changeRequestId}`}>
               <span className="pre">{kindPrefix(p.kind)}</span>
               <span>{p.text}</span>
-              <span className="pill gold">čaka</span>
+              <Pill tone="gold">čaka</Pill>
               {p.createdBy === viewer.id ? (
                 <IconButton
                   icon="x"
@@ -207,7 +207,7 @@ export function MassPanel({ mass: m, viewer, onClose }: { mass: PanelMass; viewe
           </div>
         ) : null}
         <div className="acts">
-          <Button variant="danger" style={{ background: "var(--paper)" }} disabled={busy || (hasIntentions && !move)} onClick={doCancel}>
+          <Button variant="danger" disabled={busy || (hasIntentions && !move)} onClick={doCancel}>
             {ask ? "Predlagaj odpoved" : "Potrdi odpoved"}
           </Button>
           <Button variant="ghost" onClick={() => setCancel(false)}>

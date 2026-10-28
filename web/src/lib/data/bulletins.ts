@@ -17,9 +17,9 @@ export type BulletinNotice = { key: string; text: string };
 
 export type PublicBulletin = {
   id: number;
-  /** Monday */
-  weekStart: IsoDate;
   /** Sunday */
+  weekStart: IsoDate;
+  /** Saturday */
   weekEnd: IsoDate;
   notices: BulletinNotice[];
 };
@@ -88,13 +88,13 @@ const list = cached(
 
 /**
  * The bulletin to show now: the latest published week that has started.
- * On Sunday the next week's bulletin (read out at Mass that day) already counts.
+ * Weeks start on Sunday, so the bulletin read out at Mass that day counts from that Sunday on.
  */
 export async function getCurrentBulletin(): Promise<PublicBulletin | null> {
-  return latestFrom(addDays(today(), 1));
+  return latestFrom(today());
 }
 
-/** The published bulletin of the week starting on Monday `weekStart`. */
+/** The published bulletin of the week starting on Sunday `weekStart`. */
 export async function getBulletinByWeek(weekStart: IsoDate): Promise<PublicBulletin | null> {
   return byWeek(weekStart);
 }

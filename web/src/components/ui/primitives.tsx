@@ -186,20 +186,34 @@ type ButtonProps = {
   external?: boolean;
 };
 
-const buttonBase =
+const buttonShape =
   "inline-flex items-center justify-center gap-2 rounded-sm font-medium tracking-[0.01em] transition-colors duration-200 " +
-  "min-h-12 px-6 text-body focus-visible:outline-offset-4 disabled:opacity-60 disabled:pointer-events-none";
+  "focus-visible:outline-offset-4 disabled:opacity-60 disabled:pointer-events-none";
+const buttonBase = `${buttonShape} min-h-12 px-6 text-body`;
 
 const buttonVariants = {
   primary: "bg-moss text-paper hover:bg-moss-deep",
   secondary: "border border-ink/25 bg-transparent text-ink hover:border-ink",
   ghost: "text-moss hover:bg-moss-soft",
   onDark: "bg-paper text-ink hover:bg-paper-2",
+  // Only for the editor (buttonClassName): removing or cancelling something.
+  danger: "border border-alert/40 bg-paper text-alert hover:border-alert",
+  dangerGhost: "text-alert hover:bg-alert-soft",
 };
+
+/**
+ * The button look as a class string, for controls that cannot use `Button`
+ * (the editor's buttons). `sm` is the compact size for dense rows: still a
+ * 44px tap target.
+ */
+export function buttonClassName({ variant = "primary", size = "md" }: { variant?: keyof typeof buttonVariants; size?: ButtonProps["size"] | "sm" } = {}) {
+  if (size === "sm") return cn(buttonShape, "min-h-11 px-4 text-small", buttonVariants[variant]);
+  return cn(buttonBase, buttonVariants[variant], size === "lg" && "min-h-[3.25rem] px-7 text-lede");
+}
 
 /** Button or link that looks like a button. Tap target ≥ 44px. */
 export function Button({ href, variant = "primary", size = "md", icon, className, children, type = "button", disabled, external }: ButtonProps) {
-  const classes = cn(buttonBase, buttonVariants[variant], size === "lg" && "min-h-[3.25rem] px-7 text-lede", className);
+  const classes = cn(buttonClassName({ variant, size }), className);
   const content = (
     <>
       <span>{children}</span>

@@ -1,5 +1,6 @@
 import Link from "next/link";
 import { Icon } from "@/components/admin/Icon";
+import { btnClass, Pill } from "@/components/admin/ui";
 import { formatDayNumber, formatTime, formatWeekdayShort } from "@/lib/dates";
 import type { EventItem, EventMonth } from "@/lib/dogodki/queries";
 import s from "./dogodki.module.css";
@@ -20,7 +21,7 @@ export function EventList({ months, me }: { months: EventMonth[]; me: string }) 
       <div className="calm">
         <h3>Ni prihodnjih dogodkov.</h3>
         <p>Dodajte srečanje, molitev ali delovno akcijo. Pokaže se na strani Dogodki.</p>
-        <Link href="/dogodki?dogodek=nov" className={`btn primary ${s.link} ${s.calmAct}`} scroll={false} prefetch={false}>
+        <Link href="/dogodki?dogodek=nov" className={btnClass({ variant: "primary" }, s.calmAct)} scroll={false} prefetch={false}>
           <Icon name="plus" />
           Nov dogodek
         </Link>
@@ -43,9 +44,9 @@ export function EventList({ months, me }: { months: EventMonth[]; me: string }) 
               <p>
                 <span>{formatTime(e.time)}</span>
                 <span>· {e.place}</span>
-                {e.onFrontPage ? <span className="pill">na prvi strani</span> : null}
+                {e.onFrontPage ? <Pill>na prvi strani</Pill> : null}
                 {e.pending ? (
-                  <span className="pill gold">{e.pending.by === me ? "čaka župnika" : `čaka potrditev · ${firstOf(e.pending.byName)}`}</span>
+                  <Pill tone="gold">{e.pending.by === me ? "čaka župnika" : `čaka potrditev · ${firstOf(e.pending.byName)}`}</Pill>
                 ) : null}
               </p>
             </span>

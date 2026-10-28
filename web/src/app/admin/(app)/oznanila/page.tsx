@@ -10,7 +10,7 @@ import { listBulletins, nextWeekStart, type BulletinListEntry } from "@/lib/bull
 
 const ymd = new Intl.DateTimeFormat("en-CA", { timeZone: "Europe/Ljubljana", year: "numeric", month: "2-digit", day: "2-digit" });
 const hm = new Intl.DateTimeFormat("en-GB", { timeZone: "Europe/Ljubljana", hour: "2-digit", minute: "2-digit", hourCycle: "h23" });
-/** "danes", "ned 25. okt." */
+/** "danes", "ned 25. okt" */
 const day = (d: Date) => (ymd.format(d) === today() ? "danes" : fDayS(ymd.format(d)));
 /** "danes ob 10.04" */
 const dayAt = (d: Date) => `${day(d)} ob ${fT(hm.format(d))}`;
@@ -38,7 +38,7 @@ export default async function BulletinsPage() {
   // Published weeks without a stored draft (older ones): count the week's intentions.
   const m = schema.masses;
   const perWeek = await db
-    .select({ week: sql<string>`date_trunc('week', ${m.date})::date::text`, n: sql<number>`count(*)::int` })
+    .select({ week: sql<string>`(${m.date} - extract(dow from ${m.date})::int)::text`, n: sql<number>`count(*)::int` })
     .from(schema.intentions)
     .innerJoin(m, eq(m.id, schema.intentions.massId))
     .groupBy(sql`1`);

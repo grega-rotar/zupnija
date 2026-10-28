@@ -4,7 +4,7 @@
  */
 import { and, asc, eq, gte, inArray, lte } from "drizzle-orm";
 import { db as defaultDb, schema, type Db } from "@/db";
-import { nowTime, today, weekStart as mondayOf } from "@/lib/clock";
+import { nowTime, today, weekStart as weekStartOf } from "@/lib/clock";
 import type { LessonCancelPayload } from "./actions";
 
 export type Lesson = {
@@ -27,17 +27,17 @@ const addDays = (iso: string, n: number) => {
   return d.toISOString().slice(0, 10);
 };
 
-/** Lessons of every group in the week starting on Monday `weekStart`, ordered by date and time. */
+/** Lessons of every group in the week (Sunday–Saturday) containing `weekStart`, ordered by date and time. */
 export async function getLessons(weekStart: string, dbx: Db = defaultDb): Promise<Lesson[]> {
-  const monday = mondayOf(weekStart);
-  const sunday = addDays(monday, 6);
+  const start = weekStartOf(weekStart);
+  const end = addDays(start, 6);
   const groups = await dbx.select().from(schema.catechesisGroups).orderBy(asc(schema.catechesisGroups.position), asc(schema.catechesisGroups.id));
   if (!groups.length) return [];
   const c = schema.catechesisCancellations;
   const cancels = await dbx
     .select()
     .from(c)
-    .where(and(gte(c.date, monday), lte(c.date, sunday), inArray(c.groupId, groups.map((x) => x.id))));
+    .where(and(gte(c.date, start), lte(c.date, end), inArray(c.groupId, groups.map((x) => x.id))));
   const cr = schema.changeRequests;
   const pend = await dbx
     .select({ id: cr.id, action: cr.action, payload: cr.payload, createdBy: cr.createdBy, createdAt: cr.createdAt, byName: schema.user.name })
@@ -48,7 +48,7 @@ export async function getLessons(weekStart: string, dbx: Db = defaultDb): Promis
 
   return groups
     .map((grp): Lesson => {
-      const date = addDays(monday, (grp.weekday + 6) % 7);
+      const date = addDays(start, grp.weekday); // weekday 0 = Sunday = week start
       const cancel = cancels.find((x) => x.groupId === grp.id && x.date === date);
       const p = pend.filter((x) => {
         const pl = x.payload as LessonCancelPayload;
@@ -81,7 +81,7 @@ export async function getLessons(weekStart: string, dbx: Db = defaultDb): Promis
 /** The next lesson that hasn't started yet (this week or next), cancelled or not; null if there are no groups. */
 export async function getNextLesson(dbx: Db = defaultDb): Promise<Lesson | null> {
   const d = today(), t = nowTime();
-  const monday = mondayOf(d);
-  const lessons = [...(await getLessons(monday, dbx)), ...(await getLessons(addDays(monday, 7), dbx))];
+  const start = weekStartOf(d);
+  const lessons = [...(await getLessons(start, dbx)), ...(await getLessons(addDays(start, 7), dbx))];
   return lessons.find((l) => l.date > d || (l.date === d && l.time >= t)) ?? null;
 }

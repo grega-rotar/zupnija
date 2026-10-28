@@ -7,7 +7,7 @@ export const fieldOf = (error: string) => FIELD_MESSAGES.includes(error);
 export function FieldError({ id, text }: { id?: string; text?: string }) {
   if (!text) return null;
   return (
-    <small id={id} role="alert" style={{ color: "var(--alert)", fontWeight: 600 }}>
+    <small id={id} role="alert" className="font-semibold text-alert">
       {text}
     </small>
   );

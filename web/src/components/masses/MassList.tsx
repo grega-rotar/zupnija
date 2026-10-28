@@ -90,7 +90,7 @@ export function MassRow({ mass, showIntentions, size = "md", tone = "paper" }: M
   );
 }
 
-function ChurchPill({ name, slug, dark, muted }: { name: string; slug?: string; dark: boolean; muted: boolean }) {
+export function ChurchPill({ name, slug, dark, muted }: { name: string; slug?: string; dark: boolean; muted: boolean }) {
   const classes = cn(
     "inline-flex min-h-7 items-center rounded-full border px-2.5 text-small leading-none",
     dark ? "border-paper/25 text-paper/85" : "border-stone-2 text-ink-2",
@@ -105,7 +105,7 @@ function ChurchPill({ name, slug, dark, muted }: { name: string; slug?: string; 
   );
 }
 
-function StatusPill({ children, tone, dark }: { children: React.ReactNode; tone: "alert" | "gold"; dark: boolean }) {
+export function StatusPill({ children, tone, dark }: { children: React.ReactNode; tone: "alert" | "gold"; dark: boolean }) {
   return (
     <span
       className={cn(

@@ -15,7 +15,7 @@ import { db, schema } from "@/db";
 import { perform, type PerformResult } from "@/lib/admin/engine";
 import { ForbiddenError, UserError } from "@/lib/admin/errors";
 import { can, type Actor } from "@/lib/admin/sections";
-import { now, today, weekStart as mondayOf } from "@/lib/clock";
+import { now, today, weekStart as weekStartOf } from "@/lib/clock";
 import { addDays } from "@/lib/dates";
 import { ALREADY_PUBLISHED, type PublishPayload } from "./actions";
 import { readBulletin } from "./extract";
@@ -108,7 +108,7 @@ export async function getBulletinByWeek(weekStart: string): Promise<BulletinView
   return b ? getBulletin(b.id) : null;
 }
 
-/** Newest week first; next week (Monday after today) appears as "missing" while it has no row. */
+/** Newest week first; next week (the Sunday after today) appears as "missing" while it has no row. */
 export async function listBulletins(): Promise<BulletinListEntry[]> {
   const rows = await Promise.all((await db.select().from(schema.bulletins).orderBy(desc(schema.bulletins.weekStart))).map(settlePending));
   const notices = await db.select({ bulletinId: schema.bulletinNotices.bulletinId }).from(schema.bulletinNotices);
@@ -134,17 +134,17 @@ export async function listBulletins(): Promise<BulletinListEntry[]> {
   return out;
 }
 
-/** The Monday after today ("2026-10-27" → "2026-11-02"). */
-export const nextWeekStart = () => addDays(mondayOf(today()), 7);
+/** The Sunday after today ("2026-10-27" → "2026-11-01"); weeks run Sunday–Saturday. */
+export const nextWeekStart = () => addDays(weekStartOf(today()), 7);
 
 // ── Writes ──────────────────────────────────────────────────────────────────
-function assertMonday(weekStart: string) {
-  if (!/^\d{4}-\d{2}-\d{2}$/.test(weekStart) || mondayOf(weekStart) !== weekStart) throw new UserError("Izberite teden.");
+function assertWeekStart(weekStart: string) {
+  if (!/^\d{4}-\d{2}-\d{2}$/.test(weekStart) || weekStartOf(weekStart) !== weekStart) throw new UserError("Izberite teden.");
 }
 
 async function prepareWeek(weekStart: string, actor: Actor) {
   if (!can(actor, "oznanila")) throw new ForbiddenError();
-  assertMonday(weekStart);
+  assertWeekStart(weekStart);
   const [found] = await db.select().from(schema.bulletins).where(eq(schema.bulletins.weekStart, weekStart));
   const existing = found ? await settlePending(found) : null;
   if (existing?.status === "published") throw new UserError(ALREADY_PUBLISHED);

@@ -1,11 +1,10 @@
 import Link from "next/link";
 import { Icon, type IconName } from "@/components/admin/Icon";
-import { ButtonLink } from "@/components/admin/ui";
+import { ButtonLink, PageHead } from "@/components/admin/ui";
 import { MAS, pl, SPREMEMBA_JE, URA_ODPADE } from "@/lib/domov/format";
 import type { HomeView } from "@/lib/domov/loader";
 import { ApprovalsTask } from "./ApprovalsTask";
 import { AskTile } from "./AskTile";
-import css from "./domov.module.css";
 
 /** Domov, variant C of the prototype (vHome): greeting, hero, Na vrsti, Hitro, Urejeno. */
 export function Home({ v, isOwner }: { v: HomeView; isOwner: boolean }) {
@@ -109,12 +108,8 @@ export function Home({ v, isOwner }: { v: HomeView; isOwner: boolean }) {
 
   const h = v.hero;
   return (
-    <div className={`page enter ${css.home}`}>
-      <div className="hello">
-        <p className="eyebrow">{v.greeting.eyebrow}</p>
-        <h1>Dober dan, {v.greeting.name}.</h1>
-        <p>{v.greeting.sub}</p>
-      </div>
+    <div className="page enter">
+      <PageHead eyebrow={v.greeting.eyebrow} title={`Dober dan, ${v.greeting.name}.`} sub={v.greeting.sub} />
 
       {h ? (
         <Link className="hero" href={h.kind === "mass" ? `/teden?masa=${h.massId}` : "/verouk"}>

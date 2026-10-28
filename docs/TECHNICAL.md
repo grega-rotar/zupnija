@@ -206,14 +206,14 @@ GitHub repo settings (Settings → Secrets and variables → Actions):
 | secret | `DEPLOY_SSH_KEY` | private key whose public half is in `~deploy/.ssh/authorized_keys` on t4a |
 | secret | `DEPLOY_KNOWN_HOSTS` | `ssh-keyscan 77.42.42.60` |
 | secret | `SANITY_AUTH_TOKEN` | Deploy Studio token (sanity.io/manage → API → Tokens), for the studio job |
-| variable | `SITE_URL` | now `https://zupnija.etiam.si`; later the real domain (no trailing slash) |
+| variable | `SITE_URL` | `https://zupnija-pirnice.si` (no trailing slash) |
 | variable | `STUDIO_URL` | e.g. `https://zupnija-pirnice.sanity.studio` |
 | variable | `STUDIO_DEPLOY` | `true` once the first manual Studio deploy is done |
 
 On t4a, `/srv/zupnija/.env` (owner `deploy`, mode 600) holds the runtime values:
 
 ```
-DOMAIN=zupnija.etiam.si
+DOMAIN=zupnija-pirnice.si
 SANITY_API_READ_TOKEN=...
 RESEND_API_KEY=...
 CONTACT_FROM_EMAIL=...
@@ -221,10 +221,12 @@ CONTACT_FROM_EMAIL=...
 
 `DOMAIN` is used by the Traefik labels (the router matches it and `www.` too).
 
-Until `zupnija-pirnice.si` is registered, the site runs on `zupnija.etiam.si`
-(proxied `A` record in the `etiam.si` zone; the `*.etiam.si` origin cert already
-covers it). To move: change `DOMAIN` in `/srv/zupnija/.env` and the `SITE_URL`
-variable, then redeploy (the URL is baked into the image).
+The site runs on `zupnija-pirnice.si` (moved from `zupnija.etiam.si` on
+2026-10-28). The old host redirects permanently, keeping the path, through
+`/srv/edge/dynamic/zupnija-legacy.yml` on t4a; the `zupnija.etiam.si` record in
+the `etiam.si` zone stays so the redirect keeps working. Sanity's `settings.siteUrl`
+and CORS origins point at the new domain. The URL is also baked into the image
+from the `SITE_URL` variable, so a domain change needs a redeploy.
 Cloudflare: proxied `A` records for the domain and `www` → `77.42.42.60`,
 SSL mode Full (strict), and an Origin Certificate in
 `/srv/edge/certs/<zone>/origin.{pem,key}`, listed in `infra/edge/dynamic/tls.yml`
@@ -350,13 +352,11 @@ mode: `chgrp claude-pool /etc/claude-pool/*; chmod 640 /etc/claude-pool/*`).
 
 ### Domain and TLS
 
-`admin.zupnija.etiam.si` is two levels below `etiam.si`, so neither the
-`*.etiam.si` origin cert nor Cloudflare's Universal SSL covers it. While the
-site runs on `zupnija.etiam.si`, set `ADMIN_HOST=zupnija-admin.etiam.si` (and
-`BETTER_AUTH_URL=https://zupnija-admin.etiam.si`) with a proxied `A` record.
-On `zupnija-pirnice.si`, drop both and use the default
-`admin.zupnija-pirnice.si` (proxied `A` record, covered by a
-`*.zupnija-pirnice.si` origin cert).
+The editor runs on `admin.zupnija-pirnice.si`: a proxied `A` record to t4a,
+covered by the `zupnija-pirnice.si` + `*.zupnija-pirnice.si` origin cert in
+`/srv/edge/certs/zupnija-pirnice.si/` (valid until 2041). `.env` sets
+`ADMIN_HOST=admin.zupnija-pirnice.si` and
+`BETTER_AUTH_URL=https://admin.zupnija-pirnice.si`.
 
 ### Backups
 

@@ -5,6 +5,7 @@ import { useEffect, useRef, useState } from "react";
 import { useAssistant } from "../AssistantContext";
 import { Icon } from "../Icon";
 import { Panel } from "../Panel";
+import { btnClass } from "../ui";
 import { useToast } from "../Toast";
 import type { Actor } from "@/lib/admin/sections";
 import type { AssistantMessage } from "@/lib/assistant/schema";
@@ -246,7 +247,7 @@ export function AssistantPanel({ actor }: { actor: Actor }) {
                 ))}
                 {m.upload && canUpload ? (
                   <div>
-                    <Link href={UPLOAD} className="btn primary" onClick={closeAssistant}>
+                    <Link href={UPLOAD} className={btnClass({ variant: "primary" })} onClick={closeAssistant}>
                       <Icon name="cam" />
                       Odpri nalaganje oznanil
                     </Link>

@@ -5,6 +5,7 @@
 import { and, asc, eq, gte, inArray } from "drizzle-orm";
 import { db as defaultDb, schema, type Db } from "@/db";
 import { today } from "@/lib/clock";
+import { formatMonthLong } from "@/lib/dates";
 import type { EventSavePayload } from "./actions";
 
 export type EventPending = {
@@ -33,7 +34,6 @@ export type EventItem = {
 
 export type EventMonth = { month: string; key: string; items: EventItem[] };
 
-const MONTHS = ["januar", "februar", "marec", "april", "maj", "junij", "julij", "avgust", "september", "oktober", "november", "december"];
 
 const hhmm = (t: string) => t.slice(0, 5);
 const byWhen = (a: EventItem, b: EventItem) => (a.date + a.time).localeCompare(b.date + b.time);
@@ -107,7 +107,7 @@ export function groupByMonth(items: EventItem[]): EventMonth[] {
   for (const it of items) {
     const key = it.date.slice(0, 7);
     let g = out[out.length - 1];
-    if (!g || g.key !== key) out.push((g = { key, month: MONTHS[Number(key.slice(5, 7)) - 1], items: [] }));
+    if (!g || g.key !== key) out.push((g = { key, month: formatMonthLong(it.date), items: [] }));
     g.items.push(it);
   }
   return out;

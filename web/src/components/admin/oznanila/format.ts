@@ -1,34 +1,21 @@
 /**
- * Formatting for the oznanila screens, as in the prototype (fDayS, fT, pl).
+ * Formatting for the oznanila screens: thin names over src/lib/dates.ts, so
+ * the editor and the public site write dates the same way.
  * No server imports: the list (server) and the upload flow (client) share it.
  */
 import type { BulletinFlag, BulletinItem } from "@/lib/bulletin/types";
+import { addDays, formatDayShort, formatTime, formatWeekdayShort, formatWeekSpan } from "@/lib/dates";
 
-const WD_S = ["ned", "pon", "tor", "sre", "čet", "pet", "sob"];
-const MON = ["januar", "februar", "marec", "april", "maj", "junij", "julij", "avgust", "september", "oktober", "november", "december"];
-const MON_S = ["jan", "feb", "mar", "apr", "maj", "jun", "jul", "avg", "sep", "okt", "nov", "dec"];
-
-export const addDaysIso = (iso: string, n: number) => {
-  const d = new Date(`${iso}T12:00:00Z`);
-  d.setUTCDate(d.getUTCDate() + n);
-  return d.toISOString().slice(0, 10);
-};
-const wd = (iso: string) => new Date(`${iso}T12:00:00Z`).getUTCDay();
-const dnum = (iso: string) => Number(iso.slice(8, 10));
-const mon = (iso: string) => MON[Number(iso.slice(5, 7)) - 1];
-const monS = (iso: string) => MON_S[Number(iso.slice(5, 7)) - 1];
+export const addDaysIso = addDays;
 
 /** "18:30" → "18.30", "07:00" → "7.00". */
-export const fT = (t: string) => `${Number(t.slice(0, 2))}.${t.slice(3, 5)}`;
-/** "tor 3. nov." */
-export const fDayS = (iso: string) => `${WD_S[wd(iso)]} ${dnum(iso)}. ${monS(iso)}.`;
-/** "2.–8. november", across months "26. okt – 1. nov". */
-export const fSpan = (a: string) => {
-  const b = addDaysIso(a, 6);
-  return mon(a) === mon(b) ? `${dnum(a)}.–${dnum(b)}. ${mon(b)}` : `${dnum(a)}. ${monS(a)} – ${dnum(b)}. ${monS(b)}`;
-};
-/** "pon 2.11." as written on a sheet. */
-export const fSheetDay = (iso: string) => `${WD_S[wd(iso)]} ${dnum(iso)}.${Number(iso.slice(5, 7))}.`;
+export const fT = formatTime;
+/** "tor 3. nov" */
+export const fDayS = formatDayShort;
+/** The bulletin week starting on Sunday `a`: "1.–7. november", across months "29. nov – 5. dec". */
+export const fSpan = (a: string) => formatWeekSpan(a, addDays(a, 6));
+/** "pon 2.11." as written on a sheet (the sheet's own notation, used only to echo the sheet). */
+export const fSheetDay = (iso: string) => `${formatWeekdayShort(iso)} ${Number(iso.slice(8, 10))}.${Number(iso.slice(5, 7))}.`;
 
 /** Slovenian number forms: 1 namen, 2 namena, 3 nameni, 5 namenov. */
 export const pl = (n: number, f: readonly [string, string, string, string]) => {

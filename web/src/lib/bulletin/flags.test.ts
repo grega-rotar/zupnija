@@ -5,16 +5,16 @@ import { flagScheduleMismatches } from "./flags";
 import { parseReply } from "./prompt";
 import { readableDraftSchema, type ReadableDraft, type WeekMass } from "./types";
 
-/** The regular schedule of 2026-11-02 … 08 (src/test/seed.ts). */
+/** The regular schedule of the week Sunday 2026-11-01 … Saturday 07 (src/test/seed.ts). */
 const WEEK: WeekMass[] = [
+  { date: "2026-11-01", time: "08:00", churchSlug: "sv-kriz" },
+  { date: "2026-11-01", time: "10:00", churchSlug: "marijino-vnebovzetje" },
   { date: "2026-11-02", time: "18:30", churchSlug: "sv-kriz" },
   { date: "2026-11-03", time: "18:30", churchSlug: "marijino-vnebovzetje" },
   { date: "2026-11-04", time: "18:30", churchSlug: "marijino-vnebovzetje" },
   { date: "2026-11-05", time: "07:00", churchSlug: "marijino-vnebovzetje" },
   { date: "2026-11-06", time: "18:30", churchSlug: "sv-kriz" },
   { date: "2026-11-07", time: "18:30", churchSlug: "marijino-vnebovzetje" },
-  { date: "2026-11-08", time: "08:00", churchSlug: "sv-kriz" },
-  { date: "2026-11-08", time: "10:00", churchSlug: "marijino-vnebovzetje" },
 ];
 const draft = (d: unknown): ReadableDraft => readableDraftSchema.parse(d);
 
@@ -40,14 +40,14 @@ describe("flagScheduleMismatches [unit]", () => {
     const out = flagScheduleMismatches(
       {
         readable: true,
-        weekStart: "2026-11-02",
+        weekStart: "2026-11-01",
         notices: [],
         items: [
           { id: "a", date: "2026-11-03", time: "19:00", churchSlug: "marijino-vnebovzetje", ...base },
           { id: "b", date: "2026-11-03", time: "18:30", churchSlug: "sv-kriz", ...base },
           { id: "c", date: "2026-11-02", time: "07:00", churchSlug: "sv-tomaz", ...base },
           { id: "d", date: "2026-11-09", time: "18:30", churchSlug: "sv-kriz", ...base },
-          { id: "e", date: "2026-11-08", time: "10:00", churchSlug: "marijino-vnebovzetje", ...base },
+          { id: "e", date: "2026-11-01", time: "10:00", churchSlug: "marijino-vnebovzetje", ...base },
         ],
       },
       WEEK,
@@ -60,7 +60,7 @@ describe("flagScheduleMismatches [unit]", () => {
   it("does not mutate its input", () => {
     const d = draft(rokopis);
     flagScheduleMismatches(d, WEEK);
-    expect(d.items[4].flag).toBeUndefined();
+    expect(d.items[6].flag).toBeUndefined();
   });
 });
 

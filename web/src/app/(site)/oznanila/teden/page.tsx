@@ -4,7 +4,7 @@ import { getSettings } from "@/sanity/data";
 import { getBulletinList } from "@/lib/data/bulletins";
 import { buildMetadata } from "@/lib/seo";
 import { routes } from "@/lib/routes";
-import { formatDateSpan } from "@/lib/dates";
+import { formatWeekSpan } from "@/lib/dates";
 import { Breadcrumbs, Container, EmptyState, PageHeader, Section } from "@/components/ui/primitives";
 
 export async function generateMetadata(): Promise<Metadata> {
@@ -33,7 +33,7 @@ export default async function BulletinsPage() {
                     href={routes.bulletin(b.weekStart)}
                     className="flex min-h-14 items-center justify-between gap-4 rounded-md border border-stone bg-paper px-5 py-3 no-underline hover:border-stone-2 [&_span:first-child]:hover:underline"
                   >
-                    <span className="font-serif text-lede">{formatDateSpan(b.weekStart, b.weekEnd)}</span>
+                    <span className="font-serif text-lede">{formatWeekSpan(b.weekStart, b.weekEnd, true)}</span>
                     <span className="text-small text-ink-3">{b.itemCount} oznanil</span>
                   </Link>
                 </li>

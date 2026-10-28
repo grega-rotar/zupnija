@@ -13,7 +13,7 @@ import { listPending } from "@/lib/admin/engine";
 import { can, SECTION_LABEL, type Actor, type Section } from "@/lib/admin/sections";
 import { listBulletins, nextWeekStart } from "@/lib/bulletin/service";
 import { readableDraftSchema } from "@/lib/bulletin/types";
-import { now, nowTime, today, weekStart as mondayOf } from "@/lib/clock";
+import { now, nowTime, today, weekStart as weekStartOf } from "@/lib/clock";
 import { addDays, formatWeekSpan } from "@/lib/dates";
 import { dayLabel, kindPrefix, timeLabel, weekdayLabel } from "@/lib/mase/format";
 import { getMass, getMassesWithoutIntention, getNextMass } from "@/lib/mase/queries";
@@ -138,15 +138,15 @@ async function toRows(list: Cr[], dbx: Db): Promise<ApprovalRow[]> {
 
 // ── Lessons (this week and next) ────────────────────────────────────────────
 async function lessonsAround(dbx: Db): Promise<Lesson[]> {
-  const monday = mondayOf(today());
-  return [...(await getLessons(monday, dbx)), ...(await getLessons(addDays(monday, 7), dbx))];
+  const start = weekStartOf(today());
+  return [...(await getLessons(start, dbx)), ...(await getLessons(addDays(start, 7), dbx))];
 }
 
 // ── loadHome ────────────────────────────────────────────────────────────────
 export async function loadHome(actor: Actor, dbx: Db = defaultDb): Promise<HomeView> {
   const c = { mase: can(actor, "mase"), oznanila: can(actor, "oznanila"), dogodki: can(actor, "dogodki"), verouk: can(actor, "verouk") };
   const d = today();
-  const thisWeek = mondayOf(d);
+  const thisWeek = weekStartOf(d);
 
   const greeting = {
     eyebrow: dayLabel(d),

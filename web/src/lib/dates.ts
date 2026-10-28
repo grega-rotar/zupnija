@@ -57,7 +57,7 @@ export function nowTime(now: Date = new Date()): string {
     timeZone: TIME_ZONE,
     hour: "2-digit",
     minute: "2-digit",
-    hour12: false,
+    hourCycle: "h23",
   }).format(now);
 }
 
@@ -180,12 +180,33 @@ export function formatDateSpan(from: IsoDate, to: IsoDate): string {
   return sameYear ? `${a} – ${b}` : `${formatDate(from)} – ${b}`;
 }
 
-/** Week without the year, as a heading: "25.–31. oktober", across months "28. sep – 4. okt". */
-export function formatWeekSpan(from: IsoDate, to: IsoDate): string {
+/** "september" */
+export function formatMonthLong(date: IsoDate): string {
+  return fmt({ month: "long", timeZone: "UTC" }).format(toUtcNoon(date));
+}
+
+/** "14. september" (no weekday, no year). */
+export function formatDayMonth(date: IsoDate): string {
+  return `${formatDayNumber(date)}. ${formatMonthLong(date)}`;
+}
+
+/** Short day for tight rows and pills: "tor 3. nov". */
+export function formatDayShort(date: IsoDate): string {
+  return `${formatWeekdayShort(date)} ${formatDayNumber(date)}. ${formatMonthShort(date)}`;
+}
+
+/**
+ * A week (Sunday–Saturday) or any span of days, as a heading: "25.–31. oktober",
+ * across months "28. sep – 4. okt". `withYear` adds the year: "25.–31. oktober 2026",
+ * across years "28. dec 2025 – 3. jan 2026".
+ */
+export function formatWeekSpan(from: IsoDate, to: IsoDate, withYear = false): string {
   const day = (d: IsoDate) => formatDayNumber(d);
-  if (from === to) return `${day(from)}. ${fmt({ month: "long", timeZone: "UTC" }).format(toUtcNoon(from))}`;
-  if (from.slice(0, 7) === to.slice(0, 7)) return `${day(from)}.–${day(to)}. ${fmt({ month: "long", timeZone: "UTC" }).format(toUtcNoon(to))}`;
-  return `${day(from)}. ${formatMonthShort(from)} – ${day(to)}. ${formatMonthShort(to)}`;
+  const y = (d: IsoDate) => (withYear ? ` ${d.slice(0, 4)}` : "");
+  if (from === to) return `${formatDayMonth(from)}${y(from)}`;
+  if (from.slice(0, 7) === to.slice(0, 7)) return `${day(from)}.–${formatDayMonth(to)}${y(to)}`;
+  const fromYear = from.slice(0, 4) !== to.slice(0, 4) ? y(from) : "";
+  return `${day(from)}. ${formatMonthShort(from)}${fromYear} – ${day(to)}. ${formatMonthShort(to)}${y(to)}`;
 }
 
 /** "Nedelja, 14. september ob 10.00" (Slovenian time uses a dot). */
@@ -195,7 +216,7 @@ export function formatDateTime(datetime: string, allDay = false): string {
   return `${day} ob ${formatTime(timeOf(datetime))}`;
 }
 
-/** "10.00" — Slovenian convention for times in running text. */
+/** "10.00" — Slovenian convention for times in running text. Accepts "10:00" and Postgres "10:00:00". */
 export function formatTime(time: string): string {
   const [h, m] = normaliseTime(time).split(":");
   return `${Number(h)}.${m}`;

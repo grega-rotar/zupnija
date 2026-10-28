@@ -2,8 +2,7 @@ import { EventList } from "@/components/admin/dogodki/EventList";
 import { EventPanel, type EventPanelProps } from "@/components/admin/dogodki/EventPanel";
 import Link from "next/link";
 import { Icon } from "@/components/admin/Icon";
-import { PageHead } from "@/components/admin/ui";
-import s from "@/components/admin/dogodki/dogodki.module.css";
+import { btnClass, PageHead } from "@/components/admin/ui";
 import { requirePageArea } from "@/lib/admin/next";
 import { needsApproval, type Actor } from "@/lib/admin/sections";
 import { today, weekStart } from "@/lib/clock";
@@ -59,7 +58,7 @@ export default async function DogodkiPage({ searchParams }: { searchParams: Prom
         title="Dogodki"
         sub="Kar ni maša: srečanja, molitve, delovne akcije."
         action={
-          <Link href="/dogodki?dogodek=nov" className={`btn primary ${s.link}`} scroll={false} prefetch={false}>
+          <Link href="/dogodki?dogodek=nov" className={btnClass({ variant: "primary" })} scroll={false} prefetch={false}>
             <Icon name="plus" />
             Nov dogodek
           </Link>

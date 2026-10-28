@@ -1,3 +1,4 @@
+import { SitePreview } from "@/components/admin/mase/SitePreview";
 import { WeekView, type WeekLink } from "@/components/admin/mase/WeekView";
 import { requirePageArea } from "@/lib/admin/next";
 import { can, needsApproval } from "@/lib/admin/sections";
@@ -51,6 +52,7 @@ export default async function TedenPage({ searchParams }: { searchParams: Search
       next={w < last ? link(addDays(w, 7)) : null}
       extraMass={inWeek ? null : extra}
       upcoming={upcoming}
+      sitePreview={<SitePreview date={w} />}
     />
   );
 }

@@ -1,12 +1,13 @@
 import type { Metadata, Viewport } from "next";
 import { Caveat, Newsreader, Source_Sans_3 } from "next/font/google";
 import { getActor } from "@/lib/admin/session";
+import "../globals.css";
 import "./admin.css";
 
 /*
  * The editor's own root layout (admin.<domain>, rewritten to /admin/** by the
- * proxy). It shares tokens and fonts with the site but none of its chrome,
- * and no Tailwind: everything is in admin.css.
+ * proxy). It loads the site's globals.css (Tailwind, design tokens, base
+ * styles) and adds admin.css for the app-only frame. None of the site chrome.
  */
 
 const newsreader = Newsreader({
@@ -41,10 +42,8 @@ export const viewport: Viewport = {
   width: "device-width",
   initialScale: 1,
   viewportFit: "cover",
-  themeColor: [
-    { media: "(prefers-color-scheme: light)", color: "#fbfaf7" },
-    { media: "(prefers-color-scheme: dark)", color: "#161b18" },
-  ],
+  // Light only, like the site.
+  themeColor: "#fbfaf7",
 };
 
 /** Per request: who is signed in decides the text size and everything below. */

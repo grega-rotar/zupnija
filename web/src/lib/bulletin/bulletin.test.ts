@@ -30,7 +30,7 @@ import {
 import "./actions";
 
 const FIXTURES = path.join(__dirname, "fixtures");
-const WEEK = "2026-11-02";
+const WEEK = "2026-11-01"; // a Sunday: weeks run Sunday–Saturday
 const actor = async (id: string): Promise<Actor> => {
   const [u] = await db.select().from(schema.user).where(eq(schema.user.id, id));
   const secs = await db.select().from(schema.userSections).where(eq(schema.userSections.userId, id));
@@ -160,9 +160,9 @@ describe("upload [integration]", () => {
     expect(calls[0].files).toEqual(["oznanila.heic"]);
   });
 
-  it("forbids a user without oznanila and a week that isn't a Monday", async () => {
+  it("forbids a user without oznanila and a week that isn't a Sunday", async () => {
     await expect(startBulletin({ weekStart: WEEK, file: jpg() }, ana)).rejects.toThrow("forbidden");
-    await expect(startBulletin({ weekStart: "2026-11-03", file: jpg() }, blaz)).rejects.toThrow("Izberite teden.");
+    await expect(startBulletin({ weekStart: "2026-11-02", file: jpg() }, blaz)).rejects.toThrow("Izberite teden.");
   });
 });
 
@@ -225,17 +225,17 @@ describe("reading [integration]", () => {
     expect(again.bulletinId).toBe(id);
     await settle();
     expect((await getBulletin(id))!.flagCount).toBe(0);
-    await expect(startBulletin({ weekStart: "2026-10-26", file: jpg() }, blaz)).rejects.toThrow("Oznanila za ta teden so že objavljena.");
+    await expect(startBulletin({ weekStart: "2026-10-25", file: jpg() }, blaz)).rejects.toThrow("Oznanila za ta teden so že objavljena.");
   });
 });
 
 describe("publish [integration]", () => {
-  const resolved = { i2: "Jože Novak", i5: "17:30" };
+  const resolved = { i4: "Jože Novak", i7: "17:30" };
 
   it("refuses while a flag is open and publishes nothing", async () => {
     const id = await readRokopis();
     const before = await contentCounts();
-    await expect(publishBulletin(blaz, { bulletinId: id, resolutions: { i2: "Jože Novak" }, notices: rokopis.notices })).rejects.toThrow(
+    await expect(publishBulletin(blaz, { bulletinId: id, resolutions: { i4: "Jože Novak" }, notices: rokopis.notices })).rejects.toThrow(
       "Najprej preverite označena mesta.",
     );
     await expect(publishBulletin(marta, { bulletinId: id, resolutions: {}, notices: rokopis.notices })).rejects.toThrow("Najprej preverite označena mesta.");
@@ -254,8 +254,8 @@ describe("publish [integration]", () => {
       .select({ date: m.date, time: m.time, text: i.text, kind: i.kind, createdBy: i.createdBy })
       .from(i)
       .innerJoin(m, eq(m.id, i.massId))
-      .where(and(gte(m.date, WEEK), lte(m.date, "2026-11-08")));
-    const inWeek = week.filter((w) => w.date >= WEEK && w.date <= "2026-11-08");
+      .where(and(gte(m.date, WEEK), lte(m.date, "2026-11-07")));
+    const inWeek = week.filter((w) => w.date >= WEEK && w.date <= "2026-11-07");
     expect(inWeek).toHaveLength(8);
     expect(inWeek.every((w) => w.createdBy === "blaz")).toBe(true);
     expect(inWeek.find((w) => w.date === "2026-11-03")).toMatchObject({ text: "Jože Novak", kind: "deceased" });
@@ -274,14 +274,14 @@ describe("publish [integration]", () => {
     expect(b.publishedAt).not.toBeNull();
     const h = await db.select().from(schema.history).where(eq(schema.history.action, "bulletin.publish"));
     expect(h).toHaveLength(1);
-    expect(h[0].label).toBe("Objava oznanil 2.–8. november");
+    expect(h[0].label).toBe("Objava oznanil 1.–7. november");
 
     await expect(publishBulletin(blaz, { bulletinId: id, resolutions: resolved, notices: [] })).rejects.toThrow("Oznanila za ta teden so že objavljena.");
   });
 
   it("choosing the schedule time keeps the Mass at 18:30", async () => {
     const id = await readRokopis();
-    await publishBulletin(blaz, { bulletinId: id, resolutions: { i2: "Jože Nosak", i5: "18.30" }, notices: rokopis.notices });
+    await publishBulletin(blaz, { bulletinId: id, resolutions: { i4: "Jože Nosak", i7: "18.30" }, notices: rokopis.notices });
     const fri = await db.select().from(schema.masses).where(eq(schema.masses.date, "2026-11-06"));
     expect(fri.map((x) => x.time.slice(0, 5))).toEqual(["18:30"]);
     expect(fri[0].editedAt).toBeNull();
@@ -295,7 +295,7 @@ describe("publish [integration]", () => {
     expect(r.status).toBe("pending");
     const crs = await db.select().from(schema.changeRequests).where(eq(schema.changeRequests.action, "bulletin.publish"));
     expect(crs).toHaveLength(1);
-    expect(crs[0]).toMatchObject({ section: "oznanila", label: "Objava oznanil 2.–8. november", createdBy: "marta" });
+    expect(crs[0]).toMatchObject({ section: "oznanila", label: "Objava oznanil 1.–7. november", createdBy: "marta" });
     expect((await getBulletin(id))!.status).toBe("pending");
     expect(await contentCounts()).toEqual(before);
     await expect(startBulletin({ weekStart: WEEK, file: jpg() }, blaz)).rejects.toThrow("čakajo na potrditev");
@@ -313,9 +313,9 @@ describe("list and drafts [integration]", () => {
   it("lists newest first with next week missing", async () => {
     const list = await listBulletins();
     expect(list.map((b) => [b.weekStart, b.status])).toEqual([
-      ["2026-11-02", "missing"],
-      ["2026-10-26", "published"],
-      ["2026-10-19", "published"],
+      ["2026-11-01", "missing"],
+      ["2026-10-25", "published"],
+      ["2026-10-18", "published"],
     ]);
     const id = await readRokopis();
     const after = await listBulletins();
@@ -334,6 +334,6 @@ describe("list and drafts [integration]", () => {
 
     const { bulletinId } = await startManualBulletin({ weekStart: WEEK }, blaz);
     expect((await getBulletin(bulletinId))!).toMatchObject({ status: "draft", readableDraft: { items: [], notices: [] } });
-    await expect(discardDraft((await listBulletins()).find((b) => b.weekStart === "2026-10-26")!.id!)).rejects.toThrow("že objavljena");
+    await expect(discardDraft((await listBulletins()).find((b) => b.weekStart === "2026-10-25")!.id!)).rejects.toThrow("že objavljena");
   });
 });

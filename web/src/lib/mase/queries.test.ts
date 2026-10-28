@@ -16,28 +16,38 @@ describe("mase loaders (US-004, US-005)", () => {
     s = await seedParish(db);
   });
 
-  it("week 26. okt: 8 masses in 7 days, Vsi sveti, Ivana Kos pending by Marta", async () => {
-    const w = await getWeek("2026-10-26");
+  it("week 25.–31. oktober: Sunday to Saturday, 8 masses in 7 days, the 6 October intentions", async () => {
+    const w = await getWeek("2026-10-27");
+    expect([w.weekStart, w.weekEnd]).toEqual(["2026-10-25", "2026-10-31"]);
     expect(w.days).toHaveLength(7);
     expect(w.counts.masses).toBe(8);
     expect(w.days.flatMap((d) => d.masses)).toHaveLength(8);
-    expect(w.days[6]).toMatchObject({ date: "2026-11-01", weekday: "nedelja", label: "nedelja, 1. november", feast: "Vsi sveti" });
+    expect(w.days[0]).toMatchObject({ date: "2026-10-25", weekday: "nedelja", label: "nedelja, 25. oktober", feast: null });
     expect(w.isEmpty).toBe(false);
-    expect(w.counts).toMatchObject({ intentions: 6, pending: 1, withoutIntention: 1 });
-    const sun8 = w.days[6].masses.find((m) => m.time === "08:00")!;
+    expect(w.counts).toMatchObject({ intentions: 6, pending: 0, withoutIntention: 2 });
+    const wed = w.days[3].masses[0];
+    expect([wed.date, wed.time, wed.church, wed.intentions[0].text]).toEqual(["2026-10-28", "18:30", "Marijina cerkev", "Branko Babnik"]);
+  });
+
+  it("week 1.–7. november: Vsi sveti, Ivana Kos pending by Marta", async () => {
+    const w = await getWeek("2026-11-02");
+    expect([w.weekStart, w.weekEnd]).toEqual(["2026-11-01", "2026-11-07"]);
+    expect(w.counts.masses).toBe(8);
+    expect(w.days[0]).toMatchObject({ date: "2026-11-01", weekday: "nedelja", label: "nedelja, 1. november", feast: "Vsi sveti" });
+    expect(w.days[1].feast).toBe("Spomin vseh vernih rajnih");
+    expect(w.isEmpty).toBe(false);
+    expect(w.counts).toMatchObject({ intentions: 0, pending: 1, withoutIntention: 7 });
+    const sun8 = w.days[0].masses.find((m) => m.time === "08:00")!;
     expect(sun8.church).toBe("Sv. Križ");
     expect(sun8.intentions).toHaveLength(0);
     expect(sun8.pending.map((p) => [p.text, p.kind, p.createdByName])).toEqual([["Ivana Kos", "deceased", "Marta Zupan"]]);
-    const wed = w.days[2].masses[0];
-    expect([wed.time, wed.church, wed.intentions[0].text]).toEqual(["18:30", "Marijina cerkev", "Branko Babnik"]);
   });
 
-  it("week 2. nov: 8 masses, no intentions, isEmpty", async () => {
-    const w = await getWeek("2026-11-02");
+  it("week 8.–14. november: 8 masses, no intentions, isEmpty", async () => {
+    const w = await getWeek("2026-11-08");
     expect(w.counts.masses).toBe(8);
     expect(w.counts.intentions + w.counts.pending).toBe(0);
     expect(w.isEmpty).toBe(true);
-    expect(w.days[0].feast).toBe("Spomin vseh vernih rajnih");
   });
 
   it("next mass is today 18.30 with Štefan Hrovat", async () => {
@@ -46,9 +56,12 @@ describe("mase loaders (US-004, US-005)", () => {
     expect(m!.intentions.map((i) => i.text)).toEqual(["Štefan Hrovat"]);
   });
 
-  it("masses without intention: only Sunday 10.00 (a pending intention counts)", async () => {
-    const list = await getMassesWithoutIntention("2026-10-26");
-    expect(list.map((m) => `${m.date} ${m.time}`)).toEqual(["2026-11-01 10:00"]);
+  it("masses without intention: this week only last Sunday's; next Sunday 8.00 has a pending one, which counts", async () => {
+    const list = await getMassesWithoutIntention("2026-10-27");
+    expect(list.map((m) => `${m.date} ${m.time}`)).toEqual(["2026-10-25 08:00", "2026-10-25 10:00"]);
+    const next = (await getMassesWithoutIntention("2026-11-01")).map((m) => `${m.date} ${m.time}`);
+    expect(next).toContain("2026-11-01 10:00");
+    expect(next).not.toContain("2026-11-01 08:00");
   });
 
   it("shows a pending cancel and a cancelled mass", async () => {
@@ -59,9 +72,9 @@ describe("mase loaders (US-004, US-005)", () => {
     const fri = await getMass(s.masses["2026-10-30 18:30"]);
     expect(fri!.pendingCancel).toMatchObject({ reason: "Bolezen.", intentionHandling: "keep", createdByName: "Marta Zupan" });
     const w = await getWeek("2026-10-28");
-    const wed = w.days[2].masses[0];
+    const wed = w.days[3].masses[0];
     expect([wed.status, wed.cancelReason, wed.intentions.length]).toEqual(["cancelled", "Duhovne vaje.", 0]);
-    expect(w.days[3].masses[0].intentions.map((i) => [i.text, i.movedFromMassId])).toEqual([
+    expect(w.days[4].masses[0].intentions.map((i) => [i.text, i.movedFromMassId])).toEqual([
       ["v zahvalo", null],
       ["Branko Babnik", wed.id],
     ]);
