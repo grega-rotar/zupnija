@@ -16,7 +16,7 @@ export function HomeHero({ home, parishName, block }: Props) {
       <div className={s.frame}>
         {hasImage(home?.heroImage) ? (
           <div className={s.ph} aria-hidden="true">
-            <SanityImage image={home.heroImage} sizes="100vw" maxWidth={2400} priority quality={80} decorative fill />
+            <SanityImage image={home.heroImage} sizes="100vw" maxWidth={2400} priority quality={74} decorative fill />
           </div>
         ) : null}
         <div className={s.sh} aria-hidden="true" />

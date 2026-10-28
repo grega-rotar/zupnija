@@ -46,9 +46,13 @@ export function Nav({ parishName, links, more, give }: Props) {
   useEffect(() => {
     if (!home) return;
     const onScroll = () => setScrolled(window.scrollY > window.innerHeight * 0.6);
-    onScroll();
+    // First read on the next frame, not during hydration (no forced layout).
+    const frame = requestAnimationFrame(onScroll);
     window.addEventListener("scroll", onScroll, { passive: true });
-    return () => window.removeEventListener("scroll", onScroll);
+    return () => {
+      cancelAnimationFrame(frame);
+      window.removeEventListener("scroll", onScroll);
+    };
   }, [home]);
 
   useEffect(() => {

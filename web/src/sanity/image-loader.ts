@@ -15,7 +15,7 @@ export default function mediaImageLoader({ src, width, quality }: ImageLoaderPro
   const h = Number(url.searchParams.get("h"));
   if (w && h) url.searchParams.set("h", String(Math.round((h * width) / w)));
   url.searchParams.set("w", String(width));
-  url.searchParams.set("q", String(quality ?? 78));
+  url.searchParams.set("q", String(quality ?? 70));
   url.searchParams.set("auto", "format");
   return media ? `${url.pathname}${url.search}` : url.toString();
 }

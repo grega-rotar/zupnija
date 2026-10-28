@@ -27,7 +27,7 @@ type Props = {
 export function PageHero({ settings, header, title, accent, lede, crumbs, children }: Props) {
   const h = settings?.[header];
   const image = hasImage(h?.image) ? (
-    <SanityImage image={h.image} aspect={21 / 9} sizes="100vw" maxWidth={2400} priority quality={80} decorative fill />
+    <SanityImage image={h.image} aspect={21 / 9} sizes="100vw" maxWidth={2400} priority quality={74} decorative fill />
   ) : null;
   const trail = [{ label: "Domov", href: routes.home }, ...(crumbs ?? [{ label: title }])];
 

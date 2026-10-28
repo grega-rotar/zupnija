@@ -64,7 +64,7 @@ export function SanityImage({
   className,
   imgClassName,
   decorative,
-  quality = 78,
+  quality = 70,
   fill,
 }: Props) {
   if (!hasImage(image)) return null;
@@ -89,7 +89,9 @@ export function SanityImage({
         width={width}
         height={height}
         sizes={sizes}
-        priority={priority}
+        // The page's main photo (LCP): preloaded from <head> and fetched first. `priority` is deprecated in Next 16.
+        preload={priority}
+        fetchPriority={priority ? "high" : undefined}
         loading={priority ? undefined : "lazy"}
         placeholder={image.asset.metadata?.lqip ? "blur" : "empty"}
         blurDataURL={image.asset.metadata?.lqip ?? undefined}
