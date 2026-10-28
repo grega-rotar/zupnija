@@ -4,12 +4,11 @@ import { getSettings } from "@/sanity/data";
 import { getBulletinList } from "@/lib/data/bulletins";
 import { buildMetadata } from "@/lib/seo";
 import { routes } from "@/lib/routes";
-import { formatWeekSpan } from "@/lib/dates";
 import { Breadcrumbs, Container, EmptyState, PageHeader, Section } from "@/components/ui/primitives";
 
 export async function generateMetadata(): Promise<Metadata> {
   const settings = await getSettings();
-  return buildMetadata({ settings, title: "Tedenska oznanila", path: routes.bulletins });
+  return buildMetadata({ settings, title: "Vsa oznanila", path: routes.bulletins });
 }
 
 export default async function BulletinsPage() {
@@ -17,10 +16,10 @@ export default async function BulletinsPage() {
   return (
     <>
       <PageHeader
-        title="Tedenska oznanila"
-        lede="Oznanila po tednih."
+        title="Vsa oznanila"
+        lede="Objavljena oznanila župnije, najnovejša prva."
         eyebrow={
-          <Breadcrumbs items={[{ label: "Oznanila", href: routes.announcements }, { label: "Tedenska oznanila" }]} />
+          <Breadcrumbs items={[{ label: "Oznanila", href: routes.announcements }, { label: "Vsa oznanila" }]} />
         }
       />
       <Section tight tone="paper-2">
@@ -30,17 +29,17 @@ export default async function BulletinsPage() {
               {list.map((b) => (
                 <li key={b.id}>
                   <Link
-                    href={routes.bulletin(b.weekStart)}
+                    href={routes.bulletin(b.periodStart)}
                     className="flex min-h-14 items-center justify-between gap-4 rounded-md border border-stone bg-paper px-5 py-3 no-underline hover:border-stone-2 [&_span:first-child]:hover:underline"
                   >
-                    <span className="font-serif text-lede">{formatWeekSpan(b.weekStart, b.weekEnd, true)}</span>
-                    <span className="text-small text-ink-3">{b.itemCount} oznanil</span>
+                    <span className="font-serif text-lede">{b.label}</span>
+                    <span className="text-small text-ink-3">{b.itemCount} {b.itemCount === 1 ? "obvestilo" : b.itemCount === 2 ? "obvestili" : b.itemCount < 5 && b.itemCount > 0 ? "obvestila" : "obvestil"}{b.hasPdf ? " · PDF" : ""}</span>
                   </Link>
                 </li>
               ))}
             </ul>
           ) : (
-            <EmptyState title="Tedenskih oznanil še ni" />
+            <EmptyState title="Oznanil še ni" />
           )}
         </Container>
       </Section>

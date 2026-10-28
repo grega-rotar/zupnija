@@ -1,21 +1,24 @@
 /**
- * FR-11: after extraction, flag every item whose date, time or church doesn't
- * match one of the week's generated Masses, even when the model was sure.
- * Pure: the caller passes the week's Masses.
+ * FR-11: after assignment (assign.ts), flag every intention whose time or
+ * church doesn't match one of the day's generated Masses, even when the model
+ * was sure. Server-assigned intentions always match; printed times (weekly or
+ * handwritten sheets, spreadsheets) may not. Pure: the caller passes the
+ * period's Masses.
  *
- * A schedule mismatch replaces a model flag on the same item (one flag per
- * item): the schedule question decides which Mass the intention goes to.
+ * A schedule mismatch replaces a model flag on the same intention (one flag
+ * per intention): the schedule question decides which Mass it goes to.
  */
 import { formatTime } from "@/lib/dates";
-import type { BulletinFlag, BulletinItem, ReadableDraft, WeekMass } from "./types";
+import { noMassFlag } from "./assign";
+import type { BulletinFlag, PeriodMass, ReadableDraft } from "./types";
 
 const t5 = (t: string) => t.slice(0, 5);
 const uniq = (xs: string[]) => [...new Set(xs)];
 const DAY = ["nedeljska", "ponedeljkova", "torkova", "sredina", "četrtkova", "petkova", "sobotna"];
 const dayAdj = (date: string) => DAY[new Date(`${date}T12:00:00Z`).getUTCDay()];
 
-export function mismatchFlag(item: BulletinItem, masses: WeekMass[]): BulletinFlag | null {
-  const same = (m: WeekMass) => m.date === item.date;
+export function mismatchFlag(item: { date: string; time: string; churchSlug: string }, masses: PeriodMass[]): BulletinFlag | null {
+  const same = (m: PeriodMass) => m.date === item.date;
   if (masses.some((m) => same(m) && t5(m.time) === item.time && m.churchSlug === item.churchSlug)) return null;
 
   const sameChurch = masses.filter((m) => same(m) && m.churchSlug === item.churchSlug);
@@ -44,20 +47,18 @@ export function mismatchFlag(item: BulletinItem, masses: WeekMass[]): BulletinFl
       options: uniq([item.time, ...sameDay.map((m) => t5(m.time))]),
     };
   }
-  const otherDays = masses.filter((m) => t5(m.time) === item.time && m.churchSlug === item.churchSlug).map((m) => m.date);
-  return {
-    field: "date",
-    question: "Ta dan po urniku ni maše. Je datum pravi?",
-    options: uniq([item.date, ...otherDays]),
-  };
+  return noMassFlag(item.date, masses);
 }
 
-export function flagScheduleMismatches(draft: ReadableDraft, weekMasses: WeekMass[]): ReadableDraft {
+export function flagScheduleMismatches(draft: ReadableDraft, masses: PeriodMass[]): ReadableDraft {
   return {
     ...draft,
-    items: draft.items.map((item) => {
-      const flag = mismatchFlag(item, weekMasses);
-      return flag ? { ...item, flag } : item;
-    }),
+    days: draft.days.map((day) => ({
+      ...day,
+      intentions: day.intentions.map((it) => {
+        const flag = mismatchFlag({ date: day.date, time: it.time, churchSlug: it.churchSlug }, masses);
+        return flag ? { ...it, flag } : it;
+      }),
+    })),
   };
 }

@@ -1,22 +1,156 @@
 {
   "readable": true,
-  "weekStart": "2026-11-01",
-  "items": [
-    { "id": "i1", "date": "2026-11-01", "time": "08:00", "churchSlug": "sv-kriz", "kind": "other", "text": "za žive in rajne župljane", "sourceLine": "ned 1.11. 8.00 Križ za žive in rajne žup." },
-    { "id": "i2", "date": "2026-11-01", "time": "10:00", "churchSlug": "marijino-vnebovzetje", "kind": "deceased", "text": "Ana Kos", "sourceLine": "10.00 † Ana Kos" },
-    { "id": "i3", "date": "2026-11-02", "time": "18:30", "churchSlug": "sv-kriz", "kind": "deceased", "text": "vsi rajni župljani", "sourceLine": "pon 2.11. 18.30 Križ † vsi rajni župljani" },
+  "period": {
+    "start": "2026-11-01",
+    "end": "2026-11-07",
+    "title": "Teden 1.–7. november 2026"
+  },
+  "days": [
     {
-      "id": "i4", "date": "2026-11-03", "time": "18:30", "churchSlug": "marijino-vnebovzetje", "kind": "deceased", "text": "Jože Novak", "sourceLine": "tor 3.11. 18.30 † Jože Novak",
-      "flag": { "field": "text", "question": "Priimek je slabo čitljiv. Piše Novak ali Nosak?", "options": ["Jože Novak", "Jože Nosak"] }
+      "date": "2026-11-01",
+      "tags": [],
+      "intentions": [
+        {
+          "id": "i1",
+          "text": "za žive in rajne župljane",
+          "kind": "other",
+          "time": "08:00",
+          "churchSlug": "sv-kriz",
+          "sourceLine": "ned 1.11. 8.00 Križ za žive in rajne žup."
+        },
+        {
+          "id": "i2",
+          "text": "Ana Kos",
+          "kind": "deceased",
+          "time": "10:00",
+          "churchSlug": "marijino-vnebovzetje",
+          "sourceLine": "10.00 † Ana Kos"
+        }
+      ]
     },
-    { "id": "i5", "date": "2026-11-04", "time": "18:30", "churchSlug": "marijino-vnebovzetje", "kind": "deceased", "text": "Marija in Franc Kralj", "sourceLine": "sre 4.11. 18.30 † Marija in Franc Kralj" },
-    { "id": "i6", "date": "2026-11-05", "time": "07:00", "churchSlug": "marijino-vnebovzetje", "kind": "other", "text": "za zdravje v družini", "sourceLine": "čet 5.11. 7.00 za zdravje v družini" },
-    { "id": "i7", "date": "2026-11-06", "time": "17:30", "churchSlug": "sv-kriz", "kind": "thanksgiving", "text": "v zahvalo za 50 let poroke", "sourceLine": "pet 6.11. 17.30 Križ v zahvalo – 50 let por." },
-    { "id": "i8", "date": "2026-11-07", "time": "18:30", "churchSlug": "marijino-vnebovzetje", "kind": "deceased", "text": "iz družine Vidmar", "sourceLine": "sob 7.11. 18.30 † druž. Vidmar" }
+    {
+      "date": "2026-11-02",
+      "tags": [],
+      "intentions": [
+        {
+          "id": "i3",
+          "text": "vsi rajni župljani",
+          "kind": "deceased",
+          "time": "18:30",
+          "churchSlug": "sv-kriz",
+          "sourceLine": "pon 2.11. 18.30 Križ † vsi rajni župljani"
+        }
+      ]
+    },
+    {
+      "date": "2026-11-03",
+      "tags": [],
+      "intentions": [
+        {
+          "id": "i4",
+          "text": "Jože Novak",
+          "kind": "deceased",
+          "time": "18:30",
+          "churchSlug": "marijino-vnebovzetje",
+          "sourceLine": "tor 3.11. 18.30 † Jože Novak",
+          "flag": {
+            "field": "text",
+            "question": "Priimek je slabo čitljiv. Piše Novak ali Nosak?",
+            "options": [
+              "Jože Novak",
+              "Jože Nosak"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "date": "2026-11-04",
+      "tags": [],
+      "intentions": [
+        {
+          "id": "i5",
+          "text": "Marija in Franc Kralj",
+          "kind": "deceased",
+          "time": "18:30",
+          "churchSlug": "marijino-vnebovzetje",
+          "sourceLine": "sre 4.11. 18.30 † Marija in Franc Kralj"
+        }
+      ]
+    },
+    {
+      "date": "2026-11-05",
+      "tags": [],
+      "intentions": [
+        {
+          "id": "i6",
+          "text": "za zdravje v družini",
+          "kind": "other",
+          "time": "07:00",
+          "churchSlug": "marijino-vnebovzetje",
+          "sourceLine": "čet 5.11. 7.00 za zdravje v družini"
+        }
+      ]
+    },
+    {
+      "date": "2026-11-06",
+      "tags": [],
+      "intentions": [
+        {
+          "id": "i7",
+          "text": "v zahvalo za 50 let poroke",
+          "kind": "thanksgiving",
+          "time": "17:30",
+          "churchSlug": "sv-kriz",
+          "sourceLine": "pet 6.11. 17.30 Križ v zahvalo – 50 let por."
+        }
+      ]
+    },
+    {
+      "date": "2026-11-07",
+      "tags": [],
+      "intentions": [
+        {
+          "id": "i8",
+          "text": "iz družine Vidmar",
+          "kind": "deceased",
+          "time": "18:30",
+          "churchSlug": "marijino-vnebovzetje",
+          "sourceLine": "sob 7.11. 18.30 † druž. Vidmar"
+        }
+      ]
+    }
   ],
   "notices": [
-    "V ponedeljek, 2. novembra, je spomin vseh vernih rajnih. Po večerni maši molimo na pokopališču.",
-    "Ključarji se zberejo v četrtek, 5. novembra, po jutranji maši.",
-    "Nabirka prihodnje nedelje je za potrebe župnije. Bog povrni za vaše darove."
+    {
+      "id": "n1",
+      "text": "V ponedeljek, 2. novembra, je spomin vseh vernih rajnih. Po večerni maši molimo na pokopališču."
+    },
+    {
+      "id": "n2",
+      "text": "Ključarji se zberejo v četrtek, 5. novembra, po jutranji maši."
+    },
+    {
+      "id": "n3",
+      "text": "Nabirka prihodnje nedelje je za potrebe župnije. Bog povrni za vaše darove."
+    }
+  ],
+  "events": [
+    {
+      "id": "e1",
+      "title": "Srečanje ključarjev",
+      "date": "2026-11-05",
+      "place": "župnišče",
+      "description": "Po jutranji maši.",
+      "include": true,
+      "flag": {
+        "field": "time",
+        "question": "Ura ni napisana: »po jutranji maši«. Kdaj bo srečanje?",
+        "options": [
+          "07:45",
+          "08:00"
+        ]
+      }
+    }
   ]
 }

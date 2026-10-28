@@ -1,3 +1,4 @@
+import type { Section } from "@/lib/admin/sections";
 import type { Proposal } from "@/lib/assistant/schema";
 
 export type StartData = { greeting: string; suggestions: string[]; approval: boolean };
@@ -8,8 +9,17 @@ export type CardDetail = {
   when: string;
   /** cancel_mass / add_intention: the Mass's intentions now. */
   intentions?: { kind: "deceased" | "thanksgiving" | "other"; text: string }[];
-  /** cancel_lesson: the group ("4.–6. razred"). */
+  /** Lesson cards: the group; event cards: the title; people cards: the person; approvals: the change. */
   name?: string;
+  /** remove_intention: the intention's kind. */
+  kind?: "deceased" | "thanksgiving" | "other";
+  /** edit_event: the event as it is now. */
+  before?: string;
+  /** update_access: the person's access now. */
+  sections?: Section[];
+  requiresApproval?: boolean;
+  /** approve_change / reject_change: who proposed it and when. */
+  by?: string;
 };
 
 export type CardProposal = { proposal: Proposal; detail: CardDetail };

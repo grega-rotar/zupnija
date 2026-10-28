@@ -1,7 +1,8 @@
 "use client";
 
 import { kindPrefix } from "@/lib/mase/format";
-import { btnClass, Pill } from "@/components/admin/ui";
+import { btnClass, Chip, Pill, Switch } from "@/components/admin/ui";
+import { SECTION_LABEL, SECTIONS, type Section } from "@/lib/admin/sections";
 import type { Proposal } from "@/lib/assistant/schema";
 import type { CardProposal } from "./types";
 
@@ -18,6 +19,10 @@ export type CardState = CardProposal & {
   move: "next" | "keep" | null;
   /** add_intention: the kind (the guess until the person picks). */
   kind: Kind;
+  /** invite_person / update_access: the sections as set on the card. */
+  sections: Section[];
+  /** invite_person / update_access: "Spremembe potrdim jaz". */
+  approve: boolean;
 };
 
 export function newCard(c: CardProposal, id: string): CardState {
@@ -30,6 +35,8 @@ export function newCard(c: CardProposal, id: string): CardState {
     message: p.type === "cancel_lesson" ? (p.message ?? "") : "",
     move: null,
     kind: p.type === "add_intention" ? p.kind : "deceased",
+    sections: p.type === "invite_person" || p.type === "update_access" ? SECTIONS.filter((x) => p.sections.includes(x)) : [],
+    approve: p.type === "invite_person" || p.type === "update_access" ? p.requiresApproval : false,
   };
 }
 
@@ -46,6 +53,8 @@ const GUESS: Record<Kind, string> = {
 
 /** cancel_mass needs an answer about the intentions before it can be confirmed. */
 export const needsMove = (c: CardState) => c.proposal.type === "cancel_mass" && !!c.detail.intentions?.length && !c.move;
+/** An invitation needs at least one section. */
+export const needsSection = (c: CardState) => c.proposal.type === "invite_person" && !c.sections.length;
 
 /** What the card's Potrdi sends along (ConfirmExtras). */
 export function extrasOf(c: CardState): Record<string, unknown> {
@@ -56,6 +65,9 @@ export function extrasOf(c: CardState): Record<string, unknown> {
       return { message: c.message };
     case "add_intention":
       return { kind: c.kind };
+    case "invite_person":
+    case "update_access":
+      return { sections: c.sections, requiresApproval: c.approve };
     default:
       return {};
   }
@@ -163,6 +175,117 @@ function Body({ c, p, closed, onChange }: { c: CardState; p: Proposal; closed: b
           {p.description ? <p className="wsum">{p.description}</p> : null}
         </>
       );
+    case "remove_intention":
+      return (
+        <div className="chg minus">
+          <span className="s">−</span>
+          <b>
+            Odstrani namen {kindPrefix(c.detail.kind ?? "other")} {c.detail.name}
+          </b>
+          <small>{c.detail.when}</small>
+        </div>
+      );
+    case "restore_mass":
+      return (
+        <div className="chg">
+          <span className="s">+</span>
+          <b>Maša je spet na urniku</b>
+          <small>{c.detail.when}</small>
+        </div>
+      );
+    case "restore_lesson":
+      return (
+        <div className="chg">
+          <span className="s">+</span>
+          <b>Verouk {c.detail.name} je spet na urniku</b>
+          <small>{c.detail.when}</small>
+        </div>
+      );
+    case "edit_event":
+      return (
+        <>
+          <div className="chg minus">
+            <span className="s">−</span>
+            <b>Prej</b>
+            <small>{c.detail.before}</small>
+          </div>
+          <div className="chg">
+            <span className="s">+</span>
+            <b>{c.detail.name}</b>
+            <small>{c.detail.when}</small>
+          </div>
+          {p.description ? <p className="wsum">{p.description}</p> : null}
+        </>
+      );
+    case "delete_event":
+      return (
+        <div className="chg minus">
+          <span className="s">−</span>
+          <b>Izbriši dogodek {c.detail.name}</b>
+          <small>{c.detail.when}</small>
+        </div>
+      );
+    case "invite_person":
+    case "update_access": {
+      const toggle = (s: Section) =>
+        onChange({ sections: SECTIONS.filter((x) => (x === s ? !c.sections.includes(s) : c.sections.includes(x))) });
+      const invite = p.type === "invite_person";
+      return (
+        <>
+          <div className="chg">
+            <span className="s">{invite ? "+" : "~"}</span>
+            <b>{invite ? `Povabilo: ${c.detail.name}${p.title ? `, ${p.title}` : ""}` : `Dostop za ${c.detail.name}`}</b>
+            <small>{c.detail.when}</small>
+          </div>
+          {!invite && c.detail.sections ? (
+            <p className="wsum">
+              Zdaj: {c.detail.sections.length ? c.detail.sections.map((x) => SECTION_LABEL[x]).join(", ") : "nič"}
+              {c.detail.requiresApproval ? ", spremembe potrdite vi" : ""}
+            </p>
+          ) : null}
+          {closed ? (
+            <p className="wsum">
+              {c.sections.map((x) => SECTION_LABEL[x]).join(", ") || "nič"}
+              {c.approve ? ", spremembe potrdite vi" : ""}
+            </p>
+          ) : (
+            <>
+              <div className="q">
+                <p>Kaj sme urejati?</p>
+                <div className="chips" role="group" aria-label="Kaj sme urejati">
+                  {SECTIONS.map((x) => (
+                    <Chip key={x} pressed={c.sections.includes(x)} onClick={() => toggle(x)} disabled={c.st === "busy"}>
+                      {SECTION_LABEL[x]}
+                    </Chip>
+                  ))}
+                </div>
+              </div>
+              <Switch
+                label="Spremembe potrdim jaz"
+                hint="Na strani so šele, ko jih potrdite."
+                checked={c.approve}
+                onChange={(approve) => onChange({ approve })}
+                disabled={c.st === "busy"}
+              />
+              {invite ? <p className="wsum">Po e-pošti dobi povezavo za prijavo.</p> : null}
+            </>
+          )}
+        </>
+      );
+    }
+    case "approve_change":
+    case "reject_change": {
+      const ok = p.type === "approve_change";
+      return (
+        <div className={`chg${ok ? "" : " minus"}`}>
+          <span className="s">{ok ? "+" : "−"}</span>
+          <b>
+            {ok ? "Potrdi" : "Zavrni"}: {c.detail.name}
+          </b>
+          <small>{c.detail.by}</small>
+        </div>
+      );
+    }
     default:
       return null;
   }
@@ -178,12 +301,27 @@ export function ProposalCard({ card, approval, onChange, onConfirm, onCancel }: 
 }) {
   const closed = card.st === "done" || card.st === "gone";
   const busy = card.st === "busy";
-  const blocked = needsMove(card);
-  const label = blocked ? "Najprej izberite zgoraj" : busy ? "Shranjujem …" : approval ? "Pošlji v potrditev" : "Potrdi";
+  const blocked = needsMove(card) || needsSection(card);
+  const type = card.proposal.type;
+  // Owner-only actions are never queued, so they never say "Pošlji v potrditev".
+  const ownerOnly = type === "delete_event" || type === "invite_person" || type === "update_access" || type === "approve_change" || type === "reject_change";
+  const label = blocked
+    ? needsSection(card)
+      ? "Izberite vsaj en razdelek"
+      : "Najprej izberite zgoraj"
+    : busy
+      ? "Shranjujem …"
+      : approval && !ownerOnly
+        ? "Pošlji v potrditev"
+        : type === "invite_person"
+          ? "Pošlji povabilo"
+          : type === "reject_change"
+            ? "Zavrni"
+            : "Potrdi";
   return (
     <div className={`card${card.st === "done" ? " closed" : card.st === "gone" ? " gone" : ""}`}>
       <div className="card-h">
-        <span className="eyebrow">{card.st === "done" ? "Shranjeno" : card.st === "gone" ? "Preklicano" : "Predlog"}</span>
+        <span className="eyebrow">{card.st === "done" ? (card.proposal.type === "reject_change" ? "Zavrnjeno" : "Shranjeno") : card.st === "gone" ? "Preklicano" : "Predlog"}</span>
         {closed ? null : <Pill tone="line">še ni shranjeno</Pill>}
       </div>
       <div className="card-b">

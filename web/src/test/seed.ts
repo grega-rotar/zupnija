@@ -121,12 +121,13 @@ export async function seedParish(dbx: Db | Tx): Promise<SeededParish> {
     ])
     .returning();
 
-  // ── Bulletins: two published weeks (week_start is a Sunday); 2026-11-01 has no row (missing) ──
+  // ── Bulletins: two published weeks, as migration 0001 left the weekly ones;
+  //    November (from 2026-11-01) has no row: the missing period ──
   const b = await dbx
     .insert(schema.bulletins)
     .values([
-      { weekStart: "2026-10-18", status: "published", publishedAt: at("2026-10-17T18:00:00+02:00"), publishedBy: "blaz" },
-      { weekStart: "2026-10-25", status: "published", publishedAt: at("2026-10-24T18:05:00+02:00"), publishedBy: "blaz" },
+      { periodStart: "2026-10-18", periodEnd: "2026-10-24", title: "Teden 18. 10.–24. 10. 2026", status: "published", publishedAt: at("2026-10-17T18:00:00+02:00"), publishedBy: "blaz" },
+      { periodStart: "2026-10-25", periodEnd: "2026-10-31", title: "Teden 25. 10.–31. 10. 2026", status: "published", publishedAt: at("2026-10-24T18:05:00+02:00"), publishedBy: "blaz" },
     ])
     .returning();
 

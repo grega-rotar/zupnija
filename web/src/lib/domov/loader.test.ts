@@ -33,11 +33,11 @@ describe("Domov loader (US-004)", () => {
     ]);
     expect(h.mine).toEqual([]);
     expect(h.bulletinMissing).toEqual({ week: "2026-11-01" });
-    expect(h.bulletin).toMatchObject({ status: "missing", span: "1.–7. november" });
+    expect(h.bulletin).toMatchObject({ status: "missing", span: "november 2026" });
     // This week is Sunday 25 – Saturday 31 October; last Sunday's Masses are past.
     expect(h.massesWithoutIntention).toEqual([]);
     expect(h.cancelledLessons).toEqual([]);
-    expect(h.done).toEqual(["Oznanila za 25.–31. oktober so objavljena", "Urnik verouka velja do preklica", "Redni urnik maš velja do preklica"]);
+    expect(h.done).toEqual(["Oznanila za 25.–31. oktober 2026 so objavljena", "Urnik verouka velja do preklica", "Redni urnik maš velja do preklica"]);
   });
 
   it("Marta: no approvals, her own 2 items wait for the priest", async () => {
@@ -89,11 +89,23 @@ describe("Domov loader (US-004)", () => {
     expect(h.approvals).toHaveLength(3);
   });
 
-  it("a draft for next week replaces the missing bulletin", async () => {
-    await db.insert(schema.bulletins).values({ weekStart: "2026-11-01", status: "draft", draft: { readable: true, items: [], notices: [] } });
+  it("a draft for the missing month replaces the missing bulletin", async () => {
+    const draft = { readable: true, period: { start: "2026-11-01", end: "2026-11-30", title: "November 2026" }, days: [], notices: [], events: [] };
+    await db.insert(schema.bulletins).values({ periodStart: "2026-11-01", periodEnd: "2026-11-30", title: "November 2026", status: "draft", draft });
     const h = await loadHome(await actor("blaz"));
-    expect(h.bulletin).toMatchObject({ status: "draft", week: "2026-11-01" });
+    expect(h.bulletin).toMatchObject({ status: "draft", week: "2026-11-01", span: "november 2026" });
     expect(h.bulletinMissing).toBeNull();
+  });
+
+  it("missing-month notice: from the 20th of the month before, and always for the current month", async () => {
+    // November published: on 27 October nothing is missing until December, not due yet.
+    await db.insert(schema.bulletins).values({ periodStart: "2026-11-01", periodEnd: "2026-11-30", title: "November 2026", status: "published" });
+    expect((await loadHome(await actor("blaz"))).bulletin).toBeNull();
+    // No bulletin covers today: the current month is due.
+    await db.delete(schema.bulletins);
+    const h = await loadHome(await actor("blaz"));
+    expect(h.bulletin).toMatchObject({ status: "missing", week: "2026-10-01", span: "oktober 2026" });
+    expect(h.bulletinMissing).toEqual({ week: "2026-10-01" });
   });
 });
 

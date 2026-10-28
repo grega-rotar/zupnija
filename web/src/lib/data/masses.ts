@@ -7,6 +7,8 @@
  *   cancellation waiting for the priest) are never read here.
  * - A cancelled Mass stays in the list with status "cancelled" and its reason
  *   as `statusNote`. Intentions kept on a cancelled Mass are not shown (FR-8).
+ * - Each day carries the liturgical title, Sunday name and Gospel line the
+ *   published bulletin wrote into calendar_days (an override's label wins).
  * - Missing Masses of the regular schedule are generated with the editor's
  *   `ensureMasses`, within a window around today, so the public site and the
  *   editor list the same rows. Weeks far outside it show only stored rows.
@@ -36,7 +38,7 @@ async function loadMassDays(from: IsoDate, to: IsoDate): Promise<MassDay[]> {
   const hi = to < addDays(t, ENSURE_AHEAD) ? to : addDays(t, ENSURE_AHEAD);
   if (lo <= hi) await ensureMasses(db, lo, hi);
 
-  const [rows, overrides] = await Promise.all([
+  const [rows, overrides, calendar] = await Promise.all([
     db
       .select({ mass: m, church: { slug: c.slug, name: c.name, shortName: c.shortName } })
       .from(m)
@@ -47,6 +49,10 @@ async function loadMassDays(from: IsoDate, to: IsoDate): Promise<MassDay[]> {
       .select()
       .from(schema.massDayOverrides)
       .where(and(gte(schema.massDayOverrides.date, from), lte(schema.massDayOverrides.date, to))),
+    db
+      .select()
+      .from(schema.calendarDays)
+      .where(and(gte(schema.calendarDays.date, from), lte(schema.calendarDays.date, to))),
   ]);
   const ids = rows.filter((r) => r.mass.status === "scheduled").map((r) => r.mass.id);
   const ints = ids.length ? await db.select().from(i).where(inArray(i.massId, ids)).orderBy(asc(i.position), asc(i.id)) : [];
@@ -64,12 +70,17 @@ async function loadMassDays(from: IsoDate, to: IsoDate): Promise<MassDay[]> {
     recurring: mass.source === "schedule",
   }));
   const labels = new Map(overrides.map((o) => [o.date, o.label]));
+  const cal = new Map(calendar.map((d) => [d.date, d]));
 
   return dateRange(from, to).map((date) => {
     const list = masses.filter((_, n) => rows[n].mass.date === date);
     return {
       date,
-      liturgicalTitle: labels.get(date) || FEASTS[date] || null,
+      // An override's label (a feast the priest set) first, then the bulletin's calendar, then the built-in feasts.
+      liturgicalTitle: labels.get(date) || cal.get(date)?.title || FEASTS[date] || null,
+      sundayName: cal.get(date)?.sundayName ?? null,
+      gospel: cal.get(date)?.gospel ?? null,
+      tags: cal.get(date)?.tags ?? [],
       note: null,
       masses: list,
       // Drives "nameni še niso vpisani" on /masni-nameni.

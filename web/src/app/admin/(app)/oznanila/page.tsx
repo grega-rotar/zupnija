@@ -1,12 +1,14 @@
-import { and, eq, inArray, sql } from "drizzle-orm";
+import { and, eq, gte, inArray, lte, sql } from "drizzle-orm";
 import { db, schema } from "@/db";
 import { Icon } from "@/components/admin/Icon";
 import { PickButtons } from "@/components/admin/oznanila/PickButtons";
-import { fDayS, fSpan, fT, NAM, OBV, pl } from "@/components/admin/oznanila/format";
+import { ReadingHints } from "@/components/admin/oznanila/ReadingHints";
+import { fDayS, fT, NAM, OBV, periodName, pl, SRE, toCheck } from "@/components/admin/oznanila/format";
 import { ButtonLink, PageHead, Pill } from "@/components/admin/ui";
 import { requirePageArea } from "@/lib/admin/next";
 import { today } from "@/lib/clock";
-import { listBulletins, nextWeekStart, type BulletinListEntry } from "@/lib/bulletin/service";
+import { getReadingHints } from "@/lib/bulletin/hints";
+import { listBulletins, type BulletinListEntry } from "@/lib/bulletin/service";
 
 const ymd = new Intl.DateTimeFormat("en-CA", { timeZone: "Europe/Ljubljana", year: "numeric", month: "2-digit", day: "2-digit" });
 const hm = new Intl.DateTimeFormat("en-GB", { timeZone: "Europe/Ljubljana", hour: "2-digit", minute: "2-digit", hourCycle: "h23" });
@@ -14,35 +16,49 @@ const hm = new Intl.DateTimeFormat("en-GB", { timeZone: "Europe/Ljubljana", hour
 const day = (d: Date) => (ymd.format(d) === today() ? "danes" : fDayS(ymd.format(d)));
 /** "danes ob 10.04" */
 const dayAt = (d: Date) => `${day(d)} ob ${fT(hm.format(d))}`;
+const cap = (s: string) => s.charAt(0).toUpperCase() + s.slice(1);
 
-/** " · iz datoteke: PDF", " · vpisano ročno", or nothing for weeks from before the editor. */
+/** " · iz datoteke: PDF", " · vpisano ročno", or nothing for bulletins from before the editor. */
 const source = (s: { mime: string | null; hasDraft: boolean } | undefined) => {
   if (s?.mime) return ` · iz datoteke: ${s.mime.startsWith("image/") ? "fotografija" : s.mime === "application/pdf" ? "PDF" : "tabela"}`;
   return s?.hasDraft ? " · vpisano ročno" : "";
 };
 
+/** "35 namenov, 10 obvestil, 8 srečanj" (the parts that aren't zero, intentions always). */
+const counts = (b: BulletinListEntry) =>
+  [pl(b.itemCount, NAM), b.noticeCount ? pl(b.noticeCount, OBV) : null, b.eventCount ? pl(b.eventCount, SRE) : null].filter(Boolean).join(", ");
+
 export default async function BulletinsPage() {
-  await requirePageArea("oznanila");
-  const list = await listBulletins();
-  const next = nextWeekStart();
+  const actor = await requirePageArea("oznanila");
+  const [list, hints] = await Promise.all([listBulletins(), actor.isOwner ? getReadingHints() : null]);
   const ids = list.map((b) => b.id).filter((id): id is number => id != null);
+  const t = today();
 
   const uploads = ids.length
     ? await db
-        .select({ id: schema.bulletins.id, mime: schema.uploads.mime, hasDraft: sql<boolean>`${schema.bulletins.draft} is not null` })
+        .select({ id: schema.bulletins.id, mime: schema.uploads.mime, draft: schema.bulletins.draft, error: schema.bulletins.error })
         .from(schema.bulletins)
         .leftJoin(schema.uploads, eq(schema.uploads.id, schema.bulletins.uploadId))
         .where(inArray(schema.bulletins.id, ids))
     : [];
-  const srcOf = new Map(uploads.map((u) => [u.id, u]));
-  // Published weeks without a stored draft (older ones): count the week's intentions.
+  const srcOf = new Map(uploads.map((u) => [u.id, { mime: u.mime, hasDraft: u.draft != null }]));
+  /** "other_period:Oktober 2026" → "oktober 2026": the file was the bulletin of a period that is already here. */
+  const otherOf = new Map(uploads.flatMap((u) => (u.error?.startsWith("other_period:") ? [[u.id, u.error.slice(13).replace(/^./, (c) => c.toLowerCase())] as const] : [])));
+  // Published bulletins without a stored draft (from before the editor): count their period's intentions.
   const m = schema.masses;
-  const perWeek = await db
-    .select({ week: sql<string>`(${m.date} - extract(dow from ${m.date})::int)::text`, n: sql<number>`count(*)::int` })
-    .from(schema.intentions)
-    .innerJoin(m, eq(m.id, schema.intentions.massId))
-    .groupBy(sql`1`);
-  const intentionsIn = new Map(perWeek.map((r) => [r.week, r.n]));
+  const older = list.filter((b) => b.status === "published" && !srcOf.get(b.id!)?.hasDraft);
+  const intentionsIn = new Map(
+    await Promise.all(
+      older.map(async (b) => {
+        const [{ n }] = await db
+          .select({ n: sql<number>`count(*)::int` })
+          .from(schema.intentions)
+          .innerJoin(m, eq(m.id, schema.intentions.massId))
+          .where(and(gte(m.date, b.periodStart), lte(m.date, b.periodEnd)));
+        return [b.id, n] as const;
+      }),
+    ),
+  );
   const cr = schema.changeRequests;
   const requests = await db
     .select({ payload: cr.payload, at: cr.createdAt, name: schema.user.name })
@@ -51,34 +67,46 @@ export default async function BulletinsPage() {
     .where(and(eq(cr.status, "pending"), eq(cr.action, "bulletin.publish")));
   const sentBy = new Map(requests.map((r) => [(r.payload as { bulletinId?: number }).bulletinId, r]));
 
-  const eyebrow = (b: BulletinListEntry) => (b.weekStart === next ? "prihodnja nedelja" : b.weekStart < next ? "ta teden" : "kasneje");
+  /** "ta mesec", "prihodnji mesec", or nothing: where the period sits relative to today. */
+  const when = (b: BulletinListEntry) => (b.periodStart <= t && b.periodEnd >= t ? "trenutno" : b.periodStart > t ? "naslednja" : null);
   const resume = (b: BulletinListEntry) => `/oznanila/nalozi?id=${b.id}`;
+  const name = (b: BulletinListEntry) => cap(periodName({ start: b.periodStart, end: b.periodEnd }));
+  const span = (b: BulletinListEntry) => periodName({ start: b.periodStart, end: b.periodEnd });
 
   const card = (b: BulletinListEntry) => {
-    const span = fSpan(b.weekStart);
+    const w = when(b);
+    const eyebrow = w ? <span className="eyebrow">{w}</span> : null;
     switch (b.status) {
       case "missing":
+        return (
+          <div key={b.periodStart} className="bcard missing">
+            <div className="meta">
+              <Pill tone="gold">manjka</Pill>
+              {eyebrow}
+            </div>
+            <h3>{name(b)}</h3>
+            <p>Oznanila za {span(b)} še niso naložena. Izberite PDF ali jih fotografirajte. Claude jih prebere in pripravi osnutek. Nič ni objavljeno, dokler ne potrdite.</p>
+            <div className="acts">
+              <PickButtons />
+            </div>
+          </div>
+        );
       case "draft":
         return (
-          <div key={b.weekStart} className="bcard missing">
+          <div key={b.periodStart} className="bcard missing">
             <div className="meta">
-              <Pill tone="gold">{b.status === "draft" ? "osnutek" : "manjka"}</Pill>
-              <span className="eyebrow">{eyebrow(b)}</span>
+              <Pill tone="gold">osnutek</Pill>
+              {b.flagCount ? <span className="wsum">{toCheck(b.flagCount)}</span> : null}
+              {eyebrow}
             </div>
-            <h3>{span}</h3>
+            <h3>{name(b)}</h3>
             <p>
-              {b.status === "draft"
-                ? "Osnutek je shranjen. Preverite označena polja in ga objavite."
-                : "Fotografirajte list z oznanili ali izberite PDF ali tabelo. Claude jih prebere in pripravi osnutek. Nič ni objavljeno, dokler ne potrdite."}
+              Osnutek je shranjen: {counts(b)}. {b.flagCount ? "Preverite označena mesta in ga objavite." : "Preverite ga in objavite."}
             </p>
             <div className="acts">
-              {b.status === "draft" ? (
-                <ButtonLink href={resume(b)} variant="primary" size="lg" icon="pen">
-                  Nadaljuj pregled
-                </ButtonLink>
-              ) : (
-                <PickButtons />
-              )}
+              <ButtonLink href={resume(b)} variant="primary" size="lg" icon="pen">
+                Nadaljuj pregled
+              </ButtonLink>
             </div>
           </div>
         );
@@ -86,16 +114,20 @@ export default async function BulletinsPage() {
       case "unreadable":
       case "ai_busy":
         return (
-          <div key={b.weekStart} className="bcard missing">
+          <div key={b.periodStart} className="bcard missing">
             <div className="meta">
-              <Pill tone={b.status === "reading" ? "gold" : "alert"}>{b.status === "reading" ? "Claude bere" : "ni prebrano"}</Pill>
-              <span className="eyebrow">{eyebrow(b)}</span>
+              <Pill tone={b.status === "reading" || otherOf.has(b.id!) ? "gold" : "alert"}>{b.status === "reading" ? "Claude bere" : otherOf.has(b.id!) ? "druga oznanila" : "ni prebrano"}</Pill>
+              {eyebrow}
             </div>
-            <h3>{span}</h3>
+            <h3>{name(b)}</h3>
             <p>
               {b.status === "reading"
-                ? "Claude bere naloženi list. Osnutek bo pripravljen v pol minute."
-                : "Lista ni bilo mogoče prebrati. Naložite ga znova ali vpišite oznanila ročno."}
+                ? "Claude bere naložena oznanila. Osnutek bo pripravljen v minuti."
+                : b.status === "ai_busy"
+                  ? "Branje ni uspelo. Poskusite znova ali vpišite oznanila ročno."
+                  : otherOf.has(b.id!)
+                    ? `Naložena datoteka so bila oznanila za ${otherOf.get(b.id!)}, ki so že naložena. Za ${span(b)} izberite drugo datoteko.`
+                    : "Datoteke ni bilo mogoče prebrati. Naložite jo znova ali vpišite oznanila ročno."}
             </p>
             <div className="acts">
               <ButtonLink href={resume(b)} variant="primary" size="lg" icon={b.status === "reading" ? "eye" : "r"}>
@@ -107,15 +139,16 @@ export default async function BulletinsPage() {
       case "pending": {
         const s = sentBy.get(b.id ?? -1);
         return (
-          <div key={b.weekStart} className="bcard">
+          <div key={b.periodStart} className="bcard">
             <div>
               <div className="meta">
                 <Pill tone="gold">pri župniku</Pill>
+                {eyebrow}
               </div>
-              <h3>{span}</h3>
+              <h3>{name(b)}</h3>
               <p>
                 {s ? `Poslala ${s.name}, ${dayAt(s.at)} · ` : ""}
-                {pl(b.itemCount, NAM)}, {pl(b.noticeCount, OBV)}
+                {counts(b)}
               </p>
             </div>
           </div>
@@ -123,19 +156,20 @@ export default async function BulletinsPage() {
       }
       case "published":
         return (
-          <div key={b.weekStart} className="bcard">
+          <div key={b.periodStart} className="bcard">
             <div>
               <div className="meta">
                 <Pill icon="check">objavljeno</Pill>
                 {b.publishedAt ? <span className="wsum">{day(b.publishedAt)}</span> : null}
+                {eyebrow}
               </div>
-              <h3>{span}</h3>
+              <h3>{name(b)}</h3>
               <p>
-                {pl(srcOf.get(b.id!)?.hasDraft ? b.itemCount : (intentionsIn.get(b.weekStart) ?? 0), NAM)}, {pl(b.noticeCount, OBV)}
+                {srcOf.get(b.id!)?.hasDraft ? counts(b) : counts({ ...b, itemCount: intentionsIn.get(b.id) ?? 0 })}
                 {source(srcOf.get(b.id!))}
               </p>
             </div>
-            <ButtonLink href={`/teden?w=${b.weekStart}`} variant="ghost" icon="eye">
+            <ButtonLink href={`/teden?w=${b.periodStart > t ? b.periodStart : b.periodEnd < t ? b.periodStart : t}`} variant="ghost" icon="eye">
               Poglej
             </ButtonLink>
           </div>
@@ -145,9 +179,10 @@ export default async function BulletinsPage() {
 
   return (
     <div className="page enter">
-      <PageHead title="Oznanila" sub="Vsak teden en list. Claude ga prebere, vi preverite in objavite." />
+      <PageHead title="Oznanila" sub="Claude prebere oznanila, vi preverite in objavite." action={hints != null ? <ReadingHints key={hints} initial={hints} /> : undefined} />
       <div className="blist">
-        {list.map(card)}
+        {/* Open work first, oldest first (a draft before the next missing month); then what is published, newest first. */}
+        {[...list.filter((b) => b.status !== "published").reverse(), ...list.filter((b) => b.status === "published")].map(card)}
         {list.length === 0 ? (
           <p className="wsum">
             <Icon name="file" /> Še ni oznanil.

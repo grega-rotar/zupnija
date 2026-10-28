@@ -6,10 +6,9 @@
 import "@/lib/admin/next";
 import "@/lib/admin/registry";
 import { toResult, UserError, type ActionResult } from "@/lib/admin/errors";
-import type { PerformResult } from "@/lib/admin/engine";
 import { requireActor } from "@/lib/admin/session";
 import { askAssistant, type AssistantResponse } from "./ask";
-import { confirmProposal } from "./confirm";
+import { confirmProposal, type ConfirmResult } from "./confirm";
 import { messagesSchema } from "./schema";
 
 export async function askAssistantAction(messages: unknown): Promise<ActionResult<AssistantResponse>> {
@@ -21,7 +20,7 @@ export async function askAssistantAction(messages: unknown): Promise<ActionResul
   });
 }
 
-export async function confirmProposalAction(proposal: unknown, extras?: unknown): Promise<ActionResult<PerformResult>> {
+export async function confirmProposalAction(proposal: unknown, extras?: unknown): Promise<ActionResult<ConfirmResult>> {
   const actor = await requireActor();
   return toResult(() => confirmProposal(actor, proposal, extras ?? {}));
 }

@@ -10,13 +10,29 @@ import {
   weekdayOf,
   type IsoDate,
 } from "@/lib/dates";
-import { INTENTION_PREFIX, MASS_TYPE_LABEL, type Mass, type MassDay } from "@/lib/masses";
+import { dayLines, INTENTION_PREFIX, MASS_TYPE_LABEL, type Mass, type MassDay } from "@/lib/masses";
 import { routes } from "@/lib/routes";
 import { clean } from "@/lib/clean";
 import { cn } from "@/lib/utils";
 import { RichText } from "@/components/sanity/RichText";
 
 type Tone = "paper" | "ink";
+
+export { dayLines };
+
+/** Title, Sunday name and Gospel line of a day, as small text under a heading. */
+export function DayTitle({ day, tone = "paper", className }: { day: Pick<MassDay, "liturgicalTitle" | "sundayName" | "gospel">; tone?: Tone; className?: string }) {
+  const { title, sunday, gospel } = dayLines(day);
+  if (!title && !gospel) return null;
+  const dark = tone === "ink";
+  return (
+    <div className={cn("mt-1 text-small", dark ? "text-paper/70" : "text-ink-2", className)}>
+      {title ? <p>{title}</p> : null}
+      {sunday ? <p className={dark ? "text-paper/60" : "text-ink-3"}>{sunday}</p> : null}
+      {gospel ? <p className={cn("font-serif italic", dark ? "text-paper/60" : "text-ink-3")}>{gospel}</p> : null}
+    </div>
+  );
+}
 
 type MassRowProps = {
   mass: Mass;
@@ -181,7 +197,7 @@ export function DayCard({ day, masses, today, showIntentions, size = "md", tone 
           <Heading id={`dan-${day.date}`} className={cn("font-serif leading-tight", size === "lg" ? "text-h2" : "text-h3", dark ? "text-paper" : "text-ink")}>
             {heading}
           </Heading>
-          {day.liturgicalTitle ? <p className={cn("mt-1 text-small", dark ? "text-paper/70" : "text-ink-2")}>{day.liturgicalTitle}</p> : null}
+          <DayTitle day={day} tone={tone} />
         </div>
       </div>
       {list.length ? (
@@ -233,7 +249,8 @@ export function WeekGrid({ days, today, time, tone = "paper" }: { days: MassDay[
               ) : (
                 <li className={cn("text-body", dark ? "text-paper/40" : "text-ink-3")}>—</li>
               )}
-              {day.liturgicalTitle ? <li className={cn("text-meta", dark ? "text-paper/50" : "text-ink-3")}>{day.liturgicalTitle}</li> : null}
+              {dayLines(day).title ? <li className={cn("text-meta", dark ? "text-paper/50" : "text-ink-3")}>{dayLines(day).title}</li> : null}
+              {dayLines(day).gospel ? <li className={cn("font-serif text-meta italic", dark ? "text-paper/50" : "text-ink-3")}>{dayLines(day).gospel}</li> : null}
             </ul>
           </li>
         );

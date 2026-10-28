@@ -52,7 +52,11 @@ export async function greeting(actor: Actor, dbx: Db = defaultDb): Promise<strin
 
 export async function suggestions(actor: Actor, dbx: Db = defaultDb): Promise<string[]> {
   const out: string[] = [];
+  // A question first: the assistant answers from the person's data, not only changes it.
+  if (actor.isOwner) out.push("Kaj čaka mojo potrditev?");
+  else if (needsApproval(actor)) out.push("Kaj še čaka na potrditev?");
   if (can(actor, "mase")) out.push("Odpovej mašo v sredo", "Dodaj namen za Jožeta Novaka v nedeljo ob 8h", "Kaj je ta teden?");
+  if (actor.isOwner) out.push("Koliko ljudi ima dostop?");
   if (can(actor, "oznanila")) out.push("Naloži oznanila");
   if (!can(actor, "mase") && can(actor, "verouk")) {
     const [g] = await dbx
@@ -63,6 +67,6 @@ export async function suggestions(actor: Actor, dbx: Db = defaultDb): Promise<st
     const day = ["nedeljo", "ponedeljek", "torek", "sredo", "četrtek", "petek", "soboto"];
     out.push(g ? `Odpovej verouk za ${g.name} v ${day[g.weekday]}` : "Odpovej verouk", "Kaj je ta teden?");
   }
-  if (!can(actor, "mase") && can(actor, "dogodki")) out.push("Dodaj dogodek");
+  if (!can(actor, "mase") && can(actor, "dogodki")) out.push("Dodaj dogodek", "Kateri dogodki so ta mesec?");
   return out;
 }

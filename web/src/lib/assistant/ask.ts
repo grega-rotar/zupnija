@@ -25,24 +25,61 @@ export const BUSY_REPLY = "Pomočnik je trenutno zaseden. Spremembo lahko naredi
 export const FAILED_REPLY = "Pomočnik trenutno ne deluje. Spremembo lahko naredite tudi na zaslonu.";
 export const UNCLEAR_REPLY = "Tega nisem razumel. Poskusite drugače.";
 
-/** Keep proposals of allowed types that point at open, future items in the context. */
+/** Keep proposals of allowed types that point at items the context actually holds, in a state where the change makes sense. */
 export function filterProposals(ctx: AssistantContext, raw: unknown[]): Proposal[] {
   const out: Proposal[] = [];
+  const mass = (id: number) => ctx.masses?.find((x) => x.massId === id);
+  const lesson = (groupId: number, date: string) => ctx.lessons?.find((x) => x.groupId === groupId && x.date === date);
+  const event = (id: number) => ctx.events?.find((x) => x.id === id);
+  const keep = (p: Proposal): boolean => {
+    switch (p.type) {
+      case "add_intention": {
+        const m = mass(p.massId);
+        return !!m && m.status !== "cancelled";
+      }
+      case "cancel_mass": {
+        const m = mass(p.massId);
+        return !!m && m.status !== "cancelled" && !m.past;
+      }
+      case "restore_mass": {
+        const m = mass(p.massId);
+        return !!m && m.status === "cancelled" && !m.past;
+      }
+      case "remove_intention":
+        return !!ctx.masses?.some((m) => m.intentions?.some((i) => i.id === p.intentionId));
+      case "cancel_lesson": {
+        const l = lesson(p.groupId, p.date);
+        return !!l && !l.cancelled && !l.past;
+      }
+      case "restore_lesson": {
+        const l = lesson(p.groupId, p.date);
+        return !!l && l.cancelled && !l.past;
+      }
+      case "edit_event":
+        return !!event(p.id) && [p.title, p.date, p.time, p.place, p.description].some((v) => v !== undefined);
+      case "delete_event":
+        return !!event(p.id);
+      case "invite_person": {
+        const email = p.email.toLowerCase();
+        return p.sections.length > 0 && !ctx.people?.some((x) => x.email.toLowerCase() === email);
+      }
+      case "update_access": {
+        const person = ctx.people?.find((x) => x.userId === p.userId);
+        return !!person && !person.isOwner;
+      }
+      case "approve_change":
+      case "reject_change":
+        return ctx.pending.some((x) => x.changeRequestId === p.changeRequestId);
+      case "event":
+      case "open_upload":
+        return true;
+    }
+  };
   for (const r of raw) {
     const parsed = proposalSchema.safeParse(r);
     if (!parsed.success) continue;
     const p = parsed.data;
-    if (!ctx.allowed.includes(p.type)) continue;
-    if (p.type === "add_intention" || p.type === "cancel_mass") {
-      const m = ctx.masses?.find((x) => x.massId === p.massId);
-      if (!m || m.status === "cancelled") continue;
-      if (p.type === "cancel_mass" && m.past) continue;
-    }
-    if (p.type === "cancel_lesson") {
-      const l = ctx.lessons?.find((x) => x.groupId === p.groupId && x.date === p.date);
-      if (!l || l.cancelled || l.past) continue;
-    }
-    out.push(p);
+    if (ctx.allowed.includes(p.type) && keep(p)) out.push(p);
   }
   return out;
 }
