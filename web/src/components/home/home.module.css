@@ -879,8 +879,10 @@ a.tile:hover {
 .give {
   display: grid;
   gap: 20px;
-  grid-template-columns: minmax(0, 1fr);
-  max-width: 820px;
+  /* Giving and the newsletter side by side, as in the prototype; stacked on phones. */
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 440px), 1fr));
+  align-items: stretch;
+  max-width: 1240px;
   margin: 0 auto;
 }
 .giveTile {

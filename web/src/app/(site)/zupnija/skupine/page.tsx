@@ -3,6 +3,8 @@ import { getGroups, getSettings } from "@/sanity/data";
 import { buildMetadata } from "@/lib/seo";
 import { routes } from "@/lib/routes";
 import { GroupRow } from "@/components/groups/GroupRow";
+import { GroupSearch } from "@/components/groups/GroupSearch";
+import { groupSearchText, queryParam } from "@/components/groups/groupSearch";
 import { Breadcrumbs, Container, EmptyState, PageHeader, Section } from "@/components/ui/primitives";
 
 export async function generateMetadata(): Promise<Metadata> {
@@ -15,8 +17,10 @@ export async function generateMetadata(): Promise<Metadata> {
   });
 }
 
-export default async function GroupsPage() {
-  const groups = await getGroups();
+type Props = { searchParams: Promise<{ q?: string | string[] }> };
+
+export default async function GroupsPage({ searchParams }: Props) {
+  const [groups, { q }] = await Promise.all([getGroups(), searchParams]);
   return (
     <>
       <PageHeader
@@ -28,11 +32,11 @@ export default async function GroupsPage() {
       <Section>
         <Container>
           {groups.length ? (
-            <ul className="grid gap-5 md:grid-cols-2">
-              {groups.map((g) => (
-                <GroupRow key={g._id} group={g} />
-              ))}
-            </ul>
+            <GroupSearch
+              action={routes.groups}
+              initialQuery={queryParam(q)}
+              rows={groups.map((g) => ({ id: g._id, text: groupSearchText(g), node: <GroupRow group={g} /> }))}
+            />
           ) : (
             <EmptyState title="Skupine še niso vpisane" />
           )}

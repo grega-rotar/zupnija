@@ -1,9 +1,11 @@
 import Link from "next/link";
 import type { SETTINGS_QUERY_RESULT } from "@/sanity/types.generated";
 import { routes } from "@/lib/routes";
+import { FooterSubscribe } from "@/components/newsletter/NewsletterTile";
+import { FooterGiving } from "@/components/giving/FooterGiving";
 import { telHref } from "@/lib/links";
 import { today } from "@/lib/clock";
-import { hozanaUrl } from "@/lib/liturgy/hozana";
+import { PrayerFooterLink } from "@/components/home/PrayerLink";
 import { WEEKDAY_LABEL, type Weekday, formatTime } from "@/lib/dates";
 
 const more = [
@@ -105,10 +107,11 @@ export function Footer({ settings }: { settings: SETTINGS_QUERY_RESULT | null })
           <h2 className="mb-2 text-[13px] font-semibold tracking-[-0.005em] text-ink">Več</h2>
           <ul className="grid gap-1">
             <li>
-              <a href={hozanaUrl(today())} target="_blank" rel="noopener noreferrer" className={link}>
+              <Link href={routes.readings} className={link}>
                 Berila dneva
-              </a>
+              </Link>
             </li>
+            <PrayerFooterLink className={link} />
             {more.map((l) => (
               <li key={l.href}>
                 <Link href={l.href} className={link}>
@@ -119,6 +122,9 @@ export function Footer({ settings }: { settings: SETTINGS_QUERY_RESULT | null })
           </ul>
         </nav>
       </div>
+
+      <FooterGiving />
+      <div className="pb-8"><FooterSubscribe /></div>
 
       <div className="flex flex-wrap justify-between gap-3 border-t border-[rgb(14_14_16/0.07)] pt-5 text-[12px]">
         <span>

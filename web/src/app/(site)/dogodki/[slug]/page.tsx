@@ -12,6 +12,9 @@ import { DateLeaf } from "@/components/events/EventCard";
 import { Icon, type IconName } from "@/components/ui/Icon";
 import { Breadcrumbs, Container, JsonLdScript, Section, Tag, TextLink, headline, tile } from "@/components/ui/primitives";
 import { cn } from "@/lib/utils";
+import { eventIcsPath, eventToCal } from "@/lib/calendar/feed";
+import { AddToCalendar } from "@/components/share/AddToCalendar";
+import { Share } from "@/components/share/Share";
 
 type Props = { params: Promise<{ slug: string }> };
 
@@ -109,9 +112,11 @@ export default async function EventPage({ params }: Props) {
                   </div>
                 ) : null}
               </dl>
-              <TextLink href={routes.events} className="mt-4">
-                Vsi dogodki
-              </TextLink>
+              {!isPast ? <AddToCalendar event={eventToCal(event, settings)} icsHref={eventIcsPath(event.slug)} className="mt-5 border-t border-stone/70 pt-5" /> : null}
+              <div className="mt-5 flex flex-wrap items-center justify-between gap-3">
+                <Share title={event.title} url={absoluteUrl(routes.event(event.slug), settings)} />
+                <TextLink href={routes.events}>Vsi dogodki</TextLink>
+              </div>
             </div>
             {home?.tile?.text ? (
               <figure className="rounded-lg bg-[linear-gradient(165deg,var(--color-gold-soft)_0%,#fff_72%)] p-8 text-center shadow-soft">

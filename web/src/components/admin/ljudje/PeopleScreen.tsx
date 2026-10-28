@@ -5,6 +5,7 @@ import { useCallback } from "react";
 import { Icon } from "@/components/admin/Icon";
 import { Button, PageHead, Pill } from "@/components/admin/ui";
 import { SECTION_LABEL, type Section } from "@/lib/admin/sections";
+import { PeopleTabs } from "@/components/newsletter/admin/PeopleTabs";
 import { InvitePanel, PersonPanel } from "./panels";
 
 export type PersonView = {
@@ -44,6 +45,7 @@ export function PeopleScreen({ people }: { people: PersonView[] }) {
           </Button>
         }
       />
+      <PeopleTabs current="/ljudje" />
       <div className="people">
         {people.map((p) => (
           <button

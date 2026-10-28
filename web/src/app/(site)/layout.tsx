@@ -26,6 +26,20 @@ export async function generateMetadata(): Promise<Metadata> {
  * Every page is rendered per request: "today", "this week" and expiring
  * announcements depend on the current time. Content fetches are still
  * cached (tag "content") and revalidated by the editor, so this stays fast.
+ *
+ * Decided on purpose (2026-10, docs/TECHNICAL.md "Hitrost"), not an oversight:
+ * - ISR (`revalidate`) or Cache Components would prerender at `next build`,
+ *   which has no database (CI, Docker), so the build fails or bakes empty
+ *   pages that are served after a deploy.
+ * - Time-based ISR is stale-while-revalidate: after a quiet night the first
+ *   visitor gets yesterday's "Danes". Bounding it (`expireTime`) makes those
+ *   visitors wait for a render anyway.
+ * - HTML in the Cloudflare cache can't be expired by `updateTag`, so editor
+ *   changes would no longer show at once.
+ * - It isn't where the time goes: with the data cache warm a render takes
+ *   ~25 ms; on production the homepage waits 144 ms vs 113 ms for a static
+ *   file (Cloudflare → origin). Lighthouse's LCP is main-thread work
+ *   (render delay 2–3.7 s of a 3.2–4.4 s LCP), not the server.
  */
 export const dynamic = "force-dynamic";
 

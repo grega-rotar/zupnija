@@ -97,6 +97,8 @@ describe("the Spletna stran sidebar group", () => {
       "Zakramenti",
       "Verouk (stran)",
       "Urnik maš (opomba)",
+      "Molitev",
+      "Nameni darovanja",
       "Posebna obdobja",
       "Nastavitve",
     ]);
@@ -104,7 +106,7 @@ describe("the Spletna stran sidebar group", () => {
 
   it("shows a helper only the areas they were given, never Nastavitve", () => {
     expect(site({ isOwner: false, sections: ["oznanila"] })).toEqual([]);
-    expect(site({ isOwner: false, sections: ["zupnija"] })).toEqual(["Cerkve", "Skupine", "Duhovniki", "Zakramenti", "Verouk (stran)", "Urnik maš (opomba)"]);
+    expect(site({ isOwner: false, sections: ["zupnija"] })).toEqual(["Cerkve", "Skupine", "Duhovniki", "Zakramenti", "Verouk (stran)", "Urnik maš (opomba)", "Molitev", "Nameni darovanja"]);
     expect(site({ isOwner: false, sections: ["vsebina"] })).not.toContain("Nastavitve");
   });
 });

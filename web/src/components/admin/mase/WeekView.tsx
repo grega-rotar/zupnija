@@ -18,8 +18,10 @@ export type Viewer = { id: string; isOwner: boolean; approval: boolean; canUploa
 /** `w` for the week link (null = this week, no parameter). */
 export type WeekLink = { w: string | null } | null;
 
-export function WeekView({ viewer, today, week, span, offset, prev, next, extraMass, upcoming, sitePreview }: {
+export function WeekView({ viewer, today, week, span, offset, prev, next, extraMass, upcoming, sitePreview, tabs }: {
   viewer: Viewer;
+  /** "Nameni | Prošnje (n)" (components/admin/requests/Tabs.tsx). */
+  tabs?: React.ReactNode;
   /** "Na strani": the public Mašni nameni page for this week, rendered on the server (SitePreview). */
   sitePreview: React.ReactNode;
   today: string;
@@ -97,6 +99,7 @@ export function WeekView({ viewer, today, week, span, offset, prev, next, extraM
   return (
     <div className="page enter">
       {head}
+      {tabs}
       {bar}
       {url.preview ? (
         <div className="preview" style={busy}>

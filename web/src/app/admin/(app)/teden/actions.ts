@@ -22,8 +22,9 @@ async function run(name: string, payload: unknown): Promise<ActionResult<MassCha
   return res;
 }
 
-export async function addIntention(massId: number, text: string, kind: IntentionKind) {
-  return run("intention.add", { massId, text, kind });
+/** `requestId`: the visitor's request (Prošnje) this intention answers; it is marked done with it. */
+export async function addIntention(massId: number, text: string, kind: IntentionKind, requestId?: number) {
+  return run("intention.add", { massId, text, kind, requestId });
 }
 
 export async function removeIntention(intentionId: number) {

@@ -826,6 +826,21 @@ export function readHomePage(s: Store): T.HOME_PAGE_QUERY_RESULT {
   } as J;
 }
 
+export type PrayerItem = { _key: string; title: string; when: string; place: string | null; note: string | null; onHome: boolean };
+export type PrayerPageDoc = { title: string | null; intro: J; image: NonNullable<T.HOME_PAGE_QUERY_RESULT>["heroImage"]; items: PrayerItem[] };
+
+/** The prayerPage singleton (/molitev, the homepage band); items without a title or time are left out. */
+export function readPrayerPage(s: Store): PrayerPageDoc | null {
+  const d = s.byId.get("prayerPage")?.data;
+  if (!d || d._type !== "prayerPage") return null;
+  const str = (v: unknown) => (typeof v === "string" && v.trim() ? v.trim() : null);
+  const items = (Array.isArray(d.items) ? d.items : [])
+    .filter(isObj)
+    .map((i, n) => ({ _key: str(i._key) ?? String(n), title: str(i.title) ?? "", when: str(i.when) ?? "", place: str(i.place), note: str(i.note), onHome: i.onHome === true }))
+    .filter((i) => i.title && i.when);
+  return { title: str(d.title), intro: blockContent(s, d.intro), image: image(s, d.image) as J, items };
+}
+
 // ───────────────────────── Search & sitemap ─────────────────────────
 
 const SEARCH_TYPES = ["announcement", "event", "article", "page", "church", "sacrament", "parishGroup", "gallery", "parishDocument"];

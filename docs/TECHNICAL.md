@@ -146,6 +146,22 @@ Design tokens live in `src/app/globals.css` (`@theme`): fonts Newsreader
 (serif) + Source Sans 3, palette paper/stone/ink/moss/gold, type scale, radii.
 Liturgical colours are thin markers only (`SEASON_COLOR`).
 
+### Speed and caching ("Hitrost", 2026-10)
+
+Public pages are rendered per request on purpose (`dynamic = "force-dynamic"`
+in `app/(site)/layout.tsx`, which explains it); only the data is cached
+(`lib/data/cache.ts`, tags expired by the editor through `updateTag`, so a
+change shows on the next request). ISR, Cache Components and CDN caching of
+HTML were measured and rejected: they prerender at `next build`, which has no
+database; time-based ISR serves yesterday's "Danes" to the first visitor after
+a quiet night; and Cloudflare can't be expired by `updateTag`. They would also
+save little: a warm render takes ~25 ms, and on production the homepage waits
+144 ms against 113 ms for a static file (the rest is Cloudflare → origin). The
+mobile LCP is the hero photo held back by main-thread work (2–3.7 s render
+delay under Lighthouse's 4× CPU), so speed work belongs in the client JS and
+fonts, not in caching. `experimental.inlineCss` was tried and left off (+35 kB
+gzip per page, no LCP gain).
+
 ### Scripts
 
 ```bash
@@ -379,9 +395,33 @@ itself.
 | `CLAUDE_POOL_ENV_FILE` | image | `/dev/null`, so claude-pool never picks up a stray `.env` |
 | `CLAUDE_POOL_ALERT` | `.env` (optional) | Command run when every account is full or a token is refused (claude-pool docs/settings.md) |
 | `DEV_ACTOR` | `.env.local` only | Development: act as this user id without signing in. Ignored in production |
+| `CRON_SECRET` | `.env` (required for the newsletter) | Shared secret for `/api/cron/outbox`: `openssl rand -hex 32`. Unset = the route answers 503 and nothing is sent |
+| `MAIL_DAILY_LIMIT` | `.env` (optional) | Outbox mails per Ljubljana day, default `90` (Resend free tier: 100/day, leaving room for one-off mails) |
 
 No new GitHub secrets or variables are needed: CI's Postgres uses fixed
 throw-away credentials, and everything above is runtime-only.
+
+### Newsletter and the outbox cron (PRD US-005)
+
+Visitors subscribe in the footer or the homepage tile (double opt-in:
+`/obvestila/potrdi?token=…`). Publishing a bulletin (`bulletin.publish`)
+queues one mail per active subscriber in the `outbox` table, once per bulletin
+(`bulletins.mailed_at`; undo keeps it, so a re-publish never mails again).
+Nothing is sent in the publish request. `/api/cron/outbox` sends what is due:
+at most `MAIL_DAILY_LIMIT` per day, the rest at 06:00 Europe/Ljubljana the
+next day; a provider error retries after 5, 10, 20, 40 min and the 5th failure
+marks the row `failed`. Each mail carries `List-Unsubscribe` and
+`List-Unsubscribe-Post` (one-click POST to `/obvestila/odjava?token=…`).
+Owner sees the numbers in the editor under Ljudje → Naročniki.
+
+The host calls the route every 5 minutes (crontab of `deploy` on t4a):
+
+```
+*/5 * * * * . /srv/zupnija/.env && curl -fsS -m 240 -H "Authorization: Bearer $CRON_SECRET" https://$DOMAIN/api/cron/outbox >/dev/null
+```
+
+`X-Cron-Secret: $CRON_SECRET` works as well. The response is JSON
+(`{ sent, retry, failed, held, deferred }`).
 
 ### claude-pool on t4a (once)
 

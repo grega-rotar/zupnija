@@ -1,4 +1,5 @@
 import { routes } from "@/lib/routes";
+import { hasPrayerPage } from "@/lib/prayer/page";
 import { Nav, type NavLink } from "./Nav";
 
 /** The pill's links, as in the approved design (tasks/proto-v4/partials/a.html). */
@@ -23,7 +24,14 @@ const more: NavLink[] = [
   { label: "Iskanje", href: routes.search },
 ];
 
-/** Floating pill navigation: brand, seven links, "Daruj". */
-export function Header({ parishName }: { parishName: string }) {
-  return <Nav parishName={parishName} links={links} more={more} give={{ label: "Daruj", href: `${routes.home}#darovi` }} />;
+/**
+ * Floating pill navigation: brand, seven links, "Daruj". "Molitev" takes
+ * Verouk's place in the pill while /molitev has items (US-012); Verouk then
+ * moves to the phone menu.
+ */
+export async function Header({ parishName }: { parishName: string }) {
+  const prayer = await hasPrayerPage();
+  const pill = prayer ? links.map((l) => (l.href === routes.catechesis ? { label: "Molitev", href: routes.prayer } : l)) : links;
+  const rest = prayer ? [{ label: "Verouk", href: routes.catechesis }, ...more] : more;
+  return <Nav parishName={parishName} links={pill} more={rest} give={{ label: "Daruj", href: `${routes.home}#darovi` }} />;
 }

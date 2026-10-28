@@ -5,6 +5,8 @@ import { can, needsApproval } from "@/lib/admin/sections";
 import { today, weekStart } from "@/lib/clock";
 import { addDays, formatWeekSpan, isIsoDate } from "@/lib/dates";
 import { getMass, getUpcomingMasses, getWeek } from "@/lib/mase/queries";
+import { countNewIntentionRequests } from "@/lib/mase/requests";
+import { MaseTabs } from "@/components/admin/requests/Tabs";
 
 /** How far ahead the week arrows go: Masses exist for the next 8 weeks (FR-7). */
 const WEEKS_AHEAD = 8;
@@ -34,7 +36,7 @@ export default async function TedenPage({ searchParams }: { searchParams: Search
   }
   w = !w || w < first ? first : w > last ? last : w;
 
-  const [week, upcoming] = await Promise.all([getWeek(w), one(sp.nov) === "1" ? getUpcomingMasses() : null]);
+  const [week, upcoming, requests] = await Promise.all([getWeek(w), one(sp.nov) === "1" ? getUpcomingMasses() : null, countNewIntentionRequests()]);
   const inWeek = masaId != null && week.days.some((x) => x.masses.some((m) => m.id === masaId));
   if (masaId && !inWeek && !extra) extra = await getMass(masaId);
 
@@ -53,6 +55,7 @@ export default async function TedenPage({ searchParams }: { searchParams: Search
       extraMass={inWeek ? null : extra}
       upcoming={upcoming}
       sitePreview={<SitePreview date={w} />}
+      tabs={<MaseTabs current="/teden" requests={requests} />}
     />
   );
 }

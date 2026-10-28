@@ -9,7 +9,8 @@ import { SanityImage, hasImage } from "@/components/sanity/SanityImage";
 import { PersonCard } from "@/components/sections/PageSections";
 import { Faq } from "@/components/ui/Faq";
 import { Icon } from "@/components/ui/Icon";
-import { Breadcrumbs, Container, JsonLdScript, PageHeader, Section, TextLink } from "@/components/ui/primitives";
+import { Breadcrumbs, Button, Container, JsonLdScript, PageHeader, Section, TextLink } from "@/components/ui/primitives";
+import { enquiryKind } from "@/lib/sacraments/kinds";
 
 type Props = { params: Promise<{ slug: string }> };
 
@@ -93,6 +94,13 @@ export default async function SacramentPage({ params }: Props) {
           </div>
 
           <aside className="space-y-5">
+            <div className="rounded-lg bg-[linear-gradient(165deg,var(--color-gold-soft)_0%,#fff_72%)] p-6 shadow-soft sm:p-8">
+              <h2 className="text-h3">Se pripravljate?</h2>
+              <p className="mt-2 text-body text-ink-2">Pošljite nam povpraševanje, oglasili se vam bomo.</p>
+              <Button href={`/zakramenti/povprasevanje?vrsta=${enquiryKind(s.kind, slug)}`} className="mt-5">
+                Pošlji povpraševanje
+              </Button>
+            </div>
             {s.contact || s.contactNote?.length ? (
               <div className="rounded-lg bg-surface p-6 shadow-soft sm:p-8">
                 <h2 className="text-h3">Na koga se obrniti</h2>

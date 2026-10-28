@@ -16,6 +16,10 @@ services:
       CLAUDE_POOL_DIR: /etc/claude-pool
       CLAUDE_POOL_STATE: /data/claude/state/usage.json
       CLAUDE_CONFIG_DIR: /data/claude/config
+      # Newsletter outbox (docs/TECHNICAL.md, "Newsletter and the outbox cron"): the host cron
+      # calls /api/cron/outbox with this secret; at most MAIL_DAILY_LIMIT outbox mails a day.
+      CRON_SECRET: ${CRON_SECRET:-}
+      MAIL_DAILY_LIMIT: ${MAIL_DAILY_LIMIT:-90}
     # The host's claude-pool group (getent group claude-pool), so the node user can read the
     # 640 token files in /etc/claude-pool.
     group_add:

@@ -7,6 +7,8 @@ import { pl } from "@/lib/assistant/greeting";
 import { weekStart } from "@/lib/clock";
 import { addDays, formatDayHeading, formatTime, formatWeekSpan } from "@/lib/dates";
 import { getLessons, type Lesson } from "@/lib/verouk/queries";
+import { countEnrolments } from "@/lib/verouk/enrolment";
+import { VeroukTabs } from "@/components/admin/requests/Tabs";
 
 const KIDS: [string, string, string, string] = ["otrok", "otroka", "otroci", "otrok"];
 /** "torek, 27. oktober" (the prototype's fDay). */
@@ -63,13 +65,14 @@ export default async function VeroukPage({ searchParams }: { searchParams: Promi
   const actor = await requirePageArea("verouk");
   const { odpade } = await searchParams;
   const from = weekStart();
-  const lessons = await getLessons(from);
+  const [lessons, enrolments] = await Promise.all([getLessons(from), countEnrolments()]);
   const gid = Number(Array.isArray(odpade) ? odpade[0] : odpade);
   const open = lessons.find((l) => l.groupId === gid && !l.cancelled && !l.pending);
 
   return (
     <div className="page enter">
       <PageHead title="Verouk" sub={`Teden ${formatWeekSpan(from, addDays(from, 6))}. Če ura odpade, starši to vidijo na strani.`} />
+      <VeroukTabs current="/verouk" enrolments={enrolments} />
       {lessons.length ? (
         <div className="groups">
           {lessons.map((l) => (
