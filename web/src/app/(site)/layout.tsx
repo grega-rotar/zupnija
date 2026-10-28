@@ -1,14 +1,10 @@
 import type { Metadata, Viewport } from "next";
-import { draftMode } from "next/headers";
-import { VisualEditing } from "next-sanity/visual-editing";
-import { SanityLive } from "@/sanity/live";
 import { getSettings, getUrgentAnnouncements } from "@/sanity/data";
 import { organizationJsonLd, siteUrl } from "@/lib/seo";
 import { Header } from "@/components/layout/Header";
 import { Footer } from "@/components/layout/Footer";
 import { SkipLink } from "@/components/layout/SkipLink";
 import { UrgentBanner } from "@/components/layout/UrgentBanner";
-import { DisableDraftMode } from "@/components/layout/DisableDraftMode";
 import { JsonLdScript } from "@/components/ui/primitives";
 import { fontVariables } from "@/lib/fonts";
 import "../globals.css";
@@ -29,7 +25,7 @@ export async function generateMetadata(): Promise<Metadata> {
 /**
  * Every page is rendered per request: "today", "this week" and expiring
  * announcements depend on the current time. Content fetches are still
- * cached and invalidated by the Live Content API, so this stays fast.
+ * cached (tag "content") and revalidated by the editor, so this stays fast.
  */
 export const dynamic = "force-dynamic";
 
@@ -40,7 +36,7 @@ export const viewport: Viewport = {
 };
 
 export default async function RootLayout({ children }: { children: React.ReactNode }) {
-  const [settings, urgent, draft] = await Promise.all([getSettings(), getUrgentAnnouncements(), draftMode()]);
+  const [settings, urgent] = await Promise.all([getSettings(), getUrgentAnnouncements()]);
   const parishName = settings?.name || "Župnija Pirniče";
 
   return (
@@ -54,13 +50,6 @@ export default async function RootLayout({ children }: { children: React.ReactNo
         </main>
         <Footer settings={settings} />
         <JsonLdScript data={organizationJsonLd(settings)} />
-        <SanityLive />
-        {draft.isEnabled ? (
-          <>
-            <DisableDraftMode />
-            <VisualEditing />
-          </>
-        ) : null}
       </body>
     </html>
   );

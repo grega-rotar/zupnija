@@ -56,7 +56,7 @@ COPY --from=build --chown=node:node /app/web/drizzle ./web/drizzle
 COPY --from=build --chown=node:node /app/web/scripts/migrate.mjs ./web/scripts/migrate.mjs
 # One-time steps of the first editor deploy, run by hand (docs/TECHNICAL.md §8), never on start:
 # the Sanity import (needs only postgres + fetch) and the owner bootstrap.
-COPY --from=build --chown=node:node /app/web/scripts/import-sanity.mjs /app/web/scripts/import-sanity-lib.mjs /app/web/scripts/bootstrap-owner.mjs ./web/scripts/
+COPY --from=build --chown=node:node /app/web/scripts/import-sanity.mjs /app/web/scripts/import-sanity-lib.mjs /app/web/scripts/bootstrap-owner.mjs /app/web/scripts/import-sanity-content.mjs /app/web/scripts/import-sanity-content-lib.mjs ./web/scripts/
 USER node
 ENV NODE_ENV=production \
     NEXT_TELEMETRY_DISABLED=1 \
@@ -73,4 +73,4 @@ EXPOSE 3000
 HEALTHCHECK --interval=30s --timeout=5s --start-period=20s --retries=3 \
   CMD node -e "fetch('http://127.0.0.1:3000/api/health').then(r=>process.exit(r.ok?0:1),()=>process.exit(1))"
 # Migrate first; a failed migration stops the container instead of serving a half-updated schema.
-CMD ["sh", "-c", "node web/scripts/migrate.mjs && exec node web/server.js"]
+CMD ["sh", "-c", "node web/scripts/migrate.mjs && (node web/scripts/import-sanity-content.mjs --if-empty || true) && exec node web/server.js"]

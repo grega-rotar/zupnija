@@ -15,6 +15,13 @@
       "when": 1793178490082,
       "tag": "0001_monthly_bulletins",
       "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "7",
+      "when": 1793202189094,
+      "tag": "0002_content",
+      "breakpoints": true
     }
   ]
 }

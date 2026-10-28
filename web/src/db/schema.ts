@@ -83,7 +83,7 @@ export const verification = pgTable("verification", {
 });
 
 // ── Access ──────────────────────────────────────────────────────────────────
-export const sectionEnum = pgEnum("section", ["mase", "oznanila", "dogodki", "verouk"]);
+export const sectionEnum = pgEnum("section", ["mase", "oznanila", "dogodki", "verouk", "vsebina", "zupnija"]);
 
 export const userSections = pgTable(
   "user_sections",
@@ -282,6 +282,57 @@ export const appSettings = pgTable("app_settings", {
   value: text("value").notNull(),
   updatedAt: updated(),
   updatedBy: text("updated_by").references(() => user.id, { onDelete: "set null" }),
+});
+
+// ── Website content (formerly Sanity) ───────────────────────────────────────
+/**
+ * Every website document as its Sanity JSON (tasks/contract-content.md):
+ * `data` holds the whole document incl. `_id` and `_type`, minus `_rev`,
+ * `_createdAt` and `_updatedAt`. Imported documents keep their Sanity id, new
+ * ones get a uuid; singletons use their type as id ("settings", "homePage",
+ * "catechesisPage"). The public data layer reads it (src/lib/content/read.ts).
+ */
+export const content = pgTable(
+  "content",
+  {
+    id: text("id").primaryKey(),
+    type: text("type").notNull(),
+    /** data.slug.current, for types that have one. */
+    slug: text("slug"),
+    data: jsonb("data").notNull().$type<Record<string, unknown>>(),
+    published: boolean("published").notNull().default(true),
+    sort: integer("sort").notNull().default(0),
+    createdBy: text("created_by"),
+    createdAt: created(),
+    updatedAt: updated(),
+  },
+  (t) => [
+    index("content_type_sort").on(t.type, t.sort),
+    uniqueIndex("content_type_slug").on(t.type, t.slug).where(sql`${t.slug} is not null`),
+  ],
+);
+
+/**
+ * Images and files the website uses, under UPLOAD_DIR. Ids keep Sanity's
+ * asset id format ("image-<sha1>-<w>x<h>-<ext>", "file-<sha1>-<ext>"), so
+ * @sanity/image-url builds /media URLs for them (src/app/media/**).
+ */
+export const media = pgTable("media", {
+  id: text("id").primaryKey(),
+  kind: text("kind").notNull().$type<"image" | "file">(),
+  /** Relative to UPLOAD_DIR, e.g. "media/ab/<id>.jpg". */
+  path: text("path").notNull(),
+  mime: text("mime").notNull(),
+  size: integer("size").notNull(),
+  width: integer("width"),
+  height: integer("height"),
+  /** Tiny base64 placeholder (data URL) for images. */
+  lqip: text("lqip"),
+  /** The original file name. */
+  filename: text("filename"),
+  sha256: text("sha256").notNull(),
+  createdBy: text("created_by"),
+  createdAt: created(),
 });
 
 // ── Change requests and history ─────────────────────────────────────────────

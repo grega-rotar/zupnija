@@ -36,6 +36,7 @@ export const TRACKED = {
   calendar_days: schema.calendarDays,
   app_settings: schema.appSettings,
   user: schema.user,
+  content: schema.content,
 } as const;
 /** Primary-key column name per table: `id`, except calendar_days (`date`) and app_settings (`key`). */
 const PK: Partial<Record<keyof typeof TRACKED, string>> = { calendar_days: "date", app_settings: "key" };
@@ -108,7 +109,8 @@ export type ActionCtx = { actor: Actor; track: Tracker; tx: Tx; requestedBy: str
 
 export type ActionDef<P> = {
   name: string;
-  area: Area;
+  /** Or, when it depends on the payload (website content: the document's type), a function of it. */
+  area: Area | ((p: P, tx: Tx) => Promise<Area> | Area);
   schema: z.ZodType<P>;
   /** false = cannot be queued for approval (e.g. owner-only, or undo-like). */
   approvable: boolean;
@@ -155,15 +157,21 @@ function parse<P>(def: ActionDef<P>, payload: unknown): P {
   return r.data;
 }
 
+/** The action's area for this payload. */
+async function areaOf<P>(def: ActionDef<P>, p: P, tx: Tx): Promise<Area> {
+  return typeof def.area === "function" ? def.area(p, tx) : def.area;
+}
+
 async function applyNow<P>(dbx: Db, actor: Actor, def: ActionDef<P>, p: P, labelPrefix = "", note?: string, requestedBy = actor.id) {
   const out = await dbx.transaction(async (tx) => {
+    const area = await areaOf(def, p, tx);
     await def.check?.(p, tx);
     const track = new Tracker(tx);
     const result = await def.apply(p, { actor, track, tx, requestedBy });
     const label = labelPrefix + (await def.label(p, tx));
     const [h] = await tx
       .insert(schema.history)
-      .values({ userId: actor.id, section: def.area, action: def.name, label, note, changes: track.changes, createdAt: now() })
+      .values({ userId: actor.id, section: area, action: def.name, label, note, changes: track.changes, createdAt: now() })
       .returning({ id: schema.history.id });
     return { historyId: h.id, result };
   });
@@ -173,14 +181,16 @@ async function applyNow<P>(dbx: Db, actor: Actor, def: ActionDef<P>, p: P, label
 
 export async function perform(actor: Actor, name: string, payload: unknown, dbx: Db = defaultDb): Promise<PerformResult> {
   const def = getAction(name);
-  if (!can(actor, def.area)) throw new ForbiddenError();
+  if (typeof def.area !== "function" && !can(actor, def.area)) throw new ForbiddenError();
   const p = parse(def, payload);
+  const area = await areaOf(def, p, dbx as unknown as Tx);
+  if (!can(actor, area)) throw new ForbiddenError();
   if (def.approvable && needsApproval(actor)) {
     await def.check?.(p, dbx as unknown as Tx);
     const label = await def.label(p, dbx as unknown as Tx);
     const [cr] = await dbx
       .insert(schema.changeRequests)
-      .values({ section: def.area as Section, action: name, payload: p as object, label, createdBy: actor.id, createdAt: now() })
+      .values({ section: area as Section, action: name, payload: p as object, label, createdBy: actor.id, createdAt: now() })
       .returning({ id: schema.changeRequests.id });
     revalidate("approvals");
     return { status: "pending", changeRequestId: cr.id };

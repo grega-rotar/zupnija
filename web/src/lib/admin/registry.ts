@@ -8,4 +8,5 @@ import "@/lib/dogodki/actions";
 import "@/lib/verouk/actions";
 import "@/lib/bulletin/actions";
 import "@/lib/ljudje/actions";
+import "@/lib/content/actions";
 export * from "./engine";

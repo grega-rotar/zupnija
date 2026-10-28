@@ -1,4 +1,4 @@
-import { defineQuery } from "next-sanity";
+import { defineQuery } from "./define";
 import { churchRefFragment, imageFragment, personRefFragment } from "./fragments";
 
 /**

@@ -1,0 +1,321 @@
+/*
+ * The rich text field: a white field (the .field ring, gold when focused)
+ * with a quiet toolbar on top and the text set like the site's .prose, so
+ * what the priest sees is what the page will show. Site tokens and
+ * admin.css's app-only names only.
+ */
+@layer components {
+  .rt {
+    position: relative;
+    display: grid;
+    min-width: 0;
+    border-radius: var(--radius-sm);
+    background: var(--color-surface);
+    box-shadow: 0 0 0 1px rgb(20 12 4 / 0.1), 0 1px 2px rgb(20 12 4 / 0.04);
+    transition: box-shadow 0.15s;
+  }
+  .rt:hover {
+    box-shadow: 0 0 0 1px rgb(20 12 4 / 0.2), 0 1px 2px rgb(20 12 4 / 0.04);
+  }
+  .rt:has(.rt-text:focus) {
+    box-shadow: 0 0 0 2px var(--color-gold);
+  }
+  .rt.invalid {
+    box-shadow: 0 0 0 2px var(--color-alert);
+  }
+
+  /* ── Toolbar: grouped icon buttons, sunk when on ── */
+  .rt-bar {
+    position: sticky;
+    top: var(--rt-sticky, 0px);
+    z-index: 2;
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 0.25rem 0.125rem;
+    padding: 0.375rem;
+    border-radius: var(--radius-sm) var(--radius-sm) 0 0;
+    background: var(--ed-bar);
+    backdrop-filter: var(--blur);
+    -webkit-backdrop-filter: var(--blur);
+    border-bottom: 1px solid var(--hair);
+  }
+  .rt-grp {
+    display: flex;
+    gap: 0.125rem;
+  }
+  .rt-grp + .rt-grp {
+    padding-left: 0.375rem;
+    margin-left: 0.25rem;
+    border-left: 1px solid var(--hair);
+  }
+  .rt-btn {
+    width: 2.75rem;
+    height: 2.75rem;
+    border-radius: 0.625rem;
+    display: grid;
+    place-items: center;
+    color: var(--color-ink-2);
+    transition: background-color 0.12s, color 0.12s;
+  }
+  .rt-btn:hover {
+    background: var(--color-paper-2);
+    color: var(--color-ink);
+  }
+  .rt-btn[aria-pressed="true"] {
+    background: var(--color-gold-soft);
+    color: var(--gold-ink);
+  }
+  .rt-btn:disabled {
+    opacity: 0.55;
+    cursor: progress;
+  }
+  .rt-btn:focus-visible {
+    outline-offset: -1px;
+  }
+  .rt-g {
+    font-size: 1.0625rem;
+    line-height: 1;
+    font-weight: 700;
+    letter-spacing: -0.02em;
+  }
+  .rt-gi {
+    font-family: var(--font-serif, Georgia, serif);
+    font-weight: 400;
+    font-size: 1.25rem;
+  }
+  .rt-gs {
+    font-size: 0.875rem;
+    letter-spacing: -0.01em;
+  }
+
+  /* ── The text, as the site sets it ── */
+  .rt-text {
+    min-height: 9rem;
+    padding: 1rem 1.125rem 1.25rem;
+    color: var(--color-ink-2);
+    font-size: var(--text-body);
+    line-height: 1.65;
+    outline: none;
+    overflow-wrap: anywhere;
+  }
+  .rt-text > * + * {
+    margin-top: 0.75em;
+  }
+  .rt-text h2 {
+    font-size: 1.375rem;
+    line-height: 1.25;
+    letter-spacing: -0.03em;
+    color: var(--color-ink);
+    margin-top: 1.25em;
+  }
+  .rt-text h3 {
+    font-size: 1.125rem;
+    line-height: 1.3;
+    letter-spacing: -0.02em;
+    color: var(--color-ink);
+    margin-top: 1.1em;
+  }
+  .rt-text > :first-child {
+    margin-top: 0;
+  }
+  .rt-text blockquote {
+    border-left: 2px solid var(--color-gold);
+    padding-left: 1rem;
+    color: var(--color-ink-2);
+    font-style: italic;
+  }
+  .rt-text strong {
+    color: var(--color-ink);
+    font-weight: 600;
+  }
+  .rt-a {
+    color: var(--color-moss);
+    text-decoration: underline;
+    text-decoration-color: color-mix(in srgb, var(--color-moss) 45%, transparent);
+    text-underline-offset: 3px;
+  }
+  /* List items are flat blocks in Portable Text; bullets and numbers are drawn. */
+  .rt-li {
+    position: relative;
+    padding-left: 1.5rem;
+  }
+  .rt-li + .rt-li {
+    margin-top: 0.25em;
+  }
+  .rt-li[data-level="2"] {
+    margin-left: 1.5rem;
+  }
+  .rt-li[data-level="3"] {
+    margin-left: 3rem;
+  }
+  .rt-li[data-list="bullet"]::before {
+    content: "";
+    position: absolute;
+    left: 0.375rem;
+    top: 0.68em;
+    width: 0.375rem;
+    height: 0.375rem;
+    border-radius: 50%;
+    background: var(--color-gold);
+  }
+  .rt-text > :not([data-list="number"]) {
+    counter-reset: rt-n;
+  }
+  .rt-li[data-list="number"] {
+    counter-increment: rt-n;
+  }
+  .rt-li[data-list="number"]::before {
+    content: counter(rt-n) ".";
+    position: absolute;
+    left: 0;
+    width: 1.125rem;
+    text-align: right;
+    color: var(--gold-ink);
+    font-weight: 600;
+    font-variant-numeric: tabular-nums;
+  }
+  .rt-ph {
+    color: var(--color-ink-3);
+    pointer-events: none;
+  }
+
+  /* ── Picture and attachment blocks: a card in the text, "Uredi" opens the fields ── */
+  .rt-obj {
+    margin: 1em 0;
+  }
+  .rt-card {
+    display: flex;
+    align-items: center;
+    gap: 0.875rem;
+    padding: 0.5rem 0.5rem 0.5rem 0.5rem;
+    border-radius: 0.875rem;
+    background: var(--color-paper);
+    box-shadow: 0 0 0 1px var(--hair);
+    user-select: none;
+    line-height: 1.4;
+    transition: box-shadow 0.15s;
+  }
+  .rt-obj.on .rt-card {
+    box-shadow: 0 0 0 2px var(--color-gold);
+  }
+  .rt-thumb {
+    width: 4.5rem;
+    height: 3.25rem;
+    border-radius: 0.5rem;
+    object-fit: cover;
+    background: var(--color-paper-2);
+    flex: none;
+  }
+  .rt-card .mf-tile {
+    margin-left: 0.25rem;
+  }
+  .rt-card-t {
+    display: grid;
+    gap: 0.0625rem;
+    min-width: 0;
+    flex: 1;
+  }
+  .rt-card-t b {
+    color: var(--color-ink);
+    font-weight: 600;
+    font-size: var(--text-small);
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+  .rt-card-t small {
+    color: var(--color-ink-3);
+    font-size: var(--text-meta);
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+  .rt-card-t small.warn {
+    color: var(--color-alert);
+  }
+
+  .rt-objed {
+    display: grid;
+    gap: 0.875rem;
+    margin: 0 0.5rem 0.5rem;
+    padding: 0.875rem;
+    border-radius: var(--radius-sm);
+    background: var(--color-paper-2);
+    outline-offset: 2px;
+  }
+  .rt-objed-h {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 0.75rem;
+  }
+  .rt-objed-h h3 {
+    font: var(--label);
+    color: var(--color-ink-3);
+    letter-spacing: -0.005em;
+  }
+  .rt-objed-f {
+    display: grid;
+    gap: 0.875rem;
+  }
+
+  /* ── Link popover, under the toolbar ── */
+  .rt-pop {
+    position: absolute;
+    z-index: 3;
+    top: 3.75rem;
+    left: 0.5rem;
+    width: min(26rem, calc(100% - 1rem));
+    display: grid;
+    gap: 0.5rem;
+    padding: 0.875rem;
+    border-radius: var(--radius-md);
+    background: var(--color-surface);
+    box-shadow: 0 0 0 0.5px rgb(20 12 4 / 0.12), 0 12px 32px rgb(20 12 4 / 0.14), 0 2px 6px rgb(20 12 4 / 0.06);
+  }
+  .rt-pop .field > span {
+    padding-left: 0.125rem;
+  }
+  .rt-pop-row {
+    display: flex;
+    gap: 0.5rem;
+  }
+  .rt-pop-row .input {
+    flex: 1;
+    min-width: 0;
+  }
+  .rt-pop-acts {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: flex-end;
+    gap: 0.25rem;
+  }
+  .rt-pop-msg {
+    color: var(--color-ink-2);
+    font-size: var(--text-small);
+    padding: 0.25rem 0.25rem 0;
+  }
+  .rt-err {
+    padding: 0 1.125rem 0.875rem;
+  }
+
+  @media (max-width: 30rem) {
+    .rt-text {
+      padding-inline: 0.875rem;
+    }
+    /* The toolbar wraps here; a divider would start the second row. */
+    .rt-grp + .rt-grp {
+      padding-left: 0;
+      margin-left: 0.5rem;
+      border-left: 0;
+    }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .rt,
+    .rt-btn,
+    .rt-card {
+      transition: none;
+    }
+  }
+}

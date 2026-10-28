@@ -251,6 +251,14 @@
     background: var(--hair);
     margin: 0.625rem 0.625rem;
   }
+  /* A sidebar group heading ("Spletna stran"): the small grey label. */
+  .nav .navgroup {
+    font-size: 0.75rem;
+    font-weight: 600;
+    letter-spacing: -0.003em;
+    color: var(--color-ink-3);
+    padding: 1rem 0.625rem 0.375rem;
+  }
   .me {
     display: flex;
     align-items: center;

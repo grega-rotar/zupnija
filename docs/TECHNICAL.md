@@ -473,6 +473,42 @@ scripts/backup.sh                           # a backup of the imported state, be
 - Locally: `DATABASE_URL=postgres://zupnija:dev@localhost:5433/<db> node scripts/import-sanity.mjs`
   (after `node scripts/migrate.mjs`).
 
+### Website content (Sanity retired)
+
+All website content (settings, homepage, pages, news, announcements,
+galleries, documents, special periods, churches, people, groups, sacraments,
+the Verouk page) lives in Postgres since migration `0002_content`: the
+`content` table holds each document as its Sanity JSON (same `_id`), the
+`media` table its images and files, with the bytes under
+`UPLOAD_DIR/media/` (resized copies in `UPLOAD_DIR/media-cache/`, safe to
+delete). The site reads it through `src/lib/content/read.ts` (cache tag
+`content`); images are served by `/media/images|files/…` (sharp). Contract:
+`tasks/contract-content.md`. The container runs the import with
+`--if-empty` on every start, after the migrations: the first start after
+migration 0002 fills `content` and `media` before the server listens; later
+starts see rows and do nothing. A failed first import is logged and does not
+stop the site. To run it by hand (e.g. after that failure):
+
+```bash
+cd /srv/zupnija
+docker compose exec web node web/scripts/import-sanity-content.mjs --dry-run   # prints counts, rolls back (downloads the assets)
+docker compose exec web node web/scripts/import-sanity-content.mjs             # one transaction
+docker compose up -d --force-recreate web   # drops the cached (empty) content reads
+scripts/backup.sh
+```
+
+- Reads every published document of those types and every asset they
+  reference from Sanity's public API (no token) and downloads the assets to
+  the uploads volume.
+- Idempotent: a re-run inserts what is new, refreshes documents still as
+  imported, and keeps (and lists) documents edited in the editor since;
+  `--force` overwrites those too. Media rows are never changed.
+- `--dump <dir>` writes `sanity-export.json` (the test fixture in
+  `src/test/fixtures/`) without touching the database.
+- After this the Studio is no longer read by anything; edit content in the
+  editor ("Spletna stran" in the sidebar, areas Vsebina strani and Župnija).
+- Locally: `DATABASE_URL=postgres://zupnija:dev@localhost:5433/zupnija UPLOAD_DIR=./.uploads node scripts/import-sanity-content.mjs`.
+
 ### Backups
 
 `scripts/backup.sh` (copied to `/srv/zupnija/scripts/` by every deploy) writes
