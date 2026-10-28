@@ -113,7 +113,7 @@ describe("people and access", () => {
     await db.update(schema.user).set({ lastSeenAt: new Date() }).where(eq(schema.user.id, "marta"));
     const people = await listPeople();
     expect(people.map((p) => p.name)).toEqual(["msgr. dr. Blaž Jezeršek", "Ana Rozman", "Marta Zupan", "Tone Kralj"]);
-    expect(people[0]).toMatchObject({ isOwner: true, sections: ["mase", "oznanila", "dogodki", "verouk"], requiresApproval: false });
+    expect(people[0]).toMatchObject({ isOwner: true, sections: ["mase", "oznanila", "dogodki", "verouk", "vsebina", "zupnija"], requiresApproval: false });
     expect(people[2]).toMatchObject({ invited: false, sections: ["mase", "oznanila", "dogodki"], requiresApproval: true });
     expect(people[3]).toMatchObject({ invited: true, sections: ["dogodki"], short: "TK" });
   });

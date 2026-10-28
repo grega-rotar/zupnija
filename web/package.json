@@ -18,14 +18,19 @@
     "eval:assistant": "tsx --conditions=react-server --env-file=.env.local scripts/eval-assistant.ts"
   },
   "dependencies": {
+    "@portabletext/editor": "^8.0.3",
+    "@portabletext/html": "^2.0.2",
+    "@portabletext/react": "^8.0.1",
+    "@portabletext/schema": "^3.1.0",
+    "@sanity/image-url": "^2.1.1",
     "better-auth": "^1.7.14",
     "drizzle-orm": "^0.45.4",
     "next": "16.3.5",
-    "next-sanity": "^13.3.4",
     "postgres": "^3.4.9",
     "react": "19.2.8",
     "react-dom": "19.2.8",
     "server-only": "^0.0.1",
+    "sharp": "^0.35.4",
     "xlsx": "https://cdn.sheetjs.com/xlsx-0.20.3/xlsx-0.20.3.tgz",
     "zod": "^4.6.7"
   },
@@ -37,6 +42,7 @@
     "drizzle-kit": "^0.31.11",
     "eslint": "^9",
     "eslint-config-next": "16.3.5",
+    "jsdom": "^29.1.1",
     "tailwindcss": "^4",
     "tsx": "^4.23.15",
     "typescript": "^5",

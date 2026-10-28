@@ -15,7 +15,7 @@
 import "server-only";
 import { unstable_cache } from "next/cache";
 
-export type DataTag = "masses" | "events" | "verouk" | "bulletins";
+export type DataTag = "masses" | "events" | "verouk" | "bulletins" | "content";
 
 /**
  * Cache `fn` under `key` with `tags`. Outside Next (vitest) there is no

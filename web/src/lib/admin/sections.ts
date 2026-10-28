@@ -1,5 +1,5 @@
 /** Sections a helper can be given. "ljudje" (people & access) is owner-only. */
-export const SECTIONS = ["mase", "oznanila", "dogodki", "verouk"] as const;
+export const SECTIONS = ["mase", "oznanila", "dogodki", "verouk", "vsebina", "zupnija"] as const;
 export type Section = (typeof SECTIONS)[number];
 export type Area = Section | "ljudje";
 
@@ -8,6 +8,8 @@ export const SECTION_LABEL: Record<Section, string> = {
   oznanila: "Oznanila",
   dogodki: "Dogodki",
   verouk: "Verouk",
+  vsebina: "Vsebina strani",
+  zupnija: "Župnija",
 };
 
 /** The signed-in person as every permission check sees them. */

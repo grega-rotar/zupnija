@@ -21,6 +21,9 @@ const STATIC: { path: string; priority: number; changeFrequency: MetadataRoute.S
   { path: routes.contact, priority: 0.8, changeFrequency: "monthly" },
 ];
 
+// Reads the content from Postgres, which the build has no access to.
+export const dynamic = "force-dynamic";
+
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const settings = await getSettings();
   const now = new Date();

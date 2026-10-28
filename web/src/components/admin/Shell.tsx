@@ -48,10 +48,14 @@ export function Shell({ me, approvals, children }: { me: ShellUser; approvals: n
           </div>
         </div>
         <nav className="nav" aria-label="Razdelki">
-          {items.map((n) => (
-            <NavLinkWithSep key={n.href} sep={n.href === "/zgodovina"}>
+          {items.map((n, i) => (
+            <NavLinkWithSep
+              key={n.href}
+              sep={n.href === "/zgodovina" || (!n.group && !!items[i - 1]?.group)}
+              heading={n.group && n.group !== items[i - 1]?.group ? n.group : undefined}
+            >
               <Link href={n.href} aria-current={cur.href === n.href ? "page" : undefined}>
-                <span className={`tile${GREY.has(n.href) ? " n" : ""}`}>
+                <span className={`tile${GREY.has(n.href) || n.group ? " n" : ""}`}>
                   <Icon name={n.icon} />
                 </span>
                 {n.label}
@@ -74,7 +78,7 @@ export function Shell({ me, approvals, children }: { me: ShellUser; approvals: n
       <div className="mainwrap">
         <header className="topbar">
           <p className="crumb">
-            <span>Urejanje ›</span> {cur.label}
+            <span>{cur.group ?? "Urejanje"} ›</span> {cur.label}
           </p>
         </header>
         <header className="phonebar">
@@ -140,10 +144,11 @@ function Wordmark() {
   return <span className="wordmark">Župnija Pirniče</span>;
 }
 
-function NavLinkWithSep({ sep, children }: { sep: boolean; children: React.ReactNode }) {
+function NavLinkWithSep({ sep, heading, children }: { sep: boolean; heading?: string; children: React.ReactNode }) {
   return (
     <>
       {sep ? <div className="sep" role="separator" /> : null}
+      {heading ? <p className="navgroup">{heading}</p> : null}
       {children}
     </>
   );

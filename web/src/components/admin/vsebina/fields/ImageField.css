@@ -1,0 +1,260 @@
+/*
+ * Media fields (ImageField, FileField, and the picture/attachment blocks in
+ * RichTextField). Site tokens and admin.css's app-only names only; the v4
+ * rules in admin.css's header apply: white surfaces with the field ring, the
+ * gold focus ring, small grey labels, gold icon tiles, pill buttons.
+ */
+@layer components {
+  .mf {
+    display: grid;
+    gap: 0.5rem;
+    min-width: 0;
+    container-type: inline-size;
+  }
+
+  /* ── Empty: a white drop tile; dashed gold edge while a file hovers ── */
+  .mf-drop {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    width: 100%;
+    min-height: 7.5rem;
+    padding: 1.25rem;
+    border-radius: var(--radius-sm);
+    border: 1.5px dashed var(--color-stone-2);
+    background: var(--color-surface);
+    color: var(--color-ink);
+    text-align: left;
+    cursor: pointer;
+    transition: border-color 0.15s, background-color 0.15s, box-shadow 0.15s;
+  }
+  .mf-drop-row {
+    min-height: 4.5rem;
+    padding: 0.875rem 1rem;
+  }
+  .mf-drop:hover {
+    border-color: var(--color-gold);
+  }
+  .mf-drop.over {
+    border-color: var(--color-gold);
+    border-style: solid;
+    background: var(--color-gold-soft);
+  }
+  .mf-drop:disabled {
+    cursor: progress;
+  }
+  .mf-drop.invalid {
+    border-color: var(--color-alert);
+    border-style: solid;
+  }
+  .mf-drop-t {
+    display: grid;
+    gap: 0.125rem;
+    min-width: 0;
+  }
+  .mf-drop-t b {
+    font-weight: 600;
+    letter-spacing: -0.01em;
+  }
+  .mf-drop-t small {
+    color: var(--color-ink-3);
+    font-size: var(--text-meta);
+  }
+  .mf-tile {
+    width: 2.75rem;
+    height: 2.75rem;
+    flex: none;
+    border-radius: 0.75rem;
+    display: grid;
+    place-items: center;
+    background: var(--tile-gold);
+    box-shadow: inset 0 0 0 0.5px rgb(0 0 0 / 0.1);
+    color: #fff;
+  }
+  .mf-tile-doc {
+    background: var(--color-gold-soft);
+    color: var(--gold-ink);
+    box-shadow: none;
+  }
+  .mf-spin {
+    animation: mf-spin 0.9s linear infinite;
+  }
+  @keyframes mf-spin {
+    to {
+      transform: rotate(360deg);
+    }
+  }
+
+  /* ── Image: picture (focal point) and its fields side by side when there is room ── */
+  .mf-img {
+    display: grid;
+    gap: 1rem;
+    padding: 0.875rem;
+    border-radius: var(--radius-md);
+    background: var(--color-surface);
+    box-shadow: 0 0 0 1px rgb(20 12 4 / 0.1), 0 1px 2px rgb(20 12 4 / 0.04);
+    transition: box-shadow 0.15s, background-color 0.15s;
+  }
+  .mf-img.over {
+    box-shadow: 0 0 0 2px var(--color-gold);
+    background: var(--color-gold-soft);
+  }
+  @container (min-width: 34rem) {
+    .mf-img {
+      grid-template-columns: minmax(0, 15rem) minmax(0, 1fr);
+      align-items: start;
+    }
+  }
+  .mf-media {
+    display: grid;
+    gap: 0.5rem;
+    min-width: 0;
+  }
+  .mf-stage {
+    position: relative;
+    max-height: 22rem;
+    border-radius: 0.75rem;
+    overflow: hidden;
+    background: var(--color-paper-2);
+    cursor: crosshair;
+    outline-offset: 3px;
+  }
+  .mf-stage img {
+    display: block;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    user-select: none;
+  }
+  /* The focal point: a white ring with a gold centre, readable on any photo. */
+  .mf-spot {
+    position: absolute;
+    width: 1.75rem;
+    height: 1.75rem;
+    margin: -0.875rem 0 0 -0.875rem;
+    border-radius: 50%;
+    border: 2.5px solid #fff;
+    background: radial-gradient(circle, var(--color-gold) 0 28%, rgb(168 130 47 / 0.25) 30%);
+    box-shadow: 0 0 0 1px rgb(20 12 4 / 0.35), 0 2px 8px rgb(20 12 4 / 0.3);
+    pointer-events: none;
+    transition: left 0.15s, top 0.15s;
+  }
+  .mf-busy {
+    position: absolute;
+    inset: 0;
+    display: grid;
+    place-content: center;
+    grid-auto-flow: column;
+    gap: 0.5rem;
+    align-items: center;
+    background: rgb(255 255 255 / 0.78);
+    font-weight: 600;
+    font-size: var(--text-small);
+  }
+  .mf-hint {
+    color: var(--color-ink-3);
+    font-size: var(--text-meta);
+    line-height: 1.4;
+  }
+  .mf-side {
+    display: grid;
+    gap: 0.875rem;
+    min-width: 0;
+    align-content: start;
+  }
+  .mf-acts {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+  }
+
+  /* ── File: one row, like the site's attachment link ── */
+  .mf-file {
+    display: flex;
+    align-items: center;
+    gap: 0.875rem;
+    min-height: 4.5rem;
+    padding: 0.75rem 0.75rem 0.75rem 1rem;
+    border-radius: var(--radius-sm);
+    background: var(--color-surface);
+    box-shadow: 0 0 0 1px rgb(20 12 4 / 0.1), 0 1px 2px rgb(20 12 4 / 0.04);
+    transition: box-shadow 0.15s, background-color 0.15s;
+  }
+  .mf-file.over {
+    box-shadow: 0 0 0 2px var(--color-gold);
+    background: var(--color-gold-soft);
+  }
+  .mf-file-t {
+    display: grid;
+    gap: 0.125rem;
+    min-width: 0;
+    flex: 1;
+  }
+  .mf-file-t a,
+  .mf-file-t b {
+    font-weight: 600;
+    letter-spacing: -0.01em;
+    color: var(--color-ink);
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    text-decoration: none;
+  }
+  .mf-file-t a:hover {
+    color: var(--color-moss);
+    text-decoration: underline;
+    text-underline-offset: 3px;
+  }
+  .mf-file-t small {
+    color: var(--color-ink-3);
+    font-size: var(--text-meta);
+  }
+  .mf-file-acts {
+    display: flex;
+    gap: 0.25rem;
+    flex: none;
+  }
+  /* Narrow: the file row's buttons keep only their icons (they keep aria-labels). */
+  @container (max-width: 26rem) {
+    .mf-file-acts .mf-wide {
+      position: absolute;
+      width: 1px;
+      height: 1px;
+      overflow: hidden;
+      clip: rect(0 0 0 0);
+      white-space: nowrap;
+    }
+    .mf-file-acts .btn {
+      padding-inline: 0;
+      width: 2.75rem;
+      justify-content: center;
+    }
+  }
+
+  .mf-err {
+    display: flex;
+    gap: 0.375rem;
+    align-items: flex-start;
+    color: var(--color-alert);
+    font-size: var(--text-small);
+    font-weight: 500;
+    line-height: 1.4;
+  }
+  .mf-err .i {
+    width: 1.125rem;
+    height: 1.125rem;
+    margin-top: 0.0625rem;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .mf-spin {
+      animation-duration: 2.4s;
+    }
+    .mf-spot,
+    .mf-drop,
+    .mf-img,
+    .mf-file {
+      transition: none;
+    }
+  }
+}

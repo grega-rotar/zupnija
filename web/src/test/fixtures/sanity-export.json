@@ -1,0 +1,3217 @@
+{
+ "project": "hnwav9pa",
+ "dataset": "production",
+ "documents": [
+  {
+   "_createdAt": "2026-10-26T17:48:43Z",
+   "_id": "ann-adoracija",
+   "_rev": "QnTUkLMvmt3ECzV0IwSEgv",
+   "_type": "announcement",
+   "_updatedAt": "2026-10-26T17:58:31Z",
+   "body": [
+    {
+     "_key": "c2h469",
+     "_type": "block",
+     "children": [
+      {
+       "_key": "c2i469",
+       "_type": "span",
+       "marks": [],
+       "text": "Adoracija pred Najsvetejšim je možna vsak dan razen četrtka in nedelje med 17.00 in 18.00 uro v Marijini cerkvi."
+      }
+     ],
+     "markDefs": [],
+     "style": "normal"
+    },
+    {
+     "_key": "c2j469",
+     "_type": "block",
+     "children": [
+      {
+       "_key": "c2k469",
+       "_type": "span",
+       "marks": [],
+       "text": "Molitvena skupina se srečuje vsako sredo ob 18.00 v Marijini cerkvi, molitvena skupina Karitas pa se k molitvi za zdravje srečuje ob torkih ob 18.00 ob kipu Kraljice miru."
+      }
+     ],
+     "markDefs": [],
+     "style": "normal"
+    }
+   ],
+   "category": "pastoral",
+   "image": {
+    "_type": "imageWithAlt",
+    "alt": "Monštranca z Najsvetejšim",
+    "asset": {
+     "_ref": "image-e0e2fb1a0e178997af474a3309e7953cefbe2956-3072x2304-jpg",
+     "_type": "reference"
+    },
+    "caption": "Foto: കാക്കര, CC BY-SA 3.0, Wikimedia Commons"
+   },
+   "importance": "normal",
+   "publishFrom": "2026-08-31T22:00:00.000Z",
+   "showOnHomepage": true,
+   "slug": {
+    "_type": "slug",
+    "current": "adoracija-pred-najsvetejsim"
+   },
+   "summary": "Vsak dan razen četrtka in nedelje med 17.00 in 18.00 v Marijini cerkvi.",
+   "title": "Adoracija pred Najsvetejšim"
+  },
+  {
+   "_createdAt": "2026-10-26T17:48:43Z",
+   "_id": "ann-otroci-nas-potrebujejo-2026",
+   "_rev": "QnTUkLMvmt3ECzV0IwSEgv",
+   "_type": "announcement",
+   "_updatedAt": "2026-10-26T17:58:31Z",
+   "body": [
+    {
+     "_key": "c2r469",
+     "_type": "block",
+     "children": [
+      {
+       "_key": "c2s469",
+       "_type": "span",
+       "marks": [],
+       "text": "Če želite pri akciji sodelovati, lahko pri izhodu iz cerkve poiščete položnico, s pomočjo katere lahko na račun Slovenske Karitas nakažete želeno vsoto."
+      }
+     ],
+     "markDefs": [],
+     "style": "normal"
+    }
+   ],
+   "category": "caritas",
+   "image": {
+    "_type": "imageWithAlt",
+    "alt": "Sveče v cerkvi",
+    "asset": {
+     "_ref": "image-c6aa32755aa9514649c7c028f35cbca060c09a3d-3840x2555-jpg",
+     "_type": "reference"
+    },
+    "caption": "Foto: Guillaume Paumier, CC BY 3.0, Wikimedia Commons"
+   },
+   "importance": "normal",
+   "publishFrom": "2026-07-31T22:00:00.000Z",
+   "publishUntil": "2026-09-15T21:45:00.000Z",
+   "showOnHomepage": false,
+   "slug": {
+    "_type": "slug",
+    "current": "otroci-nas-potrebujejo-2026"
+   },
+   "summary": "Slovenska Karitas zbira sredstva za pakete šolskih potrebščin za 14.000 otrok. Dar 5 € s SMS ZVEZEK5 na 1919.",
+   "title": "Karitas: Otroci nas potrebujejo"
+  },
+  {
+   "_createdAt": "2026-10-26T17:48:43Z",
+   "_id": "ann-oznanila-oktober-2026",
+   "_rev": "QnTUkLMvmt3ECzV0IwSEgv",
+   "_type": "announcement",
+   "_updatedAt": "2026-10-26T17:58:31Z",
+   "attachments": [
+    {
+     "_key": "c2c469",
+     "_type": "attachment",
+     "file": {
+      "_type": "file",
+      "asset": {
+       "_ref": "file-b3ecbec148c80cfefe569a106c1a021e8a4a1102-pdf",
+       "_type": "reference"
+      }
+     },
+     "title": "Oznanila – oktober 2026 (PDF)"
+    }
+   ],
+   "category": "notice",
+   "image": {
+    "_type": "imageWithAlt",
+    "alt": "Ladja župnijske cerkve",
+    "asset": {
+     "_ref": "image-5bbaebb89d7cebb316ddea1a7f692d74b7d2842c-2734x2724-jpg",
+     "_type": "reference"
+    },
+    "caption": "Foto: TadejM, CC BY-SA 4.0, Wikimedia Commons"
+   },
+   "importance": "normal",
+   "publishFrom": "2026-09-30T22:00:00.000Z",
+   "publishUntil": "2026-10-31T22:45:00.000Z",
+   "showOnHomepage": true,
+   "slug": {
+    "_type": "slug",
+    "current": "oznanila-oktober-2026"
+   },
+   "summary": "Mesečna oznanila s koledarjem svetih maš in nameni ter župnijskimi obvestili za oktober.",
+   "title": "Oznanila za oktober 2026"
+  },
+  {
+   "_createdAt": "2026-10-26T17:48:43Z",
+   "_id": "ann-romanje-trsat-2026",
+   "_rev": "QnTUkLMvmt3ECzV0IwSEgv",
+   "_type": "announcement",
+   "_updatedAt": "2026-10-26T17:58:31Z",
+   "body": [
+    {
+     "_key": "c2l469",
+     "_type": "block",
+     "children": [
+      {
+       "_key": "c2m469",
+       "_type": "span",
+       "marks": [],
+       "text": "Pri kosilu bo na voljo tudi brezmesni meni, vendar je treba na to izbiro pri prijavi posebej opozoriti."
+      }
+     ],
+     "markDefs": [],
+     "style": "normal"
+    }
+   ],
+   "category": "notice",
+   "image": {
+    "_type": "imageWithAlt",
+    "alt": "Kip sv. Janeza Pavla II. pri svetišču na Trsatu",
+    "asset": {
+     "_ref": "image-f0a1f4da6fb50c0fca6df54277d03f2d732d7ccb-1952x2592-jpg",
+     "_type": "reference"
+    },
+    "caption": "Foto: Rundvald, CC BY-SA 4.0, Wikimedia Commons"
+   },
+   "importance": "normal",
+   "publishFrom": "2026-09-30T22:00:00.000Z",
+   "publishUntil": "2026-10-10T21:45:00.000Z",
+   "relatedEvent": {
+    "_ref": "event-romanje-trsat-2026",
+    "_type": "reference"
+   },
+   "showOnHomepage": false,
+   "slug": {
+    "_type": "slug",
+    "current": "prijave-romanje-trsat-2026"
+   },
+   "summary": "Prijave do 10. oktobra osebno v župnišču, po spletu ali po telefonu. Cena 40 €, otroci do 15. leta brezplačno.",
+   "title": "Prijave na župnijsko romanje na Trsat"
+  },
+  {
+   "_createdAt": "2026-10-26T17:48:43Z",
+   "_id": "ann-roznivenski-mesec-2026",
+   "_rev": "QnTUkLMvmt3ECzV0IwSEgv",
+   "_type": "announcement",
+   "_updatedAt": "2026-10-26T17:58:31Z",
+   "body": [
+    {
+     "_key": "c2d469",
+     "_type": "block",
+     "children": [
+      {
+       "_key": "c2e469",
+       "_type": "span",
+       "marks": [],
+       "text": "Mesec oktober je zaradi praznika Rožnovenske Matere Božje v celoti posvečen rožnemu vencu. Zato ga bomo v tem mesecu tudi mi vsak večer pred sveto mašo molili pred izpostavljenim Najsvetejšim."
+      }
+     ],
+     "markDefs": [],
+     "style": "normal"
+    },
+    {
+     "_key": "c2f469",
+     "_type": "block",
+     "children": [
+      {
+       "_key": "c2g469",
+       "_type": "span",
+       "marks": [],
+       "text": "Odkar imamo v Marijini cerkvi na vidnem mestu razstavljen rožni venec z jagodo iz rožnega venca sv. Janeza Pavla II., smo še toliko bolj povabljeni, da s to globoko molitvijo pred Gospoda prinašamo našo župnijo, naše družine in vso Kristusovo Cerkev. Lepo bo, če boste mesec oktober z molitvijo (vsaj desetke) rožnega venca vsak dan obeležili tudi doma."
+      }
+     ],
+     "markDefs": [],
+     "style": "normal"
+    }
+   ],
+   "category": "pastoral",
+   "image": {
+    "_type": "imageWithAlt",
+    "alt": "Lesen rožni venec s križem",
+    "asset": {
+     "_ref": "image-99dfce870bf18bcc51c8fb0e25cc7b3ed51725c7-2272x1704-jpg",
+     "_type": "reference"
+    },
+    "caption": "Foto: Daniel Tibi (Dti) | daniel-tibi.de, Public domain, Wikimedia Commons"
+   },
+   "importance": "important",
+   "publishFrom": "2026-09-30T22:00:00.000Z",
+   "publishUntil": "2026-10-31T22:45:00.000Z",
+   "showOnHomepage": true,
+   "slug": {
+    "_type": "slug",
+    "current": "oktober-mesec-roznega-venca-2026"
+   },
+   "summary": "Vsak večer pred sveto mašo molimo rožni venec pred izpostavljenim Najsvetejšim.",
+   "title": "Oktober – mesec rožnega venca"
+  },
+  {
+   "_createdAt": "2026-10-26T17:48:43Z",
+   "_id": "ann-vpis-verouk-2026",
+   "_rev": "QnTUkLMvmt3ECzV0IwSEgv",
+   "_type": "announcement",
+   "_updatedAt": "2026-10-26T17:58:31Z",
+   "body": [
+    {
+     "_key": "c2n469",
+     "_type": "block",
+     "children": [
+      {
+       "_key": "c2o469",
+       "_type": "span",
+       "marks": [],
+       "text": "Starši ste po večini elektronske prijavnice že oddali. Zato bo vpis namenjen temu, da osebno izrečemo nekaj besed, nas opozorite na morebitne posebnosti in poravnate stroške za učbenike, liturgične zvezke in ogrevanje."
+      }
+     ],
+     "markDefs": [],
+     "style": "normal"
+    },
+    {
+     "_key": "c2p469",
+     "_type": "block",
+     "children": [
+      {
+       "_key": "c2q469",
+       "_type": "span",
+       "marks": [],
+       "text": "Veroučna šola bo svoja vrata odprla v ponedeljek, 7. septembra, katehetska sveta maša pa bo že dan prej, v nedeljo ob 10.00."
+      }
+     ],
+     "markDefs": [],
+     "style": "normal"
+    }
+   ],
+   "category": "catechesis",
+   "image": {
+    "_type": "imageWithAlt",
+    "alt": "Otroci na prvem svetem obhajilu",
+    "asset": {
+     "_ref": "image-04fb30d344234886b7ad01f1a50d9f02b42ddc52-3840x2634-jpg",
+     "_type": "reference"
+    },
+    "caption": "Foto: Jeffrey Backowski, CC0, Wikimedia Commons"
+   },
+   "importance": "important",
+   "publishFrom": "2026-08-24T22:00:00.000Z",
+   "publishUntil": "2026-09-07T21:45:00.000Z",
+   "relatedEvent": {
+    "_ref": "event-katehetska-masa-2026",
+    "_type": "reference"
+   },
+   "showOnHomepage": false,
+   "slug": {
+    "_type": "slug",
+    "current": "vpis-v-verousko-solo-2026"
+   },
+   "summary": "Vpis bo v torek, 1., in sredo, 2. septembra, med 16.00 in 18.00 v pevski sobi v župnišču.",
+   "title": "Vpis v veroučno šolo"
+  },
+  {
+   "_createdAt": "2026-10-26T17:48:43Z",
+   "_id": "article-kristofova-nedelja-miva-2026",
+   "_rev": "QnTUkLMvmt3ECzV0IwSEgv",
+   "_type": "article",
+   "_updatedAt": "2026-10-26T17:58:31Z",
+   "attachments": [
+    {
+     "_key": "c1v469",
+     "_type": "attachment",
+     "file": {
+      "_type": "file",
+      "asset": {
+       "_ref": "file-f610c1498e661a4e1368b601b2d195d3ce389ef2-pdf",
+       "_type": "reference"
+      }
+     },
+     "title": "Oznanila – avgust 2026 (PDF)"
+    }
+   ],
+   "author": {
+    "_ref": "person-blaz-jezersek",
+    "_type": "reference"
+   },
+   "body": [
+    {
+     "_key": "c1p469",
+     "_type": "block",
+     "children": [
+      {
+       "_key": "c1q469",
+       "_type": "span",
+       "marks": [],
+       "text": "Tretjo julijsko nedeljo smo v katoliški Cerkvi na Slovenskem obhajali kot Krištofovo nedeljo. To je tudi letos zaznamovala akcija MIVA, s katero verniki skušamo našim misijonarjem pomagati do primernih prevoznih sredstev."
+      }
+     ],
+     "markDefs": [],
+     "style": "normal"
+    },
+    {
+     "_key": "c1r469",
+     "_type": "block",
+     "children": [
+      {
+       "_key": "c1s469",
+       "_type": "span",
+       "marks": [],
+       "text": "Bogu smo se zahvalili za srečno prevožene poti in ob tem zbrali skoraj 1000 € za vozila naših misijonarjev. Prva informacija o višini zbranih sredstev je bila nekoliko nižja, vendar so se nekateri darovalci našli še kasneje, tako da letošnja nabirka v bistvu ne odstopa preveč od povprečja minulih let."
+      }
+     ],
+     "markDefs": [],
+     "style": "normal"
+    },
+    {
+     "_key": "c1t469",
+     "_type": "block",
+     "children": [
+      {
+       "_key": "c1u469",
+       "_type": "span",
+       "marks": [],
+       "text": "S pomočjo darov, zbranih na Krištofovo nedeljo lani, je MIVA Slovenija s 491.838 € sodelovala pri 21 projektih v 17 misijonskih deželah po svetu. Vsem darovalcem Bog povrni!"
+      }
+     ],
+     "markDefs": [],
+     "style": "normal"
+    }
+   ],
+   "excerpt": "Na Krištofovo nedeljo smo se Bogu zahvalili za srečno prevožene poti in zbrali darove za akcijo MIVA.",
+   "image": {
+    "_type": "imageWithAlt",
+    "alt": "Notranjost cerkve",
+    "asset": {
+     "_ref": "image-8b87208c0c0c7a0be882f534eec6e9329d4ce6d3-3648x2736-jpg",
+     "_type": "reference"
+    },
+    "caption": "Foto: Urharec, CC BY-SA 3.0, Wikimedia Commons"
+   },
+   "publishedAt": "2026-08-02T06:00:00.000Z",
+   "slug": {
+    "_type": "slug",
+    "current": "kristofova-nedelja-miva-2026"
+   },
+   "title": "Za vozila misijonarjev zbrali skoraj 1000 €"
+  },
+  {
+   "_createdAt": "2026-10-26T17:48:43Z",
+   "_id": "article-marijino-vnebovzetje",
+   "_rev": "oYIqK8aBt7dLGaaLNtdRUf",
+   "_type": "article",
+   "_updatedAt": "2026-10-26T17:48:43Z",
+   "attachments": [
+    {
+     "_key": "c1o469",
+     "_type": "attachment",
+     "file": {
+      "_type": "file",
+      "asset": {
+       "_ref": "file-f610c1498e661a4e1368b601b2d195d3ce389ef2-pdf",
+       "_type": "reference"
+      }
+     },
+     "title": "Oznanila – avgust 2026 (PDF)"
+    }
+   ],
+   "author": {
+    "_ref": "person-blaz-jezersek",
+    "_type": "reference"
+   },
+   "body": [
+    {
+     "_key": "c1e469",
+     "_type": "block",
+     "children": [
+      {
+       "_key": "c1f469",
+       "_type": "span",
+       "marks": [],
+       "text": "Naša mlada župnija svoj rojstni dan obhaja na enega najlepših in najstarejših krščanskih praznikov – na praznik Marijinega vnebovzetja. Ko se sredi avgusta zberemo v cerkvi, morda tu, pri nas, morda v kakem od številnih Marijanskih romarskih središč, se včasih vprašamo: Kaj pravzaprav praznujemo? Ali gre le za spomin na nekaj, kar se je zgodilo pred stoletji, ali pa ima ta praznik neposredno zvezo z našim vsakdanjim življenjem?"
+      }
+     ],
+     "markDefs": [],
+     "style": "normal"
+    },
+    {
+     "_key": "c1g469",
+     "_type": "block",
+     "children": [
+      {
+       "_key": "c1h469",
+       "_type": "span",
+       "marks": [],
+       "text": "Marijino vnebovzetje pomeni, da je bila Marija, Jezusova mati, po koncu svojega zemeljskega življenja s telesom in dušo vzeta v nebeško slavo. To je temeljna resnica naše vere. Vendar liturgija – torej praznično bogoslužje Cerkve – te resnice ne razlaga z zapletenimi teološkimi pojmi, ampak jo izpoveduje s pesmijo, molitvijo in simboli."
+      }
+     ],
+     "markDefs": [],
+     "style": "normal"
+    },
+    {
+     "_key": "c1i469",
+     "_type": "block",
+     "children": [
+      {
+       "_key": "c1j469",
+       "_type": "span",
+       "marks": [],
+       "text": "Marija ni neka nedosegljiva zvezda, ampak je ena izmed nas. Kakor mi je Jezusova učenka, a vendarle prva med nami; prva, ki je v popolnem zaupanju Bogu, prehodila pot od tistega njenega »Zgodi se« ob oznanjenju, pa vse do končnega cilja. To, kar je Bog storil z Marijo, obljublja tudi vsakemu izmed nas."
+      }
+     ],
+     "markDefs": [],
+     "style": "normal"
+    },
+    {
+     "_key": "c1k469",
+     "_type": "block",
+     "children": [
+      {
+       "_key": "c1l469",
+       "_type": "span",
+       "marks": [],
+       "text": "Vnebovzetje zato ni le Marijin praznik, ampak praznik naše prihodnosti. Pove nam, da naše življenje ne gre proti niču ali pozabi, ampak proti polnosti v Bogu. Ko gledamo Marijo v nebesih, gledamo to, kar bomo nekoč, po Božji dobroti in svojem zvestem sodelovanju z Njim, postali tudi mi."
+      }
+     ],
+     "markDefs": [],
+     "style": "normal"
+    },
+    {
+     "_key": "c1m469",
+     "_type": "block",
+     "children": [
+      {
+       "_key": "c1n469",
+       "_type": "span",
+       "marks": [],
+       "text": "Praznik nam sporoča nekaj čudovitega o našem telesu in ustvarjenem svetu. Krščanstvo ne uči, da je telo le minljiva lupina, ki jo moramo odvreči. Marija je vzeta v nebesa s telesom in dušo. To pomeni, da je vse naše konkretno življenje – naše vsakdanje delo, naši trudi, naše veselje, pa tudi naše bolečine in žulji – dragoceno v Božjih očeh. Zato Marijo v bogoslužju tega praznika povsem upravičeno imenujemo »znamenje trdnega upanja in tolažbe potujočemu Božjemu ljudstvu«."
+      }
+     ],
+     "markDefs": [],
+     "style": "normal"
+    }
+   ],
+   "excerpt": "Naša mlada župnija svoj rojstni dan obhaja na enega najlepših in najstarejših krščanskih praznikov.",
+   "image": {
+    "_type": "imageWithAlt",
+    "alt": "Cerkev sv. Tomaža in okrogla Marijina cerkev v Zgornjih Pirničah",
+    "asset": {
+     "_ref": "image-b257c590bc28e058750a5de96c488eb12a1038e5-1920x2560-jpg",
+     "_type": "reference"
+    },
+    "caption": "Foto: Ajznponar, CC BY-SA 4.0, Wikimedia Commons"
+   },
+   "publishedAt": "2026-08-01T06:00:00.000Z",
+   "slug": {
+    "_type": "slug",
+    "current": "marijino-vnebovzetje"
+   },
+   "title": "Marijino vnebovzetje – rojstni dan naše župnije"
+  },
+  {
+   "_createdAt": "2026-10-26T17:48:43Z",
+   "_id": "article-povisanje-svetega-kriza",
+   "_rev": "oYIqK8aBt7dLGaaLNtdRUf",
+   "_type": "article",
+   "_updatedAt": "2026-10-26T17:48:43Z",
+   "attachments": [
+    {
+     "_key": "c1d469",
+     "_type": "attachment",
+     "file": {
+      "_type": "file",
+      "asset": {
+       "_ref": "file-0ebe7f5bdf2b0d908a1ea4e2b5c79c9957e0033e-pdf",
+       "_type": "reference"
+      }
+     },
+     "title": "Oznanila – september 2026 (PDF)"
+    }
+   ],
+   "author": {
+    "_ref": "person-blaz-jezersek",
+    "_type": "reference"
+   },
+   "body": [
+    {
+     "_key": "c15469",
+     "_type": "block",
+     "children": [
+      {
+       "_key": "c16469",
+       "_type": "span",
+       "marks": [],
+       "text": "Praznik Povišanja svetega križa, ki ga Cerkev obhaja 14. septembra, v središče postavlja temeljno znamenje krščanske vere. Križ, ki je bil v rimskem svetu simbol sramote in najhujšega kaznovanja, po Kristusovem vstajenju postane znamenje zmage, upanja in odrešenja."
+      }
+     ],
+     "markDefs": [],
+     "style": "normal"
+    },
+    {
+     "_key": "c17469",
+     "_type": "block",
+     "children": [
+      {
+       "_key": "c18469",
+       "_type": "span",
+       "marks": [],
+       "text": "Korenine praznika segajo v 4. stoletje in so tesno povezane z dvema ključnima zgodovinskima dogodkoma. Cesarica Helena, mati cesarja Konstantina Velikega, se je okoli leta 326 podala na romanje v Sveto deželo, kjer je po izročilu na Kalvariji našla ostanke pravega Kristusovega križa. Na tem mestu je Konstantin dal zgraditi mogočno baziliko Božjega groba (Anastasis). Posvečena je bila 13. septembra 335, dan kasneje, 14. septembra, pa so relikvijo križa prvič slovesno dvignili (povišali) in jo postavili zbranemu ljudstvu v češčenje."
+      }
+     ],
+     "markDefs": [],
+     "style": "normal"
+    },
+    {
+     "_key": "c19469",
+     "_type": "block",
+     "children": [
+      {
+       "_key": "c1a469",
+       "_type": "span",
+       "marks": [],
+       "text": "Praznik je dobil nov zagon v 7. stoletju. Leta 614 je perzijski kralj Kozroj II. zavzel Jeruzalem, opustošil svete kraje in kot vojni plen odnesel relikvijo svetega križa. Bizantinski cesar Heraklij je po dolgotrajni vojni premagal Perzijce in relikvijo zmagovito vrnil v Jeruzalem. Izročilo pravi, da je želel cesar v polnem vladarskem sijaju sam prinesti križ na Kalvarijo, a se je ustavil pred zaprtimi mestnimi vrati; šele ko je po opozorilu patriarha Zaharija odložil krono, se sezul in oblekel spokorna oblačila, je lahko vstopil in povišal križ."
+      }
+     ],
+     "markDefs": [],
+     "style": "normal"
+    },
+    {
+     "_key": "c1b469",
+     "_type": "block",
+     "children": [
+      {
+       "_key": "c1c469",
+       "_type": "span",
+       "marks": [],
+       "text": "V rimskem bogoslužju sta dolgo obstajala dva praznika: Najdba svetega križa (3. maja) in Povišanje svetega križa (14. septembra). Z liturgično prenovo po drugem vatikanskem koncilu sta se praznovanji združili v en sam praznik 14. septembra."
+      }
+     ],
+     "markDefs": [],
+     "style": "normal"
+    }
+   ],
+   "excerpt": "Križ, ki je bil v rimskem svetu simbol sramote, po Kristusovem vstajenju postane znamenje zmage, upanja in odrešenja.",
+   "image": {
+    "_type": "imageWithAlt",
+    "alt": "Cerkev Povišanja svetega Križa v Spodnjih Pirničah",
+    "asset": {
+     "_ref": "image-2b0b1d9e06ab0d6f61b86e8fc9f26f7b44f62e27-3264x2448-jpg",
+     "_type": "reference"
+    },
+    "caption": "Foto: Ajznponar, CC BY-SA 4.0, Wikimedia Commons"
+   },
+   "publishedAt": "2026-09-01T06:00:00.000Z",
+   "slug": {
+    "_type": "slug",
+    "current": "povisanje-svetega-kriza"
+   },
+   "title": "Povišanje svetega Križa"
+  },
+  {
+   "_createdAt": "2026-10-26T17:48:43Z",
+   "_id": "article-roznovenska-mati-bozja",
+   "_rev": "QnTUkLMvmt3ECzV0IwSEgv",
+   "_type": "article",
+   "_updatedAt": "2026-10-26T17:58:31Z",
+   "attachments": [
+    {
+     "_key": "c14469",
+     "_type": "attachment",
+     "file": {
+      "_type": "file",
+      "asset": {
+       "_ref": "file-b3ecbec148c80cfefe569a106c1a021e8a4a1102-pdf",
+       "_type": "reference"
+      }
+     },
+     "title": "Oznanila – oktober 2026 (PDF)"
+    }
+   ],
+   "author": {
+    "_ref": "person-blaz-jezersek",
+    "_type": "reference"
+   },
+   "body": [
+    {
+     "_key": "cw469",
+     "_type": "block",
+     "children": [
+      {
+       "_key": "cx469",
+       "_type": "span",
+       "marks": [],
+       "text": "God Rožnovenske Matere Božje, ki ga Cerkev obhaja 7. oktobra, nosi v sebi izjemno prepletenost zgodovine, duhovnosti in osebnega izkustva vere. Praznik ne slavi zgolj zgodovinske zmage, temveč nas vabi k ponovnemu odkritju ene najbolj prepoznavnih in rodovitnih molitev v zakladnici Cerkve."
+      }
+     ],
+     "markDefs": [],
+     "style": "normal"
+    },
+    {
+     "_key": "cy469",
+     "_type": "block",
+     "children": [
+      {
+       "_key": "cz469",
+       "_type": "span",
+       "marks": [],
+       "text": "Izvor praznika sega v burno 16. stoletje. Dne 7. oktobra 1571 se je v Korintskem zalivu odvila pomorska bitka pri Lepantu, v kateri se je krščansko ladjevje Svete lige soočilo z močnejšim otomanskim ladjevjem. Papež Pij V. se je zavedal usodnosti trenutka za prihodnost Evrope, zato je vse vernike pozval k vztrajni molitvi rožnega venca. Ko je združena mornarica nepričakovano zmagala, je papež uspeh brez obotavljanja pripisal priprošnji Božje Matere. Leta 1572 je uvedel spominski dan »Marije Zmagovalke«, ki ga je njegov naslednik Gregor XIII. preimenoval v praznik svetega rožnega venca. Praznik se je sprva obhajal le v cerkvah z rožnovenskimi bratovščinami, papež Pij X. pa je leta 1913 praznik ukazal za vso Cerkev in določil današnji stalni datum."
+      }
+     ],
+     "markDefs": [],
+     "style": "normal"
+    },
+    {
+     "_key": "c10469",
+     "_type": "block",
+     "children": [
+      {
+       "_key": "c11469",
+       "_type": "span",
+       "marks": [],
+       "text": "Lepota rožnega venca pa presega vojaške in politične okvire ter nagovarja človeka v njegovi najgloblji notranjosti. Čeprav se nenehno ponavljata očenaš in zdravamarija, je rožni venec v resnici izrazito kristocentrična molitev. Preko štirih delov – veselega, svetlega, žalostnega in častitljivega – se sprehodimo skozi celotno zgodovino odrešenja. Gre za kontemplacijo Kristusovega obličja v šoli Marije, ki je vse te dogodke zvesto ohranjala in premišljevala v svojem srcu."
+      }
+     ],
+     "markDefs": [],
+     "style": "normal"
+    },
+    {
+     "_key": "c12469",
+     "_type": "block",
+     "children": [
+      {
+       "_key": "c13469",
+       "_type": "span",
+       "marks": [],
+       "text": "Ritmično ponavljanje besed deluje pomirjujoče; ustvarja varen duhovni prostor, v katerem se um umiri, misli pa se osredotočijo na skrivnosti vere. Preprosto prebiranje jagod med prsti pomaga zasidrati duha v sedanjem trenutku in prepojiti telo z molitvijo. Rožnovenska Mati Božja nas torej spominja, da najmočnejše orožje duha niso hrupne besede, temveč vztrajna, zbrana molitev, ki spreminja srce in prenavlja svet."
+      }
+     ],
+     "markDefs": [],
+     "style": "normal"
+    }
+   ],
+   "excerpt": "God Rožnovenske Matere Božje nas vabi k ponovnemu odkritju ene najbolj prepoznavnih in rodovitnih molitev v zakladnici Cerkve.",
+   "image": {
+    "_type": "imageWithAlt",
+    "alt": "Rožni venec",
+    "asset": {
+     "_ref": "image-f276815aca51b85df41b00d8142e934f9c224cf6-3840x2260-jpg",
+     "_type": "reference"
+    },
+    "caption": "Foto: Jacek Halicki, CC BY-SA 4.0, Wikimedia Commons"
+   },
+   "publishedAt": "2026-10-01T06:00:00.000Z",
+   "slug": {
+    "_type": "slug",
+    "current": "roznovenska-mati-bozja"
+   },
+   "title": "Rožnovenska Mati Božja"
+  },
+  {
+   "_createdAt": "2026-10-26T17:48:43Z",
+   "_id": "article-sveto-resnje-telo-in-kri",
+   "_rev": "QnTUkLMvmt3ECzV0IwSEgv",
+   "_type": "article",
+   "_updatedAt": "2026-10-26T17:58:31Z",
+   "attachments": [
+    {
+     "_key": "c2b469",
+     "_type": "attachment",
+     "file": {
+      "_type": "file",
+      "asset": {
+       "_ref": "file-5e44c0a208e8d10e15f2c47a1d2e19a800d75960-pdf",
+       "_type": "reference"
+      }
+     },
+     "title": "Oznanila – junij 2026 (PDF)"
+    }
+   ],
+   "author": {
+    "_ref": "person-blaz-jezersek",
+    "_type": "reference"
+   },
+   "body": [
+    {
+     "_key": "c21469",
+     "_type": "block",
+     "children": [
+      {
+       "_key": "c22469",
+       "_type": "span",
+       "marks": [],
+       "text": "Praznik Svetega Rešnjega Telesa in Krvi (telovo) predstavlja enega vrhuncev liturgičnega leta, ko Cerkev javno in slovesno izrazi svojo vero v realno prisotnost Jezusa Kristusa v zakramentu evharistije. Medtem ko veliki četrtek, kot ustanovni dan svete evharistije, ostaja zakoreninjen v resnobnosti Kristusovega trpljenja, je telovo praznik hvaležnosti in slavljenja tega neprecenljivega daru."
+      }
+     ],
+     "markDefs": [],
+     "style": "normal"
+    },
+    {
+     "_key": "c23469",
+     "_type": "block",
+     "children": [
+      {
+       "_key": "c24469",
+       "_type": "span",
+       "marks": [],
+       "text": "Korenine praznika segajo v 13. stoletje v Belgijo, natančneje v škofijo Liège. Ključna osebnost za nastanek praznika je bila sveta Julijana Cornillonska, redovnica in mistikinja, ki je imela od leta 1209 dalje ponavljajoča se videnja polne lune, na kateri je bila opazna črna lisa. Po globoki molitvi je prejela razlago: luna je predstavljala Cerkev, črna lisa pa odsotnost praznika, ki bi posebej častil najsvetejši zakrament."
+      }
+     ],
+     "markDefs": [],
+     "style": "normal"
+    },
+    {
+     "_key": "c25469",
+     "_type": "block",
+     "children": [
+      {
+       "_key": "c26469",
+       "_type": "span",
+       "marks": [],
+       "text": "Lokalni škof Robert je po temeljitem premisleku leta 1246 v svoji škofiji uvedel ta praznik. Ključni premik na raven celotne Cerkve pa se je zgodil po evharističnem čudežu v Bolseni (1263), kjer je hostija med mašo zakrvavela. Papež Urban IV. je leta 1264 praznik razširil na vesoljno Cerkev; pripravo liturgičnih besedil na čast prazniku pa je zaupal sv. Tomažu Akvinskemu."
+      }
+     ],
+     "markDefs": [],
+     "style": "normal"
+    },
+    {
+     "_key": "c27469",
+     "_type": "block",
+     "children": [
+      {
+       "_key": "c28469",
+       "_type": "span",
+       "marks": [],
+       "text": "V 14. stoletju so praznovanje obogatili s procesijami, ki so postale osrednji element praznika. V obdobju protireformacije in po tridentinskem koncilu (1545–1563) je telovo dobilo še močnejši poudarek: postalo je zunanje izpovedovanje katoliške vere. Procesije so postale veličastne manifestacije vere, kjer sta se prepletala sakralni sijaj in ljudska kultura."
+      }
+     ],
+     "markDefs": [],
+     "style": "normal"
+    },
+    {
+     "_key": "c29469",
+     "_type": "block",
+     "children": [
+      {
+       "_key": "c2a469",
+       "_type": "span",
+       "marks": [],
+       "text": "Danes, po liturgični prenovi drugega vatikanskega koncila, praznik ohranja svojo globoko teološko noto, a z močnejšim poudarkom na evharistiji kot viru in vrhuncu celotnega krščanskega življenja. Praznik nas danes vabi, da kot Božje ljudstvo ne le prejemamo Kristusa v svetem obhajilu, pač pa postanemo Njegove »monštrance« v svetu – živo znamenje Njegove ljubezni na ulicah našega vsakdana."
+      }
+     ],
+     "markDefs": [],
+     "style": "normal"
+    }
+   ],
+   "excerpt": "Telovo je praznik hvaležnosti in slavljenja neprecenljivega daru evharistije.",
+   "image": {
+    "_type": "imageWithAlt",
+    "alt": "Telovska procesija",
+    "asset": {
+     "_ref": "image-25f0c0bd6e5ca2f5c5cd73dcfccb606d6708b41a-3840x2697-jpg",
+     "_type": "reference"
+    },
+    "caption": "Foto: Chrumps, CC BY-SA 4.0, Wikimedia Commons"
+   },
+   "publishedAt": "2026-05-31T06:00:00.000Z",
+   "slug": {
+    "_type": "slug",
+    "current": "sveto-resnje-telo-in-kri"
+   },
+   "title": "Praznik Svetega Rešnjega Telesa in Krvi"
+  },
+  {
+   "_createdAt": "2026-10-26T17:48:43Z",
+   "_id": "article-verouk-v-stevilkah-2025-2026",
+   "_rev": "oYIqK8aBt7dLGaaLNtdRUf",
+   "_type": "article",
+   "_updatedAt": "2026-10-26T17:48:43Z",
+   "attachments": [
+    {
+     "_key": "c20469",
+     "_type": "attachment",
+     "file": {
+      "_type": "file",
+      "asset": {
+       "_ref": "file-5e44c0a208e8d10e15f2c47a1d2e19a800d75960-pdf",
+       "_type": "reference"
+      }
+     },
+     "title": "Oznanila – junij 2026 (PDF)"
+    }
+   ],
+   "author": {
+    "_ref": "person-blaz-jezersek",
+    "_type": "reference"
+   },
+   "body": [
+    {
+     "_key": "c1w469",
+     "_type": "block",
+     "children": [
+      {
+       "_key": "c1x469",
+       "_type": "span",
+       "marks": [],
+       "text": "K osnovnošolskemu verouku je letos v devetih razredih skupaj hodilo natanko 100 otrok; 47 je bilo dečkov in 53 deklic. Največ (15) jih je bilo v osmem, najmanj (7) pa v petem razredu. Prvi razred je letos obiskovalo 14 otrok."
+      }
+     ],
+     "markDefs": [],
+     "style": "normal"
+    },
+    {
+     "_key": "c1y469",
+     "_type": "block",
+     "children": [
+      {
+       "_key": "c1z469",
+       "_type": "span",
+       "marks": [],
+       "text": "12 otrok je letos pristopilo k prvemu svetemu obhajilu, zakrament svete birme pa je prejelo 23 mladostnikov. Srečanj mladinske skupine se je udeleževalo 5 do 10 mladincev."
+      }
+     ],
+     "markDefs": [],
+     "style": "normal"
+    }
+   ],
+   "excerpt": "K osnovnošolskemu verouku je v devetih razredih hodilo natanko 100 otrok. 12 jih je prejelo prvo sveto obhajilo, 23 pa sveto birmo.",
+   "image": {
+    "_type": "imageWithAlt",
+    "alt": "Polja pred Zgornjimi Pirničami",
+    "asset": {
+     "_ref": "image-b126e1a5be29bf8cf9d83aa1c1e3e4f34c198f43-3840x2160-jpg",
+     "_type": "reference"
+    },
+    "caption": "Foto: ModriDirkac, CC0, Wikimedia Commons"
+   },
+   "publishedAt": "2026-06-01T06:00:00.000Z",
+   "slug": {
+    "_type": "slug",
+    "current": "verouk-v-stevilkah-2025-2026"
+   },
+   "title": "Veroučno leto 2025/2026 v številkah"
+  },
+  {
+   "_createdAt": "2026-09-14T15:51:55Z",
+   "_id": "catechesisPage",
+   "_rev": "oYIqK8aBt7dLGaaLNtdRUf",
+   "_type": "catechesisPage",
+   "_updatedAt": "2026-10-26T17:48:43Z",
+   "contact": {
+    "_ref": "person-blaz-jezersek",
+    "_type": "reference"
+   },
+   "documents": [
+    {
+     "_key": "c5t46b",
+     "_ref": "doc-prijavnica-verouk-2025-2026",
+     "_type": "reference"
+    }
+   ],
+   "enrollment": [
+    {
+     "_key": "c5n46b",
+     "_type": "block",
+     "children": [
+      {
+       "_key": "c5o46b",
+       "_type": "span",
+       "marks": [],
+       "text": "Vpis v veroučno šolo je v začetku septembra v pevski sobi v župnišču. Prijavnico starši večinoma oddate že prej v elektronski obliki, ob vpisu pa poravnate stroške za delovne in liturgične zvezke ter ogrevanje."
+      }
+     ],
+     "markDefs": [],
+     "style": "normal"
+    },
+    {
+     "_key": "c5p46b",
+     "_type": "block",
+     "children": [
+      {
+       "_key": "c5q46b",
+       "_type": "span",
+       "marks": [],
+       "text": "Za napredovanje v naslednji razred je potreben reden obisk veroučnih ur (vsaj 75-odstotna udeležba). Podrobnosti so v pravilniku veroučne šole."
+      }
+     ],
+     "markDefs": [],
+     "style": "normal"
+    }
+   ],
+   "intro": [
+    {
+     "_key": "c5l46b",
+     "_type": "block",
+     "children": [
+      {
+       "_key": "c5m46b",
+       "_type": "span",
+       "marks": [],
+       "text": "Verouk v župniji Pirniče poteka v župnišču v Zgornjih Pirničah. V veroučnem letu 2025/2026 ga je obiskovalo 100 otrok od 1. do 9. razreda."
+      }
+     ],
+     "markDefs": [],
+     "style": "normal"
+    }
+   ],
+   "notice": [
+    {
+     "_key": "c5r46b",
+     "_type": "block",
+     "children": [
+      {
+       "_key": "c5s46b",
+       "_type": "span",
+       "marks": [],
+       "text": "Spodaj je urnik veroučnega leta 2025/2026. Urnik za 2026/2027 bo objavljen, ko ga potrdi župnijski urad."
+      }
+     ],
+     "markDefs": [],
+     "style": "normal"
+    }
+   ],
+   "schoolYear": "2025/2026",
+   "title": "Verouk"
+  },
+  {
+   "_createdAt": "2026-10-26T17:36:50Z",
+   "_id": "church-marijino-vnebovzetje",
+   "_rev": "oYIqK8aBt7dLGaaLNtce7o",
+   "_type": "church",
+   "_updatedAt": "2026-10-26T17:42:28Z",
+   "address": {
+    "_type": "address",
+    "city": "Medvode",
+    "postalCode": "1215",
+    "street": "Zgornje Pirniče 74b"
+   },
+   "dedication": "Marijino vnebovzetje",
+   "gallery": [
+    {
+     "_key": "k72j5",
+     "_type": "imageWithAlt",
+     "alt": "Cerkev sv. Tomaža v Zgornjih Pirničah, levo za njo okrogla Marijina cerkev",
+     "asset": {
+      "_ref": "image-b257c590bc28e058750a5de96c488eb12a1038e5-1920x2560-jpg",
+      "_type": "reference"
+     },
+     "caption": "Foto: Ajznponar, CC BY-SA 4.0, Wikimedia Commons"
+    }
+   ],
+   "history": [
+    {
+     "_key": "k0tk5",
+     "_type": "block",
+     "children": [
+      {
+       "_key": "k1tk5",
+       "_type": "span",
+       "marks": [],
+       "text": "Župnija Pirniče je bila ustanovljena leta 1985 na praznik Marijinega vnebovzetja, ko se je izločila iz župnije Smlednik. Obsega vasi Verje, Zgornje Pirniče, Spodnje Pirniče, Vikrče in Zavrh pod Šmarno goro."
+      }
+     ],
+     "markDefs": [],
+     "style": "normal"
+    },
+    {
+     "_key": "k2tk5",
+     "_type": "block",
+     "children": [
+      {
+       "_key": "k3tk5",
+       "_type": "span",
+       "marks": [],
+       "text": "Prvi župnik Peter Slevec je vodil gradnjo Marijine cerkve, ki je postala središče župnije."
+      }
+     ],
+     "markDefs": [],
+     "style": "normal"
+    }
+   ],
+   "image": {
+    "_key": "k3zac",
+    "_type": "imageWithAlt",
+    "alt": "Zgornje Pirniče z Marijino cerkvijo in zvonikom cerkve sv. Tomaža",
+    "asset": {
+     "_ref": "image-67f0c0bd20fcfdb1dd4b43d50d4868e5e30ca8b5-2130x1550-jpg",
+     "_type": "reference"
+    },
+    "caption": "Foto: ModriDirkac, CC0, Wikimedia Commons"
+   },
+   "kind": "parish",
+   "name": "Župnijska cerkev Marijinega vnebovzetja",
+   "order": 1,
+   "patronFeast": "15. avgust",
+   "shortName": "Marijina cerkev",
+   "slug": {
+    "_type": "slug",
+    "current": "marijino-vnebovzetje"
+   },
+   "summary": "Župnijska cerkev v Zgornjih Pirničah, zgrajena po ustanovitvi župnije leta 1985."
+  },
+  {
+   "_createdAt": "2026-10-26T17:36:50Z",
+   "_id": "church-sv-kriz",
+   "_rev": "oYIqK8aBt7dLGaaLNtce7o",
+   "_type": "church",
+   "_updatedAt": "2026-10-26T17:42:28Z",
+   "address": {
+    "_type": "address",
+    "city": "Medvode",
+    "postalCode": "1215",
+    "street": "Spodnje Pirniče"
+   },
+   "dedication": "Povišanje svetega Križa",
+   "gallery": [
+    {
+     "_key": "k62j5",
+     "_type": "imageWithAlt",
+     "alt": "Spodnje Pirniče s cerkvijo svetega Križa na vzpetini",
+     "asset": {
+      "_ref": "image-d5e6be0730d94bf9edd8cf3b32fa1ad3d7eaf3ae-3840x2160-jpg",
+      "_type": "reference"
+     },
+     "caption": "Foto: ModriDirkac, CC0, Wikimedia Commons"
+    }
+   ],
+   "image": {
+    "_key": "k0v3l",
+    "_type": "imageWithAlt",
+    "alt": "Cerkev Povišanja svetega Križa v Spodnjih Pirničah",
+    "asset": {
+     "_ref": "image-2b0b1d9e06ab0d6f61b86e8fc9f26f7b44f62e27-3264x2448-jpg",
+     "_type": "reference"
+    },
+    "caption": "Foto: Ajznponar, CC BY-SA 4.0, Wikimedia Commons"
+   },
+   "kind": "filial",
+   "name": "Podružnična cerkev Povišanja svetega Križa",
+   "order": 2,
+   "patronFeast": "14. september",
+   "shortName": "Sv. Križ",
+   "slug": {
+    "_type": "slug",
+    "current": "sv-kriz"
+   },
+   "summary": "Podružnična cerkev v Spodnjih Pirničah."
+  },
+  {
+   "_createdAt": "2026-10-26T17:36:50Z",
+   "_id": "church-sv-tomaz",
+   "_rev": "oYIqK8aBt7dLGaaLNtce7o",
+   "_type": "church",
+   "_updatedAt": "2026-10-26T17:42:28Z",
+   "address": {
+    "_type": "address",
+    "city": "Medvode",
+    "postalCode": "1215",
+    "street": "Zgornje Pirniče"
+   },
+   "dedication": "Sv. Tomaž, apostol",
+   "image": {
+    "_key": "k2xwm",
+    "_type": "imageWithAlt",
+    "alt": "Cerkev sv. Tomaža v Zgornjih Pirničah, levo za njo okrogla Marijina cerkev",
+    "asset": {
+     "_ref": "image-b257c590bc28e058750a5de96c488eb12a1038e5-1920x2560-jpg",
+     "_type": "reference"
+    },
+    "caption": "Foto: Ajznponar, CC BY-SA 4.0, Wikimedia Commons"
+   },
+   "kind": "filial",
+   "name": "Podružnična cerkev sv. Tomaža, apostola",
+   "order": 3,
+   "patronFeast": "3. julij",
+   "shortName": "Sv. Tomaž",
+   "slug": {
+    "_type": "slug",
+    "current": "sv-tomaz"
+   },
+   "summary": "Podružnična cerkev v Zgornjih Pirničah."
+  },
+  {
+   "_createdAt": "2026-09-14T15:51:55Z",
+   "_id": "homePage",
+   "_rev": "oYIqK8aBt7dLGaaLNtdRUf",
+   "_system": {
+    "base": {
+     "id": "homePage",
+     "rev": "crd3MCDUqF3hUPkmsgmphn"
+    }
+   },
+   "_type": "homePage",
+   "_updatedAt": "2026-10-26T17:48:43Z",
+   "featuredLinks": [
+    {
+     "_key": "c5u46b",
+     "_type": "link",
+     "internal": {
+      "_ref": "ann-oznanila-oktober-2026",
+      "_type": "reference"
+     },
+     "kind": "internal",
+     "label": "Oznanila za oktober"
+    },
+    {
+     "_key": "c5v46b",
+     "_type": "link",
+     "internal": {
+      "_ref": "ann-adoracija",
+      "_type": "reference"
+     },
+     "kind": "internal",
+     "label": "Adoracija in molitvene skupine"
+    }
+   ],
+   "heroEyebrow": "Skupaj na poti vere",
+   "heroImage": {
+    "_type": "imageWithAlt",
+    "alt": "Zgornje Pirniče z Marijino cerkvijo in zvonikom cerkve sv. Tomaža",
+    "asset": {
+     "_ref": "image-67f0c0bd20fcfdb1dd4b43d50d4868e5e30ca8b5-2130x1550-jpg",
+     "_type": "reference"
+    },
+    "caption": "Foto: ModriDirkac, CC0, Wikimedia Commons"
+   },
+   "heroQuote": {
+    "source": "Mt 18,20",
+    "text": "„Kjer sta dva ali so trije zbrani v mojem imenu, tam sem jaz med njimi.“"
+   },
+   "heroText": "Dobrodošli v župniji Pirniče pod Šmarno goro.",
+   "tile": {
+    "image": {
+     "_type": "imageWithAlt",
+     "alt": "Polja pred Zgornjimi Pirničami",
+     "asset": {
+      "_ref": "image-b126e1a5be29bf8cf9d83aa1c1e3e4f34c198f43-3840x2160-jpg",
+      "_type": "reference"
+     },
+     "caption": "Foto: ModriDirkac, CC0, Wikimedia Commons"
+    },
+    "source": "Ps 25,4",
+    "text": "„Gospod, kaži nam svojo pot.“"
+   },
+   "welcome": {
+    "image": {
+     "_type": "imageWithAlt",
+     "alt": "Cerkev sv. Tomaža v Zgornjih Pirničah, levo za njo okrogla Marijina cerkev",
+     "asset": {
+      "_ref": "image-b257c590bc28e058750a5de96c488eb12a1038e5-1920x2560-jpg",
+      "_type": "reference"
+     },
+     "caption": "Foto: Ajznponar, CC BY-SA 4.0, Wikimedia Commons"
+    },
+    "link": {
+     "_type": "link",
+     "internal": {
+      "_ref": "page-o-zupniji",
+      "_type": "reference"
+     },
+     "kind": "internal",
+     "label": "Več o župniji"
+    },
+    "text": [
+     {
+      "_key": "k82j5",
+      "_type": "block",
+      "children": [
+       {
+        "_key": "k92j5",
+        "_type": "span",
+        "marks": [],
+        "text": "Župnija Pirniče je bila ustanovljena leta 1985 in povezuje vasi Verje, Zgornje Pirniče, Spodnje Pirniče, Vikrče in Zavrh pod Šmarno goro. Svete maše so v Marijini cerkvi v Zgornjih Pirničah in v cerkvi svetega Križa v Spodnjih Pirničah."
+       }
+      ],
+      "markDefs": [],
+      "style": "normal"
+     }
+    ],
+    "title": "Dobrodošli med nami"
+   }
+  },
+  {
+   "_createdAt": "2026-10-26T17:36:50Z",
+   "_id": "schedule-redni",
+   "_rev": "oYIqK8aBt7dLGaaLNtbzOs",
+   "_type": "massSchedule",
+   "_updatedAt": "2026-10-26T17:36:50Z",
+   "entries": [
+    {
+     "_key": "k4tk5",
+     "_type": "massScheduleEntry",
+     "church": {
+      "_ref": "church-sv-kriz",
+      "_type": "reference"
+     },
+     "time": "08:00",
+     "type": "sunday",
+     "weekdays": [
+      "sunday"
+     ]
+    },
+    {
+     "_key": "k5tk5",
+     "_type": "massScheduleEntry",
+     "church": {
+      "_ref": "church-marijino-vnebovzetje",
+      "_type": "reference"
+     },
+     "time": "10:00",
+     "type": "sunday",
+     "weekdays": [
+      "sunday"
+     ]
+    },
+    {
+     "_key": "k6tk5",
+     "_type": "massScheduleEntry",
+     "church": {
+      "_ref": "church-marijino-vnebovzetje",
+      "_type": "reference"
+     },
+     "note": "nedeljska maša v soboto zvečer",
+     "time": "18:30",
+     "type": "sunday",
+     "weekdays": [
+      "saturday"
+     ]
+    },
+    {
+     "_key": "k7tk5",
+     "_type": "massScheduleEntry",
+     "church": {
+      "_ref": "church-sv-kriz",
+      "_type": "reference"
+     },
+     "time": "18:30",
+     "type": "regular",
+     "weekdays": [
+      "monday",
+      "friday"
+     ]
+    },
+    {
+     "_key": "k8tk5",
+     "_type": "massScheduleEntry",
+     "church": {
+      "_ref": "church-marijino-vnebovzetje",
+      "_type": "reference"
+     },
+     "time": "18:30",
+     "type": "regular",
+     "weekdays": [
+      "tuesday",
+      "wednesday"
+     ]
+    },
+    {
+     "_key": "k9tk5",
+     "_type": "massScheduleEntry",
+     "church": {
+      "_ref": "church-marijino-vnebovzetje",
+      "_type": "reference"
+     },
+     "time": "07:00",
+     "type": "regular",
+     "weekdays": [
+      "thursday"
+     ]
+    }
+   ],
+   "note": [
+    {
+     "_key": "katk5",
+     "_type": "block",
+     "children": [
+      {
+       "_key": "kbtk5",
+       "_type": "span",
+       "marks": [],
+       "text": "Za krst, poroko in spoved se oglasite pri župniku, kjer se boste dogovorili za pripravo in podelitev zakramenta."
+      }
+     ],
+     "markDefs": [],
+     "style": "normal"
+    }
+   ],
+   "title": "Redni urnik"
+  },
+  {
+   "_createdAt": "2026-10-26T17:48:43Z",
+   "_id": "page-o-zupniji",
+   "_rev": "oYIqK8aBt7dLGaaLNtdRUf",
+   "_type": "page",
+   "_updatedAt": "2026-10-26T17:48:43Z",
+   "intro": "Župnija Pirniče leži pod Šmarno goro in povezuje vasi Verje, Zgornje Pirniče, Spodnje Pirniče, Vikrče in Zavrh pod Šmarno goro.",
+   "sections": [
+    {
+     "_key": "c4246a",
+     "_type": "sectionRichText",
+     "body": [
+      {
+       "_key": "c4346a",
+       "_type": "block",
+       "children": [
+        {
+         "_key": "c4446a",
+         "_type": "span",
+         "marks": [],
+         "text": "Župnija Pirniče je bila ustanovljena leta 1985 na praznik Marijinega vnebovzetja, ko se je zaradi naraščajočega števila prebivalcev izločila iz župnije Smlednik. Spada v dekanijo Ljubljana - Šentvid v nadškofiji Ljubljana."
+        }
+       ],
+       "markDefs": [],
+       "style": "normal"
+      },
+      {
+       "_key": "c4546a",
+       "_type": "block",
+       "children": [
+        {
+         "_key": "c4646a",
+         "_type": "span",
+         "marks": [],
+         "text": "Prvi župnik Peter Slevec je vodil gradnjo Marijine cerkve v Zgornjih Pirničah, ki je postala središče župnije. Ob njej stojita starejši podružnični cerkvi: cerkev Povišanja svetega Križa v Spodnjih Pirničah in cerkev sv. Tomaža, apostola, v Zgornjih Pirničah. Župnik je msgr. dr. Blaž Jezeršek."
+        }
+       ],
+       "markDefs": [],
+       "style": "normal"
+      }
+     ],
+     "title": "Mlada župnija"
+    },
+    {
+     "_key": "c4746a",
+     "_type": "sectionTextImage",
+     "body": [
+      {
+       "_key": "c4846a",
+       "_type": "block",
+       "children": [
+        {
+         "_key": "c4946a",
+         "_type": "span",
+         "marks": [],
+         "text": "Nedeljske svete maše so v soboto ob 18.30 in v nedeljo ob 10.00 v Marijini cerkvi ter v nedeljo ob 8.00 v cerkvi svetega Križa."
+        }
+       ],
+       "markDefs": [],
+       "style": "normal"
+      },
+      {
+       "_key": "c4a46a",
+       "_type": "block",
+       "children": [
+        {
+         "_key": "c4b46a",
+         "_type": "span",
+         "marks": [],
+         "text": "Med tednom so maše ob ponedeljkih in petkih ob 18.30 v cerkvi svetega Križa, ob torkih, sredah in sobotah ob 18.30 ter ob četrtkih ob 7.00 v Marijini cerkvi."
+        }
+       ],
+       "markDefs": [],
+       "style": "normal"
+      }
+     ],
+     "image": {
+      "_type": "imageWithAlt",
+      "alt": "Cerkev sv. Tomaža in okrogla Marijina cerkev v Zgornjih Pirničah",
+      "asset": {
+       "_ref": "image-b257c590bc28e058750a5de96c488eb12a1038e5-1920x2560-jpg",
+       "_type": "reference"
+      },
+      "caption": "Foto: Ajznponar, CC BY-SA 4.0, Wikimedia Commons"
+     },
+     "imageSide": "right",
+     "title": "Naše cerkve"
+    },
+    {
+     "_key": "c4c46a",
+     "_type": "sectionRichText",
+     "body": [
+      {
+       "_key": "c4d46a",
+       "_type": "block",
+       "children": [
+        {
+         "_key": "c4e46a",
+         "_type": "span",
+         "marks": [],
+         "text": "V veroučnem letu 2025/2026 je k verouku hodilo 100 otrok. V župniji delujejo:"
+        }
+       ],
+       "markDefs": [],
+       "style": "normal"
+      },
+      {
+       "_key": "c4f46a",
+       "_type": "block",
+       "children": [
+        {
+         "_key": "c4g46a",
+         "_type": "span",
+         "marks": [],
+         "text": "župnijski pastoralni svet,"
+        }
+       ],
+       "level": 1,
+       "listItem": "bullet",
+       "markDefs": [],
+       "style": "normal"
+      },
+      {
+       "_key": "c4h46a",
+       "_type": "block",
+       "children": [
+        {
+         "_key": "c4i46a",
+         "_type": "span",
+         "marks": [],
+         "text": "Župnijska Karitas Pirniče,"
+        }
+       ],
+       "level": 1,
+       "listItem": "bullet",
+       "markDefs": [],
+       "style": "normal"
+      },
+      {
+       "_key": "c4j46a",
+       "_type": "block",
+       "children": [
+        {
+         "_key": "c4k46a",
+         "_type": "span",
+         "marks": [],
+         "text": "molitvena skupina in molitvena skupina Karitas,"
+        }
+       ],
+       "level": 1,
+       "listItem": "bullet",
+       "markDefs": [],
+       "style": "normal"
+      },
+      {
+       "_key": "c4l46a",
+       "_type": "block",
+       "children": [
+        {
+         "_key": "c4m46a",
+         "_type": "span",
+         "marks": [],
+         "text": "dve zakonski skupini,"
+        }
+       ],
+       "level": 1,
+       "listItem": "bullet",
+       "markDefs": [],
+       "style": "normal"
+      },
+      {
+       "_key": "c4n46a",
+       "_type": "block",
+       "children": [
+        {
+         "_key": "c4o46a",
+         "_type": "span",
+         "marks": [],
+         "text": "mladinska skupina,"
+        }
+       ],
+       "level": 1,
+       "listItem": "bullet",
+       "markDefs": [],
+       "style": "normal"
+      },
+      {
+       "_key": "c4p46a",
+       "_type": "block",
+       "children": [
+        {
+         "_key": "c4q46a",
+         "_type": "span",
+         "marks": [],
+         "text": "odrasli pevski zbor."
+        }
+       ],
+       "level": 1,
+       "listItem": "bullet",
+       "markDefs": [],
+       "style": "normal"
+      },
+      {
+       "_key": "c4r46a",
+       "_type": "block",
+       "children": [
+        {
+         "_key": "c4s46a",
+         "_type": "span",
+         "marks": [],
+         "text": "Vsako poletje pripravimo oratorij, jeseni pa župnijsko romanje."
+        }
+       ],
+       "markDefs": [],
+       "style": "normal"
+      }
+     ],
+     "title": "Življenje župnije"
+    },
+    {
+     "_key": "c4t46a",
+     "_type": "sectionFaq",
+     "items": [
+      {
+       "_key": "c4u46a",
+       "_type": "faqItem",
+       "answer": [
+        {
+         "_key": "c4v46a",
+         "_type": "block",
+         "children": [
+          {
+           "_key": "c4w46a",
+           "_type": "span",
+           "marks": [],
+           "text": "V župnijskem uradu v času uradnih ur ali pri župniku po maši."
+          }
+         ],
+         "markDefs": [],
+         "style": "normal"
+        }
+       ],
+       "question": "Kako naročim sveto mašo?"
+      },
+      {
+       "_key": "c4x46a",
+       "_type": "faqItem",
+       "answer": [
+        {
+         "_key": "c4y46a",
+         "_type": "block",
+         "children": [
+          {
+           "_key": "c4z46a",
+           "_type": "span",
+           "marks": [],
+           "text": "Mesečna oznanila z nameni svetih maš so na voljo v cerkvi in na tej spletni strani med dokumenti."
+          }
+         ],
+         "markDefs": [],
+         "style": "normal"
+        }
+       ],
+       "question": "Kje najdem oznanila?"
+      }
+     ],
+     "title": "Pogosta vprašanja"
+    }
+   ],
+   "slug": {
+    "_type": "slug",
+    "current": "o-zupniji"
+   },
+   "title": "O župniji"
+  },
+  {
+   "_createdAt": "2026-10-26T17:48:43Z",
+   "_id": "page-zasebnost",
+   "_rev": "oYIqK8aBt7dLGaaLNtdRUf",
+   "_type": "page",
+   "_updatedAt": "2026-10-26T17:48:43Z",
+   "intro": "Kako spletna stran Župnije Pirniče ravna z vašimi podatki.",
+   "sections": [
+    {
+     "_key": "c5046a",
+     "_type": "sectionRichText",
+     "body": [
+      {
+       "_key": "c5146a",
+       "_type": "block",
+       "children": [
+        {
+         "_key": "c5246a",
+         "_type": "span",
+         "marks": [],
+         "text": "Upravljavec"
+        }
+       ],
+       "markDefs": [],
+       "style": "h2"
+      },
+      {
+       "_key": "c5346a",
+       "_type": "block",
+       "children": [
+        {
+         "_key": "c5446a",
+         "_type": "span",
+         "marks": [],
+         "text": "Upravljavec osebnih podatkov je Župnija Pirniče, Zgornje Pirniče 74b, 1215 Medvode, e-pošta zupirnice@gmail.com."
+        }
+       ],
+       "markDefs": [],
+       "style": "normal"
+      },
+      {
+       "_key": "c5546a",
+       "_type": "block",
+       "children": [
+        {
+         "_key": "c5646a",
+         "_type": "span",
+         "marks": [],
+         "text": "Piškotki in analitika"
+        }
+       ],
+       "markDefs": [],
+       "style": "h2"
+      },
+      {
+       "_key": "c5746a",
+       "_type": "block",
+       "children": [
+        {
+         "_key": "c5846a",
+         "_type": "span",
+         "marks": [],
+         "text": "Spletna stran ne uporablja piškotkov za sledenje in ne vključuje orodij za analitiko ali vsebin tretjih oseb."
+        }
+       ],
+       "markDefs": [],
+       "style": "normal"
+      },
+      {
+       "_key": "c5946a",
+       "_type": "block",
+       "children": [
+        {
+         "_key": "c5a46a",
+         "_type": "span",
+         "marks": [],
+         "text": "Kontaktni obrazec"
+        }
+       ],
+       "markDefs": [],
+       "style": "h2"
+      },
+      {
+       "_key": "c5b46a",
+       "_type": "block",
+       "children": [
+        {
+         "_key": "c5c46a",
+         "_type": "span",
+         "marks": [],
+         "text": "Podatke, ki jih vpišete v kontaktni obrazec (ime, e-pošta, telefon, sporočilo), uporabimo izključno za odgovor na vaše sporočilo. Sporočilo prejme župnijski urad po e-pošti."
+        }
+       ],
+       "markDefs": [],
+       "style": "normal"
+      },
+      {
+       "_key": "c5d46a",
+       "_type": "block",
+       "children": [
+        {
+         "_key": "c5e46a",
+         "_type": "span",
+         "marks": [],
+         "text": "Mašni nameni"
+        }
+       ],
+       "markDefs": [],
+       "style": "h2"
+      },
+      {
+       "_key": "c5f46a",
+       "_type": "block",
+       "children": [
+        {
+         "_key": "c5g46a",
+         "_type": "span",
+         "marks": [],
+         "text": "Na spletni strani objavljamo mašne namene v enaki obliki kot v tiskanih oznanilih. Če ne želite, da je namen objavljen, to povejte ob naročilu maše."
+        }
+       ],
+       "markDefs": [],
+       "style": "normal"
+      },
+      {
+       "_key": "c5h46a",
+       "_type": "block",
+       "children": [
+        {
+         "_key": "c5i46a",
+         "_type": "span",
+         "marks": [],
+         "text": "Fotografije"
+        }
+       ],
+       "markDefs": [],
+       "style": "h2"
+      },
+      {
+       "_key": "c5j46a",
+       "_type": "block",
+       "children": [
+        {
+         "_key": "c5k46a",
+         "_type": "span",
+         "marks": [],
+         "text": "Fotografije otrok z verouka in drugih dejavnosti objavljamo le s soglasjem staršev, ki ga dajo ob vpisu v veroučno šolo. Za odstranitev fotografije nam pišite."
+        }
+       ],
+       "markDefs": [],
+       "style": "normal"
+      }
+     ]
+    }
+   ],
+   "slug": {
+    "_type": "slug",
+    "current": "zasebnost"
+   },
+   "title": "Zasebnost"
+  },
+  {
+   "_createdAt": "2026-10-26T17:48:43Z",
+   "_id": "doc-oznanila-2026-05",
+   "_rev": "oYIqK8aBt7dLGaaLNtdRUf",
+   "_type": "parishDocument",
+   "_updatedAt": "2026-10-26T17:48:43Z",
+   "category": "bulletins",
+   "date": "2026-05-01",
+   "description": "Mesečna oznanila župnije Pirniče za maj 2026: koledar svetih maš z nameni in župnijska obvestila.",
+   "file": {
+    "_type": "file",
+    "asset": {
+     "_ref": "file-fe40e9fc893da28d07aa8802e75182a3f84b5eb2-pdf",
+     "_type": "reference"
+    }
+   },
+   "public": true,
+   "title": "Oznanila – maj 2026"
+  },
+  {
+   "_createdAt": "2026-10-26T17:48:43Z",
+   "_id": "doc-oznanila-2026-06",
+   "_rev": "oYIqK8aBt7dLGaaLNtdRUf",
+   "_type": "parishDocument",
+   "_updatedAt": "2026-10-26T17:48:43Z",
+   "category": "bulletins",
+   "date": "2026-06-01",
+   "description": "Mesečna oznanila župnije Pirniče za junij 2026: koledar svetih maš z nameni in župnijska obvestila.",
+   "file": {
+    "_type": "file",
+    "asset": {
+     "_ref": "file-5e44c0a208e8d10e15f2c47a1d2e19a800d75960-pdf",
+     "_type": "reference"
+    }
+   },
+   "public": true,
+   "title": "Oznanila – junij 2026"
+  },
+  {
+   "_createdAt": "2026-10-26T17:48:43Z",
+   "_id": "doc-oznanila-2026-08",
+   "_rev": "oYIqK8aBt7dLGaaLNtdRUf",
+   "_type": "parishDocument",
+   "_updatedAt": "2026-10-26T17:48:43Z",
+   "category": "bulletins",
+   "date": "2026-08-01",
+   "description": "Mesečna oznanila župnije Pirniče za avgust 2026: koledar svetih maš z nameni in župnijska obvestila.",
+   "file": {
+    "_type": "file",
+    "asset": {
+     "_ref": "file-f610c1498e661a4e1368b601b2d195d3ce389ef2-pdf",
+     "_type": "reference"
+    }
+   },
+   "public": true,
+   "title": "Oznanila – avgust 2026"
+  },
+  {
+   "_createdAt": "2026-10-26T17:48:43Z",
+   "_id": "doc-oznanila-2026-09",
+   "_rev": "oYIqK8aBt7dLGaaLNtdRUf",
+   "_type": "parishDocument",
+   "_updatedAt": "2026-10-26T17:48:43Z",
+   "category": "bulletins",
+   "date": "2026-09-01",
+   "description": "Mesečna oznanila župnije Pirniče za september 2026: koledar svetih maš z nameni in župnijska obvestila.",
+   "file": {
+    "_type": "file",
+    "asset": {
+     "_ref": "file-0ebe7f5bdf2b0d908a1ea4e2b5c79c9957e0033e-pdf",
+     "_type": "reference"
+    }
+   },
+   "public": true,
+   "title": "Oznanila – september 2026"
+  },
+  {
+   "_createdAt": "2026-10-26T17:48:43Z",
+   "_id": "doc-oznanila-2026-10",
+   "_rev": "oYIqK8aBt7dLGaaLNtdRUf",
+   "_type": "parishDocument",
+   "_updatedAt": "2026-10-26T17:48:43Z",
+   "category": "bulletins",
+   "date": "2026-10-01",
+   "description": "Mesečna oznanila župnije Pirniče za oktober 2026: koledar svetih maš z nameni in župnijska obvestila.",
+   "file": {
+    "_type": "file",
+    "asset": {
+     "_ref": "file-b3ecbec148c80cfefe569a106c1a021e8a4a1102-pdf",
+     "_type": "reference"
+    }
+   },
+   "public": true,
+   "title": "Oznanila – oktober 2026"
+  },
+  {
+   "_createdAt": "2026-10-26T17:48:43Z",
+   "_id": "doc-prijavnica-verouk-2025-2026",
+   "_rev": "oYIqK8aBt7dLGaaLNtdRUf",
+   "_type": "parishDocument",
+   "_updatedAt": "2026-10-26T17:48:43Z",
+   "category": "catechesis",
+   "date": "2025-08-25",
+   "description": "Prijavnica za verouk, pravilnik veroučne šole, cene delovnih zvezkov in urnik za veroučno leto 2025/2026.",
+   "file": {
+    "_type": "file",
+    "asset": {
+     "_ref": "file-92e11eb0fb18d9ebf907d1e55e695021f632d8ce-pdf",
+     "_type": "reference"
+    }
+   },
+   "public": true,
+   "title": "Prijavnica in pravilnik veroučne šole 2025/2026"
+  },
+  {
+   "_createdAt": "2026-10-26T17:36:50Z",
+   "_id": "group-karitas",
+   "_rev": "QnTUkLMvmt3ECzV0IwSEgv",
+   "_type": "parishGroup",
+   "_updatedAt": "2026-10-26T17:58:31Z",
+   "contactName": "Jera Rak",
+   "description": [
+    {
+     "_key": "c2468",
+     "_type": "block",
+     "children": [
+      {
+       "_key": "c3468",
+       "_type": "span",
+       "marks": [],
+       "text": "Župnijska Karitas Pirniče je bila ustanovljena z namenom, da konkretizira krščansko ljubezen."
+      }
+     ],
+     "markDefs": [],
+     "style": "normal"
+    },
+    {
+     "_key": "c4468",
+     "_type": "block",
+     "children": [
+      {
+       "_key": "c5468",
+       "_type": "span",
+       "marks": [],
+       "text": "Uradne ure so vsak prvi ponedeljek v mesecu od 17. do 18. ure v mežnariji v Spodnjih Pirničah. Sodelavci se srečujejo vsak tretji torek v mesecu ob 19.15 v župnišču."
+      }
+     ],
+     "markDefs": [],
+     "style": "normal"
+    },
+    {
+     "_key": "c6468",
+     "_type": "block",
+     "children": [
+      {
+       "_key": "c7468",
+       "_type": "span",
+       "marks": [],
+       "text": "Molitvena skupina Karitas se k molitvi za zdravje srečuje ob torkih ob 18.00 ob kipu Kraljice miru v Marijini cerkvi."
+      }
+     ],
+     "markDefs": [],
+     "style": "normal"
+    },
+    {
+     "_key": "c8468",
+     "_type": "block",
+     "children": [
+      {
+       "_key": "c9468",
+       "_type": "span",
+       "marks": [],
+       "text": "Dar za Karitas: SI56 0202 1025 3468 769."
+      }
+     ],
+     "markDefs": [],
+     "style": "normal"
+    }
+   ],
+   "email": "karitas.pirnice@gmail.com",
+   "image": {
+    "_type": "imageWithAlt",
+    "alt": "Sveče v cerkvi",
+    "asset": {
+     "_ref": "image-c6aa32755aa9514649c7c028f35cbca060c09a3d-3840x2555-jpg",
+     "_type": "reference"
+    },
+    "caption": "Foto: Guillaume Paumier, CC BY 3.0, Wikimedia Commons"
+   },
+   "location": "Mežnarija v Spodnjih Pirničah",
+   "meetingSchedule": "Uradne ure vsak 1. ponedeljek v mesecu od 17. do 18. ure",
+   "order": 1,
+   "phone": "031 422 688",
+   "slug": {
+    "_type": "slug",
+    "current": "zupnijska-karitas"
+   },
+   "summary": "Sodelavci Župnijske Karitas Pirniče s skupnimi močmi udejanjamo ljubezen do bližnjega.",
+   "title": "Župnijska Karitas Pirniče"
+  },
+  {
+   "_createdAt": "2026-10-26T17:48:43Z",
+   "_id": "group-mladinska",
+   "_rev": "QnTUkLMvmt3ECzV0IwSEgv",
+   "_type": "parishGroup",
+   "_updatedAt": "2026-10-26T17:58:31Z",
+   "contactPerson": {
+    "_ref": "person-blaz-jezersek",
+    "_type": "reference"
+   },
+   "image": {
+    "_type": "imageWithAlt",
+    "alt": "Mladi ob tabornem ognju",
+    "asset": {
+     "_ref": "image-c672c64cb051167d359be891c3c39fcbfb34c8af-3840x2880-jpg",
+     "_type": "reference"
+    },
+    "caption": "Foto: Forest Service Northern Region from Missoula, MT, USA, Public domain, Wikimedia Commons"
+   },
+   "location": "Župnišče",
+   "meetingSchedule": "Ob sobotah (termini v mesečnih oznanilih)",
+   "order": 5,
+   "slug": {
+    "_type": "slug",
+    "current": "mladinska-skupina"
+   },
+   "summary": "Srečanja mladih ob sobotah. V preteklem letu se jih je udeleževalo 5 do 10 mladincev.",
+   "title": "Mladinska skupina"
+  },
+  {
+   "_createdAt": "2026-10-26T17:48:43Z",
+   "_id": "group-molitvena",
+   "_rev": "QnTUkLMvmt3ECzV0IwSEgv",
+   "_type": "parishGroup",
+   "_updatedAt": "2026-10-26T17:58:31Z",
+   "image": {
+    "_type": "imageWithAlt",
+    "alt": "Rožni venec",
+    "asset": {
+     "_ref": "image-f276815aca51b85df41b00d8142e934f9c224cf6-3840x2260-jpg",
+     "_type": "reference"
+    },
+    "caption": "Foto: Jacek Halicki, CC BY-SA 4.0, Wikimedia Commons"
+   },
+   "location": "Marijina cerkev",
+   "meetingSchedule": "Vsako sredo ob 18.00",
+   "order": 2,
+   "slug": {
+    "_type": "slug",
+    "current": "molitvena-skupina"
+   },
+   "summary": "Vsako sredo ob 18.00 v Marijini cerkvi. Toplo povabljeni, da se nam pridružite v Marijini cerkvi ali v duhu.",
+   "title": "Molitvena skupina"
+  },
+  {
+   "_createdAt": "2026-10-26T17:48:43Z",
+   "_id": "group-pevski-zbor",
+   "_rev": "QnTUkLMvmt3ECzV0IwSEgv",
+   "_type": "parishGroup",
+   "_updatedAt": "2026-10-26T17:58:31Z",
+   "image": {
+    "_type": "imageWithAlt",
+    "alt": "Pevski zbor med nastopom",
+    "asset": {
+     "_ref": "image-b25aa33621a218c350dcc183008c6ab47b3c4639-2938x1993-jpg",
+     "_type": "reference"
+    },
+    "caption": "Foto: Eleassar, CC BY-SA 3.0, Wikimedia Commons"
+   },
+   "location": "Pevska soba v župnišču",
+   "order": 6,
+   "slug": {
+    "_type": "slug",
+    "current": "odrasli-pevski-zbor"
+   },
+   "summary": "Odrasli pevski zbor župnije Pirniče poje pri bogoslužju. Vaje so v pevski sobi v župnišču.",
+   "title": "Odrasli pevski zbor"
+  },
+  {
+   "_createdAt": "2026-10-26T17:48:43Z",
+   "_id": "group-zakonska-1",
+   "_rev": "QnTUkLMvmt3ECzV0IwSEgv",
+   "_type": "parishGroup",
+   "_updatedAt": "2026-10-26T17:58:31Z",
+   "image": {
+    "_type": "imageWithAlt",
+    "alt": "Nadevanje poročnega prstana",
+    "asset": {
+     "_ref": "image-d5b9a6988de48c4d94d48e90df3ceb5857ebe047-2723x2292-jpg",
+     "_type": "reference"
+    },
+    "caption": "Foto: Petar Milošević, CC BY-SA 4.0, Wikimedia Commons"
+   },
+   "location": "Župnišče",
+   "meetingSchedule": "Druga sreda v mesecu ob 20.15",
+   "order": 3,
+   "slug": {
+    "_type": "slug",
+    "current": "prva-zakonska-skupina"
+   },
+   "summary": "Srečanja zakoncev vsako drugo sredo v mesecu.",
+   "title": "Prva zakonska skupina"
+  },
+  {
+   "_createdAt": "2026-10-26T17:48:43Z",
+   "_id": "group-zakonska-2",
+   "_rev": "QnTUkLMvmt3ECzV0IwSEgv",
+   "_type": "parishGroup",
+   "_updatedAt": "2026-10-26T17:58:31Z",
+   "image": {
+    "_type": "imageWithAlt",
+    "alt": "Starejši par z roko v roki",
+    "asset": {
+     "_ref": "image-f5799196799970211bfd53322963cf32b188465c-1920x1440-jpg",
+     "_type": "reference"
+    },
+    "caption": "Foto: https://pixabay.com/users/pasja1000-6355831/, CC0, Wikimedia Commons"
+   },
+   "location": "Župnišče",
+   "meetingSchedule": "Četrta sreda v mesecu ob 20.00",
+   "order": 4,
+   "slug": {
+    "_type": "slug",
+    "current": "druga-zakonska-skupina"
+   },
+   "summary": "Srečanja zakoncev vsako četrto sredo v mesecu. Vabljeni novi člani!",
+   "title": "Druga zakonska skupina"
+  },
+  {
+   "_createdAt": "2026-10-26T17:48:43Z",
+   "_id": "group-zps",
+   "_rev": "QnTUkLMvmt3ECzV0IwSEgv",
+   "_type": "parishGroup",
+   "_updatedAt": "2026-10-26T17:58:31Z",
+   "contactPerson": {
+    "_ref": "person-blaz-jezersek",
+    "_type": "reference"
+   },
+   "description": [
+    {
+     "_key": "c0468",
+     "_type": "block",
+     "children": [
+      {
+       "_key": "c1468",
+       "_type": "span",
+       "marks": [],
+       "text": "Redne mesečne seje ŽPS so ob prvih torkih v mesecu ob 19.15 v župnišču."
+      }
+     ],
+     "markDefs": [],
+     "style": "normal"
+    }
+   ],
+   "image": {
+    "_type": "imageWithAlt",
+    "alt": "Ladja župnijske cerkve",
+    "asset": {
+     "_ref": "image-5bbaebb89d7cebb316ddea1a7f692d74b7d2842c-2734x2724-jpg",
+     "_type": "reference"
+    },
+    "caption": "Foto: TadejM, CC BY-SA 4.0, Wikimedia Commons"
+   },
+   "location": "Župnišče",
+   "meetingSchedule": "Prvi torek v mesecu ob 19.15",
+   "order": 0,
+   "slug": {
+    "_type": "slug",
+    "current": "zupnijski-pastoralni-svet"
+   },
+   "summary": "Sodelavci, ki z župnikom načrtujejo in spremljajo življenje župnije.",
+   "title": "Župnijski pastoralni svet (ŽPS)"
+  },
+  {
+   "_createdAt": "2026-10-26T17:36:50Z",
+   "_id": "person-blaz-jezersek",
+   "_rev": "oYIqK8aBt7dLGaaLNtbzOs",
+   "_type": "person",
+   "_updatedAt": "2026-10-26T17:36:50Z",
+   "email": "zupirnice@gmail.com",
+   "name": "msgr. dr. Blaž Jezeršek",
+   "order": 1,
+   "phone": "041 604 422",
+   "role": "pastor",
+   "showContact": true,
+   "slug": {
+    "_type": "slug",
+    "current": "blaz-jezersek"
+   }
+  },
+  {
+   "_createdAt": "2026-10-26T17:48:43Z",
+   "_id": "person-marija-ilc",
+   "_rev": "oYIqK8aBt7dLGaaLNtdRUf",
+   "_type": "person",
+   "_updatedAt": "2026-10-26T17:48:43Z",
+   "name": "Marija Ilc",
+   "order": 10,
+   "role": "catechist",
+   "roleTitle": "katehistinja",
+   "showContact": false,
+   "slug": {
+    "_type": "slug",
+    "current": "marija-ilc"
+   }
+  },
+  {
+   "_createdAt": "2026-10-26T17:48:43Z",
+   "_id": "sacrament-bolnisko-maziljenje",
+   "_rev": "QnTUkLMvmt3ECzV0IwSEgv",
+   "_type": "sacrament",
+   "_updatedAt": "2026-10-26T17:58:31Z",
+   "contact": {
+    "_ref": "person-blaz-jezersek",
+    "_type": "reference"
+   },
+   "contactNote": [
+    {
+     "_key": "c3p46a",
+     "_type": "block",
+     "children": [
+      {
+       "_key": "c3q46a",
+       "_type": "span",
+       "marks": [],
+       "text": "Župnijski urad: ponedeljek in petek od 17. do 18. ure, torek od 11. do 12. ure, četrtek od 7.30 do 8.00. Telefon 01 362 11 71 ali 041 604 422."
+      }
+     ],
+     "markDefs": [],
+     "style": "normal"
+    }
+   ],
+   "description": [
+    {
+     "_key": "c3n46a",
+     "_type": "block",
+     "children": [
+      {
+       "_key": "c3o46a",
+       "_type": "span",
+       "marks": [],
+       "text": "Priložnost za prejem zakramenta bolniškega maziljenja je tudi vsako leto na srečanju bolnih, invalidnih in ostarelih v naši župniji."
+      }
+     ],
+     "markDefs": [],
+     "style": "normal"
+    }
+   ],
+   "image": {
+    "_type": "imageWithAlt",
+    "alt": "Blagoslov svetih olj",
+    "asset": {
+     "_ref": "image-b7347d830c520165e5774d042ee6cc09130fbcfb-3600x2400-jpg",
+     "_type": "reference"
+    },
+    "caption": "Foto: PNA photo by Yancy Lim, Public domain, Wikimedia Commons"
+   },
+   "kind": "anointing",
+   "order": 6,
+   "slug": {
+    "_type": "slug",
+    "current": "bolnisko-maziljenje"
+   },
+   "summary": "Za obisk bolnika na domu pokličite župnika na 041 604 422.",
+   "title": "Bolniško maziljenje"
+  },
+  {
+   "_createdAt": "2026-10-26T17:48:43Z",
+   "_id": "sacrament-krst",
+   "_rev": "QnTUkLMvmt3ECzV0IwSEgv",
+   "_type": "sacrament",
+   "_updatedAt": "2026-10-26T17:58:31Z",
+   "contact": {
+    "_ref": "person-blaz-jezersek",
+    "_type": "reference"
+   },
+   "contactNote": [
+    {
+     "_key": "c3746a",
+     "_type": "block",
+     "children": [
+      {
+       "_key": "c3846a",
+       "_type": "span",
+       "marks": [],
+       "text": "Župnijski urad: ponedeljek in petek od 17. do 18. ure, torek od 11. do 12. ure, četrtek od 7.30 do 8.00. Telefon 01 362 11 71 ali 041 604 422."
+      }
+     ],
+     "markDefs": [],
+     "style": "normal"
+    }
+   ],
+   "description": [
+    {
+     "_key": "c3546a",
+     "_type": "block",
+     "children": [
+      {
+       "_key": "c3646a",
+       "_type": "span",
+       "marks": [],
+       "text": "Za krst, poroko in spoved se oglasite pri župniku, kjer se boste dogovorili za pripravo in podelitev zakramenta."
+      }
+     ],
+     "markDefs": [],
+     "style": "normal"
+    }
+   ],
+   "image": {
+    "_type": "imageWithAlt",
+    "alt": "Krstni kamen",
+    "asset": {
+     "_ref": "image-0ff9db8ca873ab3868b14c651cd01efd49ef6ba4-3688x5120-jpg",
+     "_type": "reference"
+    },
+    "caption": "Foto: Doremo, CC BY 4.0, Wikimedia Commons"
+   },
+   "kind": "baptism",
+   "order": 1,
+   "slug": {
+    "_type": "slug",
+    "current": "krst"
+   },
+   "summary": "Za krst se oglasite pri župniku, kjer se boste dogovorili za pripravo in podelitev zakramenta.",
+   "title": "Krst"
+  },
+  {
+   "_createdAt": "2026-10-26T17:48:43Z",
+   "_id": "sacrament-pogreb",
+   "_rev": "QnTUkLMvmt3ECzV0IwSEgv",
+   "_type": "sacrament",
+   "_updatedAt": "2026-10-26T17:58:31Z",
+   "contact": {
+    "_ref": "person-blaz-jezersek",
+    "_type": "reference"
+   },
+   "contactNote": [
+    {
+     "_key": "c3r46a",
+     "_type": "block",
+     "children": [
+      {
+       "_key": "c3s46a",
+       "_type": "span",
+       "marks": [],
+       "text": "Župnijski urad: ponedeljek in petek od 17. do 18. ure, torek od 11. do 12. ure, četrtek od 7.30 do 8.00. Telefon 01 362 11 71 ali 041 604 422."
+      }
+     ],
+     "markDefs": [],
+     "style": "normal"
+    }
+   ],
+   "image": {
+    "_type": "imageWithAlt",
+    "alt": "Sveče v cerkvi",
+    "asset": {
+     "_ref": "image-c6aa32755aa9514649c7c028f35cbca060c09a3d-3840x2555-jpg",
+     "_type": "reference"
+    },
+    "caption": "Foto: Guillaume Paumier, CC BY 3.0, Wikimedia Commons"
+   },
+   "kind": "funeral",
+   "order": 7,
+   "slug": {
+    "_type": "slug",
+    "current": "pogreb"
+   },
+   "summary": "Svojci se za pogreb in svete maše za pokojnega oglasite v župnijskem uradu ali pokličite župnika.",
+   "title": "Pogreb"
+  },
+  {
+   "_createdAt": "2026-10-26T17:48:43Z",
+   "_id": "sacrament-poroka",
+   "_rev": "QnTUkLMvmt3ECzV0IwSEgv",
+   "_type": "sacrament",
+   "_updatedAt": "2026-10-26T17:58:31Z",
+   "contact": {
+    "_ref": "person-blaz-jezersek",
+    "_type": "reference"
+   },
+   "contactNote": [
+    {
+     "_key": "c3j46a",
+     "_type": "block",
+     "children": [
+      {
+       "_key": "c3k46a",
+       "_type": "span",
+       "marks": [],
+       "text": "Župnijski urad: ponedeljek in petek od 17. do 18. ure, torek od 11. do 12. ure, četrtek od 7.30 do 8.00. Telefon 01 362 11 71 ali 041 604 422."
+      }
+     ],
+     "markDefs": [],
+     "style": "normal"
+    }
+   ],
+   "description": [
+    {
+     "_key": "c3546a",
+     "_type": "block",
+     "children": [
+      {
+       "_key": "c3646a",
+       "_type": "span",
+       "marks": [],
+       "text": "Za krst, poroko in spoved se oglasite pri župniku, kjer se boste dogovorili za pripravo in podelitev zakramenta."
+      }
+     ],
+     "markDefs": [],
+     "style": "normal"
+    }
+   ],
+   "image": {
+    "_type": "imageWithAlt",
+    "alt": "Nadevanje poročnega prstana",
+    "asset": {
+     "_ref": "image-d5b9a6988de48c4d94d48e90df3ceb5857ebe047-2723x2292-jpg",
+     "_type": "reference"
+    },
+    "caption": "Foto: Petar Milošević, CC BY-SA 4.0, Wikimedia Commons"
+   },
+   "kind": "marriage",
+   "order": 4,
+   "slug": {
+    "_type": "slug",
+    "current": "poroka"
+   },
+   "summary": "Za poroko se oglasite pri župniku, kjer se boste dogovorili za pripravo in podelitev zakramenta.",
+   "title": "Sveta poroka"
+  },
+  {
+   "_createdAt": "2026-10-26T17:48:43Z",
+   "_id": "sacrament-prvo-sveto-obhajilo",
+   "_rev": "QnTUkLMvmt3ECzV0IwSEgv",
+   "_type": "sacrament",
+   "_updatedAt": "2026-10-26T17:58:31Z",
+   "contact": {
+    "_ref": "person-blaz-jezersek",
+    "_type": "reference"
+   },
+   "contactNote": [
+    {
+     "_key": "c3c46a",
+     "_type": "block",
+     "children": [
+      {
+       "_key": "c3d46a",
+       "_type": "span",
+       "marks": [],
+       "text": "Župnijski urad: ponedeljek in petek od 17. do 18. ure, torek od 11. do 12. ure, četrtek od 7.30 do 8.00. Telefon 01 362 11 71 ali 041 604 422."
+      }
+     ],
+     "markDefs": [],
+     "style": "normal"
+    }
+   ],
+   "description": [
+    {
+     "_key": "c3946a",
+     "_type": "block",
+     "children": [
+      {
+       "_key": "c3a46a",
+       "_type": "span",
+       "marks": [],
+       "text": "V veroučnem letu 2025/2026 je k prvemu svetemu obhajilu pristopilo 12 otrok."
+      }
+     ],
+     "markDefs": [],
+     "style": "normal"
+    }
+   ],
+   "downloads": [
+    {
+     "_key": "c3b46a",
+     "_ref": "doc-prijavnica-verouk-2025-2026",
+     "_type": "reference"
+    }
+   ],
+   "image": {
+    "_type": "imageWithAlt",
+    "alt": "Otroci na prvem svetem obhajilu",
+    "asset": {
+     "_ref": "image-04fb30d344234886b7ad01f1a50d9f02b42ddc52-3840x2634-jpg",
+     "_type": "reference"
+    },
+    "caption": "Foto: Jeffrey Backowski, CC0, Wikimedia Commons"
+   },
+   "kind": "communion",
+   "order": 2,
+   "slug": {
+    "_type": "slug",
+    "current": "prvo-sveto-obhajilo"
+   },
+   "summary": "Otroci se na prvo sveto obhajilo pripravljajo v 3. razredu verouka.",
+   "title": "Prvo sveto obhajilo"
+  },
+  {
+   "_createdAt": "2026-10-26T17:48:43Z",
+   "_id": "sacrament-spoved",
+   "_rev": "QnTUkLMvmt3ECzV0IwSEgv",
+   "_type": "sacrament",
+   "_updatedAt": "2026-10-26T17:58:31Z",
+   "contact": {
+    "_ref": "person-blaz-jezersek",
+    "_type": "reference"
+   },
+   "contactNote": [
+    {
+     "_key": "c3l46a",
+     "_type": "block",
+     "children": [
+      {
+       "_key": "c3m46a",
+       "_type": "span",
+       "marks": [],
+       "text": "Župnijski urad: ponedeljek in petek od 17. do 18. ure, torek od 11. do 12. ure, četrtek od 7.30 do 8.00. Telefon 01 362 11 71 ali 041 604 422."
+      }
+     ],
+     "markDefs": [],
+     "style": "normal"
+    }
+   ],
+   "description": [
+    {
+     "_key": "c3546a",
+     "_type": "block",
+     "children": [
+      {
+       "_key": "c3646a",
+       "_type": "span",
+       "marks": [],
+       "text": "Za krst, poroko in spoved se oglasite pri župniku, kjer se boste dogovorili za pripravo in podelitev zakramenta."
+      }
+     ],
+     "markDefs": [],
+     "style": "normal"
+    }
+   ],
+   "image": {
+    "_type": "imageWithAlt",
+    "alt": "Spovednica",
+    "asset": {
+     "_ref": "image-91c5b8b4b1c2e7615254b13cf843ce8d85c74c5b-1504x1292-jpg",
+     "_type": "reference"
+    },
+    "caption": "Foto: Pugliesig, CC BY-SA 4.0, Wikimedia Commons"
+   },
+   "kind": "confession",
+   "order": 5,
+   "slug": {
+    "_type": "slug",
+    "current": "spoved"
+   },
+   "summary": "Za spoved se oglasite pri župniku ali se z njim dogovorite po telefonu.",
+   "title": "Sveta spoved"
+  },
+  {
+   "_createdAt": "2026-10-26T17:48:43Z",
+   "_id": "sacrament-sveta-birma",
+   "_rev": "QnTUkLMvmt3ECzV0IwSEgv",
+   "_type": "sacrament",
+   "_updatedAt": "2026-10-26T17:58:31Z",
+   "contact": {
+    "_ref": "person-blaz-jezersek",
+    "_type": "reference"
+   },
+   "contactNote": [
+    {
+     "_key": "c3h46a",
+     "_type": "block",
+     "children": [
+      {
+       "_key": "c3i46a",
+       "_type": "span",
+       "marks": [],
+       "text": "Župnijski urad: ponedeljek in petek od 17. do 18. ure, torek od 11. do 12. ure, četrtek od 7.30 do 8.00. Telefon 01 362 11 71 ali 041 604 422."
+      }
+     ],
+     "markDefs": [],
+     "style": "normal"
+    }
+   ],
+   "description": [
+    {
+     "_key": "c3e46a",
+     "_type": "block",
+     "children": [
+      {
+       "_key": "c3f46a",
+       "_type": "span",
+       "marks": [],
+       "text": "V veroučnem letu 2025/2026 je zakrament svete birme prejelo 23 mladostnikov."
+      }
+     ],
+     "markDefs": [],
+     "style": "normal"
+    }
+   ],
+   "downloads": [
+    {
+     "_key": "c3g46a",
+     "_ref": "doc-prijavnica-verouk-2025-2026",
+     "_type": "reference"
+    }
+   ],
+   "image": {
+    "_type": "imageWithAlt",
+    "alt": "Škof podeljuje zakrament svete birme",
+    "asset": {
+     "_ref": "image-9d431f41e607223af31397ebebc4cda9a0c32b30-2250x1500-jpg",
+     "_type": "reference"
+    },
+    "caption": "Foto: Staff Sgt. Jamal D. Sutter, U.S. Air Force, Public domain, Wikimedia Commons"
+   },
+   "kind": "confirmation",
+   "order": 3,
+   "slug": {
+    "_type": "slug",
+    "current": "sveta-birma"
+   },
+   "summary": "Birmanci se pripravljajo v 8. in 9. razredu verouka pri župniku.",
+   "title": "Sveta birma"
+  },
+  {
+   "_createdAt": "2026-09-14T15:51:55Z",
+   "_id": "settings",
+   "_rev": "7viveG4dgpViozvlke8QrP",
+   "_type": "settings",
+   "_updatedAt": "2026-10-28T07:55:38Z",
+   "address": {
+    "_type": "address",
+    "city": "Medvode",
+    "postalCode": "1215",
+    "street": "Zgornje Pirniče 74b"
+   },
+   "announcementsHeader": {
+    "image": {
+     "_type": "imageWithAlt",
+     "alt": "Cerkev sv. Tomaža v Zgornjih Pirničah, levo za njo okrogla Marijina cerkev",
+     "asset": {
+      "_ref": "image-b257c590bc28e058750a5de96c488eb12a1038e5-1920x2560-jpg",
+      "_type": "reference"
+     },
+     "caption": "Foto: Ajznponar, CC BY-SA 4.0, Wikimedia Commons"
+    },
+    "quote": {
+     "source": "Ps 119,105",
+     "text": "„Tvoja beseda je svetilka mojim nogam in luč na moji stezi.“"
+    },
+    "tagline": "Novice iz župnije, za življenje v veri."
+   },
+   "catechesisHeader": {
+    "image": {
+     "_type": "imageWithAlt",
+     "alt": "Polja pred Zgornjimi Pirničami",
+     "asset": {
+      "_ref": "image-b126e1a5be29bf8cf9d83aa1c1e3e4f34c198f43-3840x2160-jpg",
+      "_type": "reference"
+     },
+     "caption": "Foto: ModriDirkac, CC0, Wikimedia Commons"
+    },
+    "quote": {
+     "source": "Mr 10,14",
+     "text": "„Pustite otroke, naj prihajajo k meni.“"
+    },
+    "tagline": "Rastemo v veri."
+   },
+   "contactFormRecipient": "zupirnice@gmail.com",
+   "contactHeader": {
+    "image": {
+     "_type": "imageWithAlt",
+     "alt": "Cerkev Povišanja svetega Križa v Spodnjih Pirničah",
+     "asset": {
+      "_ref": "image-75ab12f22643a381ab7f9c7e7ca22797babca6e3-3264x2448-jpg",
+      "_type": "reference"
+     },
+     "caption": "Foto: Ajznponar, CC BY-SA 4.0, Wikimedia Commons"
+    },
+    "quote": {
+     "source": "",
+     "text": ""
+    },
+    "tagline": "Vrata so odprta."
+   },
+   "diocese": "Nadškofija Ljubljana, dekanija Ljubljana - Šentvid",
+   "donations": {
+    "iban": "SI56 0202 1026 2993 393",
+    "purpose": "Dar za župnijo",
+    "recipient": "Župnija Pirniče"
+   },
+   "email": "zupirnice@gmail.com",
+   "emergencyContact": {
+    "label": "Za bolniško maziljenje in pogreb",
+    "phone": "041 604 422"
+   },
+   "eventsHeader": {
+    "image": {
+     "_type": "imageWithAlt",
+     "alt": "Spodnje Pirniče s cerkvijo svetega Križa na vzpetini",
+     "asset": {
+      "_ref": "image-d5e6be0730d94bf9edd8cf3b32fa1ad3d7eaf3ae-3840x2160-jpg",
+      "_type": "reference"
+     },
+     "caption": "Foto: ModriDirkac, CC0, Wikimedia Commons"
+    },
+    "quote": {
+     "source": "Ps 133,1",
+     "text": "„Glejte, kako dobro in kako prijetno je, če bratje prebivajo skupaj.“"
+    },
+    "tagline": "Srečanja, romanja, praznovanja."
+   },
+   "massesHeader": {
+    "image": {
+     "_type": "imageWithAlt",
+     "alt": "Cerkev Povišanja svetega Križa v Spodnjih Pirničah",
+     "asset": {
+      "_ref": "image-2b0b1d9e06ab0d6f61b86e8fc9f26f7b44f62e27-3264x2448-jpg",
+      "_type": "reference"
+     },
+     "caption": "Foto: Ajznponar, CC BY-SA 4.0, Wikimedia Commons"
+    },
+    "quote": {
+     "source": "Mt 18,20",
+     "text": "„Kjer sta dva ali so trije zbrani v mojem imenu, tam sem jaz med njimi.“"
+    },
+    "tagline": "Skupaj pred Gospodom."
+   },
+   "mobile": "041 604 422",
+   "name": "Župnija Pirniče",
+   "officeHours": [
+    {
+     "_key": "kstk6",
+     "_type": "openingHours",
+     "from": "17:00",
+     "to": "18:00",
+     "weekday": "monday"
+    },
+    {
+     "_key": "kttk6",
+     "_type": "openingHours",
+     "from": "11:00",
+     "to": "12:00",
+     "weekday": "tuesday"
+    },
+    {
+     "_key": "kutk6",
+     "_type": "openingHours",
+     "from": "07:30",
+     "to": "08:00",
+     "weekday": "thursday"
+    },
+    {
+     "_key": "kvtk6",
+     "_type": "openingHours",
+     "from": "17:00",
+     "to": "18:00",
+     "weekday": "friday"
+    }
+   ],
+   "officeHoursNote": [
+    {
+     "_key": "kwtk6",
+     "_type": "block",
+     "children": [
+      {
+       "_key": "kxtk6",
+       "_type": "span",
+       "marks": [],
+       "text": "Za krst, poroko in spoved se oglasite pri župniku, kjer se boste dogovorili za pripravo in podelitev zakramenta."
+      }
+     ],
+     "markDefs": [],
+     "style": "normal"
+    }
+   ],
+   "parishHeader": {
+    "image": {
+     "_type": "imageWithAlt",
+     "alt": "Zgornje Pirniče z Marijino cerkvijo in zvonikom cerkve sv. Tomaža",
+     "asset": {
+      "_ref": "image-67f0c0bd20fcfdb1dd4b43d50d4868e5e30ca8b5-2130x1550-jpg",
+      "_type": "reference"
+     },
+     "caption": "Foto: ModriDirkac, CC0, Wikimedia Commons"
+    },
+    "quote": {
+     "source": "",
+     "text": ""
+    },
+    "tagline": "Naša skupnost pod Šmarno goro."
+   },
+   "pastor": {
+    "_ref": "person-blaz-jezersek",
+    "_type": "reference"
+   },
+   "phone": "01 362 11 71",
+   "privacyPage": {
+    "_ref": "page-zasebnost",
+    "_type": "reference"
+   },
+   "seo": {
+    "_type": "seo",
+    "description": "Svete maše, oznanila, dogodki in verouk v župniji Pirniče pod Šmarno goro."
+   },
+   "siteUrl": "https://zupnija-pirnice.si",
+   "socialLinks": [
+    {
+     "_key": "kytk6",
+     "_type": "socialLink",
+     "platform": "facebook",
+     "url": "https://www.facebook.com/ZUPirnice"
+    }
+   ]
+  }
+ ],
+ "assets": [
+  {
+   "_id": "file-0ebe7f5bdf2b0d908a1ea4e2b5c79c9957e0033e-pdf",
+   "_type": "sanity.fileAsset",
+   "extension": "pdf",
+   "metadata": null,
+   "mimeType": "application/pdf",
+   "originalFilename": "oznanila-september-2026.pdf",
+   "size": 158699,
+   "url": "https://cdn.sanity.io/files/hnwav9pa/production/0ebe7f5bdf2b0d908a1ea4e2b5c79c9957e0033e.pdf"
+  },
+  {
+   "_id": "file-5e44c0a208e8d10e15f2c47a1d2e19a800d75960-pdf",
+   "_type": "sanity.fileAsset",
+   "extension": "pdf",
+   "metadata": null,
+   "mimeType": "application/pdf",
+   "originalFilename": "oznanila-junij-2026.pdf",
+   "size": 154094,
+   "url": "https://cdn.sanity.io/files/hnwav9pa/production/5e44c0a208e8d10e15f2c47a1d2e19a800d75960.pdf"
+  },
+  {
+   "_id": "file-92e11eb0fb18d9ebf907d1e55e695021f632d8ce-pdf",
+   "_type": "sanity.fileAsset",
+   "extension": "pdf",
+   "metadata": null,
+   "mimeType": "application/pdf",
+   "originalFilename": "prijavnica-verouk-2025-2026.pdf",
+   "size": 308137,
+   "url": "https://cdn.sanity.io/files/hnwav9pa/production/92e11eb0fb18d9ebf907d1e55e695021f632d8ce.pdf"
+  },
+  {
+   "_id": "file-b3ecbec148c80cfefe569a106c1a021e8a4a1102-pdf",
+   "_type": "sanity.fileAsset",
+   "extension": "pdf",
+   "metadata": null,
+   "mimeType": "application/pdf",
+   "originalFilename": "oznanila-oktober-2026.pdf",
+   "size": 140485,
+   "url": "https://cdn.sanity.io/files/hnwav9pa/production/b3ecbec148c80cfefe569a106c1a021e8a4a1102.pdf"
+  },
+  {
+   "_id": "file-f610c1498e661a4e1368b601b2d195d3ce389ef2-pdf",
+   "_type": "sanity.fileAsset",
+   "extension": "pdf",
+   "metadata": null,
+   "mimeType": "application/pdf",
+   "originalFilename": "oznanila-avgust-2026.pdf",
+   "size": 183302,
+   "url": "https://cdn.sanity.io/files/hnwav9pa/production/f610c1498e661a4e1368b601b2d195d3ce389ef2.pdf"
+  },
+  {
+   "_id": "file-fe40e9fc893da28d07aa8802e75182a3f84b5eb2-pdf",
+   "_type": "sanity.fileAsset",
+   "extension": "pdf",
+   "metadata": null,
+   "mimeType": "application/pdf",
+   "originalFilename": "oznanila-maj-2026.pdf",
+   "size": 163833,
+   "url": "https://cdn.sanity.io/files/hnwav9pa/production/fe40e9fc893da28d07aa8802e75182a3f84b5eb2.pdf"
+  },
+  {
+   "_id": "image-04fb30d344234886b7ad01f1a50d9f02b42ddc52-3840x2634-jpg",
+   "_type": "sanity.imageAsset",
+   "extension": "jpg",
+   "metadata": {
+    "dimensions": {
+     "height": 2634,
+     "width": 3840
+    },
+    "lqip": "data:image/jpeg;base64,/9j/2wBDAAYEBQYFBAYGBQYHBwYIChAKCgkJChQODwwQFxQYGBcUFhYaHSUfGhsjHBYWICwgIyYnKSopGR8tMC0oMCUoKSj/2wBDAQcHBwoIChMKChMoGhYaKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCj/wAARCAAOABQDASIAAhEBAxEB/8QAFwAAAwEAAAAAAAAAAAAAAAAAAAUGB//EACEQAAICAgICAwEAAAAAAAAAAAECAwQAEQUGITESIkFR/8QAFQEBAQAAAAAAAAAAAAAAAAAAAAX/xAAdEQACAQQDAAAAAAAAAAAAAAAAAQMCBBEhFDFB/9oADAMBAAIRAxEAPwDPev8ABz2lkmjhLRMpQN+bxpZ6lZHGJGiAvvZ84060kvH0pYIyrBztS2/rlFbtTW4WjSKvGDH8AdE6P9yfyol2ym4JM6RlPLQLXtCGRdOiBT5wylu9fWawXnmLyeide8MO8j8Ctq8bP//Z"
+   },
+   "mimeType": "image/jpeg",
+   "originalFilename": "First Holy Communion Celebration.JPG",
+   "size": 1708893,
+   "url": "https://cdn.sanity.io/images/hnwav9pa/production/04fb30d344234886b7ad01f1a50d9f02b42ddc52-3840x2634.jpg"
+  },
+  {
+   "_id": "image-0ff9db8ca873ab3868b14c651cd01efd49ef6ba4-3688x5120-jpg",
+   "_type": "sanity.imageAsset",
+   "extension": "jpg",
+   "metadata": {
+    "dimensions": {
+     "height": 5120,
+     "width": 3688
+    },
+    "lqip": "data:image/jpeg;base64,/9j/2wBDAAYEBQYFBAYGBQYHBwYIChAKCgkJChQODwwQFxQYGBcUFhYaHSUfGhsjHBYWICwgIyYnKSopGR8tMC0oMCUoKSj/2wBDAQcHBwoIChMKChMoGhYaKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCj/wAARCAAcABQDASIAAhEBAxEB/8QAGQAAAgMBAAAAAAAAAAAAAAAAAAYEBwgB/8QAJhAAAgEDBAEDBQAAAAAAAAAAAQIDAAQFBhESITEHEyNBQ1Fhsf/EABYBAQEBAAAAAAAAAAAAAAAAAAIDAP/EABkRAAIDAQAAAAAAAAAAAAAAAAABAhESE//aAAwDAQACEQMRAD8ArXOXktnOqN7kkrjkNqZPTrXeQ0/kl7+B2CyRk9MDTHiWxseazTXUMUtzDa/Ajed9/pVV6rmkivbJp4VhkKEkL4PdFwoWrNuY+3tspYW93G7FJEBU/qioXpq/PRGJbf7K/wAopBMt6e1BjrC+yt3OzTSTwFFbjuQaTdU5aLKPbDYfGOKkDYnuuW54Ty8QO/NT7q0gKxOYxyHipubKZTRoLROtI8dpXG2zzKCsI63oqhRyQAK7gfjeit0Ycn//2Q=="
+   },
+   "mimeType": "image/jpeg",
+   "originalFilename": "Dobrnič Slovenia - font.jpg",
+   "size": 3205815,
+   "url": "https://cdn.sanity.io/images/hnwav9pa/production/0ff9db8ca873ab3868b14c651cd01efd49ef6ba4-3688x5120.jpg"
+  },
+  {
+   "_id": "image-25f0c0bd6e5ca2f5c5cd73dcfccb606d6708b41a-3840x2697-jpg",
+   "_type": "sanity.imageAsset",
+   "extension": "jpg",
+   "metadata": {
+    "dimensions": {
+     "height": 2697,
+     "width": 3840
+    },
+    "lqip": "data:image/jpeg;base64,/9j/2wBDAAYEBQYFBAYGBQYHBwYIChAKCgkJChQODwwQFxQYGBcUFhYaHSUfGhsjHBYWICwgIyYnKSopGR8tMC0oMCUoKSj/2wBDAQcHBwoIChMKChMoGhYaKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCj/wAARCAAOABQDASIAAhEBAxEB/8QAGAAAAwEBAAAAAAAAAAAAAAAAAAMFBAf/xAAjEAACAgEDBAMBAAAAAAAAAAABAgMEAAURIRITFFEGIjEy/8QAFgEBAQEAAAAAAAAAAAAAAAAAAQID/8QAGxEAAgEFAAAAAAAAAAAAAAAAAAESAgMhMWH/2gAMAwEAAhEDEQA/AOeR6XZZWseREIXbqR244yxpNe5fljo13jkkn+ikngezviE0BrEzo058ccIm54ynHpc1btrVnERRSAyjYg+8Js3dulrQ5PjsGlNJSmrV+7ExDHcHc4Zhk0aR26rN2WWU/wBOT+nDIwEOH//Z"
+   },
+   "mimeType": "image/jpeg",
+   "originalFilename": "Corpus Christi in Łowicz.jpg",
+   "size": 2256832,
+   "url": "https://cdn.sanity.io/images/hnwav9pa/production/25f0c0bd6e5ca2f5c5cd73dcfccb606d6708b41a-3840x2697.jpg"
+  },
+  {
+   "_id": "image-2b0b1d9e06ab0d6f61b86e8fc9f26f7b44f62e27-3264x2448-jpg",
+   "_type": "sanity.imageAsset",
+   "extension": "jpg",
+   "metadata": {
+    "dimensions": {
+     "height": 2448,
+     "width": 3264
+    },
+    "lqip": "data:image/jpeg;base64,/9j/2wBDAAYEBQYFBAYGBQYHBwYIChAKCgkJChQODwwQFxQYGBcUFhYaHSUfGhsjHBYWICwgIyYnKSopGR8tMC0oMCUoKSj/2wBDAQcHBwoIChMKChMoGhYaKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCj/wAARCAAPABQDASIAAhEBAxEB/8QAFgABAQEAAAAAAAAAAAAAAAAABgcA/8QAHhAAAgICAwEBAAAAAAAAAAAAAQIDBAARBQYSIXH/xAAWAQEBAQAAAAAAAAAAAAAAAAAFAQT/xAAbEQEAAgMBAQAAAAAAAAAAAAABAAIEBREhA//aAAwDAQACEQMRAD8AovNRQVEV7brErt5Bb5s4VvpA9yvDXZJRMCdq29aybdsudm5/jUrWeWSdFkDqCvkg/uH6lHsPHp6FtVKrpWVvoxG23Pk8YY4CirKRzEclW4Y1h9DyDvNgCfmOw2GDS2kLABd/mbM9912zx8krgvPZ/9k="
+   },
+   "mimeType": "image/jpeg",
+   "originalFilename": "Spodnje Pirnice, Holy Cross church 01.jpg",
+   "size": 2696623,
+   "url": "https://cdn.sanity.io/images/hnwav9pa/production/2b0b1d9e06ab0d6f61b86e8fc9f26f7b44f62e27-3264x2448.jpg"
+  },
+  {
+   "_id": "image-5bbaebb89d7cebb316ddea1a7f692d74b7d2842c-2734x2724-jpg",
+   "_type": "sanity.imageAsset",
+   "extension": "jpg",
+   "metadata": {
+    "dimensions": {
+     "height": 2724,
+     "width": 2734
+    },
+    "lqip": "data:image/jpeg;base64,/9j/2wBDAAYEBQYFBAYGBQYHBwYIChAKCgkJChQODwwQFxQYGBcUFhYaHSUfGhsjHBYWICwgIyYnKSopGR8tMC0oMCUoKSj/2wBDAQcHBwoIChMKChMoGhYaKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCj/wAARCAAUABQDASIAAhEBAxEB/8QAGAABAAMBAAAAAAAAAAAAAAAAAAUGBwT/xAAoEAACAQMEAAQHAAAAAAAAAAABAgMABAUGERIhEyIxcRRBQlFhgaH/xAAXAQADAQAAAAAAAAAAAAAAAAABAwUC/8QAGhEBAQEAAwEAAAAAAAAAAAAAAQARAhIhMf/aAAwDAQACEQMRAD8AyfG4+LHRRhQr3H1Oe+J+wrrkD3KcLseOpOwD+o9qtOksJFDCJMwoY+IzsgPZH4q15/H6bDwpjlnj8okZpBv+hU5V135UeOACWHX2m5kun+FUyQk7qQP5StMscNeRrMqkcPFYp3t18qU3uyapxaqyc1wlo7xmMtw34ebb3qa1fm73HzWklu6hjGEPIb9UpQAjvlEDP5C5AlebZm9Qo2FKUogWW//Z"
+   },
+   "mimeType": "image/jpeg",
+   "originalFilename": "2019-11-10 St. Martin's Parish Church (Bled) - nave.jpg",
+   "size": 5514611,
+   "url": "https://cdn.sanity.io/images/hnwav9pa/production/5bbaebb89d7cebb316ddea1a7f692d74b7d2842c-2734x2724.jpg"
+  },
+  {
+   "_id": "image-67f0c0bd20fcfdb1dd4b43d50d4868e5e30ca8b5-2130x1550-jpg",
+   "_type": "sanity.imageAsset",
+   "extension": "jpg",
+   "metadata": {
+    "dimensions": {
+     "height": 1550,
+     "width": 2130
+    },
+    "lqip": "data:image/jpeg;base64,/9j/2wBDAAYEBQYFBAYGBQYHBwYIChAKCgkJChQODwwQFxQYGBcUFhYaHSUfGhsjHBYWICwgIyYnKSopGR8tMC0oMCUoKSj/2wBDAQcHBwoIChMKChMoGhYaKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCj/wAARCAAPABQDASIAAhEBAxEB/8QAGAAAAgMAAAAAAAAAAAAAAAAAAAcEBQb/xAAgEAABBAEEAwAAAAAAAAAAAAABAAIDIREEBRRxMWGB/8QAFQEBAQAAAAAAAAAAAAAAAAAAAgP/xAAaEQACAgMAAAAAAAAAAAAAAAAAFQEDAkFR/9oADAMBAAIRAxEAPwCUyTayDnWRV5tDZ9nzjnRZ7WDm0sLWk2q+eOFttDs9qjiydE1eEDNOp2oEjlxV7QlI+nGyPqEmtgV0cP/Z"
+   },
+   "mimeType": "image/jpeg",
+   "originalFilename": "Zgornje Pirniče 02.jpg",
+   "size": 708179,
+   "url": "https://cdn.sanity.io/images/hnwav9pa/production/67f0c0bd20fcfdb1dd4b43d50d4868e5e30ca8b5-2130x1550.jpg"
+  },
+  {
+   "_id": "image-75ab12f22643a381ab7f9c7e7ca22797babca6e3-3264x2448-jpg",
+   "_type": "sanity.imageAsset",
+   "extension": "jpg",
+   "metadata": {
+    "dimensions": {
+     "height": 2448,
+     "width": 3264
+    },
+    "lqip": "data:image/jpeg;base64,/9j/2wBDAAYEBQYFBAYGBQYHBwYIChAKCgkJChQODwwQFxQYGBcUFhYaHSUfGhsjHBYWICwgIyYnKSopGR8tMC0oMCUoKSj/2wBDAQcHBwoIChMKChMoGhYaKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCj/wAARCAAPABQDASIAAhEBAxEB/8QAGAAAAwEBAAAAAAAAAAAAAAAAAAUGAgf/xAAjEAABAwQCAQUAAAAAAAAAAAABAgMEAAUGERIhBxMUUmGB/8QAFQEBAQAAAAAAAAAAAAAAAAAABQT/xAAeEQACAQUAAwAAAAAAAAAAAAABAgADBAURIRIikf/aAAwDAQACEQMRAD8Almcefc6ZjuOq+KE7NYds/pzTFfBZkDotODSqpfGMiVYbg9LlTlTitHEBWwE/dJvIkeTcMgduiJaW/cODgkA7T+0q2ZqF9qvB9MMGNHh7Hs5/k6lwLs5HT0EgUU9m4bcZcguvzGnFkAciDuijqt/Wdyw2NyhLUKoBE//Z"
+   },
+   "mimeType": "image/jpeg",
+   "originalFilename": "Spodnje Pirnice, Holy Cross church 02.jpg",
+   "size": 2798674,
+   "url": "https://cdn.sanity.io/images/hnwav9pa/production/75ab12f22643a381ab7f9c7e7ca22797babca6e3-3264x2448.jpg"
+  },
+  {
+   "_id": "image-8b87208c0c0c7a0be882f534eec6e9329d4ce6d3-3648x2736-jpg",
+   "_type": "sanity.imageAsset",
+   "extension": "jpg",
+   "metadata": {
+    "dimensions": {
+     "height": 2736,
+     "width": 3648
+    },
+    "lqip": "data:image/jpeg;base64,/9j/2wBDAAYEBQYFBAYGBQYHBwYIChAKCgkJChQODwwQFxQYGBcUFhYaHSUfGhsjHBYWICwgIyYnKSopGR8tMC0oMCUoKSj/2wBDAQcHBwoIChMKChMoGhYaKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCj/wAARCAAPABQDASIAAhEBAxEB/8QAGAAAAwEBAAAAAAAAAAAAAAAAAAYHBAX/xAAjEAACAQQBAwUAAAAAAAAAAAABAgMABAURIQYTMRIiIzJB/8QAFwEAAwEAAAAAAAAAAAAAAAAAAQIEBf/EABsRAAIDAAMAAAAAAAAAAAAAAAABAhEhBCJB/9oADAMBAAIRAxEAPwBVzfds7lDFt2mb2qp8AV28QJZLqOOeQAsAN78UiPlpGvRNA52hP2G61JmJBc9wpyx5ANZk+P1W6UqbfhbJcZjLR+0lykgABLb/AGipWOq47b45YZPWOTzuiioTrBLP/9k="
+   },
+   "mimeType": "image/jpeg",
+   "originalFilename": "Saint Martin church interior, Teharje, Slovenia.jpg",
+   "size": 2171774,
+   "url": "https://cdn.sanity.io/images/hnwav9pa/production/8b87208c0c0c7a0be882f534eec6e9329d4ce6d3-3648x2736.jpg"
+  },
+  {
+   "_id": "image-91c5b8b4b1c2e7615254b13cf843ce8d85c74c5b-1504x1292-jpg",
+   "_type": "sanity.imageAsset",
+   "extension": "jpg",
+   "metadata": {
+    "dimensions": {
+     "height": 1292,
+     "width": 1504
+    },
+    "lqip": "data:image/jpeg;base64,/9j/2wBDAAYEBQYFBAYGBQYHBwYIChAKCgkJChQODwwQFxQYGBcUFhYaHSUfGhsjHBYWICwgIyYnKSopGR8tMC0oMCUoKSj/2wBDAQcHBwoIChMKChMoGhYaKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCj/wAARCAARABQDASIAAhEBAxEB/8QAGAABAAMBAAAAAAAAAAAAAAAAAAIFBwb/xAApEAABAwMBBQkAAAAAAAAAAAABAAIDBAURBhIhMTRBBxMUFTVRcXJz/8QAGAEAAgMAAAAAAAAAAAAAAAAAAwUBBAb/xAAgEQABBAIBBQAAAAAAAAAAAAABAAIDBBIhERMxMjNB/9oADAMBAAIRAxEAPwCeoYG1Fwkke4CSQF5apWKOGsri6cNihhpnSEs4u2VU3OqfJXNk34DCw591Y6Ve/Yu2Iy9/gJGtwM78JBekkz2dLVU68fQLgN8K4h1/S00McVFtOha0DJ4k9UWDnzCElndPBHQjCKRWJ+oT44w4jFbFeeaf9l1PZ5y9Z+bkRM7vih1PWs8v3qc3yiIqicu7r//Z"
+   },
+   "mimeType": "image/jpeg",
+   "originalFilename": "Confessional in Sacro Cuore (Alcamo).jpg",
+   "size": 311633,
+   "url": "https://cdn.sanity.io/images/hnwav9pa/production/91c5b8b4b1c2e7615254b13cf843ce8d85c74c5b-1504x1292.jpg"
+  },
+  {
+   "_id": "image-99dfce870bf18bcc51c8fb0e25cc7b3ed51725c7-2272x1704-jpg",
+   "_type": "sanity.imageAsset",
+   "extension": "jpg",
+   "metadata": {
+    "dimensions": {
+     "height": 1704,
+     "width": 2272
+    },
+    "lqip": "data:image/jpeg;base64,/9j/2wBDAAYEBQYFBAYGBQYHBwYIChAKCgkJChQODwwQFxQYGBcUFhYaHSUfGhsjHBYWICwgIyYnKSopGR8tMC0oMCUoKSj/2wBDAQcHBwoIChMKChMoGhYaKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCj/wAARCAAPABQDASIAAhEBAxEB/8QAFwAAAwEAAAAAAAAAAAAAAAAAAAYHBf/EACIQAAIBAwQCAwAAAAAAAAAAAAEDAgAEBQYHITEREhVhcf/EABQBAQAAAAAAAAAAAAAAAAAAAAT/xAAaEQACAwEBAAAAAAAAAAAAAAABAgADERIh/9oADAMBAAIRAxEAPwCwbh7gNxC2IwaQ+6WSGEjiP591OcBujqmV4G3klsUCSUSiIkxq35bSWIyTGNdagOn3OB9STS1pfbTHWypTzCIXDw6Uln2JEY+eKE1VzPvUStlQXMjLpTUXzuGVem2mkyJBieeqK2rW1TaIim3XFao9RiOBRS1BAwmHJBPk/9k="
+   },
+   "mimeType": "image/jpeg",
+   "originalFilename": "Rosary 2006-01-16.jpg",
+   "size": 1155155,
+   "url": "https://cdn.sanity.io/images/hnwav9pa/production/99dfce870bf18bcc51c8fb0e25cc7b3ed51725c7-2272x1704.jpg"
+  },
+  {
+   "_id": "image-9d431f41e607223af31397ebebc4cda9a0c32b30-2250x1500-jpg",
+   "_type": "sanity.imageAsset",
+   "extension": "jpg",
+   "metadata": {
+    "dimensions": {
+     "height": 1500,
+     "width": 2250
+    },
+    "lqip": "data:image/jpeg;base64,/9j/2wBDAAYEBQYFBAYGBQYHBwYIChAKCgkJChQODwwQFxQYGBcUFhYaHSUfGhsjHBYWICwgIyYnKSopGR8tMC0oMCUoKSj/2wBDAQcHBwoIChMKChMoGhYaKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCj/wAARCAANABQDASIAAhEBAxEB/8QAGAAAAgMAAAAAAAAAAAAAAAAAAAcFBgj/xAAhEAABBAICAgMAAAAAAAAAAAACAQMEBQARBhIhURMxYf/EABcBAAMBAAAAAAAAAAAAAAAAAAEDBAX/xAAfEQABBAEFAQAAAAAAAAAAAAABAAIDBCEFESNBoeH/2gAMAwEAAhEDEQA/AFvx0pNVYtyqNorEHmupN70I6+8bzvNGIdI23Jdbalk0hJHXyu/WZx4HeS623bOOa9OyKoKvhcl7qc8XJ3ZBkpl8qkiF51+ZFdgYHh0a1NM5gWy9AlMqSZWRDLkxXUcdFFXq2qphlPrec3EeG20L2xHaJv1vDFCoTndA2om4LPfi/9k="
+   },
+   "mimeType": "image/jpeg",
+   "originalFilename": "Bishop visits Moody, leads confirmation 130129-F-PO994-080.jpg",
+   "size": 2460003,
+   "url": "https://cdn.sanity.io/images/hnwav9pa/production/9d431f41e607223af31397ebebc4cda9a0c32b30-2250x1500.jpg"
+  },
+  {
+   "_id": "image-b126e1a5be29bf8cf9d83aa1c1e3e4f34c198f43-3840x2160-jpg",
+   "_type": "sanity.imageAsset",
+   "extension": "jpg",
+   "metadata": {
+    "dimensions": {
+     "height": 2160,
+     "width": 3840
+    },
+    "lqip": "data:image/jpeg;base64,/9j/2wBDAAYEBQYFBAYGBQYHBwYIChAKCgkJChQODwwQFxQYGBcUFhYaHSUfGhsjHBYWICwgIyYnKSopGR8tMC0oMCUoKSj/2wBDAQcHBwoIChMKChMoGhYaKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCj/wAARCAALABQDASIAAhEBAxEB/8QAGAAAAgMAAAAAAAAAAAAAAAAAAAUDBgf/xAAfEAABAwQDAQAAAAAAAAAAAAABAAIDBAURIRIUYnL/xAAWAQEBAQAAAAAAAAAAAAAAAAADAAT/xAAeEQACAAYDAAAAAAAAAAAAAAAAAQIDBRESIQQVUf/aAAwDAQACEQMRAD8AWMtFIQB2Id+gpBZ6Ruc1UGvYScRsLRloSe5ANzjS1KuzXrEB0aBbyLg6C3RHi+rgz9IWZyOPM7KFdzM8BfBgTtc//9k="
+   },
+   "mimeType": "image/jpeg",
+   "originalFilename": "Zgornje Pirniče 01.jpg",
+   "size": 1610438,
+   "url": "https://cdn.sanity.io/images/hnwav9pa/production/b126e1a5be29bf8cf9d83aa1c1e3e4f34c198f43-3840x2160.jpg"
+  },
+  {
+   "_id": "image-b257c590bc28e058750a5de96c488eb12a1038e5-1920x2560-jpg",
+   "_type": "sanity.imageAsset",
+   "extension": "jpg",
+   "metadata": {
+    "dimensions": {
+     "height": 2560,
+     "width": 1920
+    },
+    "lqip": "data:image/jpeg;base64,/9j/2wBDAAYEBQYFBAYGBQYHBwYIChAKCgkJChQODwwQFxQYGBcUFhYaHSUfGhsjHBYWICwgIyYnKSopGR8tMC0oMCUoKSj/2wBDAQcHBwoIChMKChMoGhYaKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCj/wAARCAAbABQDASIAAhEBAxEB/8QAGgAAAgIDAAAAAAAAAAAAAAAAAAYDBQIHCP/EACMQAAEEAQQCAwEAAAAAAAAAAAEAAgMEEQUSISIxUQYHE4H/xAAZAQABBQAAAAAAAAAAAAAAAAAGAQIDBAX/xAAdEQADAAICAwAAAAAAAAAAAAAAAQIDEwQSFDFR/9oADAMBAAIRAxEAPwDHT2Txfu+3tDBJiPHpM9WvwOEsahZjsSClAcyNsMa8D0n2nXw0NyCQERrPLpwjBrFSlURsg6oVsyv18IS7EN6s5m03UJaVqOy10znB2e3n+q5b8iuxNtTx25xLKOnJwOUjiaQ4y8+FKyaQQAB7sFCT5F+wjcpI2EftjVmMjYxu7a0Nc7bnJ9oSFEBsCFJ52Ur6Y+H/2Q=="
+   },
+   "mimeType": "image/jpeg",
+   "originalFilename": "Zgornje Pirnice, St. Thomas' filial church.jpg",
+   "size": 1273847,
+   "url": "https://cdn.sanity.io/images/hnwav9pa/production/b257c590bc28e058750a5de96c488eb12a1038e5-1920x2560.jpg"
+  },
+  {
+   "_id": "image-b25aa33621a218c350dcc183008c6ab47b3c4639-2938x1993-jpg",
+   "_type": "sanity.imageAsset",
+   "extension": "jpg",
+   "metadata": {
+    "dimensions": {
+     "height": 1993,
+     "width": 2938
+    },
+    "lqip": "data:image/jpeg;base64,/9j/2wBDAAYEBQYFBAYGBQYHBwYIChAKCgkJChQODwwQFxQYGBcUFhYaHSUfGhsjHBYWICwgIyYnKSopGR8tMC0oMCUoKSj/2wBDAQcHBwoIChMKChMoGhYaKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCj/wAARCAAOABQDASIAAhEBAxEB/8QAFwABAQEBAAAAAAAAAAAAAAAABwAFBv/EACIQAAIBBAEEAwAAAAAAAAAAAAEDAgAEBQYHETFBURMisf/EABUBAQEAAAAAAAAAAAAAAAAAAAME/8QAIBEAAQMCBwAAAAAAAAAAAAAAAQACAwQhBRESExUxQv/aAAwDAQACEQMRAD8AQNl5wxeLQH2s43ST5h4ND28cs43abpLmpnAx9/lbeYwWLy9jaXCrFNup6AZKiOgHX1R9neOkhxZY3PxA94yHUVFJikDZNp1ikZTOLdXaUdC5K12y1xKJtkkxlL6HxVXHa3qlra4pa3qQ5gJJmY96qXkj5FkJphndf//Z"
+   },
+   "mimeType": "image/jpeg",
+   "originalFilename": "Pevski zbor Lisca 2.jpg",
+   "size": 691713,
+   "url": "https://cdn.sanity.io/images/hnwav9pa/production/b25aa33621a218c350dcc183008c6ab47b3c4639-2938x1993.jpg"
+  },
+  {
+   "_id": "image-b7347d830c520165e5774d042ee6cc09130fbcfb-3600x2400-jpg",
+   "_type": "sanity.imageAsset",
+   "extension": "jpg",
+   "metadata": {
+    "dimensions": {
+     "height": 2400,
+     "width": 3600
+    },
+    "lqip": "data:image/jpeg;base64,/9j/2wBDAAYEBQYFBAYGBQYHBwYIChAKCgkJChQODwwQFxQYGBcUFhYaHSUfGhsjHBYWICwgIyYnKSopGR8tMC0oMCUoKSj/2wBDAQcHBwoIChMKChMoGhYaKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCj/wAARCAANABQDASIAAhEBAxEB/8QAFwABAQEBAAAAAAAAAAAAAAAABgAEBf/EACUQAAEDAwIGAwAAAAAAAAAAAAECAwQABREHEgYVISIxQVFhcf/EABYBAQEBAAAAAAAAAAAAAAAAAAIEBf/EABsRAAIDAAMAAAAAAAAAAAAAAAABAgQREhMh/9oADAMBAAIRAxEAPwDRddIoUrh5yHCnoDrRDiN3nPwr6ow9ppGhSrfFaeMp5/tcWOiE/lP0WNAt7E9MuUlS8JWjecKrnuWIc1mwxNlAMNh1C93UZ9Vjzt7iisKIrHyfoL4q0xkNXhaLY/GMcJAwD4PsVUjZsrr7Yc5lKSVeRnNVNXog6z//2Q=="
+   },
+   "mimeType": "image/jpeg",
+   "originalFilename": "Manila Archbishop Jose Cardinal Advincula officiates the Chrism Mass at the Manila Cathedral on Maundy Thursday (April 6, 2023).jpg",
+   "size": 4185928,
+   "url": "https://cdn.sanity.io/images/hnwav9pa/production/b7347d830c520165e5774d042ee6cc09130fbcfb-3600x2400.jpg"
+  },
+  {
+   "_id": "image-c672c64cb051167d359be891c3c39fcbfb34c8af-3840x2880-jpg",
+   "_type": "sanity.imageAsset",
+   "extension": "jpg",
+   "metadata": {
+    "dimensions": {
+     "height": 2880,
+     "width": 3840
+    },
+    "lqip": "data:image/jpeg;base64,/9j/2wBDAAYEBQYFBAYGBQYHBwYIChAKCgkJChQODwwQFxQYGBcUFhYaHSUfGhsjHBYWICwgIyYnKSopGR8tMC0oMCUoKSj/2wBDAQcHBwoIChMKChMoGhYaKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCj/wAARCAAPABQDASIAAhEBAxEB/8QAFgABAQEAAAAAAAAAAAAAAAAABgAH/8QAJRAAAgEDAwIHAAAAAAAAAAAAAQIDAAQFBxETEiEUIjEyQVHB/8QAFQEBAQAAAAAAAAAAAAAAAAAAAwH/xAAcEQACAgIDAAAAAAAAAAAAAAABAgARAyESEzH/2gAMAwEAAhEDEQA/ADmEgubNUaKXi3IPb7rVMfqHlcfjVhmukmkC9iV3IFYcc1cb8ETcqRN5l9vSf2kuPuI3t+uQt4hhu3yKIl1WydyUzDXsR5HUDPzXbuuQkRT6KFqoPeZNFuGBDbiqg7s0Li0//9k="
+   },
+   "mimeType": "image/jpeg",
+   "originalFilename": "Campfire at Webb Lake - YFMP (9268956845).jpg",
+   "size": 2941882,
+   "url": "https://cdn.sanity.io/images/hnwav9pa/production/c672c64cb051167d359be891c3c39fcbfb34c8af-3840x2880.jpg"
+  },
+  {
+   "_id": "image-c6aa32755aa9514649c7c028f35cbca060c09a3d-3840x2555-jpg",
+   "_type": "sanity.imageAsset",
+   "extension": "jpg",
+   "metadata": {
+    "dimensions": {
+     "height": 2555,
+     "width": 3840
+    },
+    "lqip": "data:image/jpeg;base64,/9j/2wBDAAYEBQYFBAYGBQYHBwYIChAKCgkJChQODwwQFxQYGBcUFhYaHSUfGhsjHBYWICwgIyYnKSopGR8tMC0oMCUoKSj/2wBDAQcHBwoIChMKChMoGhYaKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCj/wAARCAANABQDASIAAhEBAxEB/8QAGAAAAgMAAAAAAAAAAAAAAAAAAAcDBQj/xAAiEAACAQMEAgMAAAAAAAAAAAABAgMABAUGERIhEzEiQVH/xAAWAQEBAQAAAAAAAAAAAAAAAAAFBAb/xAAbEQACAwADAAAAAAAAAAAAAAABAwACEQQhMf/aAAwDAQACEQMRAD8AV+A0nkrDLw3E3AqjcuKjkTTUmg4Qc5YlHW/yWo9O5lY5GuIbKBBI5AT2F2/KuNTZVruzjBhRex6NZ3ltbZ2eZFkAUoMGgxU6uwWSly3ljso3SSNWViduu6K0FpfH2uRsZprqFXcTFAT9AAbCillHKASRndiZ/9k="
+   },
+   "mimeType": "image/jpeg",
+   "originalFilename": "Religious candles in the Church of the Nativity, Bethlehem 015 - Aug 2011.jpg",
+   "size": 1384103,
+   "url": "https://cdn.sanity.io/images/hnwav9pa/production/c6aa32755aa9514649c7c028f35cbca060c09a3d-3840x2555.jpg"
+  },
+  {
+   "_id": "image-d5b9a6988de48c4d94d48e90df3ceb5857ebe047-2723x2292-jpg",
+   "_type": "sanity.imageAsset",
+   "extension": "jpg",
+   "metadata": {
+    "dimensions": {
+     "height": 2292,
+     "width": 2723
+    },
+    "lqip": "data:image/jpeg;base64,/9j/2wBDAAYEBQYFBAYGBQYHBwYIChAKCgkJChQODwwQFxQYGBcUFhYaHSUfGhsjHBYWICwgIyYnKSopGR8tMC0oMCUoKSj/2wBDAQcHBwoIChMKChMoGhYaKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCj/wAARCAARABQDASIAAhEBAxEB/8QAFwABAQEBAAAAAAAAAAAAAAAAAAYHBf/EACsQAAEDAwIDBwUAAAAAAAAAAAIAAQMEBREGQRIhNAcWIjEzNVE2cXJzwf/EABcBAAMBAAAAAAAAAAAAAAAAAAIEBQb/xAAmEQABAwICCwAAAAAAAAAAAAABAAIDEXEEMwUSITEyQUJhkdHw/9oADAMBAAIRAxEAPwCt733OriZ56saWGJsNFE/q42zss+tVScWsKnUt2melCIHZohwTm3xlNYW+7jcKIrV087sJxth2Fs83Xa1FokrXRFIZlPRSReI2fnG+PJ1NjmlbwuDgR4T0bIJDzBCkbr22X+OtkC0yjDRi+IxMcvj5dFL0ulIZgI5Kg88T44W22RNtjNNjTSxQuDqnWcK3Hta0fuofr/qrdZfR1V+IoilaO3/d0EXUsltfSD93REWvgy22ULE5rrr/2Q=="
+   },
+   "mimeType": "image/jpeg",
+   "originalFilename": "Placing a wedding ring.jpg",
+   "size": 1940534,
+   "url": "https://cdn.sanity.io/images/hnwav9pa/production/d5b9a6988de48c4d94d48e90df3ceb5857ebe047-2723x2292.jpg"
+  },
+  {
+   "_id": "image-d5e6be0730d94bf9edd8cf3b32fa1ad3d7eaf3ae-3840x2160-jpg",
+   "_type": "sanity.imageAsset",
+   "extension": "jpg",
+   "metadata": {
+    "dimensions": {
+     "height": 2160,
+     "width": 3840
+    },
+    "lqip": "data:image/jpeg;base64,/9j/2wBDAAYEBQYFBAYGBQYHBwYIChAKCgkJChQODwwQFxQYGBcUFhYaHSUfGhsjHBYWICwgIyYnKSopGR8tMC0oMCUoKSj/2wBDAQcHBwoIChMKChMoGhYaKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCj/wAARCAALABQDASIAAhEBAxEB/8QAFgABAQEAAAAAAAAAAAAAAAAABQcA/8QAIRAAAgIBBAIDAAAAAAAAAAAAAQIAAwQFBhEhIjEHQXH/xAAWAQEBAQAAAAAAAAAAAAAAAAAAAgT/xAAaEQEAAwADAAAAAAAAAAAAAAABABESBBRh/9oADAMBAAIRAxEAPwBPF3vgLcgvdWHHQr9GKHeul2Y/OSiqoPijOO5A9teep4qN2pcciJblpro1S1akCqPoTO86iwgLNSn5vyVpyXstbrWq9BV9CaRV0UsSVHP5NI73kaJ//9k="
+   },
+   "mimeType": "image/jpeg",
+   "originalFilename": "Spodnje Pirniče 2024.jpg",
+   "size": 1379001,
+   "url": "https://cdn.sanity.io/images/hnwav9pa/production/d5e6be0730d94bf9edd8cf3b32fa1ad3d7eaf3ae-3840x2160.jpg"
+  },
+  {
+   "_id": "image-e0e2fb1a0e178997af474a3309e7953cefbe2956-3072x2304-jpg",
+   "_type": "sanity.imageAsset",
+   "extension": "jpg",
+   "metadata": {
+    "dimensions": {
+     "height": 2304,
+     "width": 3072
+    },
+    "lqip": "data:image/jpeg;base64,/9j/2wBDAAYEBQYFBAYGBQYHBwYIChAKCgkJChQODwwQFxQYGBcUFhYaHSUfGhsjHBYWICwgIyYnKSopGR8tMC0oMCUoKSj/2wBDAQcHBwoIChMKChMoGhYaKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCj/wAARCAAPABQDASIAAhEBAxEB/8QAGAAAAwEBAAAAAAAAAAAAAAAAAAQFBgf/xAAhEAABBAICAgMAAAAAAAAAAAABAgMEEQASBQZBcRQiMf/EABYBAQEBAAAAAAAAAAAAAAAAAAIDBP/EABkRAAEFAAAAAAAAAAAAAAAAAAABAhESIf/aAAwDAQACEQMRAD8A5izBJkoaP3Jqq85X7fxrkd+KX2UsbNpA0FA+8d4bjVzyW2Qn5jbtps0DXjL3bWH+VktOcrHRHRFa1KUL22OZa7ZSqOhsGDTOmREJYaeAQgV+YY1BjJeaUsXrsdfWGPQH/9k="
+   },
+   "mimeType": "image/jpeg",
+   "originalFilename": "Monstrance, Holy Cross, അരുളിക്ക.JPG",
+   "size": 3336040,
+   "url": "https://cdn.sanity.io/images/hnwav9pa/production/e0e2fb1a0e178997af474a3309e7953cefbe2956-3072x2304.jpg"
+  },
+  {
+   "_id": "image-f0a1f4da6fb50c0fca6df54277d03f2d732d7ccb-1952x2592-jpg",
+   "_type": "sanity.imageAsset",
+   "extension": "jpg",
+   "metadata": {
+    "dimensions": {
+     "height": 2592,
+     "width": 1952
+    },
+    "lqip": "data:image/jpeg;base64,/9j/2wBDAAYEBQYFBAYGBQYHBwYIChAKCgkJChQODwwQFxQYGBcUFhYaHSUfGhsjHBYWICwgIyYnKSopGR8tMC0oMCUoKSj/2wBDAQcHBwoIChMKChMoGhYaKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCj/wAARCAAbABQDASIAAhEBAxEB/8QAGgAAAgIDAAAAAAAAAAAAAAAAAAUEBgIDB//EACQQAAIBBAICAQUAAAAAAAAAAAECAwAEBREGEiExQQcTUWFx/8QAFgEBAQEAAAAAAAAAAAAAAAAAAQUE/8QAHxEAAgICAQUAAAAAAAAAAAAAAAECEQMSEwQyYaHw/9oADAMBAAIRAxEAPwBhmc9E1rI1mTJJvSk/H9qT9NuRRvZTY+6X7NxOw6u3pj+KVcuw2PxWPR7G6aV2k6nfvVVmxn6XMJZyFVxoj48+6m4uNw2gr9GtrdWzqGQtXa9mDIHKt1JQ+KKzgGMCsTkHJY9id0VM5ofMb8i/l2MTL46FMeYkfv2bfjdVe34fdRyI0tzAApBIqbC7rI6qzBQAdbrfcbKLsnz+6sJRgtUgVjq6usdBIIzAmwo3qikzRqWO1B1RWZ9Nhb7Ro//Z"
+   },
+   "mimeType": "image/jpeg",
+   "originalFilename": "Rijeka-Sanctuaire-Notre-Dame-Trsat-Statue-Jean-Paul-II.jpg",
+   "size": 5340671,
+   "url": "https://cdn.sanity.io/images/hnwav9pa/production/f0a1f4da6fb50c0fca6df54277d03f2d732d7ccb-1952x2592.jpg"
+  },
+  {
+   "_id": "image-f276815aca51b85df41b00d8142e934f9c224cf6-3840x2260-jpg",
+   "_type": "sanity.imageAsset",
+   "extension": "jpg",
+   "metadata": {
+    "dimensions": {
+     "height": 2260,
+     "width": 3840
+    },
+    "lqip": "data:image/jpeg;base64,/9j/2wBDAAYEBQYFBAYGBQYHBwYIChAKCgkJChQODwwQFxQYGBcUFhYaHSUfGhsjHBYWICwgIyYnKSopGR8tMC0oMCUoKSj/2wBDAQcHBwoIChMKChMoGhYaKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCj/wAARCAAMABQDASIAAhEBAxEB/8QAGQAAAgMBAAAAAAAAAAAAAAAAAAIDBAUI/8QAHRAAAgMAAgMAAAAAAAAAAAAAAQIAAxEEISIxQf/EABUBAQEAAAAAAAAAAAAAAAAAAAID/8QAGBEBAQEBAQAAAAAAAAAAAAAAAQACMUH/2gAMAwEAAhEDEQA/AOk777K7yHYInzxJ2IlxL+PIZt9anU08BHYlazhUuoXGAB3o5J6y+TEm4zm2lWYY32EmVQoAHoQjOQb/2Q=="
+   },
+   "mimeType": "image/jpeg",
+   "originalFilename": "2023 Różaniec.jpg",
+   "size": 303705,
+   "url": "https://cdn.sanity.io/images/hnwav9pa/production/f276815aca51b85df41b00d8142e934f9c224cf6-3840x2260.jpg"
+  },
+  {
+   "_id": "image-f5799196799970211bfd53322963cf32b188465c-1920x1440-jpg",
+   "_type": "sanity.imageAsset",
+   "extension": "jpg",
+   "metadata": {
+    "dimensions": {
+     "height": 1440,
+     "width": 1920
+    },
+    "lqip": "data:image/jpeg;base64,/9j/2wBDAAYEBQYFBAYGBQYHBwYIChAKCgkJChQODwwQFxQYGBcUFhYaHSUfGhsjHBYWICwgIyYnKSopGR8tMC0oMCUoKSj/2wBDAQcHBwoIChMKChMoGhYaKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCj/wAARCAAPABQDASIAAhEBAxEB/8QAFwAAAwEAAAAAAAAAAAAAAAAAAAQFBv/EACEQAAICAQQDAQEAAAAAAAAAAAECAwQABRETIQYSMRRB/8QAFgEBAQEAAAAAAAAAAAAAAAAAAQID/8QAGREAAwEBAQAAAAAAAAAAAAAAAQIRADGh/9oADAMBAAIRAxEAPwBW9Zioc1q835yCyoX27B/u+U4uGKmLSylYWCMGU/VAzNeZ6dBZoGvLK7BmDDffoDEdcr27nj0dajMAWAC+xIAGbOwK33CJWmr8+mu8jzcodmJ6Q/MMoaWdSi06tE6RyNHGFLew7IwyVJncMoBm/9k="
+   },
+   "mimeType": "image/jpeg",
+   "originalFilename": "Senior-3336451 1920.jpg",
+   "size": 614323,
+   "url": "https://cdn.sanity.io/images/hnwav9pa/production/f5799196799970211bfd53322963cf32b188465c-1920x1440.jpg"
+  }
+ ]
+}

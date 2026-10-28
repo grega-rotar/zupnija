@@ -40,6 +40,20 @@ const PATHS = {
   ban: '<circle cx="12" cy="12" r="10"/><path d="m4.9 4.9 14.2 14.2"/>',
   user: '<circle cx="12" cy="8" r="4"/><path d="M4 21v-1a6 6 0 0 1 6-6h4a6 6 0 0 1 6 6v1"/>',
   shield: '<path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>',
+  // Spletna stran (the prototype's "Urejevalnik" sidebar)
+  page: '<path d="M7 3h10v18H7z"/>',
+  news: '<path d="M4 5h13v14H6a2 2 0 0 1-2-2zM17 9h3v8a2 2 0 0 1-2 2M8 9h5M8 13h5"/>',
+  bell: '<path d="M6 8a6 6 0 0 1 12 0c0 7 3 9 3 9H3s3-2 3-9M10.3 21a1.94 1.94 0 0 0 3.4 0"/>',
+  image: '<path d="M3 5h18v14H3zM3 16l5-5 4 4 3-3 6 6"/>',
+  church: '<path d="M12 2v5M10 4h4M5 21v-9l7-5 7 5v9zM10 21v-4h4v4"/>',
+  chalice: '<path d="M7 3h10l-1 6a4 4 0 0 1-8 0zM12 13v6M8 21h8"/>',
+  spark: '<path d="M12 3v4M12 17v4M3 12h4M17 12h4M6 6l2.5 2.5M15.5 15.5 18 18M6 18l2.5-2.5M15.5 8.5 18 6"/>',
+  sliders: '<path d="M4 7h9M17 7h3M4 17h3M11 17h9M15 4.5v5M9 14.5v5"/>',
+  grip: '<path d="M4 9h16M4 15h16"/>',
+  search: '<circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/>',
+  ext: '<path d="M14 4h6v6M20 4l-9 9M18 14v5a1 1 0 0 1-1 1H5a1 1 0 0 1-1-1V7a1 1 0 0 1 1-1h5"/>',
+  down: '<path d="m6 9 6 6 6-6"/>',
+  upc: '<path d="m18 15-6-6-6 6"/>',
 } as const;
 
 export type IconName = keyof typeof PATHS;

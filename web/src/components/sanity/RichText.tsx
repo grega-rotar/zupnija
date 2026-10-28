@@ -1,4 +1,4 @@
-import { PortableText, type PortableTextComponents, type PortableTextBlock } from "next-sanity";
+import { PortableText, type PortableTextComponents, type PortableTextBlock } from "@portabletext/react";
 import { cn, formatFileSize } from "@/lib/utils";
 import { isExternalHref } from "@/lib/links";
 import { Icon } from "@/components/ui/Icon";

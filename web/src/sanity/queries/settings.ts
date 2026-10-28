@@ -1,4 +1,4 @@
-import { defineQuery } from "next-sanity";
+import { defineQuery } from "./define";
 import { pageHeaderFragment, personRefFragment } from "./fragments";
 
 /** Parish-wide settings (singleton). Used by layout, footer, contact, SEO. */
