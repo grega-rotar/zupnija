@@ -88,7 +88,9 @@ export async function sendMail(mail: OutgoingMail): Promise<SendResult> {
 
   if (!apiKey) {
     keep(mail);
-    if (process.env.NODE_ENV === "development") console.info(`[mail] ni poslano (brez RESEND_API_KEY): ${mail.to} — ${mail.subject}`);
+    // In production a missing key means mail silently never leaves (sign-in links, invites).
+    if (process.env.NODE_ENV === "production") console.error(`[mail] RESEND_API_KEY ni nastavljen — ni poslano: ${mail.subject}`);
+    else if (process.env.NODE_ENV === "development") console.info(`[mail] ni poslano (brez RESEND_API_KEY): ${mail.to} — ${mail.subject}`);
     return { ok: true, delivered: false };
   }
 

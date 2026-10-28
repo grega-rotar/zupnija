@@ -423,13 +423,40 @@ export function UploadFlow({ initial, week: defaultWeek, churches, approval, bus
 
   if (stage === "error") {
     const busyErr = bulletin?.status === "ai_busy";
+    // ai_busy covers two cases: the pool is full (error "ai_busy", try later) or reading
+    // failed on our side (not set up, crashed). Only the first is "busy"; for the second a
+    // new photo won't help, so lead with typing it in.
+    const down = busyErr && bulletin?.error !== "ai_busy";
+    if (down) {
+      return (
+        <div className="page wide enter" key="error">
+          {head}
+          <div className="split">
+            {srcCol("error")}
+            <div className="errcard" role="alert">
+              <h2>Samodejno branje ta trenutek ne deluje</h2>
+              <p>Napaka je na naši strani, ne pri vaši datoteki. Oznanila vpišite ročno, vse ostalo deluje. Nič ni spremenjeno.</p>
+              <div className="acts">
+                <Button variant="primary" size="lg" icon="pen" onClick={manual}>
+                  Vpiši ročno
+                </Button>
+                <Button size="lg" onClick={() => anyInput.current?.click()}>
+                  Poskusi z drugo datoteko
+                </Button>
+              </div>
+            </div>
+          </div>
+          {inputs}
+        </div>
+      );
+    }
     return (
       <div className="page wide enter" key="error">
         {head}
         <div className="split">
           {srcCol("error")}
           <div className="errcard" role="alert">
-            <h2>{busyErr ? "Claude zdaj ne more brati" : "Tega lista ni mogoče prebrati"}</h2>
+            <h2>{busyErr ? "Claude je zdaj zaseden" : "Tega lista ni mogoče prebrati"}</h2>
             <p>{busyErr ? `${busyMessage} Nič ni spremenjeno.` : unreadableText(bulletin?.error ?? null)}</p>
             {busyErr ? null : (
               <ul>

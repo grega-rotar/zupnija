@@ -326,9 +326,17 @@ throw-away credentials, and everything above is runtime-only.
 
 ### claude-pool on t4a (once)
 
-Tokens stay on the host in `/etc/claude-pool` (mode 2770, group
-`claude-pool`, files 640), mounted read-only into `web`. Usage state and
-claude's own config live in the `zupnija_claude` volume.
+On t4a the editor shares rokomet-stats' pool: `.env` has
+`CLAUDE_POOL_HOST_DIR=/srv/rokomet-stats/claude-pool`, mounted read-only at
+`/etc/claude-pool` in `web`. The token files there belong to `deploy` (uid
+1000, mode 600), and the container's `node` user is also uid 1000, so it reads
+them without group changes. Add or rotate accounts there, the way rokomet
+does; both apps pick them up. Usage state and claude's own config live in the
+`zupnija_claude` volume. (`/etc/claude-pool` on the host is a symlink to the
+same folder, left from the first setup.)
+
+For a pool of its own instead, leave `CLAUDE_POOL_HOST_DIR` unset (default
+`/etc/claude-pool`) and set it up like this:
 
 ```bash
 # as root on t4a
