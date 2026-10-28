@@ -1,6 +1,7 @@
 import Link from "next/link";
-import type { CURRENT_BULLETIN_QUERY_RESULT, HOME_PAGE_QUERY_RESULT } from "@/sanity/types.generated";
-import { formatDateSpan, formatDayHeading, formatTime, type IsoDate } from "@/lib/dates";
+import type { HOME_PAGE_QUERY_RESULT } from "@/sanity/types.generated";
+import type { PublicBulletin } from "@/lib/data/bulletins";
+import { formatDayHeading, formatWeekSpan, formatTime, type IsoDate } from "@/lib/dates";
 import { MASS_TYPE_LABEL, pickTodayOrNext, type MassDay } from "@/lib/masses";
 import { routes } from "@/lib/routes";
 import { clean } from "@/lib/clean";
@@ -13,7 +14,7 @@ type Props = {
   days: MassDay[];
   today: IsoDate;
   time: string;
-  bulletin: CURRENT_BULLETIN_QUERY_RESULT;
+  bulletin: PublicBulletin | null;
   tile: NonNullable<HOME_PAGE_QUERY_RESULT>["tile"] | null | undefined;
 };
 
@@ -24,7 +25,7 @@ type Props = {
 export function Today({ days, today, time, bulletin, tile }: Props) {
   const pick = pickTodayOrNext(days, today, time);
   const masses = pick?.masses.slice(0, 4) ?? [];
-  const bulletinText = bulletin?.liturgicalNotes ? plainText(bulletin.liturgicalNotes) : null;
+  const bulletinText = bulletin?.notices.length ? bulletin.notices.map((n) => n.text).join(" ") : null;
   const showTile = Boolean(tile?.text || hasImage(tile?.image));
 
   return (
@@ -47,7 +48,7 @@ export function Today({ days, today, time, bulletin, tile }: Props) {
                           {MASS_TYPE_LABEL[clean(m.type)] ?? MASS_TYPE_LABEL.regular}
                         </p>
                         <p className="text-small text-ink-2">
-                          {m.church?.name ?? m.church?.shortName}
+                          {m.church?.shortName ?? m.church?.name}
                           {cancelled ? <span className="text-alert"> — odpade</span> : null}
                         </p>
                       </div>
@@ -80,7 +81,7 @@ export function Today({ days, today, time, bulletin, tile }: Props) {
           ) : null}
 
           {/* Weekly bulletin */}
-          <Card icon="document" title="Tedenska oznanila" subtitle={bulletin ? formatDateSpan(bulletin.weekStart, bulletin.weekEnd) : "Ta teden"}>
+          <Card icon="document" title="Tedenska oznanila" subtitle={bulletin ? formatWeekSpan(bulletin.weekStart, bulletin.weekEnd) : "Ta teden"}>
             <p className="mt-4 text-body text-ink-2">
               {bulletinText
                 ? truncateWords(bulletinText, 26)
@@ -130,14 +131,6 @@ function CardLink({ href, children }: { href: string; children: React.ReactNode 
       <Icon name="arrow-right" size={14} className="transition-transform group-hover:translate-x-0.5" />
     </Link>
   );
-}
-
-function plainText(blocks: unknown): string {
-  if (!Array.isArray(blocks)) return "";
-  return blocks
-    .map((b) => (Array.isArray((b as { children?: { text?: string }[] }).children) ? (b as { children: { text?: string }[] }).children.map((c) => c.text ?? "").join("") : ""))
-    .filter(Boolean)
-    .join(" ");
 }
 
 function truncateWords(text: string, words: number): string {

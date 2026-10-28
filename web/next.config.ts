@@ -15,6 +15,12 @@ const nextConfig: NextConfig = {
   // Slovenian slugs contain no diacritics, but keep URLs case-sensitive and clean.
   trailingSlash: false,
   poweredByHeader: false,
+  experimental: {
+    // Bulletin uploads (oznanila) go through a server action: up to 20 MB plus multipart overhead.
+    serverActions: { bodySizeLimit: "21mb" },
+    // proxy.ts buffers request bodies (default 10 MB); without this a large upload would be cut off.
+    proxyClientMaxBodySize: "21mb",
+  },
   async headers() {
     return [
       {

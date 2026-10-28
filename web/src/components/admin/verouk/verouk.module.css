@@ -1,0 +1,13 @@
+/* Small additions to admin.css for the Verouk screen. Site tokens only. */
+.form {
+  display: grid;
+  gap: 1.375rem;
+}
+/* Inline validation under the message. Doubled class beats `.field small`. */
+.err.err {
+  color: var(--color-alert);
+  font-weight: 600;
+}
+.form.form textarea[aria-invalid="true"] {
+  border-color: var(--color-alert);
+}

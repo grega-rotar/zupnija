@@ -1,0 +1,22 @@
+{
+  "readable": true,
+  "weekStart": "2026-11-01",
+  "items": [
+    { "id": "i1", "date": "2026-11-01", "time": "08:00", "churchSlug": "sv-kriz", "kind": "other", "text": "za žive in rajne župljane", "sourceLine": "ned 1.11. 8.00 Križ za žive in rajne žup." },
+    { "id": "i2", "date": "2026-11-01", "time": "10:00", "churchSlug": "marijino-vnebovzetje", "kind": "deceased", "text": "Ana Kos", "sourceLine": "10.00 † Ana Kos" },
+    { "id": "i3", "date": "2026-11-02", "time": "18:30", "churchSlug": "sv-kriz", "kind": "deceased", "text": "vsi rajni župljani", "sourceLine": "pon 2.11. 18.30 Križ † vsi rajni župljani" },
+    {
+      "id": "i4", "date": "2026-11-03", "time": "18:30", "churchSlug": "marijino-vnebovzetje", "kind": "deceased", "text": "Jože Novak", "sourceLine": "tor 3.11. 18.30 † Jože Novak",
+      "flag": { "field": "text", "question": "Priimek je slabo čitljiv. Piše Novak ali Nosak?", "options": ["Jože Novak", "Jože Nosak"] }
+    },
+    { "id": "i5", "date": "2026-11-04", "time": "18:30", "churchSlug": "marijino-vnebovzetje", "kind": "deceased", "text": "Marija in Franc Kralj", "sourceLine": "sre 4.11. 18.30 † Marija in Franc Kralj" },
+    { "id": "i6", "date": "2026-11-05", "time": "07:00", "churchSlug": "marijino-vnebovzetje", "kind": "other", "text": "za zdravje v družini", "sourceLine": "čet 5.11. 7.00 za zdravje v družini" },
+    { "id": "i7", "date": "2026-11-06", "time": "17:30", "churchSlug": "sv-kriz", "kind": "thanksgiving", "text": "v zahvalo za 50 let poroke", "sourceLine": "pet 6.11. 17.30 Križ v zahvalo – 50 let por." },
+    { "id": "i8", "date": "2026-11-07", "time": "18:30", "churchSlug": "marijino-vnebovzetje", "kind": "deceased", "text": "iz družine Vidmar", "sourceLine": "sob 7.11. 18.30 † druž. Vidmar" }
+  ],
+  "notices": [
+    "V ponedeljek, 2. novembra, je spomin vseh vernih rajnih. Po večerni maši molimo na pokopališču.",
+    "Ključarji se zberejo v četrtek, 5. novembra, po jutranji maši.",
+    "Nabirka prihodnje nedelje je za potrebe župnije. Bog povrni za vaše darove."
+  ]
+}
