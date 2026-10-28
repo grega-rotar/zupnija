@@ -1,12 +1,13 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { getCurrentAnnouncements, getHomePage, getSettings } from "@/sanity/data";
-import { getBulletinList, getCurrentBulletin } from "@/lib/data/bulletins";
-import { getEventsInRange, getUpcomingEvents } from "@/lib/data/events";
+import { bulletinLabel, getBulletinList, getCurrentBulletin } from "@/lib/data/bulletins";
+import { getUpcomingEvents } from "@/lib/data/events";
 import { getMassDays } from "@/lib/data/masses";
 import { buildMetadata } from "@/lib/seo";
 import { routes } from "@/lib/routes";
-import { dateOf, formatDate, formatDayNumber, formatMonthShort, formatTime, formatWeekSpan, timeOf } from "@/lib/dates";
+import { addDays, dateOf, formatDate, formatDayNumber, formatMonthShort, formatTime, formatWeekSpan, startOfWeek, timeOf } from "@/lib/dates";
+import { today } from "@/lib/clock";
 import { clean } from "@/lib/clean";
 import { ANNOUNCEMENT_CATEGORY_LABEL } from "@/lib/labels";
 import { hrefFor, isExternalHref } from "@/lib/links";
@@ -22,7 +23,7 @@ export async function generateMetadata(): Promise<Metadata> {
   return buildMetadata({
     settings,
     title: "Oznanila",
-    description: "Aktualna oznanila in tedenska oznanila župnije Pirniče.",
+    description: "Aktualna oznanila in mesečna oznanila župnije Pirniče: obvestila, srečanja, mašni nameni.",
     path: routes.announcements,
   });
 }
@@ -47,9 +48,11 @@ export default async function AnnouncementsPage({ searchParams }: Props) {
     getUpcomingEvents(3),
     getHomePage(),
   ]);
-  const [massDays, weekEvents] = bulletin
-    ? await Promise.all([getMassDays(bulletin.weekStart, bulletin.weekEnd), getEventsInRange(bulletin.weekStart, bulletin.weekEnd)])
-    : [[], []];
+  // Beside the bulletin: this week's Masses while the bulletin runs, else its first week.
+  const t = today();
+  const week = bulletin ? startOfWeek(t >= bulletin.periodStart && t <= bulletin.periodEnd ? t : bulletin.periodStart) : null;
+  const massDays = week ? await getMassDays(week, addDays(week, 6)) : [];
+  const massHeading = week ? (week === startOfWeek(t) ? "Ta teden" : formatWeekSpan(week, addDays(week, 6))) : undefined;
 
   const usedCategories = new Set(announcements.map((a) => clean(a.category) ?? "notice"));
   const filters = FILTERS.filter((f) => !f.key || usedCategories.has(f.key));
@@ -156,32 +159,39 @@ export default async function AnnouncementsPage({ searchParams }: Props) {
 
             {/* Sidebar */}
             <aside className="space-y-6 lg:pt-14">
-              <section aria-labelledby="tedenska-pdf" className="rounded-md border border-stone bg-paper-2 p-6 sm:p-7">
-                <h2 id="tedenska-pdf" className="flex items-center gap-2 font-sans text-[0.75rem] font-semibold uppercase tracking-[0.14em] text-ink-3">
+              <section aria-labelledby="oznanila-zupnije" className="rounded-md border border-stone bg-paper-2 p-6 sm:p-7">
+                <h2 id="oznanila-zupnije" className="flex items-center gap-2 font-sans text-[0.75rem] font-semibold uppercase tracking-[0.14em] text-ink-3">
                   <Icon name="document" size={16} className="shrink-0" />
-                  Tedenska oznanila
+                  Oznanila župnije
                 </h2>
                 {bulletin ? (
                   <>
-                    <p className="mt-4 whitespace-nowrap font-serif text-h2 text-ink lg:text-[1.75rem] xl:text-h2">{formatWeekSpan(bulletin.weekStart, bulletin.weekEnd)}</p>
-                    <p className="mt-1 text-small text-ink-3">{bulletin.weekStart.slice(0, 4)}</p>
+                    <p className="mt-4 font-serif text-h2 text-ink lg:text-[1.75rem] xl:text-h2">{bulletinLabel(bulletin)}</p>
+                    {bulletin.issue ? <p className="mt-1 text-small text-ink-3">{bulletin.issue}</p> : null}
                   </>
                 ) : (
-                  <p className="mt-4 text-body text-ink-2">Tedenska oznanila se objavijo ob nedeljah.</p>
+                  <p className="mt-4 text-body text-ink-2">Oznanila izidejo na začetku meseca.</p>
                 )}
                 {bulletin ? (
-                  <a href="#tedenska" className="mt-3 inline-flex min-h-10 items-center gap-2 text-small text-ink-2 underline decoration-stone-2 underline-offset-4 hover:text-ink">
-                    Preberi na tej strani
-                  </a>
+                  <div className="mt-3 flex flex-wrap gap-x-5 gap-y-1">
+                    <a href="#mesecna" className="inline-flex min-h-10 items-center gap-2 text-small text-ink-2 underline decoration-stone-2 underline-offset-4 hover:text-ink">
+                      Preberi na tej strani
+                    </a>
+                    {bulletin.pdfUrl ? (
+                      <a href={bulletin.pdfUrl} className="inline-flex min-h-10 items-center gap-1.5 text-small text-moss underline underline-offset-4 hover:text-moss-deep">
+                        <Icon name="download" size={15} /> Prenesi PDF
+                      </a>
+                    ) : null}
+                  </div>
                 ) : null}
                 {olderBulletins.length ? (
                   <div className="mt-5 border-t border-stone pt-4">
-                    <h3 className="text-meta text-ink-3">Prejšnji tedni</h3>
+                    <h3 className="text-meta text-ink-3">Prejšnja oznanila</h3>
                     <ul className="mt-2 flex flex-wrap gap-x-4 gap-y-1 text-small">
                       {olderBulletins.map((b) => (
                         <li key={b.id}>
-                          <Link href={routes.bulletin(b.weekStart)} className="whitespace-nowrap text-ink-2 underline decoration-stone-2 underline-offset-4 hover:text-ink">
-                            {formatWeekSpan(b.weekStart, b.weekEnd)}
+                          <Link href={routes.bulletin(b.periodStart)} className="whitespace-nowrap text-ink-2 underline decoration-stone-2 underline-offset-4 hover:text-ink">
+                            {b.label}
                           </Link>
                         </li>
                       ))}
@@ -253,9 +263,10 @@ export default async function AnnouncementsPage({ searchParams }: Props) {
       </Section>
 
       {bulletin ? (
-        <Section tone="paper-2" id="tedenska" className="scroll-mt-16 border-t border-stone">
+        <Section tone="paper-2" id="mesecna" className="scroll-mt-16 border-t border-stone">
+          <span id="tedenska" aria-hidden="true" />
           <Container>
-            <BulletinView bulletin={bulletin} massDays={massDays} events={weekEvents} />
+            <BulletinView bulletin={bulletin} massDays={massDays} massHeading={massHeading} events={bulletin.events} />
           </Container>
         </Section>
       ) : null}

@@ -1,7 +1,7 @@
 import Link from "next/link";
 import type { HOME_PAGE_QUERY_RESULT } from "@/sanity/types.generated";
-import type { PublicBulletin } from "@/lib/data/bulletins";
-import { formatDayHeading, formatWeekSpan, formatTime, type IsoDate } from "@/lib/dates";
+import { bulletinLabel, type PublicBulletin } from "@/lib/data/bulletins";
+import { formatDayHeading, formatTime, type IsoDate } from "@/lib/dates";
 import { MASS_TYPE_LABEL, pickTodayOrNext, type MassDay } from "@/lib/masses";
 import { routes } from "@/lib/routes";
 import { clean } from "@/lib/clean";
@@ -9,6 +9,7 @@ import { cn } from "@/lib/utils";
 import { SanityImage, hasImage } from "@/components/sanity/SanityImage";
 import { Icon, type IconName } from "@/components/ui/Icon";
 import { Container } from "@/components/ui/primitives";
+import { DayTitle } from "@/components/masses/MassList";
 
 type Props = {
   days: MassDay[];
@@ -25,7 +26,7 @@ type Props = {
 export function Today({ days, today, time, bulletin, tile }: Props) {
   const pick = pickTodayOrNext(days, today, time);
   const masses = pick?.masses.slice(0, 4) ?? [];
-  const bulletinText = bulletin?.notices.length ? bulletin.notices.map((n) => n.text).join(" ") : null;
+  const bulletinText = bulletin?.notices.length ? bulletin.notices.map((n) => n.text).join(" ") : (bulletin?.article?.text ?? null);
   const showTile = Boolean(tile?.text || hasImage(tile?.image));
 
   return (
@@ -59,7 +60,7 @@ export function Today({ days, today, time, bulletin, tile }: Props) {
             ) : (
               <p className="mt-4 border-t border-stone pt-4 text-small text-ink-2">V naslednjih dneh ni vpisanih svetih maš.</p>
             )}
-            {pick?.day.liturgicalTitle ? <p className="mt-3 text-small text-ink-3">{pick.day.liturgicalTitle}</p> : null}
+            {pick ? <DayTitle day={pick.day} className="mt-3 text-ink-3" /> : null}
             <div className="flex-1" />
             <CardLink href={routes.masses}>Vsi časi maš</CardLink>
           </Card>
@@ -80,16 +81,16 @@ export function Today({ days, today, time, bulletin, tile }: Props) {
             </div>
           ) : null}
 
-          {/* Weekly bulletin */}
-          <Card icon="document" title="Tedenska oznanila" subtitle={bulletin ? formatWeekSpan(bulletin.weekStart, bulletin.weekEnd) : "Ta teden"}>
+          {/* The current bulletin (monthly) */}
+          <Card icon="document" title="Oznanila" subtitle={bulletin ? bulletinLabel(bulletin) : "Ta mesec"}>
             <p className="mt-4 text-body text-ink-2">
               {bulletinText
                 ? truncateWords(bulletinText, 26)
-                : "Preberite najnovejša oznanila, pomembne informacije in vabila za ta teden."}
+                : "Preberite najnovejša oznanila, pomembne informacije in vabila."}
             </p>
             <div className="mt-6">
               <Link
-                href={bulletin ? `${routes.announcements}#tedenska` : routes.announcements}
+                href={bulletin ? `${routes.announcements}#mesecna` : routes.announcements}
                 className="inline-flex min-h-11 items-center rounded-sm bg-moss px-5 text-small font-medium text-paper transition-colors hover:bg-moss-deep"
               >
                 Preberi oznanila

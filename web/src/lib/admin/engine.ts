@@ -24,7 +24,7 @@ import { ForbiddenError, UserError } from "./errors";
 import { can, needsApproval, type Actor, type Area, type Section } from "./sections";
 
 // ── Tracked tables ──────────────────────────────────────────────────────────
-/** Tables actions may write. All have a single `id` primary key. */
+/** Tables actions may write. Each has a single-column primary key (see PK). */
 export const TRACKED = {
   masses: schema.masses,
   intentions: schema.intentions,
@@ -33,8 +33,14 @@ export const TRACKED = {
   catechesis_cancellations: schema.catechesisCancellations,
   bulletins: schema.bulletins,
   bulletin_notices: schema.bulletinNotices,
+  calendar_days: schema.calendarDays,
+  app_settings: schema.appSettings,
   user: schema.user,
 } as const;
+/** Primary-key column name per table: `id`, except calendar_days (`date`) and app_settings (`key`). */
+const PK: Partial<Record<keyof typeof TRACKED, string>> = { calendar_days: "date", app_settings: "key" };
+const pkName = (name: keyof typeof TRACKED) => PK[name] ?? "id";
+const pkCol = (name: keyof typeof TRACKED) => (TRACKED[name] as unknown as Record<string, never>)[pkName(name)];
 export type TrackedName = keyof typeof TRACKED | "user_sections";
 type Row = Record<string, unknown>;
 
@@ -64,13 +70,13 @@ export class Tracker {
   async insert<N extends keyof typeof TRACKED>(name: N, values: Row): Promise<InferSelectModel<(typeof TRACKED)[N]>> {
     const t = TRACKED[name] as unknown as PgTable & { id: never };
     const [row] = (await this.tx.insert(t).values(values as never).returning()) as Row[];
-    this.changes.push({ table: name, id: row.id as number, before: null, after: json(row) });
+    this.changes.push({ table: name, id: row[pkName(name)] as number | string, before: null, after: json(row) });
     return row as never;
   }
 
   async update<N extends keyof typeof TRACKED>(name: N, id: number | string, patch: Row): Promise<InferSelectModel<(typeof TRACKED)[N]>> {
     const t = TRACKED[name] as unknown as PgTable & { id: never };
-    const idCol = (t as unknown as Record<string, never>).id;
+    const idCol = pkCol(name);
     const [before] = (await this.tx.select().from(t).where(eq(idCol, id as never))) as Row[];
     if (!before) throw new UserError("Ta vnos ne obstaja več.");
     const values = "updatedAt" in getTableColumns(t) ? { ...patch, updatedAt: now() } : patch;
@@ -81,7 +87,7 @@ export class Tracker {
 
   async delete<N extends keyof typeof TRACKED>(name: N, id: number | string): Promise<void> {
     const t = TRACKED[name] as unknown as PgTable;
-    const idCol = (t as unknown as Record<string, never>).id;
+    const idCol = pkCol(name);
     const [before] = (await this.tx.delete(t).where(eq(idCol, id as never)).returning()) as Row[];
     if (before) this.changes.push({ table: name, id, before: json(before), after: null });
   }
@@ -233,7 +239,7 @@ async function currentRow(tx: Tx, c: RowChange): Promise<Row | null> {
     return { sections: rows.map((r) => r.section).sort() };
   }
   const t = TRACKED[c.table] as unknown as PgTable;
-  const idCol = (t as unknown as Record<string, never>).id;
+  const idCol = pkCol(c.table);
   const [row] = (await tx.select().from(t).where(eq(idCol, c.id as never))) as Row[];
   return json(row ?? null);
 }
@@ -257,7 +263,7 @@ export async function undo(actor: Actor, historyId: number, dbx: Db = defaultDb)
         if (secs.length) await tx.insert(us).values(secs.map((section) => ({ userId, section })));
       } else {
         const t = TRACKED[c.table] as unknown as PgTable;
-        const idCol = (t as unknown as Record<string, never>).id;
+        const idCol = pkCol(c.table);
         if (c.after && !c.before) await tx.delete(t).where(eq(idCol, c.id as never));
         else if (c.before && !c.after) await tx.insert(t).values(revive(t, c.before) as never);
         else if (c.before) await tx.update(t).set(revive(t, c.before) as never).where(eq(idCol, c.id as never));

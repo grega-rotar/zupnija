@@ -33,6 +33,8 @@ export async function GET(_req: Request, { params }: { params: Promise<{ id: str
       "Content-Disposition": `inline; filename*=UTF-8''${encodeURIComponent(u.filename)}`,
       "Cache-Control": "private, max-age=3600",
       "X-Content-Type-Options": "nosniff",
+      // The review shows a PDF in an <object> on the same admin host; nobody else may frame it.
+      "X-Frame-Options": "SAMEORIGIN",
       // Chrome's PDF viewer doesn't run in a sandboxed document.
       ...(u.mime === "application/pdf" ? {} : { "Content-Security-Policy": "default-src 'none'; img-src 'self'; style-src 'unsafe-inline'; sandbox" }),
     },

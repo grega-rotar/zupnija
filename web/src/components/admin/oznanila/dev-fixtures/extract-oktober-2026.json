@@ -1,0 +1,518 @@
+{
+  "readable": true,
+  "period": {
+    "start": "2026-10-01",
+    "end": "2026-10-31",
+    "title": "Oktober 2026",
+    "issue": "Leto XLII, številka 10"
+  },
+  "days": [
+    {
+      "date": "2026-10-01",
+      "title": "Terezija Deteta Jezusa, devica in C.U.",
+      "tags": [],
+      "intentions": [
+        {
+          "text": "Po namenu",
+          "kind": "other",
+          "sourceLine": "Po namenu"
+        }
+      ]
+    },
+    {
+      "date": "2026-10-02",
+      "title": "Angeli varuhi",
+      "tags": [],
+      "intentions": [
+        {
+          "text": "Angela Klobasa",
+          "kind": "deceased",
+          "sourceLine": "+ Angela Klobasa"
+        }
+      ]
+    },
+    {
+      "date": "2026-10-03",
+      "title": "Frančišek Borgia, redovnik",
+      "tags": [
+        "MLADINSKA SK."
+      ],
+      "intentions": [
+        {
+          "text": "Joži Tudjina",
+          "kind": "deceased",
+          "sourceLine": "+ Joži Tudjina"
+        }
+      ]
+    },
+    {
+      "date": "2026-10-04",
+      "sundayName": "27. navadna nedelja",
+      "gospel": "»Ko bi imeli vero kakor gorčično zrno ...«",
+      "tags": [],
+      "intentions": [
+        {
+          "text": "iz družin Juvan in Kmetič",
+          "kind": "deceased",
+          "sourceLine": "++ iz družin Juvan in Kmetič"
+        },
+        {
+          "text": "Za farane",
+          "kind": "other",
+          "sourceLine": "Za farane"
+        }
+      ]
+    },
+    {
+      "date": "2026-10-05",
+      "title": "Marija Favstina Kowalska, redovnica",
+      "tags": [],
+      "intentions": [
+        {
+          "text": "V zahvalo",
+          "kind": "thanksgiving",
+          "sourceLine": "V zahvalo"
+        }
+      ]
+    },
+    {
+      "date": "2026-10-06",
+      "title": "Bruno, redovni ustanovitelj",
+      "tags": [
+        "ŽPS"
+      ],
+      "intentions": [
+        {
+          "text": "Valentin in Angela Anžič",
+          "kind": "deceased",
+          "sourceLine": "++ Valentin in Angela Anžič"
+        }
+      ]
+    },
+    {
+      "date": "2026-10-07",
+      "title": "Rožnovenska Mati Božja",
+      "tags": [],
+      "intentions": [
+        {
+          "text": "Franc Prudič in starši Kramberger",
+          "kind": "deceased",
+          "sourceLine": "+ Franc Prudič in starši Kramberger"
+        }
+      ]
+    },
+    {
+      "date": "2026-10-08",
+      "title": "starček Simeon, svetopisemski mož",
+      "tags": [],
+      "intentions": [
+        {
+          "text": "Po namenu",
+          "kind": "other",
+          "sourceLine": "Po namenu"
+        }
+      ]
+    },
+    {
+      "date": "2026-10-09",
+      "title": "Dionizij, škof in mučenec",
+      "tags": [],
+      "intentions": [
+        {
+          "text": "Alojzija in Franci Oletič, 30. dan",
+          "kind": "deceased",
+          "sourceLine": "++ Alojzija in Franci Oletič, 30. dan"
+        }
+      ]
+    },
+    {
+      "date": "2026-10-10",
+      "title": "Abraham in Sara",
+      "tags": [
+        "MLADINSKA SK."
+      ],
+      "intentions": [
+        {
+          "text": "Jože in starši Šetina",
+          "kind": "deceased",
+          "sourceLine": "++ Jože in starši Šetina"
+        }
+      ]
+    },
+    {
+      "date": "2026-10-11",
+      "sundayName": "28. navadna nedelja",
+      "gospel": "»Kje pa je onih devet?«",
+      "tags": [],
+      "intentions": [
+        {
+          "text": "Za farane",
+          "kind": "other",
+          "sourceLine": "Za farane"
+        },
+        {
+          "text": "Jože Novak, obl.",
+          "kind": "deceased",
+          "sourceLine": "+ Jože Novak, obl."
+        }
+      ]
+    },
+    {
+      "date": "2026-10-12",
+      "title": "Maksimilijan Celjski, škof",
+      "tags": [],
+      "intentions": [
+        {
+          "text": "starši Bovhan in Križaj",
+          "kind": "deceased",
+          "sourceLine": "++ starši Bovhan in Križaj"
+        }
+      ]
+    },
+    {
+      "date": "2026-10-13",
+      "title": "Edvard III., kralj",
+      "tags": [],
+      "intentions": [
+        {
+          "text": "Jožefa in Milan Ptiček, obl. in iz družin Črnuta",
+          "kind": "deceased",
+          "sourceLine": "++ Jožefa in Milan Ptiček, obl. in ++ iz družin Črnuta"
+        }
+      ]
+    },
+    {
+      "date": "2026-10-14",
+      "title": "Kalist I., papež in mučenec",
+      "tags": [
+        "1. ZAKONSKA"
+      ],
+      "intentions": [
+        {
+          "text": "Za Božje varstvo in blagoslov",
+          "kind": "other",
+          "sourceLine": "Za Božje varstvo in blagoslov"
+        }
+      ]
+    },
+    {
+      "date": "2026-10-15",
+      "title": "Terezija Vélika, redovnica in C.U.",
+      "tags": [],
+      "intentions": [
+        {
+          "text": "Matija Perger",
+          "kind": "deceased",
+          "sourceLine": "+ Matija Perger"
+        }
+      ]
+    },
+    {
+      "date": "2026-10-16",
+      "title": "Marjeta Marija Alakok, redovnica",
+      "tags": [],
+      "intentions": [
+        {
+          "text": "Fani Kosec, obl.",
+          "kind": "deceased",
+          "sourceLine": "+ Fani Kosec, obl."
+        }
+      ]
+    },
+    {
+      "date": "2026-10-17",
+      "title": "Ignacij Antiohijski, škof in mučenec",
+      "tags": [
+        "ZAK. JUBILANTI"
+      ],
+      "intentions": [
+        {
+          "text": "Mihaela Gruden",
+          "kind": "deceased",
+          "sourceLine": "+ Mihaela Gruden"
+        }
+      ]
+    },
+    {
+      "date": "2026-10-18",
+      "sundayName": "29. navadna nedelja",
+      "gospel": "»Treba je vedno moliti in se ne naveličati.«",
+      "tags": [],
+      "intentions": [
+        {
+          "text": "Terezija in Jože Drešar",
+          "kind": "deceased",
+          "sourceLine": "++ Terezija in Jože Drešar"
+        },
+        {
+          "text": "Za farane",
+          "kind": "other",
+          "sourceLine": "Za farane"
+        }
+      ]
+    },
+    {
+      "date": "2026-10-19",
+      "title": "Pavel od Križa, duhovnik",
+      "tags": [],
+      "intentions": [
+        {
+          "text": "Jožica Ghill",
+          "kind": "deceased",
+          "sourceLine": "+ Jožica Ghill",
+          "flag": {
+            "field": "text",
+            "question": "Priimek je nenavaden. Piše Ghill ali Gill?",
+            "options": [
+              "Jožica Ghill",
+              "Jožica Gill"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "date": "2026-10-20",
+      "title": "Irena Portugalska, mučenka",
+      "tags": [
+        "SODELAVCI KARITAS"
+      ],
+      "intentions": [
+        {
+          "text": "Za zdravje",
+          "kind": "other",
+          "sourceLine": "Za zdravje"
+        }
+      ]
+    },
+    {
+      "date": "2026-10-21",
+      "title": "Uršula, devica in mučenka",
+      "tags": [
+        "2. ZAKONSKA"
+      ],
+      "intentions": [
+        {
+          "text": "Robi Gruden",
+          "kind": "deceased",
+          "sourceLine": "+ Robi Gruden"
+        }
+      ]
+    },
+    {
+      "date": "2026-10-22",
+      "title": "Janez Pavel II., papež",
+      "tags": [],
+      "intentions": [
+        {
+          "text": "V zahvalo",
+          "kind": "thanksgiving",
+          "sourceLine": "V zahvalo"
+        }
+      ]
+    },
+    {
+      "date": "2026-10-23",
+      "title": "Janez Kapistran, duhovnik",
+      "tags": [],
+      "intentions": [
+        {
+          "text": "Lucija in Andrejka Smrtnik",
+          "kind": "deceased",
+          "sourceLine": "+ Lucija in + Andrejka Smrtnik."
+        }
+      ]
+    },
+    {
+      "date": "2026-10-24",
+      "title": "Anton M. Klaret, škof",
+      "tags": [
+        "ŽUPNIJSKO ROMANJE"
+      ],
+      "intentions": [
+        {
+          "text": "Sestre in brat Marušič",
+          "kind": "deceased",
+          "sourceLine": "++ Sestre in brat Marušič",
+          "flag": {
+            "field": "time",
+            "question": "Ta dan je župnijsko romanje. Bo večerna maša vseeno ob 18.30?",
+            "options": [
+              "18:30"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "date": "2026-10-25",
+      "sundayName": "30. navadna nedelja",
+      "gospel": "»Kdor se povišuje, bo ponižan.«",
+      "tags": [
+        "15.00 – 18.30 ČEŠČENJE S.R.T."
+      ],
+      "intentions": [
+        {
+          "text": "Za farane",
+          "kind": "other",
+          "sourceLine": "Za farane"
+        },
+        {
+          "text": "Marija in Mirko Novak in Anton Pavlic",
+          "kind": "deceased",
+          "sourceLine": "+ Marija in Mirko Novak in + Anton Pavlic"
+        }
+      ]
+    },
+    {
+      "date": "2026-10-26",
+      "title": "Lucijan in Marcijan, mučenca",
+      "tags": [],
+      "intentions": [
+        {
+          "text": "iz družin Pretnar in Jesihar",
+          "kind": "deceased",
+          "sourceLine": "++ iz družin Pretnar in Jesihar"
+        }
+      ]
+    },
+    {
+      "date": "2026-10-27",
+      "title": "Sabina Avilska, mučenka",
+      "tags": [],
+      "intentions": [
+        {
+          "text": "Štefan Hrovat",
+          "kind": "deceased",
+          "sourceLine": "+ Štefan Hrovat"
+        }
+      ]
+    },
+    {
+      "date": "2026-10-28",
+      "title": "Simon in Juda Tadej, apostola",
+      "tags": [],
+      "intentions": [
+        {
+          "text": "Branko Babnik",
+          "kind": "deceased",
+          "sourceLine": "+ Branko Babnik"
+        }
+      ]
+    },
+    {
+      "date": "2026-10-29",
+      "title": "Mihael Rua, duhovnik",
+      "tags": [],
+      "intentions": [
+        {
+          "text": "V zahvalo",
+          "kind": "thanksgiving",
+          "sourceLine": "V zahvalo"
+        }
+      ]
+    },
+    {
+      "date": "2026-10-30",
+      "title": "Marcel, mučenec",
+      "tags": [],
+      "intentions": [
+        {
+          "text": "Na čast Svetemu Duhu",
+          "kind": "other",
+          "sourceLine": "Na čast Svetemu Duhu"
+        }
+      ]
+    },
+    {
+      "date": "2026-10-31",
+      "title": "Volfgang (Volbenk), škof",
+      "tags": [],
+      "intentions": [
+        {
+          "text": "iz družin Bezlaj in Jamnik",
+          "kind": "deceased",
+          "sourceLine": "++ iz družin Bezlaj in Jamnik"
+        }
+      ]
+    }
+  ],
+  "notices": [
+    "Mesec oktober je zaradi praznika Rožnovenske Matere Božje v celoti posvečen rožnemu vencu. Zato ga bomo v tem mesecu tudi mi vsak večer pred sveto mašo molili pred izpostavljenim Najsvetejšim. Odkar imamo v Marijini cerkvi na vidnem mestu razstavljen rožni venec z jagodo iz rožnega venca sv. Janeza Pavla II., smo še toliko bolj povabljeni, da s to globoko molitvijo pred Gospoda prinašamo našo župnijo, naše družine in vso Kristusovo Cerkev. Lepo bo, če boste mesec oktober z molitvijo (vsaj desetke) rožnega venca vsak dan obeležili tudi doma.",
+    "Redna mesečna seja ŽPS-ja bo v torek, 6. oktobra ob 19.15 v župnišču.",
+    "Srečanje sodelavcev Karitas bo v torek, 20. oktobra ob 19.15.",
+    "Srečanje prve zakonske skupine bo v sredo, 14. oktobra ob 20.15.",
+    "Srečanje druge zakonske skupine bo tokrat izjemoma že v sredo, 21. oktobra ob 20.00.",
+    "V mesecu oktobru že tradicionalno organiziramo tudi župnijsko romanje. V soboto, 24. oktobra, se bomo že ob 7.00 izpred Mihovca odpravili na pot. S seboj imejte veljaven osebni dokument, saj nas bo tokrat pot vodila v Hrvaško Istro, kjer bomo obiskali božjepotno baziliko Trsatske Matere Božje. Tam bomo imeli sveto mašo, ogled delov frančiškanskega samostana ter kipa sv. Janeza Pavla II., ki je Trsat obiskal leta 2003. Po poti se bomo ustavili še v cerkvi na Premu ter pri Mariji Vnebovzeti na Vremskem Britofu. Vrnitev v Pirniče je predvidena za večerne ure. Cena romanja je 40 € na osebo. Za otroke do 15. leta je romanje brezplačno. Prijavite se lahko do 10. oktobra osebno v župnišču, po spletu ali po telefonu. Pri kosilu bo na voljo tudi brezmesni meni, vendar je treba na to izbiro pri prijavi posebej opozoriti.",
+    "Prve dni meseca oktobra, točneje med 2. in 11. 10., bodo v sosednji župniji Smlednik obhajali sveti misijon pod naslovom On te kliče. Ob tem vabijo tudi nas, da se jim pridružimo ob posameznih dogodkih. Pri izhodu iz cerkve so vabila in programi. Podrobnejši programi in predstavitve dogodkov so objavljeni tudi na spletu. Do njih pridete s pomočjo QR kode, ki je objavljena na plakatu pri izhodu iz cerkve.",
+    "Srečanje zakonskih jubilantov, ki ste (ali pa še boste) v tem letu obhajali okroglo ali polokroglo obletnico sklenitve svetega zakona, bomo imeli v soboto 17. oktobra. Letos bo srečanje jubilantov povzdignilo gostovanje glasbene skupine Vocabella, zato ste k maši (in koncertu po njej) toplo povabljeni tudi, če niste jubilanti. Sveta maša bo ob 18.30, nato pa za povabljene pare še krajše družabno srečanje v dvorani pod cerkvijo.",
+    "Zaradi župnijskega romanja ter srečanja jubilantov bosta srečanji mladinske skupine prvo in drugo soboto v mesecu.",
+    "Ni razvrščeno: URADNE URE: ponedeljek in petek od 17. do 18. ure, v torek od 11. do 12. ure, v četrtek od 7.30 do 8.00. Za krst, poroko in spoved se oglasite pri župniku.",
+    "Češčenje Svetega Rešnjega Telesa bo tudi letos zadnjo nedeljo v oktobru (25. 10. 2026) med 15.00 in 18.30, tokrat v cerkvi Povišanja Svetega Križa v Sp. Pirničah. Češčenje bomo sklenili z litanijami Srca Jezusovega ter sveto mašo ob 18.30. Toplo vabljeni!"
+  ],
+  "events": [
+    {
+      "title": "Seja ŽPS",
+      "date": "2026-10-06",
+      "time": "19:15",
+      "place": "Župnišče"
+    },
+    {
+      "title": "Sveti misijon v Smledniku",
+      "date": "2026-10-02",
+      "description": "Sosednja župnija Smlednik obhaja sveti misijon »On te kliče« od 2. do 11. oktobra.",
+      "flag": {
+        "field": "event",
+        "question": "Misijon je v sosednji župniji. Kje naj piše, da bo?",
+        "options": [
+          "Župnija Smlednik",
+          "Cerkev sv. Urha, Smlednik"
+        ]
+      }
+    },
+    {
+      "title": "Srečanje prve zakonske skupine",
+      "date": "2026-10-14",
+      "time": "20:15"
+    },
+    {
+      "title": "Srečanje zakonskih jubilantov",
+      "date": "2026-10-17",
+      "time": "18:30",
+      "place": "Marijina cerkev",
+      "description": "Sveta maša in koncert skupine Vocabella, nato družabno srečanje v dvorani pod cerkvijo."
+    },
+    {
+      "title": "Srečanje sodelavcev Karitas",
+      "date": "2026-10-20",
+      "time": "19:15"
+    },
+    {
+      "title": "Srečanje druge zakonske skupine",
+      "date": "2026-10-21",
+      "time": "20:00"
+    },
+    {
+      "title": "Župnijsko romanje na Trsat",
+      "date": "2026-10-24",
+      "time": "07:00",
+      "place": "Izpred Mihovca",
+      "description": "Trsat, Prem in Vremski Britof. Cena 40 €, otroci do 15. leta brezplačno. Prijave do 10. oktobra."
+    },
+    {
+      "title": "Češčenje Svetega Rešnjega Telesa",
+      "date": "2026-10-25",
+      "time": "15:00",
+      "place": "Cerkev Povišanja Svetega Križa",
+      "description": "Od 15.00 do 18.30, sklep z litanijami in sveto mašo ob 18.30."
+    }
+  ],
+  "article": {
+    "title": "Rožnovenska Mati Božja",
+    "text": "God Rožnovenske Matere Božje, ki ga Cerkev obhaja 7. oktobra, nosi v sebi izjemno prepletenost zgodovine, duhovnosti in osebnega izkustva vere. Praznik ne slavi zgolj zgodovinske zmage, temveč nas vabi k ponovnemu odkritju ene najbolj prepoznavnih in rodovitnih molitev v zakladnici Cerkve.\n\nIzvor praznika sega v burno 16. stoletje. Dne 7. oktobra 1571 se je v Korintskem zalivu odvila pomorska bitka pri Lepantu, v kateri se je krščansko ladjevje Svete lige soočilo z močnejšim otomanskim ladjevjem. Papež Pij V. se je zavedal usodnosti trenutka za prihodnost Evrope, zato je vse vernike pozval k vztrajni molitvi rožnega venca. Ko je združena mornarica nepričakovano zmagala, je papež uspeh brez obotavljanja pripisal priprošnji Božje Matere. Leta 1572 je uvedel spominski dan »Marije Zmagovalke«, ki ga je njegov naslednik Gregor XIII. preimenoval v praznik svetega rožnega venca. Praznik se je sprva obhajal le v cerkvah z rožnovenskimi bratovščinami, papež Pij X. pa je leta 1913 praznik ukazal za vso Cerkev in določil današnji stalni datum.\n\nLepota rožnega venca pa presega vojaške in politične okvire ter nagovarja človeka v njegovi najgloblji notranjosti. Čeprav se nenehno ponavljata očenaš in zdravamarija, je rožni venec v resnici izrazito kristocentrična molitev. Preko štirih delov – veselega, svetlega, žalostnega in častitljivega – se sprehodimo skozi celotno zgodovino odrešenja. Gre za kontemplacijo Kristusovega obličja v šoli Marije, ki je vse te dogodke zvesto ohranjala in premišljevala v svojem srcu. Ritmično ponavljanje besed deluje pomirjujoče; ustvarja varen duhovni prostor, v katerem se um umiri, misli pa se osredotočijo na skrivnosti vere. Preprosto prebiranje jagod med prsti pomaga zasidrati duha v sedanjem trenutku in prepojiti telo z molitvijo. Rožnovenska Mati Božja nas torej spominja, da najmočnejše orožje duha niso hrupne besede, temveč vztrajna, zbrana molitev, ki spreminja srce in prenavlja svet."
+  },
+  "prayerIntention": {
+    "title": "Za duševno zdravje",
+    "text": "Molimo za zdravstvene delavce in ustanove za duševno zdravje, da bi pomagali obolelim premagati zaznamovanost in diskriminacijo zaradi duševnih bolezni."
+  }
+}

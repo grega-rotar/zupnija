@@ -294,7 +294,66 @@ admin:   $ADMIN_HOST ──────────┘                          
   (the release file is checked against the sha256 at build). Bump them
   together on purpose. No tokens in the image.
 - **Uploads** (FR-15) live in the `zupnija_uploads` volume at `/data/uploads`
-  and are never served publicly.
+  and are never served publicly, with one exception: the original PDF of a
+  **published** bulletin (see "Oznanila" below).
+
+### Oznanila (bulletins)
+
+Contract: `tasks/contract-oznanila-monthly.md`. Code: `web/src/lib/bulletin/`.
+
+- **Any period.** A bulletin covers `bulletins.period_start … period_end`
+  (unique start). Today the parish prints one booklet per month; before that
+  it was weekly (migration `0001_monthly_bulletins` turned the old `week_start`
+  rows into 7-day periods titled "Teden 25. 10.–31. 10. 2026"). Nothing
+  assumes a month: the period comes from the document.
+- **Upload → draft** (`service.ts startBulletin` → `extract.ts readBulletin`
+  after the response). The target period defaults to the missing one
+  (`types.ts missingPeriod`: the next day no published or pending bulletin
+  covers starts it; a month when that day is a 1st, else as long as the
+  bulletin before it). The model reads the file (`prompt.ts`; images/PDF with
+  `Read` only in a temp dir, spreadsheets as CSV in the prompt, no tools) and
+  returns what is printed: the period, days (liturgical title, Sunday name,
+  Gospel line, tags, intentions in printed order), notices, events, article,
+  prayer intention. If the document's period differs from the target, the
+  bulletin moves there (or ends `unreadable` with `error = other_period:<title>`
+  when that period already has a bulletin).
+- **The server, not the model, decides** (`prompt.ts toDraft`):
+  `intentions.ts` strips `+`/`++`/`†` and sets the kind from the notation
+  (`V zahvalo` → thanksgiving, `Za farane`, `Po namenu` … → other; `obl.` and
+  `30. dan` stay in the text); `assign.ts assignMasses` gives each intention
+  without a printed time the i-th Mass of its day in time order (extras → the
+  last Mass; a day with no Mass → a "time" flag with the usual times);
+  printed times are kept and `flags.ts` flags a mismatch with the schedule.
+  Malformed entries become notices "Ni razvrščeno: …" and days outside the
+  period get a "date" flag, so a changed layout never fails the whole read.
+  Invalid replies are retried once.
+- **Reading hints.** "Navodila za branje oznanil" (`hints.ts`, `app_settings`
+  key `bulletin.readingHints`, owner only, engine action
+  `settings.readingHints`, so it's in history and can be undone) go into the
+  prompt as hints. They hold the parish's conventions, e.g. which Sunday line
+  belongs to which Mass; when the format changes, the priest edits them, no
+  code change. Without a saved value `DEFAULT_READING_HINTS` applies.
+- **Publish** (engine action `bulletin.publish`, payload
+  `{ bulletinId, resolutions }`; edits are saved into the draft first with
+  `saveDraftForLater`). One transaction: ensure the Masses of the period,
+  insert each intention unless that Mass already has the same text (case,
+  markers and punctuation ignored, so re-publishing a period the Sanity import
+  already filled adds only what is new), store the notices, overwrite
+  `calendar_days` for the period's days, create the ticked events unless one
+  with the same title and date exists (`events.source_bulletin_id`), and set
+  title, issue, article, prayer intention and `published`. A helper's publish
+  is a change request (status `pending`). Past periods are allowed.
+- **Public site.** `/oznanila` shows the bulletin covering today (else the
+  latest) with article, prayer intention, notices and the period's events, and
+  "Prenesi PDF" when the upload is a PDF: the PDF route serves only published
+  bulletins' PDFs. Mass day cards show the `calendar_days` title (Sundays: the
+  Sunday name and Gospel line).
+- **Checking the reader** on real files: `npm run eval:bulletin -- <folder>
+  [periodStart]` runs the real claude-pool (put `<file>.expected.json` next to
+  a file for accuracy). The canonical example is
+  `web/src/lib/bulletin/fixtures/extract-oktober-2026.json`, read from the
+  October 2026 booklet; the weekly, handwritten and spreadsheet fixtures next
+  to it keep the other formats tested.
 
 ### Environment variables
 

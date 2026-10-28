@@ -177,6 +177,8 @@ export const events = pgTable(
     onFrontPage: boolean("on_front_page").notNull().default(false),
     /** The Sanity slug of an imported event, so old /dogodki/<slug> links still resolve. */
     legacySlug: text("legacy_slug").unique(),
+    /** The bulletin this event was read from (publish creates it). */
+    sourceBulletinId: integer("source_bulletin_id").references(() => bulletins.id, { onDelete: "set null" }),
     createdBy: text("created_by").references(() => user.id, { onDelete: "set null" }),
     createdAt: created(),
     updatedAt: updated(),
@@ -231,7 +233,17 @@ export const bulletinStatusEnum = pgEnum("bulletin_status", [
 
 export const bulletins = pgTable("bulletins", {
   id: serial("id").primaryKey(),
-  weekStart: date("week_start").notNull().unique(), // a Sunday (weeks run Sunday–Saturday)
+  /** First and last day the bulletin covers (a month: 2026-10-01 … 2026-10-31). */
+  periodStart: date("period_start").notNull().unique(),
+  periodEnd: date("period_end").notNull(),
+  /** "Oktober 2026". */
+  title: text("title").notNull(),
+  /** "Leto XLII, številka 10". */
+  issue: text("issue"),
+  /** { title, text } of the feature article. */
+  article: jsonb("article").$type<{ title: string; text: string }>(),
+  /** { title, text } of the month's prayer intention. */
+  prayerIntention: jsonb("prayer_intention").$type<{ title: string; text: string }>(),
   status: bulletinStatusEnum("status").notNull(),
   uploadId: integer("upload_id").references(() => uploads.id, { onDelete: "set null" }),
   /** BulletinDraft (src/lib/bulletin/types.ts) while reading/draft/pending. */
@@ -248,6 +260,28 @@ export const bulletinNotices = pgTable("bulletin_notices", {
   bulletinId: integer("bulletin_id").notNull().references(() => bulletins.id, { onDelete: "cascade" }),
   position: integer("position").notNull().default(0),
   text: text("text").notNull(),
+});
+
+/** The liturgical day of a date, written by publishing a bulletin (overwrites its period). */
+export const calendarDays = pgTable("calendar_days", {
+  date: date("date").primaryKey(),
+  /** The liturgical day or saint. */
+  title: text("title").notNull(),
+  sundayName: text("sunday_name"),
+  gospel: text("gospel"),
+  tags: text("tags").array().notNull().default(sql`'{}'::text[]`),
+  bulletinId: integer("bulletin_id").references(() => bulletins.id, { onDelete: "set null" }),
+});
+
+/**
+ * Small parish-editable settings, e.g. "bulletin.readingHints" (the priest's
+ * hints for reading the bulletin, src/lib/bulletin/hints.ts).
+ */
+export const appSettings = pgTable("app_settings", {
+  key: text("key").primaryKey(),
+  value: text("value").notNull(),
+  updatedAt: updated(),
+  updatedBy: text("updated_by").references(() => user.id, { onDelete: "set null" }),
 });
 
 // ── Change requests and history ─────────────────────────────────────────────

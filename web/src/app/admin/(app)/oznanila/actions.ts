@@ -3,20 +3,17 @@
  * Server actions of the oznanila screens (list and upload flow). Each one
  * requires the oznanila section; the bulletin service does the work.
  */
+import { readFile } from "node:fs/promises";
 import "@/lib/admin/next";
 import "@/lib/admin/registry";
 import { toResult, UserError, type ActionResult } from "@/lib/admin/errors";
 import { requireArea } from "@/lib/admin/session";
-import {
-  discardDraft,
-  getBulletin,
-  nextWeekStart,
-  publishBulletin,
-  saveDraftForLater,
-  startBulletin,
-  startManualBulletin,
-} from "@/lib/bulletin/service";
-import { readableDraftSchema, type ReadableDraft } from "@/lib/bulletin/types";
+import { discardDraft, getBulletin, publishBulletin, saveDraftForLater, startBulletin, startManualBulletin } from "@/lib/bulletin/service";
+import { setReadingHints } from "@/lib/bulletin/hints";
+import { uploadPath } from "@/lib/bulletin/storage";
+import { allIntentions, readableDraftSchema, type ReadableDraft } from "@/lib/bulletin/types";
+import { db, schema } from "@/db";
+import { eq } from "drizzle-orm";
 import { armDevFixture } from "./dev-fixture";
 import { toFlow, type FlowBulletin } from "./flow";
 
@@ -27,24 +24,48 @@ async function load(id: unknown): Promise<FlowBulletin> {
   return toFlow(b);
 }
 
+/** The month the upload is meant for ("YYYY-MM-01"); the document's own period wins later. */
+const periodStartOf = (v: unknown) => {
+  const s = typeof v === "string" ? v : "";
+  return /^\d{4}-\d{2}-01$/.test(s) ? s : undefined;
+};
+
 /** The picked file → stored upload, bulletin "reading", Claude reads it after the response. */
 export async function uploadBulletinAction(fd: FormData): Promise<ActionResult<FlowBulletin>> {
   const actor = await requireArea("oznanila");
   return toResult(async () => {
     const file = fd.get("file");
     if (!(file instanceof File) || file.size === 0) throw new UserError("Izberite datoteko.");
-    const week = String(fd.get("weekStart") || nextWeekStart());
-    armDevFixture(file.name, week);
-    const { bulletinId } = await startBulletin({ weekStart: week, file }, actor);
+    armDevFixture(file.name);
+    const { bulletinId } = await startBulletin({ periodStart: periodStartOf(fd.get("periodStart")), file }, actor);
     return load(bulletinId);
   });
 }
 
-/** "Vpiši ročno": an empty draft for the week. */
-export async function manualBulletinAction(weekStart: string): Promise<ActionResult<FlowBulletin>> {
+/**
+ * "Poskusi znova" after claude-pool was busy or reading failed: read the
+ * same stored file again (startBulletin with its bytes; nothing to re-pick).
+ */
+export async function retryBulletinAction(id: number): Promise<ActionResult<FlowBulletin>> {
   const actor = await requireArea("oznanila");
   return toResult(async () => {
-    const { bulletinId } = await startManualBulletin({ weekStart: String(weekStart || nextWeekStart()) }, actor);
+    const b = await getBulletin(id);
+    if (!b) throw new UserError("Teh oznanil ni več.");
+    if (!b.upload) throw new UserError("Datoteke ni več. Naložite jo znova.");
+    const [u] = await db.select().from(schema.uploads).where(eq(schema.uploads.id, b.upload.id));
+    const bytes = u ? await readFile(uploadPath(u)).catch(() => null) : null;
+    if (!u || !bytes) throw new UserError("Datoteke ni več. Naložite jo znova.");
+    armDevFixture(u.filename);
+    const { bulletinId } = await startBulletin({ periodStart: b.periodStart.endsWith("-01") ? b.periodStart : undefined, file: { name: u.filename, type: u.mime, bytes: new Uint8Array(bytes) } }, actor);
+    return load(bulletinId);
+  });
+}
+
+/** "Vpiši ročno": an empty draft for the month. */
+export async function manualBulletinAction(periodStart: string): Promise<ActionResult<FlowBulletin>> {
+  const actor = await requireArea("oznanila");
+  return toResult(async () => {
+    const { bulletinId } = await startManualBulletin({ periodStart: periodStartOf(periodStart) }, actor);
     return load(bulletinId);
   });
 }
@@ -55,25 +76,28 @@ export async function bulletinStateAction(id: number): Promise<ActionResult<Flow
   return toResult(() => load(id));
 }
 
-function parseDraft(draft: unknown, weekStart: string): ReadableDraft {
-  const d = (draft ?? {}) as { notices?: unknown };
-  const notices = Array.isArray(d.notices) ? d.notices.filter((n) => typeof n === "string" && n.trim()) : d.notices;
-  const r = readableDraftSchema.safeParse({ ...(draft as object), notices, weekStart });
-  if (!r.success) throw new UserError("Preverite vpisane namene: vsak potrebuje datum, uro, cerkev in besedilo.");
+function parseDraft(draft: unknown): ReadableDraft {
+  const r = readableDraftSchema.safeParse(draft);
+  if (!r.success) {
+    const where = r.error.issues[0]?.path.join(".") ?? "";
+    if (/intentions/.test(where)) throw new UserError("Preverite vpisane namene: vsak potrebuje besedilo (največ 200 znakov).");
+    if (/events/.test(where)) throw new UserError("Preverite srečanja: vsako potrebuje naslov in datum.");
+    throw new UserError("Osnutek ni veljaven. Preverite vpisano.");
+  }
   return r.data;
 }
 
-/** "Shrani za pozneje": keeps the edited notices and hand-added rows. */
+/** "Shrani za pozneje": keeps every edit (intentions, notices, events, texts). */
 export async function saveBulletinDraftAction(id: number, draft: unknown): Promise<ActionResult<null>> {
   await requireArea("oznanila");
   return toResult(async () => {
-    const b = await load(id);
-    await saveDraftForLater(id, parseDraft(draft, b.weekStart));
+    await load(id);
+    await saveDraftForLater(id, parseDraft(draft));
     return null;
   });
 }
 
-/** "Zavrzi": the week shows as missing again. */
+/** "Zavrzi": the period shows as missing again. */
 export async function discardBulletinAction(id: number): Promise<ActionResult<null>> {
   await requireArea("oznanila");
   return toResult(async () => {
@@ -82,21 +106,45 @@ export async function discardBulletinAction(id: number): Promise<ActionResult<nu
   });
 }
 
-export type PublishOutcome = { status: "applied"; historyId: number; intentions: number; notices: number } | { status: "pending"; intentions: number; notices: number };
+/** "Navodila za branje oznanil" (owner only): returns the history id for "Razveljavi". */
+export async function saveReadingHintsAction(text: string): Promise<ActionResult<{ historyId: number | null }>> {
+  const actor = await requireArea("oznanila");
+  return toResult(async () => {
+    if (!actor.isOwner) throw new UserError("Navodila za branje ureja župnik.");
+    const r = await setReadingHints(actor, String(text ?? ""));
+    return { historyId: r.status === "applied" ? r.historyId : null };
+  });
+}
+
+export type PublishOutcome = { intentions: number; notices: number; events: number; skipped: number } & (
+  | { status: "applied"; historyId: number }
+  | { status: "pending" }
+);
 
 /**
- * "Objavi oznanila" / "Pošlji župniku": saves the edited draft (notices,
- * hand-added rows), then publishes with the chosen flag resolutions.
+ * "Objavi oznanila" / "Pošlji župniku": saves the edited draft, then
+ * publishes with the chosen flag resolutions (contract: saveDraftForLater,
+ * then { bulletinId, resolutions }).
  */
 export async function publishBulletinAction(id: number, draft: unknown, resolutions: Record<string, string>): Promise<ActionResult<PublishOutcome>> {
   const actor = await requireArea("oznanila");
   return toResult(async () => {
-    const b = await load(id);
-    const d = parseDraft(draft, b.weekStart);
-    if (!d.items.length && !d.notices.length) throw new UserError("Dodajte vsaj en namen ali obvestilo.");
+    await load(id);
+    const d = parseDraft(draft);
+    const intentions = allIntentions(d).length;
+    const events = d.events.filter((e) => e.include).length;
+    if (!intentions && !d.notices.length && !events) throw new UserError("Dodajte vsaj en namen ali obvestilo.");
     await saveDraftForLater(id, d);
-    const r = await publishBulletin(actor, { bulletinId: id, resolutions: resolutions ?? {}, notices: d.notices });
-    const counts = { intentions: d.items.length, notices: d.notices.length };
-    return r.status === "applied" ? { status: "applied", historyId: r.historyId, ...counts } : { status: "pending", ...counts };
+    const r = await publishBulletin(actor, { bulletinId: id, resolutions: resolutions ?? {} });
+    if (r.status === "pending") return { status: "pending", intentions, notices: d.notices.length, events, skipped: 0 };
+    const res = (r.result ?? {}) as { intentions?: number; notices?: number; events?: number; skipped?: number };
+    return {
+      status: "applied",
+      historyId: r.historyId,
+      intentions: res.intentions ?? intentions,
+      notices: res.notices ?? d.notices.length,
+      events: res.events ?? events,
+      skipped: res.skipped ?? 0,
+    };
   });
 }

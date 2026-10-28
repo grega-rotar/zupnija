@@ -11,10 +11,10 @@ import { eq, inArray } from "drizzle-orm";
 import { db as defaultDb, schema, type Db } from "@/db";
 import { listPending } from "@/lib/admin/engine";
 import { can, SECTION_LABEL, type Actor, type Section } from "@/lib/admin/sections";
-import { listBulletins, nextWeekStart } from "@/lib/bulletin/service";
-import { readableDraftSchema } from "@/lib/bulletin/types";
+import { listBulletins } from "@/lib/bulletin/service";
+import { allIntentions, missingPeriod, periodLabel, readableDraftSchema } from "@/lib/bulletin/types";
 import { now, nowTime, today, weekStart as weekStartOf } from "@/lib/clock";
-import { addDays, formatWeekSpan } from "@/lib/dates";
+import { addDays } from "@/lib/dates";
 import { dayLabel, kindPrefix, timeLabel, weekdayLabel } from "@/lib/mase/format";
 import { getMass, getMassesWithoutIntention, getNextMass } from "@/lib/mase/queries";
 import { getLessons, type Lesson } from "@/lib/verouk/queries";
@@ -43,6 +43,10 @@ export type HomeView = {
   nextMass: { id: number; date: string; time: string; church: string; intentions: string[] } | null;
   approvals: ApprovalRow[];
   mine: ApprovalRow[];
+  /**
+   * The month's bulletin while it still has to be uploaded or checked.
+   * `week` is the period's first day ("2026-11-01"), `span` the month ("november 2026").
+   */
   bulletin: { id: number | null; week: string; span: string; status: "missing" | "draft" } | null;
   bulletinMissing: { week: string } | null;
   massesWithoutIntention: { id: number; date: string; time: string; church: string; line: string }[];
@@ -52,6 +56,9 @@ export type HomeView = {
 };
 
 const isLater = (date: string, time: string) => date > today() || (date === today() && time > nowTime());
+
+/** "november 2026" for a month; "25.–31. oktober 2026" for a week or another span. */
+const spanOf = (b: { periodStart: string; periodEnd: string }) => periodLabel(b.periodStart, b.periodEnd);
 
 // ── The "where" line of a change request ────────────────────────────────────
 type Cr = typeof schema.changeRequests.$inferSelect;
@@ -103,14 +110,10 @@ async function describe(cr: Cr, dbx: Db): Promise<Described> {
       const [b] = await dbx.select().from(schema.bulletins).where(eq(schema.bulletins.id, p.bulletinId));
       if (!b) return fallback;
       const draft = readableDraftSchema.safeParse(b.draft);
-      const items = draft.success ? draft.data.items.length : 0;
-      const notices = Array.isArray(p.notices)
-        ? p.notices.filter((n) => typeof n === "string" && n.trim()).length
-        : draft.success
-          ? draft.data.notices.length
-          : 0;
+      const items = draft.success ? allIntentions(draft.data).length : 0;
+      const notices = draft.success ? draft.data.notices.length : 0;
       return {
-        what: `Oznanila za ${formatWeekSpan(b.weekStart, addDays(b.weekStart, 6))}`,
+        what: `Oznanila za ${spanOf(b)}`,
         where: `${pl(items, NAMEN)}, ${pl(notices, OBVESTILO)}`,
         note: null,
       };
@@ -196,19 +199,21 @@ export async function loadHome(actor: Actor, dbx: Db = defaultDb): Promise<HomeV
   const approvals = actor.isOwner ? await toRows(await listPending(dbx), dbx) : [];
   const mine = actor.isOwner ? [] : await toRows(await listPending(dbx, actor.id), dbx);
 
-  // Next week's bulletin, when it still has to be uploaded or checked.
-  // ("Urejeno" lists published bulletins for everyone, as in the prototype.)
+  // The missing month's bulletin (contract "Missing-bulletin logic"): from the
+  // 20th of the previous month, and always when the current month has none.
+  // A draft of it shows as "čaka pregled". ("Urejeno" lists published bulletins
+  // still running, for everyone, as in the prototype.)
   const list = await listBulletins();
-  const next = nextWeekStart();
-  const e = list.find((b) => b.weekStart === next);
+  const next = missingPeriod(d, list.filter((b) => b.id != null));
+  const e = list.find((b) => b.periodStart === next.start);
   const bulletin: HomeView["bulletin"] =
-    c.oznanila && e && (e.status === "missing" || e.status === "draft")
-      ? { id: e.id, week: next, span: formatWeekSpan(next, addDays(next, 6)), status: e.status }
+    c.oznanila && e && (e.status === "draft" || (e.status === "missing" && next.due))
+      ? { id: e.id, week: next.start, span: periodLabel(next.start, next.end), status: e.status }
       : null;
   const published = list
-    .filter((b) => b.status === "published" && b.weekStart >= thisWeek)
-    .sort((a, b) => a.weekStart.localeCompare(b.weekStart))
-    .map((b) => `Oznanila za ${formatWeekSpan(b.weekStart, addDays(b.weekStart, 6))} so objavljena`);
+    .filter((b) => b.status === "published" && b.periodEnd >= d)
+    .sort((a, b) => a.periodStart.localeCompare(b.periodStart))
+    .map((b) => `Oznanila za ${spanOf(b)} so objavljena`);
 
   // Masses still ahead this week with no intention (a pending one counts).
   const massesWithoutIntention = c.mase

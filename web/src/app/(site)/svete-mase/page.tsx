@@ -11,7 +11,7 @@ import { truncate } from "@/lib/utils";
 import { CHURCH_KIND_LABEL } from "@/lib/labels";
 import { PageHero } from "@/components/layout/PageHero";
 import { ScheduleMatrix } from "@/components/masses/ScheduleMatrix";
-import { MassRow, WeekGrid } from "@/components/masses/MassList";
+import { dayLines, MassRow, WeekGrid } from "@/components/masses/MassList";
 import { SanityImage, hasImage, ImagePlaceholder } from "@/components/sanity/SanityImage";
 import { Icon, type IconName } from "@/components/ui/Icon";
 import { Container, EmptyState, Notice, Section } from "@/components/ui/primitives";
@@ -92,9 +92,10 @@ export default async function MassesPage() {
                   <p className="mt-1.5 flex flex-wrap items-center gap-x-2 text-body text-ink-2">
                     <Icon name="calendar" size={16} className="text-ink-3" />
                     <span>{formatDayHeading(pick.day.date, true)}</span>
-                    {pick.day.liturgicalTitle ? <span className="text-ink-3">· {pick.day.liturgicalTitle}</span> : null}
+                    {dayLines(pick.day).title ? <span className="text-ink-3">· {dayLines(pick.day).title}</span> : null}
                   </p>
                 ) : null}
+                {pick && dayLines(pick.day).gospel ? <p className="mt-1 font-serif text-small italic text-ink-3">{dayLines(pick.day).gospel}</p> : null}
                 {pick ? (
                   <ul className="mt-4 divide-y divide-stone border-t border-stone">
                     {pick.masses.map((m) => (

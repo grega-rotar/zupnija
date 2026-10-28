@@ -13,7 +13,9 @@ import { seedParish, type SeededParish } from "@/test/seed";
 import "@/lib/mase/actions";
 import "@/lib/dogodki/actions";
 import "@/lib/verouk/actions";
-import { getBulletinByWeek, getBulletinList, getCurrentBulletin } from "./bulletins";
+import { eq } from "drizzle-orm";
+import { dayLines } from "@/lib/masses";
+import { getBulletinByStart, getBulletinCovering, getBulletinList, getCurrentBulletin, getPublishedPdf } from "./bulletins";
 import { getEvent, getEventsInRange, getHomeEvents, getPastEvents, getUpcomingEvents } from "./events";
 import { getMassDays, getMassWeek, getUpcomingMasses, getWeekMasses } from "./masses";
 import { getCatechesisGroups } from "./verouk";
@@ -127,20 +129,90 @@ describe("events", () => {
 });
 
 describe("bulletins", () => {
+  const october = {
+    periodStart: "2026-10-01",
+    periodEnd: "2026-10-31",
+    title: "Oktober 2026",
+    issue: "Leto XLII, številka 10",
+    article: { title: "Rožnovenska Mati Božja", text: "God Rožnovenske Matere Božje …\n\nIzvor praznika …" },
+    prayerIntention: { title: "Za duševno zdravje", text: "Molimo za zdravstvene delavce …" },
+    status: "published" as const,
+  };
+
   it("shows published bulletins only, with their notices", async () => {
     await db.insert(schema.bulletinNotices).values([
       { bulletinId: s.bulletins.w1025, position: 1, text: "Druga" },
       { bulletinId: s.bulletins.w1025, position: 0, text: "Prva" },
     ]);
-    await db.insert(schema.bulletins).values({ weekStart: "2026-11-01", status: "pending" });
+    await db.insert(schema.bulletins).values({ periodStart: "2026-11-01", periodEnd: "2026-11-30", title: "November 2026", status: "pending" });
     const cur = await getCurrentBulletin();
-    expect(cur).toMatchObject({ weekStart: "2026-10-25", weekEnd: "2026-10-31" });
+    expect(cur).toMatchObject({ periodStart: "2026-10-25", periodEnd: "2026-10-31", hasPdf: false, pdfUrl: null });
     expect(cur!.notices.map((n) => n.text)).toEqual(["Prva", "Druga"]);
-    expect(await getBulletinByWeek("2026-11-01")).toBeNull();
-    expect((await getBulletinList()).map((b) => [b.weekStart, b.itemCount])).toEqual([
-      ["2026-10-25", 2],
-      ["2026-10-18", 0],
+    expect(await getBulletinByStart("2026-11-01")).toBeNull();
+    expect((await getBulletinList()).map((b) => [b.periodStart, b.label, b.itemCount])).toEqual([
+      ["2026-10-25", "25.–31. oktober 2026", 2],
+      ["2026-10-18", "18.–24. oktober 2026", 0],
     ]);
+  });
+
+  it("the monthly bulletin covering today wins over an old weekly one; it carries article, prayer intention, events and the PDF link", async () => {
+    const [up] = await db.insert(schema.uploads).values({ filename: "oznanila-oktober-2026.pdf", mime: "application/pdf", size: 3, path: "ab/x.pdf", sha256: "x" }).returning();
+    const [oct] = await db.insert(schema.bulletins).values({ ...october, uploadId: up.id }).returning();
+    await db.insert(schema.bulletinNotices).values({ bulletinId: oct.id, position: 0, text: "Mesec oktober je posvečen rožnemu vencu." });
+    await db.insert(schema.events).values({ title: "Seja ŽPS", date: "2026-10-06", time: "19:15", place: "župnišče", sourceBulletinId: oct.id });
+    const cur = (await getCurrentBulletin())!;
+    expect(cur).toMatchObject({
+      id: oct.id,
+      title: "Oktober 2026",
+      issue: "Leto XLII, številka 10",
+      article: { title: "Rožnovenska Mati Božja" },
+      prayerIntention: { title: "Za duševno zdravje" },
+      hasPdf: true,
+      pdfUrl: "/oznanila/2026-10-01/oznanila.pdf",
+    });
+    expect(cur.notices.map((n) => n.text)).toEqual(["Mesec oktober je posvečen rožnemu vencu."]);
+    expect(cur.events.map((e) => e.title)).toEqual(["Seja ŽPS"]);
+    expect((await getBulletinCovering("2026-10-07"))!.id).toBe(oct.id);
+    expect((await getBulletinCovering("2026-10-26"))!.id).toBe(oct.id);
+    expect((await getBulletinList())[0]).toMatchObject({ periodStart: "2026-10-25", label: "25.–31. oktober 2026" });
+    expect((await getBulletinList()).find((b) => b.id === oct.id)).toMatchObject({ label: "Oktober 2026", hasPdf: true });
+  });
+
+  it("an image upload is never offered as PDF; after the period ends, the latest bulletin still shows", async () => {
+    const [img] = await db.insert(schema.uploads).values({ filename: "list.jpg", mime: "image/jpeg", size: 3, path: "ab/x.jpg", sha256: "y" }).returning();
+    await db.insert(schema.bulletins).values({ ...october, periodStart: "2026-09-01", periodEnd: "2026-09-30", title: "September 2026", uploadId: img.id });
+    expect(await getPublishedPdf("2026-09-01")).toBeNull();
+    await db.delete(schema.bulletins).where(eq(schema.bulletins.periodStart, "2026-10-25"));
+    // Today (27.10.) is covered by nothing now: the latest started bulletin is 18.–24. 10.
+    expect(await getCurrentBulletin()).toMatchObject({ periodStart: "2026-10-18", hasPdf: false });
+  });
+});
+
+describe("calendar days", () => {
+  it("mass days carry the bulletin's liturgical title, Sunday name and Gospel line", async () => {
+    await db.insert(schema.calendarDays).values([
+      { date: "2026-10-25", title: "30. navadna nedelja", sundayName: "30. navadna nedelja", gospel: "»Kdor se povišuje, bo ponižan.«", tags: ["15.00 – 18.30 ČEŠČENJE S.R.T."] },
+      { date: "2026-10-28", title: "Simon in Juda Tadej, apostola" },
+    ]);
+    const days = await getWeekMasses("2026-10-27");
+    expect(days[0]).toMatchObject({ liturgicalTitle: "30. navadna nedelja", sundayName: "30. navadna nedelja", gospel: "»Kdor se povišuje, bo ponižan.«", tags: ["15.00 – 18.30 ČEŠČENJE S.R.T."] });
+    expect(days[3]).toMatchObject({ date: "2026-10-28", liturgicalTitle: "Simon in Juda Tadej, apostola", sundayName: null, gospel: null, tags: [] });
+    expect(days[1]).toMatchObject({ liturgicalTitle: null, sundayName: null });
+    // The bulletin's calendar wins over the built-in feast list; an override's label wins over both.
+    await db.insert(schema.calendarDays).values({ date: "2026-11-01", title: "Vsi sveti, slovesni praznik" });
+    expect((await getWeekMasses("2026-11-01"))[0].liturgicalTitle).toBe("Vsi sveti, slovesni praznik");
+    await db.insert(schema.massDayOverrides).values({ date: "2026-11-01", replacesSchedule: false, label: "Vsi sveti (maše kot ob nedeljah)" });
+    expect((await getWeekMasses("2026-11-01"))[0].liturgicalTitle).toBe("Vsi sveti (maše kot ob nedeljah)");
+  });
+
+  it("dayLines shows a Sunday's name only when it differs from the title", () => {
+    expect(dayLines({ liturgicalTitle: "28. navadna nedelja", sundayName: "28. navadna nedelja", gospel: "»Kje pa je onih devet?«" })).toEqual({
+      title: "28. navadna nedelja",
+      sunday: null,
+      gospel: "»Kje pa je onih devet?«",
+    });
+    expect(dayLines({ liturgicalTitle: "Vsi sveti", sundayName: "31. navadna nedelja", gospel: null })).toEqual({ title: "Vsi sveti", sunday: "31. navadna nedelja", gospel: null });
+    expect(dayLines({ liturgicalTitle: null, sundayName: "29. navadna nedelja" })).toEqual({ title: "29. navadna nedelja", sunday: null, gospel: null });
   });
 });
 

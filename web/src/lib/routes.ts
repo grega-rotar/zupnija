@@ -12,6 +12,8 @@ export const routes = {
   announcement: (slug: string) => `/oznanila/${slug}`,
   bulletin: (weekStart: string) => `/oznanila/teden/${weekStart}`,
   bulletins: "/oznanila/teden",
+  /** The original PDF of a published bulletin (route: app/(site)/oznanila/[slug]/oznanila.pdf). */
+  bulletinPdf: (periodStart: string) => `/oznanila/${periodStart}/oznanila.pdf`,
   events: "/dogodki",
   eventsArchive: "/dogodki/arhiv",
   event: (slug: string) => `/dogodki/${slug}`,

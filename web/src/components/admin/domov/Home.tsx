@@ -3,6 +3,7 @@ import { Icon, type IconName } from "@/components/admin/Icon";
 import { ButtonLink, PageHead } from "@/components/admin/ui";
 import { MAS, pl, SPREMEMBA_JE, URA_ODPADE } from "@/lib/domov/format";
 import type { HomeView } from "@/lib/domov/loader";
+import { PickButtons } from "@/components/admin/oznanila/PickButtons";
 import { ApprovalsTask } from "./ApprovalsTask";
 import { AskTile } from "./AskTile";
 
@@ -45,22 +46,17 @@ export function Home({ v, isOwner }: { v: HomeView; isOwner: boolean }) {
         <h3>{draft ? `Osnutek oznanil za ${v.bulletin.span} čaka pregled` : `Oznanila za ${v.bulletin.span} še niso naložena`}</h3>
         <p>
           {draft
-            ? "Shranili ste ga za pozneje. Preverite označena polja in ga objavite."
-            : "Fotografirajte list ali izberite datoteko. Claude ga prebere, vi preverite in objavite."}
+            ? "Shranili ste ga za pozneje. Preverite označena mesta in ga objavite."
+            : "Izberite PDF oznanil ali jih fotografirajte. Claude jih prebere, vi preverite in objavite."}
         </p>
         <div className="acts">
           {draft ? (
-            <ButtonLink href="/oznanila/nalozi" variant="primary" size="lg" icon="pen">
+            <ButtonLink href={v.bulletin.id ? `/oznanila/nalozi?id=${v.bulletin.id}` : "/oznanila"} variant="primary" size="lg" icon="pen">
               Nadaljuj pregled
             </ButtonLink>
           ) : (
             <>
-              <ButtonLink href="/oznanila/nalozi" variant="primary" size="lg" icon="cam">
-                Fotografiraj oznanila
-              </ButtonLink>
-              <ButtonLink href="/oznanila/nalozi" size="lg" icon="up">
-                Izberi datoteko
-              </ButtonLink>
+              <PickButtons />
             </>
           )}
         </div>
@@ -101,7 +97,7 @@ export function Home({ v, isOwner }: { v: HomeView; isOwner: boolean }) {
     );
 
   const quick: [string, IconName, string, string][] = [];
-  if (v.can.oznanila) quick.push(["/oznanila/nalozi", "cam", "Fotografiraj oznanila", "Claude jih prebere"]);
+  if (v.can.oznanila) quick.push(["/oznanila/nalozi", "up", "Naloži oznanila", "Claude jih prebere"]);
   if (v.can.mase) quick.push(["/teden?nov=1", "plus", "Dodaj namen", "k izbrani maši"]);
   if (v.can.dogodki) quick.push(["/dogodki?dogodek=nov", "star", "Nov dogodek", "na strani in koledarju"]);
   if (v.can.verouk && !v.can.mase) quick.push(["/verouk", "book", "Odpovej uro verouka", "z obvestilom staršem"]);

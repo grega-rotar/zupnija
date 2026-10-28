@@ -2,11 +2,22 @@
 
 import { Icon } from "@/components/admin/Icon";
 import { btnClass } from "@/components/admin/ui";
-import type { ReadableDraft } from "@/lib/bulletin/types";
-import { fileMeta, fSheetDay, fSpan, fT, pre } from "./format";
+import { fileKind, fileMeta } from "./format";
 
-export type SourceFile = { name: string; mime: string; size: number; /** Inline image (object URL or the upload endpoint). */ img?: string; /** Link to the original. */ href?: string };
+export type SourceFile = {
+  name: string;
+  mime: string;
+  size: number;
+  /** Inline image (object URL or the upload route). */
+  img?: string;
+  /** The stored original on the private upload route (/oznanila/datoteka/<id>); absent while uploading. */
+  href?: string;
+  /** A local object URL of a PDF picked in this browser (preview before the upload is stored). */
+  local?: string;
+};
 export type SourceMode = "reading" | "review" | "error";
+
+const isPdf = (f: SourceFile) => f.mime === "application/pdf" || /\.pdf$/i.test(f.name);
 
 /** The uploaded photo, with the scanline while Claude reads. */
 function Photo({ file, mode }: { file: SourceFile; mode: SourceMode }) {
@@ -14,14 +25,36 @@ function Photo({ file, mode }: { file: SourceFile; mode: SourceMode }) {
     <div className="sheetpaper photo">
       {mode === "reading" ? <div className="scanline" /> : null}
       {/* eslint-disable-next-line @next/next/no-img-element -- a private upload, not an optimisable asset */}
-      <img src={file.img} alt="Naložena fotografija" />
+      <img src={file.img} alt="Naložena fotografija oznanil" />
     </div>
   );
 }
 
-/** A PDF or spreadsheet: a card with a link to the original. */
+/** A PDF: the browser's own viewer on the private upload route, with a link out as the fallback. */
+function Pdf({ file, mode }: { file: SourceFile; mode: SourceMode }) {
+  const src = file.href ?? file.local;
+  return (
+    <div className="pdfview">
+      {mode === "reading" ? <div className="scanline" /> : null}
+      {src ? (
+        <object data={`${src}#view=FitH&navpanes=0`} type="application/pdf" aria-label={`Izvirnik: ${file.name}`}>
+          <div className="pdffall">
+            <Icon name="file" />
+            <p>Brskalnik PDF-ja ne zna pokazati tukaj.</p>
+            {file.href ? (
+              <a href={file.href} target="_blank" rel="noopener" className={btnClass({ size: "sm" })}>
+                Odpri izvirnik
+              </a>
+            ) : null}
+          </div>
+        </object>
+      ) : null}
+    </div>
+  );
+}
+
+/** A spreadsheet (or a photo the browser can't show, like HEIC): a card with a link to the original. */
 function FileCard({ file, mode }: { file: SourceFile; mode: SourceMode }) {
-  const pdf = file.mime === "application/pdf";
   return (
     <div className="filecard">
       {mode === "reading" ? <div className="scanline" /> : null}
@@ -29,7 +62,7 @@ function FileCard({ file, mode }: { file: SourceFile; mode: SourceMode }) {
         <Icon name="file" />
       </span>
       <b>{file.name}</b>
-      <span>{pdf ? "PDF" : file.mime.startsWith("image/") ? "Fotografija" : "Tabela"}</span>
+      <span>{fileKind(file.mime)}</span>
       {file.href ? (
         <a href={file.href} target="_blank" rel="noopener">
           <Icon name="eye" />
@@ -40,74 +73,27 @@ function FileCard({ file, mode }: { file: SourceFile; mode: SourceMode }) {
   );
 }
 
-/** "pon 2.11. 18.30 …" or "torek, 3. 11., 18.30 …" → the day part and the rest. */
-const SPLIT = /^((?:pon|tor|sre|čet|pet|sob|ned)[a-zčšž]*\.?,?\s+\d{1,2}\.\s?\d{1,2}\.?,?)\s+(.*)$/i;
-
-/**
- * Without a photo: the draft written out as the sheet (each item's source
- * line), with the numbered gold marks on the flagged lines.
- */
-function Transcript({ draft, picks, week }: { draft: ReadableDraft; picks: Record<string, string>; week: string }) {
-  let n = 0;
-  const title = `Oznanila ${fSpan(week)}`;
-  return (
-    <div className="sheetpaper" role="img" aria-label="Prepis lista z oznanili">
-      <p className="t">{title}</p>
-      <ol>
-        {draft.items.map((it) => {
-          const line = it.sourceLine?.trim() || `${fSheetDay(it.date)} ${fT(it.time)} ${pre(it.kind) === "†" ? "† " : ""}${it.text}`;
-          const m = line.match(SPLIT);
-          const badge = it.flag ? ++n : 0;
-          return (
-            <li key={it.id} className={it.flag ? `hl ${picks[it.id] ? "ok" : ""}` : undefined}>
-              {badge ? <span className="badge">{badge}</span> : null}
-              <span className="pd">{m ? m[1] : ""}</span>
-              {m ? m[2] : line}
-            </li>
-          );
-        })}
-      </ol>
-      {draft.notices.length ? (
-        <ol className="ann">
-          {draft.notices.map((t, i) => (
-            <li key={i}>– {t}</li>
-          ))}
-        </ol>
-      ) : null}
-    </div>
-  );
-}
-
 /** The left column: file name and meta, the phone toggle, and the source. */
-export function SourceColumn({ file, mode, open, onToggle, draft, picks, week }: {
-  file: SourceFile;
-  mode: SourceMode;
-  open: boolean;
-  onToggle: () => void;
-  draft?: ReadableDraft | null;
-  picks?: Record<string, string>;
-  week: string;
-}) {
-  const transcript = !file.img && mode === "review" && draft && draft.items.length > 0;
+export function SourceColumn({ file, mode, open, onToggle }: { file: SourceFile; mode: SourceMode; open: boolean; onToggle: () => void }) {
+  const pdf = isPdf(file);
   return (
-    <div className={`src-col ${open ? "" : "collapsed"}`}>
+    <div className={`src-col ${open ? "" : "collapsed"} ${pdf ? "pdf" : ""}`}>
       <div className="srcmeta">
         <span>
           <b>{file.name}</b> · {fileMeta(file.mime, file.size)}
         </span>
-        <button type="button" className={btnClass({ variant: "ghost", size: "sm" }, "showsrc")} onClick={onToggle} aria-expanded={open}>
-          {open ? "Skrij izvirnik" : "Pokaži izvirnik"}
-        </button>
+        <span className="srcacts">
+          {pdf && file.href ? (
+            <a href={file.href} target="_blank" rel="noopener" className="srclink">
+              Odpri izvirnik
+            </a>
+          ) : null}
+          <button type="button" className={btnClass({ variant: "ghost", size: "sm" }, "showsrc")} onClick={onToggle} aria-expanded={open}>
+            {open ? "Skrij izvirnik" : "Pokaži izvirnik"}
+          </button>
+        </span>
       </div>
-      <div className="sheetwrap">
-        {file.img ? <Photo file={file} mode={mode} /> : <FileCard file={file} mode={mode} />}
-        {transcript ? (
-          <>
-            <p className="prepis">Prepis, kot ga je prebral Claude:</p>
-            <Transcript draft={draft} picks={picks ?? {}} week={week} />
-          </>
-        ) : null}
-      </div>
+      <div className="sheetwrap">{file.img ? <Photo file={file} mode={mode} /> : pdf ? <Pdf file={file} mode={mode} /> : <FileCard file={file} mode={mode} />}</div>
     </div>
   );
 }

@@ -48,9 +48,10 @@ describe("assistant", () => {
     const ms = await db
       .insert(schema.masses)
       .values([
-        { date: "2026-10-28", time: "18:30", churchId: ch.id },
-        { date: "2026-11-01", time: "08:00", churchId: ch.id, type: "sunday" },
-        { date: "2026-11-01", time: "10:00", churchId: ch.id, type: "sunday" },
+        // "manual": not from the schedule, so ensureMasses (run by buildContext) keeps them.
+        { date: "2026-10-28", time: "18:30", churchId: ch.id, source: "manual" },
+        { date: "2026-11-01", time: "08:00", churchId: ch.id, type: "sunday", source: "manual" },
+        { date: "2026-11-01", time: "10:00", churchId: ch.id, type: "sunday", source: "manual" },
       ])
       .returning();
     [wedMass, sunMass] = [ms[0].id, ms[1].id];
@@ -63,7 +64,7 @@ describe("assistant", () => {
   it("gives Ana only Verouk data and cancel_lesson", async () => {
     const ctx = await buildContext(ana);
     expect(ctx.masses).toBeUndefined();
-    expect(ctx.allowed).toEqual(["cancel_lesson"]);
+    expect(ctx.allowed).toEqual(["cancel_lesson", "restore_lesson"]);
     expect(ctx.lessons?.find((l) => l.date === "2026-10-28")).toMatchObject({ groupId, time: "16:30", cancelled: false });
     const p = buildPrompt(ana, ctx, ask);
     expect(p).toContain("cancel_lesson");
@@ -76,7 +77,7 @@ describe("assistant", () => {
     expect(ctx.masses?.map((m) => m.massId)).toEqual([wedMass, sunMass, sunMass + 1]);
     expect(ctx.masses?.[0]).toMatchObject({ weekday: "sreda", time: "18:30", church: "Marijina cerkev", status: "scheduled" });
     const p = buildPrompt(blaz, ctx, ask);
-    for (const t of ["add_intention", "cancel_mass", "event", "open_upload", "cancel_lesson"]) expect(p).toContain(`"type": "${t}"`);
+    for (const t of ["add_intention", "remove_intention", "cancel_mass", "restore_mass", "event", "edit_event", "delete_event", "open_upload", "cancel_lesson", "restore_lesson", "invite_person", "update_access", "approve_change", "reject_change"]) expect(p).toContain(`"type": "${t}"`);
     expect(p).toContain(`"massId":${wedMass}`);
     expect(p).toContain("Odpovej mašo v sredo");
   });

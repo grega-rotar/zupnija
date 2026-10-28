@@ -3,8 +3,8 @@
  * the editor and the public site write dates the same way.
  * No server imports: the list (server) and the upload flow (client) share it.
  */
-import type { BulletinFlag, BulletinItem } from "@/lib/bulletin/types";
-import { addDays, formatDayShort, formatTime, formatWeekdayShort, formatWeekSpan } from "@/lib/dates";
+import { periodLabel, type BulletinFlag, type DraftEvent, type DraftIntention } from "@/lib/bulletin/types";
+import { addDays, formatDayMonth, formatDayShort, formatMonthLong, formatTime, formatWeekdayShort, formatWeekSpan, WEEKDAY_LABEL, weekdayOf } from "@/lib/dates";
 
 export const addDaysIso = addDays;
 
@@ -12,10 +12,19 @@ export const addDaysIso = addDays;
 export const fT = formatTime;
 /** "tor 3. nov" */
 export const fDayS = formatDayShort;
-/** The bulletin week starting on Sunday `a`: "1.–7. november", across months "29. nov – 5. dec". */
-export const fSpan = (a: string) => formatWeekSpan(a, addDays(a, 6));
-/** "pon 2.11." as written on a sheet (the sheet's own notation, used only to echo the sheet). */
-export const fSheetDay = (iso: string) => `${formatWeekdayShort(iso)} ${Number(iso.slice(8, 10))}.${Number(iso.slice(5, 7))}.`;
+/** "sre" */
+export const fWd = formatWeekdayShort;
+/** "Sreda" */
+export const fWeekday = (iso: string) => {
+  const w = WEEKDAY_LABEL[weekdayOf(iso)];
+  return w.charAt(0).toUpperCase() + w.slice(1);
+};
+/** "14. oktober" */
+export const fDayMonth = formatDayMonth;
+/** "oktober" */
+export const fMonth = formatMonthLong;
+/** The days of a week clipped to the period: "1.–3. oktober", "4.–10. oktober". */
+export const fSpan = (a: string, b: string) => formatWeekSpan(a, b);
 
 /** Slovenian number forms: 1 namen, 2 namena, 3 nameni, 5 namenov. */
 export const pl = (n: number, f: readonly [string, string, string, string]) => {
@@ -24,6 +33,7 @@ export const pl = (n: number, f: readonly [string, string, string, string]) => {
 };
 export const NAM = ["namen", "namena", "nameni", "namenov"] as const;
 export const OBV = ["obvestilo", "obvestili", "obvestila", "obvestil"] as const;
+export const SRE = ["srečanje", "srečanji", "srečanja", "srečanj"] as const;
 export const MAS = ["maša", "maši", "maše", "maš"] as const;
 /** "2 mesti za preveriti" */
 export const toCheck = (n: number) => `${pl(n, ["mesto", "mesti", "mesta", "mest"])} za preveriti`;
@@ -40,18 +50,18 @@ export const KINDS = [
 
 /** "Fotografija · 412 KB", "PDF · 1,2 MB", "Tabela · 3 KB". */
 export function fileMeta(mime: string, size: number): string {
-  const kind = mime.startsWith("image/") ? "Fotografija" : mime === "application/pdf" ? "PDF" : "Tabela";
   const s = size >= 1024 * 1024 ? `${(size / 1024 / 1024).toFixed(1).replace(".", ",")} MB` : `${Math.max(1, Math.round(size / 1024))} KB`;
-  return `${kind} · ${s}`;
+  return `${fileKind(mime)} · ${s}`;
 }
+export const fileKind = (mime: string) => (mime.startsWith("image/") ? "Fotografija" : mime === "application/pdf" ? "PDF" : "Tabela");
 /** Browsers can show these inline; HEIC mostly not. */
 export const showsInline = (mime: string) => ["image/jpeg", "image/png", "image/webp", "image/gif"].includes(mime);
 
-/** "HH:MM" from "17.30", "17:30", "7.00"; null when it isn't a time. */
+/** "HH:MM" from "17.30", "17:30", "7.00", "7"; null when it isn't a time. */
 export function parseTime(v: string): string | null {
-  const m = v.trim().match(/^(\d{1,2})[:.](\d{2})$/);
-  if (!m || Number(m[1]) > 23 || Number(m[2]) > 59) return null;
-  return `${m[1].padStart(2, "0")}:${m[2]}`;
+  const m = v.trim().match(/^(\d{1,2})(?:[:.](\d{2}))?$/);
+  if (!m || Number(m[1]) > 23 || Number(m[2] ?? 0) > 59) return null;
+  return `${m[1].padStart(2, "0")}:${m[2] ?? "00"}`;
 }
 
 /**
@@ -59,7 +69,7 @@ export function parseTime(v: string): string | null {
  * "Na listu piše 17.30, po urniku je … ob 18.30": the sheet's own value reads
  * "17.30, kot piše", the scheduled one "18.30, po urniku".
  */
-export function optionLabel(item: BulletinItem, flag: BulletinFlag, option: string, churchName: (slug: string) => string): string {
+export function optionLabel(item: { time?: string }, flag: BulletinFlag, option: string, churchName: (slug: string) => string): string {
   if (flag.field === "time") {
     if (!/^\d{1,2}:\d{2}$/.test(option)) return option;
     if (!flag.question.startsWith("Na listu piše")) return fT(option);
@@ -70,8 +80,8 @@ export function optionLabel(item: BulletinItem, flag: BulletinFlag, option: stri
   return option;
 }
 
-/** The item as it will be published with this resolution. */
-export function resolved(item: BulletinItem, value: string | undefined): BulletinItem {
+/** The intention as it will be published with this resolution. */
+export function resolved<I extends DraftIntention & { date?: string }>(item: I, value: string | undefined): I {
   if (!item.flag || !value) return item;
   switch (item.flag.field) {
     case "text":
@@ -82,5 +92,39 @@ export function resolved(item: BulletinItem, value: string | undefined): Bulleti
       return { ...item, date: value };
     case "church":
       return { ...item, churchSlug: value };
+    default:
+      return item;
   }
 }
+
+/**
+ * The period in running text, whatever the bulletin covers (the backend's
+ * periodLabel): a month reads "oktober 2026", a week or any other span
+ * "1.–7. november 2026". The format of the oznanila may change, so nothing
+ * here assumes a month.
+ */
+export const periodName = (p: { start: string; end: string }): string => periodLabel(p.start, p.end);
+
+/** The event as it will be published with this resolution (mirrors lib/bulletin/actions resolveEvent). */
+export function resolvedEvent(ev: DraftEvent, value: string | undefined): DraftEvent {
+  if (!ev.include || !ev.flag || !value) return ev;
+  switch (ev.flag.field) {
+    case "time":
+      return { ...ev, time: parseTime(value) ?? ev.time };
+    case "date":
+      return /^\d{4}-\d{2}-\d{2}$/.test(value) ? { ...ev, date: value } : ev;
+    case "text":
+      return { ...ev, title: value };
+    default:
+      return { ...ev, place: value };
+  }
+}
+
+/** A notice the reader couldn't place (a format change): the backend starts it with "Ni razvrščeno:". */
+const UNPLACED = /^\s*Ni razvrščeno:\s*/i;
+export const isUnplaced = (text: string) => UNPLACED.test(text);
+/** The notice without the "Ni razvrščeno:" prefix (kept as an ordinary notice). */
+export const placed = (text: string) => text.replace(UNPLACED, "");
+
+/** "sob 24. okt · 7.00 · Izpred Mihovca" */
+export const eventWhen = (e: Pick<DraftEvent, "date" | "time" | "place">) => [fDayS(e.date), e.time ? fT(e.time) : null, e.place || null].filter(Boolean).join(" · ");

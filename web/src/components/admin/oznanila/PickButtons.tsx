@@ -6,8 +6,8 @@ import { Button } from "@/components/admin/ui";
 import { ACCEPT_ANY, ACCEPT_PHOTO, handOff } from "./handoff";
 
 /**
- * "Fotografiraj" and "Izberi datoteko" outside the upload page: opens the
- * picker here, then continues on /oznanila/nalozi with the file.
+ * "Izberi datoteko" (the PDF, the usual case) and "Fotografiraj" outside the
+ * upload page: opens the picker here, then continues on /oznanila/nalozi with the file.
  */
 export function PickButtons({ photoLabel = "Fotografiraj" }: { photoLabel?: string }) {
   const router = useRouter();
@@ -22,14 +22,14 @@ export function PickButtons({ photoLabel = "Fotografiraj" }: { photoLabel?: stri
   };
   return (
     <>
-      <Button variant="primary" size="lg" icon="cam" onClick={() => photo.current?.click()}>
-        {photoLabel}
-      </Button>
-      <Button size="lg" icon="up" onClick={() => any.current?.click()}>
+      <Button variant="primary" size="lg" icon="up" onClick={() => any.current?.click()}>
         Izberi datoteko
       </Button>
-      <input ref={photo} type="file" accept={ACCEPT_PHOTO} capture="environment" hidden onChange={take} />
+      <Button size="lg" icon="cam" onClick={() => photo.current?.click()}>
+        {photoLabel}
+      </Button>
       <input ref={any} type="file" accept={ACCEPT_ANY} hidden onChange={take} />
+      <input ref={photo} type="file" accept={ACCEPT_PHOTO} capture="environment" hidden onChange={take} />
     </>
   );
 }

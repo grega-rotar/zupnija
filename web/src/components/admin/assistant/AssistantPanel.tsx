@@ -50,6 +50,24 @@ function toastText(type: CardState["proposal"]["type"], pending: boolean): strin
       return pending ? "Poslano župniku v potrditev." : "Shranjeno. Starši bodo obvestilo videli na strani Verouk.";
     case "event":
       return pending ? "Poslano župniku v potrditev." : "Shranjeno. Dogodek je na strani.";
+    case "remove_intention":
+      return pending ? "Poslano župniku v potrditev." : "Shranjeno. Namena ni več na strani.";
+    case "restore_mass":
+      return pending ? "Poslano župniku v potrditev." : "Shranjeno. Maša je spet na urniku.";
+    case "restore_lesson":
+      return pending ? "Poslano župniku v potrditev." : "Shranjeno. Verouk je spet na urniku.";
+    case "edit_event":
+      return pending ? "Poslano župniku v potrditev." : "Shranjeno. Dogodek je spremenjen.";
+    case "delete_event":
+      return "Dogodek je izbrisan.";
+    case "invite_person":
+      return "Povabilo je poslano.";
+    case "update_access":
+      return "Shranjeno. Spremembe veljajo ob naslednjem kliku.";
+    case "approve_change":
+      return "Potrjeno. Sprememba je na strani.";
+    case "reject_change":
+      return "Zavrnjeno. Nič ni objavljeno.";
     default:
       return "Shranjeno.";
   }
@@ -195,7 +213,8 @@ export function AssistantPanel({ actor }: { actor: Actor }) {
     }
     patchCard(card.id, { st: "done" });
     const pending = res.data.status === "pending";
-    toast.show({ text: toastText(card.proposal.type, pending), historyId: res.data.status === "applied" ? res.data.historyId : null });
+    const text = res.data.mailed === false ? "Oseba je dodana, e-pošte pa ni bilo mogoče poslati. Povezavo ji pošljite sami." : toastText(card.proposal.type, pending);
+    toast.show({ text, historyId: res.data.status === "applied" ? res.data.historyId : null });
   }
 
   function onKeyDown(e: React.KeyboardEvent<HTMLTextAreaElement>) {

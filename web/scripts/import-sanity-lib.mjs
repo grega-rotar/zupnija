@@ -226,7 +226,17 @@ export function mapGroup(doc, index, lost, warnings) {
   };
 }
 
-/** A weeklyBulletin → a published bulletins row and its notices ("title" and body as two paragraphs). */
+/** "Teden 25. 10.–31. 10. 2026", the title migration 0001 gives a weekly bulletin. */
+export function weekTitle(weekStart) {
+  const end = new Date(Date.parse(`${weekStart}T12:00:00Z`) + 6 * 864e5).toISOString().slice(0, 10);
+  const dm = (d) => `${Number(d.slice(8, 10))}. ${Number(d.slice(5, 7))}.`;
+  return `Teden ${dm(weekStart)}–${dm(end)} ${end.slice(0, 4)}`;
+}
+
+/**
+ * A weeklyBulletin → a published bulletins row (period = the Sunday–Saturday
+ * week) and its notices ("title" and body as two paragraphs).
+ */
 export function mapBulletin(doc, lost, warnings) {
   let weekStart = doc.weekStart;
   if (weekStart && weekdayOf(weekStart) !== 0) {
@@ -242,7 +252,8 @@ export function mapBulletin(doc, lost, warnings) {
   if (has(doc.events)) lost.add("bulletin linked events (the week's events still show, by date)", doc._id);
   if (doc.weekEnd && weekStart && doc.weekEnd !== new Date(Date.parse(`${weekStart}T12:00:00Z`) + 6 * 864e5).toISOString().slice(0, 10))
     warnings.push(`Bulletin ${doc._id}: weekEnd ${doc.weekEnd} ignored (weeks are Sunday–Saturday)`);
-  return { weekStart, publishedAt: doc._updatedAt ?? doc._createdAt ?? null, notices };
+  const periodEnd = weekStart ? new Date(Date.parse(`${weekStart}T12:00:00Z`) + 6 * 864e5).toISOString().slice(0, 10) : null;
+  return { weekStart, periodEnd, title: weekStart ? weekTitle(weekStart) : null, publishedAt: doc._updatedAt ?? doc._createdAt ?? null, notices };
 }
 
 // ── Database ─────────────────────────────────────────────────────────────────
@@ -374,8 +385,8 @@ export async function importSanity(sql, docs, { force = false, dryRun = false, t
         continue;
       }
       const ins = await tx`
-        insert into bulletins ${tx({ week_start: b.weekStart, status: "published", published_at: b.publishedAt })}
-        on conflict (week_start) do nothing returning id`;
+        insert into bulletins ${tx({ period_start: b.weekStart, period_end: b.periodEnd, title: b.title, status: "published", published_at: b.publishedAt })}
+        on conflict (period_start) do nothing returning id`;
       if (!ins.length) continue;
       created.bulletins++;
       for (const [position, text] of b.notices.entries()) {

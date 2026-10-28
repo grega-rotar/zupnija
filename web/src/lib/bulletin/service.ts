@@ -4,9 +4,14 @@
  *
  *   startBulletin   upload → bulletin "reading" → readBulletin after the response
  *   startManual     "Vpiši ročno": an empty draft without AI
- *   getBulletin / listBulletins
+ *   getBulletin / getBulletinByPeriod / listBulletins / nextMissingPeriod
  *   saveDraftForLater / discardDraft
  *   publishBulletin perform("bulletin.publish"); a helper's → status "pending"
+ *
+ * A bulletin covers a period: today a calendar month, before that weeks, and
+ * any other span works. The upload target defaults to the missing period
+ * (types.ts missingPeriod: the next day no published or pending bulletin
+ * covers starts it); the document's own period wins once it is read.
  */
 import "server-only";
 import { and, desc, eq, sql } from "drizzle-orm";
@@ -15,16 +20,26 @@ import { db, schema } from "@/db";
 import { perform, type PerformResult } from "@/lib/admin/engine";
 import { ForbiddenError, UserError } from "@/lib/admin/errors";
 import { can, type Actor } from "@/lib/admin/sections";
-import { now, today, weekStart as weekStartOf } from "@/lib/clock";
-import { addDays } from "@/lib/dates";
+import { now, today } from "@/lib/clock";
 import { ALREADY_PUBLISHED, type PublishPayload } from "./actions";
 import { readBulletin } from "./extract";
 import { saveUpload, type UploadInput } from "./storage";
-import { flaggedItems, readableDraftSchema, type BulletinStatus, type ReadableDraft } from "./types";
+import {
+  allIntentions,
+  emptyDraft,
+  flagCount,
+  missingPeriod,
+  monthPeriod,
+  periodTitle,
+  readableDraftSchema,
+  type BulletinStatus,
+  type MissingPeriod,
+  type ReadableDraft,
+} from "./types";
 import "./actions";
 
 export const AI_BUSY_MESSAGE = "Pomočnik je trenutno zaseden. Poskusite čez nekaj minut ali vpišite ročno.";
-const PENDING = "Oznanila za ta teden čakajo na potrditev župnika.";
+const PENDING = "Ta oznanila čakajo na potrditev župnika.";
 
 // ── Background work: Next's after() in the app; tests replace it ───────────
 type Task = () => Promise<void>;
@@ -69,11 +84,15 @@ export type BulletinView = Bulletin & {
 };
 export type BulletinListEntry = {
   id: number | null;
-  weekStart: string;
+  periodStart: string;
+  periodEnd: string;
+  title: string;
   status: BulletinStatus | "missing";
+  /** Intentions in the draft. */
   itemCount: number;
   flagCount: number;
   noticeCount: number;
+  eventCount: number;
   publishedAt: Date | null;
   publishedBy: string | null;
   updatedAt: Date | null;
@@ -100,91 +119,115 @@ export async function getBulletin(id: number): Promise<BulletinView | null> {
     .where(eq(schema.bulletinNotices.bulletinId, id))
     .orderBy(schema.bulletinNotices.position);
   const readableDraft = asReadable(b.draft);
-  return { ...b, upload: upload ?? null, notices, readableDraft, flagCount: readableDraft ? flaggedItems(readableDraft).length : 0 };
+  return { ...b, upload: upload ?? null, notices, readableDraft, flagCount: readableDraft ? flagCount(readableDraft) : 0 };
 }
 
-export async function getBulletinByWeek(weekStart: string): Promise<BulletinView | null> {
-  const [b] = await db.select({ id: schema.bulletins.id }).from(schema.bulletins).where(eq(schema.bulletins.weekStart, weekStart));
+export async function getBulletinByPeriod(periodStart: string): Promise<BulletinView | null> {
+  const [b] = await db.select({ id: schema.bulletins.id }).from(schema.bulletins).where(eq(schema.bulletins.periodStart, periodStart));
   return b ? getBulletin(b.id) : null;
 }
 
-/** Newest week first; next week (the Sunday after today) appears as "missing" while it has no row. */
+/** The period to upload next (and whether it is due), from all bulletins. */
+export async function nextMissingPeriod(): Promise<MissingPeriod> {
+  const rows = await db.select({ id: schema.bulletins.id, status: schema.bulletins.status, periodStart: schema.bulletins.periodStart, periodEnd: schema.bulletins.periodEnd }).from(schema.bulletins);
+  return missingPeriod(today(), await Promise.all(rows.map(settlePending)));
+}
+/** @deprecated same as nextMissingPeriod. */
+export const nextMissingMonth = nextMissingPeriod;
+
+/** Newest period first; the missing period (missingPeriod) appears as "missing" while it has no row. */
 export async function listBulletins(): Promise<BulletinListEntry[]> {
-  const rows = await Promise.all((await db.select().from(schema.bulletins).orderBy(desc(schema.bulletins.weekStart))).map(settlePending));
+  const rows = await Promise.all((await db.select().from(schema.bulletins).orderBy(desc(schema.bulletins.periodStart))).map(settlePending));
   const notices = await db.select({ bulletinId: schema.bulletinNotices.bulletinId }).from(schema.bulletinNotices);
+  const events = await db.select({ b: schema.events.sourceBulletinId }).from(schema.events);
   const out: BulletinListEntry[] = rows.map((b) => {
     const d = asReadable(b.draft);
+    const published = b.status === "published";
     return {
       id: b.id,
-      weekStart: b.weekStart,
+      periodStart: b.periodStart,
+      periodEnd: b.periodEnd,
+      title: b.title,
       status: b.status,
-      itemCount: d?.items.length ?? 0,
-      flagCount: d ? flaggedItems(d).length : 0,
-      noticeCount: b.status === "published" ? notices.filter((n) => n.bulletinId === b.id).length : (d?.notices.length ?? 0),
+      itemCount: d ? allIntentions(d).length : 0,
+      flagCount: d && !published ? flagCount(d) : 0,
+      noticeCount: published ? notices.filter((n) => n.bulletinId === b.id).length : (d?.notices.length ?? 0),
+      eventCount: published ? events.filter((e) => e.b === b.id).length : (d?.events.filter((e) => e.include).length ?? 0),
       publishedAt: b.publishedAt,
       publishedBy: b.publishedBy,
       updatedAt: b.updatedAt,
     };
   });
-  const next = nextWeekStart();
-  if (!rows.some((b) => b.weekStart === next)) {
-    out.push({ id: null, weekStart: next, status: "missing", itemCount: 0, flagCount: 0, noticeCount: 0, publishedAt: null, publishedBy: null, updatedAt: null });
-    out.sort((a, b) => b.weekStart.localeCompare(a.weekStart));
+  const next = missingPeriod(today(), rows);
+  if (!rows.some((b) => b.periodStart === next.start)) {
+    out.push({ id: null, periodStart: next.start, periodEnd: next.end, title: next.title, status: "missing", itemCount: 0, flagCount: 0, noticeCount: 0, eventCount: 0, publishedAt: null, publishedBy: null, updatedAt: null });
+    out.sort((a, b) => b.periodStart.localeCompare(a.periodStart));
   }
   return out;
 }
 
-/** The Sunday after today ("2026-10-27" → "2026-11-01"); weeks run Sunday–Saturday. */
-export const nextWeekStart = () => addDays(weekStartOf(today()), 7);
-
 // ── Writes ──────────────────────────────────────────────────────────────────
-function assertWeekStart(weekStart: string) {
-  if (!/^\d{4}-\d{2}-\d{2}$/.test(weekStart) || weekStartOf(weekStart) !== weekStart) throw new UserError("Izberite teden.");
+export type PeriodInput = { periodStart?: string; periodEnd?: string };
+const ISO = /^\d{4}-\d{2}-\d{2}$/;
+
+/**
+ * The period an upload is meant for: `periodStart`…`periodEnd` when given
+ * (end defaults to the end of start's month), else the missing period.
+ */
+async function targetPeriod(p: PeriodInput): Promise<{ start: string; end: string; title: string }> {
+  if (p.periodStart == null) {
+    const m = await nextMissingPeriod();
+    return { start: m.start, end: m.end, title: m.title };
+  }
+  const start = p.periodStart, end = p.periodEnd ?? monthPeriod(start).end;
+  if (!ISO.test(start) || !ISO.test(end) || Number.isNaN(Date.parse(start)) || end < start) throw new UserError("Izberite obdobje.");
+  return { start, end, title: periodTitle(start, end) };
 }
 
-async function prepareWeek(weekStart: string, actor: Actor) {
+async function preparePeriod(input: PeriodInput, actor: Actor) {
   if (!can(actor, "oznanila")) throw new ForbiddenError();
-  assertWeekStart(weekStart);
-  const [found] = await db.select().from(schema.bulletins).where(eq(schema.bulletins.weekStart, weekStart));
+  const period = await targetPeriod(input);
+  const [found] = await db.select().from(schema.bulletins).where(eq(schema.bulletins.periodStart, period.start));
   const existing = found ? await settlePending(found) : null;
   if (existing?.status === "published") throw new UserError(ALREADY_PUBLISHED);
   if (existing?.status === "pending") throw new UserError(PENDING);
-  return existing ?? null;
+  return { period, existing: existing ?? null };
 }
 
-async function upsertBulletin(existing: Bulletin | null, weekStart: string, values: Partial<typeof schema.bulletins.$inferInsert>) {
+async function upsertBulletin(existing: Bulletin | null, period: { start: string; end: string; title: string }, values: Partial<typeof schema.bulletins.$inferInsert>) {
   const b = schema.bulletins;
-  const set = { uploadId: null, draft: null, error: null, ...values, updatedAt: now() };
+  const set = { uploadId: null, draft: null, error: null, periodEnd: period.end, title: period.title, issue: null, ...values, updatedAt: now() };
   if (existing) {
     await db.update(b).set(set).where(eq(b.id, existing.id));
     return existing.id;
   }
   const [row] = await db
     .insert(b)
-    .values({ weekStart, status: "reading", ...set, createdAt: now() })
+    .values({ periodStart: period.start, status: "reading", ...set, createdAt: now() })
     .onConflictDoNothing()
     .returning({ id: b.id });
-  if (!row) throw new UserError("Oznanila za ta teden se že nalagajo. Osvežite stran.");
+  if (!row) throw new UserError("Ta oznanila se že nalagajo. Osvežite stran.");
   return row.id;
 }
 
 /**
  * Store the upload and start reading it after the response. Replaces an
- * unpublished bulletin of the same week; never a published or pending one.
+ * unpublished bulletin starting on the same day; never a published or
+ * pending one. The period defaults to the missing period.
  */
-export async function startBulletin(input: { weekStart: string; file: UploadInput }, actor: Actor): Promise<{ bulletinId: number }> {
-  const existing = await prepareWeek(input.weekStart, actor);
+export async function startBulletin(input: PeriodInput & { file: UploadInput }, actor: Actor): Promise<{ bulletinId: number }> {
+  const { period, existing } = await preparePeriod(input, actor);
   const upload = await saveUpload(input.file, actor);
-  const bulletinId = await upsertBulletin(existing, input.weekStart, { status: "reading", uploadId: upload.id });
+  const bulletinId = await upsertBulletin(existing, period, { status: "reading", uploadId: upload.id });
   schedule(() => readBulletin(bulletinId));
   return { bulletinId };
 }
 
-/** "Vpiši ročno": an empty draft for the week, filled in by hand. */
-export async function startManualBulletin(input: { weekStart: string }, actor: Actor): Promise<{ bulletinId: number }> {
-  const existing = await prepareWeek(input.weekStart, actor);
-  const draft: ReadableDraft = { readable: true, weekStart: input.weekStart, items: [], notices: [] };
-  return { bulletinId: await upsertBulletin(existing, input.weekStart, { status: "draft", uploadId: existing?.uploadId ?? null, draft }) };
+/** "Vpiši ročno": an empty draft for the period, filled in by hand. */
+export async function startManualBulletin(input: PeriodInput, actor: Actor): Promise<{ bulletinId: number }> {
+  const { period, existing } = await preparePeriod(input, actor);
+  const draft = emptyDraft(period);
+  return { bulletinId: await upsertBulletin(existing, period, { status: "draft", uploadId: existing?.uploadId ?? null, draft }) };
 }
 
 async function editable(id: number) {
@@ -196,20 +239,29 @@ async function editable(id: number) {
   return b;
 }
 
-/** "Shrani za pozneje": keep the draft (optionally the edited one); status stays "draft". */
+/**
+ * "Shrani za pozneje", and before publishing: keep the (edited) draft —
+ * notices, event include toggles, added or removed intentions, article,
+ * prayer intention. The period's dates stay the bulletin's; its title and
+ * issue may be edited. Status stays "draft".
+ */
 export async function saveDraftForLater(id: number, draft?: ReadableDraft): Promise<void> {
   const b = await editable(id);
   if (b.status !== "draft") throw new UserError("Ta oznanila nimajo osnutka za objavo.");
   const values: Partial<typeof schema.bulletins.$inferInsert> = { updatedAt: now() };
   if (draft) {
-    const r = readableDraftSchema.safeParse({ ...draft, weekStart: b.weekStart });
+    const r = readableDraftSchema.safeParse({ ...draft, period: { ...draft.period, start: b.periodStart, end: b.periodEnd } });
     if (!r.success) throw new UserError("Osnutek ni veljaven.");
+    const ids = allIntentions(r.data).map((i) => i.id).concat(r.data.events.map((e) => e.id));
+    if (new Set(ids).size !== ids.length) throw new UserError("Osnutek ni veljaven.");
     values.draft = r.data;
+    values.title = r.data.period.title;
+    values.issue = r.data.period.issue ?? null;
   }
   await db.update(schema.bulletins).set(values).where(eq(schema.bulletins.id, id));
 }
 
-/** "Zavrzi": remove the unpublished bulletin; the week shows as missing again. */
+/** "Zavrzi": remove the unpublished bulletin; its period shows as missing again. */
 export async function discardDraft(id: number): Promise<void> {
   await editable(id);
   await db.delete(schema.bulletins).where(eq(schema.bulletins.id, id));

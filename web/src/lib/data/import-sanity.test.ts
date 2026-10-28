@@ -156,7 +156,7 @@ describe("mapping", () => {
       lost,
       warnings,
     );
-    expect(b).toMatchObject({ weekStart: "2026-10-25", notices: ["Adoracija\n\nVsak dan."] });
+    expect(b).toMatchObject({ weekStart: "2026-10-25", periodEnd: "2026-10-31", title: "Teden 25. 10.–31. 10. 2026", notices: ["Adoracija\n\nVsak dan."] });
     expect(warnings).toHaveLength(1);
     expect(lost.list().map((l) => l.label)).toEqual(["bulletin PDF/attachments"]);
   });

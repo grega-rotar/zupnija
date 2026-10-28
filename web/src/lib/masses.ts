@@ -50,6 +50,12 @@ export type Mass = {
 export type MassDay = {
   date: IsoDate;
   liturgicalTitle: string | null;
+  /** Sundays: the Sunday's name from the bulletin (calendar_days), e.g. "28. navadna nedelja". */
+  sundayName?: string | null;
+  /** Sundays: the Gospel line from the bulletin, e.g. "»Kje pa je onih devet?«". */
+  gospel?: string | null;
+  /** Group tags printed with the day in the bulletin ("MLADINSKA SK."). */
+  tags?: string[];
   note: MASS_DAYS_QUERY_RESULT[number]["note"];
   masses: Mass[];
   /** True when a »Mašni dan« exists for this date (intentions were entered). */
@@ -114,6 +120,17 @@ function fromExplicit(mass: NonNullable<ExplicitDay["masses"]>[number]): Mass {
     intentions: (mass.intentions ?? []).map((i) => ({ _key: i._key, kind: i.kind ?? null, text: i.text })),
     recurring: false,
   };
+}
+
+/**
+ * The day's liturgical lines from the bulletin: the title ("Simon in Juda
+ * Tadej, apostola"), on Sundays the Sunday's name when it differs from the
+ * title, and the Gospel line in italics.
+ */
+export function dayLines(day: Pick<MassDay, "liturgicalTitle" | "sundayName" | "gospel">): { title: string | null; sunday: string | null; gospel: string | null } {
+  const title = day.liturgicalTitle?.trim() || null;
+  const sunday = day.sundayName?.trim() || null;
+  return { title: title ?? sunday, sunday: sunday && title && sunday !== title ? sunday : null, gospel: day.gospel?.trim() || null };
 }
 
 export function buildMassDay(date: IsoDate, schedules: Schedule[], explicit: ExplicitDay | undefined): MassDay {
