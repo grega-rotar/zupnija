@@ -19,13 +19,13 @@ type Props = {
   /** Church photographs by id, shown at the top of each card. */
   churchImages?: Map<string, SanityImageValue>;
   showTitle?: boolean;
-  /** Hide the church name (when the card is already on the church's page). */
+  /** Hide the church name and the card (when it already sits in a tile on the church's page). */
   compact?: boolean;
 };
 
 /**
  * Weekly recurring schedule as one card per church: photograph, name, then
- * weekday rows with big serif times — the sheet on the church door.
+ * weekday rows with big tabular times — the sheet on the church door.
  */
 export function ScheduleTable({ schedule, churchId, churchImages, showTitle = true, compact }: Props) {
   const byChurch = [...scheduleByChurch(schedule).values()].filter((b) => !churchId || b.church._id === churchId);
@@ -39,25 +39,25 @@ export function ScheduleTable({ schedule, churchId, churchImages, showTitle = tr
     <div>
       {showTitle ? (
         <div className="mb-6 flex flex-wrap items-baseline gap-x-4 gap-y-1">
-          <h3 className="text-h3">{schedule.title}</h3>
+          <h3 className="text-[1.5rem] font-bold tracking-[-0.035em]">{schedule.title}</h3>
           {range ? <p className="text-small text-ink-3">velja {range}</p> : null}
         </div>
       ) : null}
-      <div className={cn("grid gap-6", !compact && "md:grid-cols-2", byChurch.length > 2 && "xl:grid-cols-3")}>
+      <div className={cn("grid gap-5", !compact && "md:grid-cols-2", byChurch.length > 2 && "xl:grid-cols-3")}>
         {byChurch.map(({ church, days }) => {
           const image = churchImages?.get(church._id);
           return (
             <section
               key={church._id}
               aria-labelledby={`urnik-${schedule._id}-${church._id}`}
-              className="overflow-hidden rounded-md border border-stone bg-paper"
+              className={compact ? undefined : "overflow-hidden rounded-lg bg-surface shadow-soft"}
             >
               {!compact && hasImage(image) ? (
-                <SanityImage image={image} aspect={16 / 7} sizes="(min-width: 768px) 36rem, 100vw" maxWidth={1200} decorative />
+                <SanityImage image={image} aspect={16 / 7} sizes="(min-width: 768px) 36rem, 100vw" maxWidth={1200} decorative imgClassName="saturate-[.6]" />
               ) : null}
-              <div className="p-5 sm:p-6">
+              <div className={compact ? undefined : "p-6 sm:p-7"}>
                 {!compact ? (
-                  <h4 id={`urnik-${schedule._id}-${church._id}`} className="font-serif text-h3 leading-tight">
+                  <h4 id={`urnik-${schedule._id}-${church._id}`} className="text-[1.375rem] font-bold leading-tight tracking-[-0.035em]">
                     <Link href={routes.church(church.slug)} className="hover:underline">
                       {church.name}
                     </Link>
@@ -67,17 +67,17 @@ export function ScheduleTable({ schedule, churchId, churchImages, showTitle = tr
                     {church.name}
                   </h4>
                 )}
-                <dl className={cn("divide-y divide-stone", !compact && "mt-4 border-t border-stone")}>
+                <dl className={cn("divide-y divide-stone/70", !compact && "mt-4 border-t border-stone/70")}>
                   {WEEK.filter((d) => days.has(d)).map((weekday) => (
                     <div key={weekday} className="grid grid-cols-[6.5rem_1fr] gap-4 py-3.5">
-                      <dt className="pt-1 text-body capitalize text-ink-2">{WEEKDAY_LABEL[weekday]}</dt>
+                      <dt className="pt-0.5 text-body capitalize text-ink-2">{WEEKDAY_LABEL[weekday]}</dt>
                       <dd>
                         <ul className="space-y-1.5">
                           {days.get(weekday)!.map((row) => {
                             const type = clean(row.type);
                             return (
                               <li key={`${row.time}-${row.type}`} className="flex flex-wrap items-baseline gap-x-2.5 gap-y-0.5">
-                                <time dateTime={row.time} className="font-serif text-[1.625rem] leading-none tracking-[-0.02em] text-moss">
+                                <time dateTime={row.time} className="text-[1.5rem] font-semibold leading-none tracking-[-0.045em] tabular-nums text-ink">
                                   {formatTime(row.time)}
                                 </time>
                                 {type !== "regular" ? <span className="text-small text-ink-2">{MASS_TYPE_LABEL[type]}</span> : null}

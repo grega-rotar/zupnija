@@ -26,8 +26,8 @@ export function ContactBlock({ settings, officeHoursOverride, className, showPas
 
   return (
     <div className={cn("grid gap-5 md:grid-cols-2", className)}>
-      <div className="rounded-md border border-stone bg-paper p-5 sm:p-7">
-        <h3 className="text-h3">Župnišče</h3>
+      <div className="rounded-lg bg-surface p-6 shadow-soft sm:p-8">
+        <h3 className="text-[1.5rem] font-bold tracking-[-0.035em]">Župnišče</h3>
         <div className="mt-4 space-y-3">
           {addressLine ? (
             <MetaRow icon="pin">
@@ -71,9 +71,9 @@ export function ContactBlock({ settings, officeHoursOverride, className, showPas
         </div>
 
         {settings.emergencyContact?.phone ? (
-          <div className="mt-6 rounded-md bg-paper-2 p-4">
+          <div className="mt-6 rounded-md bg-gold-soft p-4">
             <p className="text-small font-medium text-ink">{settings.emergencyContact.label || "Nujni primeri"}</p>
-            <a href={telHref(settings.emergencyContact.phone)} className="mt-1 inline-block font-serif text-h3 text-ink hover:underline">
+            <a href={telHref(settings.emergencyContact.phone)} className="mt-1 inline-block text-[1.375rem] font-bold tabular-nums tracking-[-0.035em] text-ink hover:text-gold-ink">
               {settings.emergencyContact.phone}
             </a>
           </div>
@@ -85,7 +85,7 @@ export function ContactBlock({ settings, officeHoursOverride, className, showPas
               <SanityImage image={pastor.photo} aspect={1} sizes="4rem" maxWidth={160} className="size-16 shrink-0 rounded-full" />
             ) : null}
             <div>
-              <p className="font-medium text-ink">{pastor.name}</p>
+              <p className="font-semibold text-ink">{pastor.name}</p>
               <p className="text-small text-ink-2">{personRole(pastor)}</p>
               {pastor.showContact !== false && (pastor.phone || pastor.email) ? (
                 <p className="mt-0.5 text-small text-ink-2">
@@ -107,18 +107,18 @@ export function ContactBlock({ settings, officeHoursOverride, className, showPas
         ) : null}
       </div>
 
-      <div className="rounded-md border border-stone bg-paper p-5 sm:p-7">
-        <h3 className="text-h3">Uradne ure</h3>
+      <div className="rounded-lg bg-surface p-6 shadow-soft sm:p-8">
+        <h3 className="text-[1.5rem] font-bold tracking-[-0.035em]">Uradne ure</h3>
         {officeHoursOverride ? (
-          <p className="mt-4 rounded-md border-l-2 border-gold bg-gold-soft/60 px-4 py-3 text-body text-ink">{officeHoursOverride}</p>
+          <p className="mt-4 rounded-md bg-gold-soft px-4 py-3 text-body text-ink">{officeHoursOverride}</p>
         ) : null}
         {settings.officeHours?.length ? (
-          <dl className={cn("divide-y divide-stone", officeHoursOverride ? "mt-4" : "mt-4")}>
+          <dl className="mt-4 divide-y divide-stone/70">
             {settings.officeHours.map((h) => (
               <div key={h._key} className="grid grid-cols-[7rem_1fr] gap-4 py-2.5">
                 <dt className="capitalize text-ink-2">{WEEKDAY_LABEL[h.weekday as Weekday] ?? h.weekday}</dt>
                 <dd>
-                  <span className="tnum font-medium text-ink">
+                  <span className="tnum font-semibold text-ink">
                     {formatTime(h.from)}–{formatTime(h.to)}
                   </span>
                   {h.note ? <span className="block text-small text-ink-3">{h.note}</span> : null}

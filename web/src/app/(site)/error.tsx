@@ -1,7 +1,8 @@
 "use client";
 
 import { useEffect } from "react";
-import { Button, Container, Section } from "@/components/ui/primitives";
+import { Button, Container, Section, buttonClassName, headline } from "@/components/ui/primitives";
+import { cn } from "@/lib/utils";
 
 export default function ErrorPage({ error, reset }: { error: Error & { digest?: string }; reset: () => void }) {
   useEffect(() => {
@@ -10,18 +11,16 @@ export default function ErrorPage({ error, reset }: { error: Error & { digest?: 
 
   return (
     <Section>
-      <Container width="prose" className="max-w-2xl py-10">
-        <p className="text-small text-ink-3">Napaka</p>
-        <h1 className="mt-2 text-h1">Nekaj je šlo narobe</h1>
-        <p className="mt-4 text-lede text-ink-2">
+      <Container width="prose" className="flex flex-col items-center py-10 text-center lg:py-16">
+        <p className="eyebrow">Napaka</p>
+        <h1 className={cn("mt-3", headline.display)}>
+          Nekaj je šlo <span className="accent">narobe</span>
+        </h1>
+        <p className="lede mt-5 text-balance">
           Strani trenutno ne moremo prikazati. Poskusite znova; če se napaka ponavlja, nas pokličite ali pišite.
         </p>
-        <div className="mt-8 flex flex-wrap gap-3">
-          <button
-            type="button"
-            onClick={reset}
-            className="inline-flex min-h-11 items-center rounded-sm bg-moss px-5 font-medium text-paper hover:bg-moss-deep"
-          >
+        <div className="mt-9 flex flex-wrap justify-center gap-3">
+          <button type="button" onClick={reset} className={buttonClassName()}>
             Poskusi znova
           </button>
           <Button href="/" variant="secondary">

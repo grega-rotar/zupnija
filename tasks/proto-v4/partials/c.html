@@ -1,0 +1,351 @@
+<style data-part="c">
+/* ===== Part C: give + newsletter, footer, states, phone, editor ===== */
+.c-sec{padding-top:160px}
+.c-open{text-align:center;max-width:820px;margin:0 auto 56px;display:flex;flex-direction:column;align-items:center}
+.c-eye{font-size:13px;font-weight:600;color:var(--accentInk);letter-spacing:-.005em}
+.c-open .h2{margin-top:14px;text-wrap:balance}
+.c-open .c-sub{margin-top:18px;max-width:640px;font-size:20px;line-height:1.45;letter-spacing:-.017em;color:var(--ink2);text-wrap:balance}
+.c-tile{background:var(--surface);border-radius:var(--r);box-shadow:0 0 0 1px var(--line),var(--sh)}
+.c-arrow{transition:transform .25s var(--ease)}
+:where([data-part="c"]) :focus-visible{outline:2px solid var(--accent);outline-offset:3px;border-radius:8px}
+:where([data-part="c"]) .btn:focus-visible{border-radius:999px}
+
+/* give + newsletter */
+.c-give{display:grid;gap:20px;grid-template-columns:repeat(2,minmax(0,1fr))}
+.c-give>*{padding:44px;display:flex;flex-direction:column;min-height:360px}
+.c-kick{font-size:13px;font-weight:600;color:var(--ink3);letter-spacing:-.005em}
+.c-gt{font-size:32px;font-weight:700;letter-spacing:-.04em;line-height:1.08;margin-top:10px;text-wrap:balance}
+.c-gp{font-size:17px;color:var(--ink2);margin-top:12px;line-height:1.5;max-width:360px}
+.c-pay{display:flex;gap:36px;align-items:center;flex:1}
+.c-pay>div:first-child{flex:1;min-width:0;display:flex;flex-direction:column;align-self:stretch}
+.c-trr{margin-top:auto;padding-top:24px;display:flex;flex-direction:column;gap:14px;align-items:flex-start}
+.c-trr dl{margin:0}.c-trr dt{font-size:12px;font-weight:600;color:var(--ink3)}.c-trr dd{margin:2px 0 0;font-size:17px;font-weight:600;letter-spacing:-.01em;font-variant-numeric:tabular-nums}
+.c-qr{flex:none;width:208px;padding:18px 18px 14px;border-radius:24px;background:#fff;box-shadow:0 0 0 1px var(--line),0 10px 30px rgba(20,12,4,.08);color:var(--ink);text-align:center}
+.c-qr svg{display:block;width:100%;height:auto}
+.c-qr span{display:block;margin-top:10px;font-size:11px;font-weight:600;letter-spacing:.06em;color:var(--ink3)}
+.c-news{background:radial-gradient(120% 100% at 100% 0%,#f6ead0 0%,#fbf6ec 45%,#fff 80%)}
+.c-news form{margin-top:auto;padding-top:28px}
+.c-field{display:flex;gap:6px;align-items:center;background:#fff;border-radius:999px;padding:6px;box-shadow:0 0 0 1px rgba(20,12,4,.09),0 6px 20px rgba(20,12,4,.06);transition:box-shadow .25s}
+.c-field:focus-within{box-shadow:0 0 0 2px var(--accent),0 6px 20px rgba(20,12,4,.06)}
+.c-field input{flex:1;min-width:0;height:44px;border:0;background:transparent;color:var(--ink);font:inherit;font-size:16px;padding:0 0 0 16px;outline:none}
+.c-field input::placeholder{color:var(--ink3)}
+.c-field .btn{flex:none}
+.c-fine{font-size:13px;color:var(--ink3);margin-top:12px;padding-left:22px}
+@media (max-width:980px){.c-give{grid-template-columns:minmax(0,1fr)}}
+@media (max-width:620px){.c-give>*{padding:28px;min-height:0}.c-pay{flex-direction:column-reverse;align-items:stretch;gap:24px}.c-qr{width:180px;align-self:center}.c-gt{font-size:28px}.c-fine{padding-left:0;text-align:center}}
+
+/* footer */
+.c-foot{padding-top:160px;padding-bottom:64px;font-size:14px;color:var(--ink3);line-height:1.6}
+.c-foot-top{display:flex;align-items:center;justify-content:space-between;gap:16px;flex-wrap:wrap;padding-bottom:28px;border-bottom:1px solid var(--line)}
+.c-brand{display:inline-flex;align-items:center;gap:10px;font-size:17px;font-weight:700;letter-spacing:-.025em;color:var(--ink)}
+.c-brand em{font-size:19px;color:var(--ink3);margin-left:2px}
+.c-cols{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:24px;padding:32px 0}
+.c-cols h3{font-size:13px;font-weight:600;color:var(--ink);letter-spacing:-.005em;margin-bottom:8px}
+.c-cols a:hover{color:var(--ink)}
+.c-cols ul{list-style:none;margin:0;padding:0;display:grid;gap:4px}
+.c-legal{display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap;padding-top:20px;border-top:1px solid var(--line);font-size:12px}
+@media (max-width:760px){.c-brand em{display:none}.c-cols{grid-template-columns:repeat(2,minmax(0,1fr));row-gap:28px}.c-foot{padding-top:96px}}
+
+/* appendix band: states, phone, editor */
+.c-appx{background:linear-gradient(180deg,var(--bg),#f4f2ee 18%,#f4f2ee 82%,var(--bg))}
+.c-appx>section:first-child{padding-top:120px}
+.c-states{display:grid;gap:40px 20px;grid-template-columns:repeat(3,minmax(0,1fr));align-items:stretch}
+.c-st{display:flex;flex-direction:column;margin:0}
+.c-st figcaption{display:flex;align-items:center;gap:10px;margin:0 0 14px 6px;font-size:15px;font-weight:600;letter-spacing:-.015em;color:var(--ink)}
+.c-st figcaption span{display:inline-flex;align-items:center;justify-content:center;width:22px;height:22px;border-radius:50%;background:var(--accentSoft);color:var(--accentInk);font-size:12px;font-weight:700;font-variant-numeric:tabular-nums}
+.c-st .widget{width:100%;flex:1;box-shadow:0 0 0 1px var(--line),0 1px 2px rgba(20,12,4,.04),0 12px 40px rgba(20,12,4,.07)}
+@media (max-width:1100px){.c-states{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@media (max-width:700px){.c-states{grid-template-columns:1fr;row-gap:32px}}
+
+/* phone */
+.c-stage{position:relative;display:flex;justify-content:center;padding:8px 0 24px}
+.c-stage:before{content:"";position:absolute;left:50%;top:46%;width:min(900px,120%);aspect-ratio:1.6;transform:translate(-50%,-50%);background:radial-gradient(closest-side,rgba(232,206,150,.45),rgba(232,206,150,0));pointer-events:none}
+.c-phone{position:relative;width:min(404px,100%);padding:11px;border-radius:66px;background:linear-gradient(145deg,#3a3936,#141413 40%,#2a2927);box-shadow:inset 0 0 0 1px rgba(255,255,255,.12),0 0 0 1px rgba(0,0,0,.4),0 50px 100px -20px rgba(30,20,8,.35),0 30px 60px -30px rgba(0,0,0,.4)}
+.c-screen{position:relative;height:836px;border-radius:55px;overflow:hidden;background:var(--bg);isolation:isolate}
+.c-island{position:absolute;top:11px;left:50%;transform:translateX(-50%);width:120px;height:35px;border-radius:999px;background:#000;z-index:3}
+.c-status{position:absolute;top:0;left:0;right:0;height:56px;display:flex;align-items:center;justify-content:space-between;padding:4px 34px 0 40px;color:#fff;font-size:16px;font-weight:600;letter-spacing:-.01em;z-index:2;font-variant-numeric:tabular-nums}
+.c-status i{display:flex;gap:6px;align-items:center}
+.c-ph-hero{position:relative;height:620px;padding:0 14px 14px;display:flex;flex-direction:column;justify-content:flex-end;gap:18px;color:#fff}
+.c-ph-hero:before{content:"";position:absolute;inset:0;z-index:-1;background:url(prototype-assets/zgornje-pirnice.jpg) 55% 92%/auto 118%;filter:saturate(.32) sepia(.28) brightness(.96)}
+.c-ph-hero:after{content:"";position:absolute;inset:0;z-index:-1;background:linear-gradient(180deg,rgba(12,10,8,.55) 0%,rgba(12,10,8,.08) 28%,rgba(12,10,8,.2) 50%,rgba(12,10,8,.78) 100%)}
+.c-ph-nav{position:absolute;top:60px;left:14px;right:14px;height:46px;display:flex;align-items:center;justify-content:space-between;padding:0 6px 0 16px;border-radius:999px;background:rgba(20,20,22,.3);backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);box-shadow:inset 0 0 0 1px rgba(255,255,255,.16);font-size:14px;font-weight:700;letter-spacing:-.02em}
+.c-ph-nav b{display:inline-flex;align-items:center;gap:7px}
+.c-ph-nav span{display:inline-flex;align-items:center;justify-content:center;width:34px;height:34px;border-radius:50%;background:rgba(255,255,255,.16)}
+.c-ph-h1{font-size:46px;font-weight:800;letter-spacing:-.055em;line-height:.92;padding:0 4px}
+.c-ph-h1 em{display:block;font-size:30px;font-weight:400;letter-spacing:-.02em;margin-top:4px;color:rgba(255,255,255,.9)}
+.c-phone .widget{width:100%;padding:18px 18px 16px;border-radius:26px}
+.c-phone .widget .t{font-size:48px}
+.c-ph-body{padding:14px}
+.c-ph-tile{border-radius:24px;padding:20px;display:flex;flex-direction:column;gap:10px;background:radial-gradient(120% 90% at 100% 0%,#f8edd4 0%,#fff 60%);box-shadow:0 0 0 1px var(--line),var(--sh)}
+.c-ph-tile p{font-size:24px;font-weight:700;letter-spacing:-.04em;line-height:1.05}
+.c-ph-tile .btn{align-self:flex-start;margin-top:4px}
+.c-home{position:absolute;bottom:8px;left:50%;transform:translateX(-50%);width:136px;height:5px;border-radius:9px;background:rgba(20,16,10,.85);z-index:3}
+@media (max-width:620px){.c-screen{height:760px;border-radius:46px}.c-phone{border-radius:56px;padding:9px}.c-ph-hero{height:560px}.c-ph-h1{font-size:40px}.c-ph-h1 em{font-size:26px}}
+
+/* editor */
+.c-ed-sec{padding-bottom:180px}
+.c-win{display:grid;grid-template-columns:272px minmax(0,1fr);border-radius:24px;overflow:hidden;background:#f5f4f1;box-shadow:0 0 0 1px rgba(20,12,4,.1),0 2px 6px rgba(20,12,4,.05),0 40px 100px -20px rgba(20,12,4,.22);min-height:760px;text-align:left}
+.c-side{background:rgba(236,233,227,.85);border-right:1px solid rgba(20,12,4,.07);padding:16px 12px 20px;display:flex;flex-direction:column}
+.c-lights{display:flex;gap:8px;padding:2px 8px 18px}
+.c-lights i{width:12px;height:12px;border-radius:50%;background:#e2dfd9;box-shadow:inset 0 0 0 .5px rgba(0,0,0,.12)}
+.c-lights i:nth-child(1){background:#ef6a5e}.c-lights i:nth-child(2){background:#f5bf4f}.c-lights i:nth-child(3){background:#62c554}
+.c-search{display:flex;align-items:center;gap:8px;height:34px;padding:0 10px;margin:0 2px 14px;border-radius:10px;background:rgba(20,12,4,.055);color:var(--ink3);font-size:14px}
+.c-search input{flex:1;min-width:0;border:0;background:transparent;font:inherit;color:var(--ink);outline:none}
+.c-search input::placeholder{color:var(--ink3)}
+.c-g{font-size:12px;font-weight:600;color:var(--ink3);padding:16px 10px 6px;letter-spacing:-.003em}
+.c-nav{list-style:none;margin:0;padding:0;display:grid;gap:1px}
+.c-nav a{display:flex;align-items:center;gap:11px;height:36px;padding:0 10px 0 6px;border-radius:10px;color:var(--ink);font-size:14px;font-weight:500;letter-spacing:-.012em;transition:background .15s}
+.c-nav a:hover{background:rgba(20,12,4,.05)}
+.c-nav a[aria-current]{background:var(--primary);color:#fff}
+.c-ic{flex:none;width:26px;height:26px;border-radius:7px;display:inline-flex;align-items:center;justify-content:center;color:#fff;background:linear-gradient(180deg,#b8913f,#8a6a26);box-shadow:inset 0 0 0 .5px rgba(0,0,0,.1)}
+.c-ic.n{background:linear-gradient(180deg,#9b958b,#6f695f)}
+.c-ic svg{width:15px;height:15px}
+.c-nav a[aria-current] .c-ic{background:#fff;color:var(--primary)}
+.c-badge{margin-left:auto;min-width:22px;height:20px;padding:0 7px;border-radius:999px;background:rgba(20,12,4,.08);color:var(--ink2);font-size:12px;font-weight:600;display:inline-flex;align-items:center;justify-content:center;font-variant-numeric:tabular-nums}
+.c-badge.acc{background:var(--accent);color:#fff}
+.c-me{margin-top:auto;display:flex;align-items:center;gap:10px;padding:16px 8px 0;border-top:1px solid rgba(20,12,4,.07)}
+.c-me span{width:30px;height:30px;border-radius:50%;background:var(--accentSoft);color:var(--accentInk);font-size:12px;font-weight:700;display:inline-flex;align-items:center;justify-content:center}
+.c-me b{display:block;font-size:13px;font-weight:600;color:var(--ink);line-height:1.2}.c-me small{font-size:12px;color:var(--ink3)}
+.c-main{display:flex;flex-direction:column;min-width:0}
+.c-bar{display:flex;align-items:center;justify-content:space-between;gap:12px;height:60px;padding:0 20px 0 28px;border-bottom:1px solid rgba(20,12,4,.07);background:rgba(250,249,246,.9)}
+.c-crumb{display:flex;align-items:center;gap:8px;font-size:14px;font-weight:600;color:var(--ink);letter-spacing:-.012em}
+.c-crumb span{color:var(--ink3);font-weight:500}
+.c-saved{display:inline-flex;align-items:center;gap:6px;font-size:13px;color:var(--ink3);font-weight:500}
+.c-saved:before{content:"";width:6px;height:6px;border-radius:50%;background:#5aa469}
+.c-bar-r{display:flex;align-items:center;gap:10px}
+.c-bar .btn{height:34px;padding:0 16px;font-size:13.5px}
+.c-bar .btn.ghost{background:rgba(20,12,4,.06)}
+.c-body{padding:40px 48px 48px;max-width:820px;width:100%;margin:0 auto}
+.c-title{font-size:34px;font-weight:700;letter-spacing:-.045em;line-height:1.05}
+.c-lede{font-size:15px;color:var(--ink3);margin-top:6px}
+.c-gh{display:flex;justify-content:space-between;align-items:baseline;font-size:13px;font-weight:600;color:var(--ink3);margin:32px 16px 8px;letter-spacing:-.005em}
+.c-gh small{font-size:12px;font-weight:500}
+.c-grp{background:#fff;border-radius:14px;box-shadow:0 0 0 .5px rgba(20,12,4,.08),0 1px 2px rgba(20,12,4,.04);overflow:hidden}
+.c-r{position:relative;display:flex;align-items:center;gap:14px;min-height:52px;padding:8px 16px}
+.c-r+.c-r:before{content:"";position:absolute;top:0;left:16px;right:0;height:1px;background:rgba(20,12,4,.07)}
+.c-grp.ic .c-r+.c-r:before{left:54px}
+.c-r>label:not(.c-sw),.c-r>.c-k{width:168px;flex:none;font-size:15px;font-weight:500;color:var(--ink);letter-spacing:-.012em}
+.c-r input[type=text]{flex:1;min-width:0;height:36px;border:0;background:transparent;font:inherit;font-size:15px;color:var(--ink2);text-align:right;outline:none;border-radius:8px;padding:0 6px}
+.c-r input[type=text]:focus{color:var(--ink);background:var(--sunk);text-align:left}
+.c-r input[type=text]:focus-visible{outline:0;box-shadow:0 0 0 2px var(--accent)}
+.c-r .c-v{flex:1;min-width:0;font-size:15px;color:var(--ink3);text-align:right;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.c-chev{flex:none;color:#bdb6aa}
+.c-thumb{width:60px;height:40px;border-radius:8px;flex:none;background:url(prototype-assets/zgornje-pirnice.jpg) center 78%/cover;filter:saturate(.4) sepia(.16);box-shadow:inset 0 0 0 .5px rgba(0,0,0,.1)}
+.c-link{flex:none;font-size:15px;font-weight:500;color:var(--accentInk);background:none;border:0;padding:4px 2px;font-family:inherit;cursor:pointer}
+.c-grip{flex:none;color:#c5beb2;cursor:grab;display:inline-flex;width:24px;justify-content:center}
+.c-sw{position:relative;flex:none;width:51px;height:31px;cursor:pointer}
+.c-sw input{position:absolute;inset:0;opacity:0;margin:0;cursor:pointer}
+.c-sw span{position:absolute;inset:0;border-radius:999px;background:#e5e2dc;transition:background .2s}
+.c-sw span:after{content:"";position:absolute;left:2px;top:2px;width:27px;height:27px;border-radius:50%;background:#fff;box-shadow:0 3px 8px rgba(0,0,0,.15),0 1px 1px rgba(0,0,0,.08);transition:transform .25s var(--ease)}
+.c-sw input:checked+span{background:var(--accent)}
+.c-sw input:checked+span:after{transform:translateX(20px)}
+.c-sw input:focus-visible+span{box-shadow:0 0 0 2px #fff,0 0 0 4px var(--accent)}
+.c-gf{font-size:13px;color:var(--ink3);margin:8px 16px 0;line-height:1.45}
+@media (max-width:900px){.c-win{grid-template-columns:1fr}.c-side{display:none}.c-body{padding:28px 16px 32px}.c-bar{padding:0 12px 0 16px}.c-saved{display:none}}
+@media (max-width:620px){.c-r>label:not(.c-sw),.c-r>.c-k{width:auto;flex:1 1 auto}.c-r .c-v{display:none}.c-r input[type=text]{flex:1 1 50%}.c-title{font-size:30px}.c-win{min-height:0;border-radius:20px}.c-crumb span{display:none}}
+
+@media (max-width:760px){.c-sec{padding-top:96px}.c-open{margin-bottom:40px}.c-open .c-sub{font-size:18px}.c-appx>section:first-child{padding-top:88px}.c-ed-sec{padding-bottom:140px}}
+@media (prefers-reduced-motion:reduce){.c-sw span,.c-sw span:after,.c-field{transition:none}}
+</style>
+
+<!-- GIVE + NEWSLETTER -->
+<section class="wrap c-sec" id="darovi" data-part="c" aria-labelledby="c-give-h">
+  <div class="c-open reveal">
+    <p class="c-eye">Darovi in oznanila</p>
+    <h2 class="h2" id="c-give-h">Podprite <em class="s">župnijo</em></h2>
+    <p class="c-sub">Skenirajte kodo v bančni aplikaciji ali prejemajte oznanila po e-pošti.</p>
+  </div>
+  <div class="c-give">
+    <div class="c-tile reveal">
+      <div class="c-pay">
+        <div>
+          <p class="c-kick">Darovi</p>
+          <h3 class="c-gt">Dar z <em class="s">UPN QR</em></h3>
+          <p class="c-gp">Skenirajte kodo v bančni aplikaciji.</p>
+          <div class="c-trr">
+            <dl><dt>TRR</dt><dd>[SI56 …]</dd></dl>
+            <a class="more" href="#">Vse o darovih <svg class="c-arrow" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a>
+          </div>
+        </div>
+        <div class="c-qr" role="img" aria-label="UPN QR koda za dar župniji"><svg viewBox="0 0 29 29" shape-rendering="crispEdges" aria-hidden="true"><path fill="currentColor" fill-rule="evenodd" d="M8 0h1v1h-1zM10 0h1v1h-1zM11 0h1v1h-1zM14 0h1v1h-1zM8 1h1v1h-1zM9 1h1v1h-1zM12 1h1v1h-1zM14 1h1v1h-1zM17 1h1v1h-1zM12 2h1v1h-1zM13 2h1v1h-1zM15 2h1v1h-1zM16 2h1v1h-1zM17 2h1v1h-1zM18 2h1v1h-1zM19 2h1v1h-1zM11 3h1v1h-1zM12 3h1v1h-1zM15 3h1v1h-1zM16 3h1v1h-1zM18 3h1v1h-1zM19 3h1v1h-1zM20 3h1v1h-1zM11 4h1v1h-1zM12 4h1v1h-1zM13 4h1v1h-1zM14 4h1v1h-1zM15 4h1v1h-1zM16 4h1v1h-1zM19 4h1v1h-1zM8 5h1v1h-1zM16 5h1v1h-1zM18 5h1v1h-1zM20 5h1v1h-1zM8 6h1v1h-1zM9 6h1v1h-1zM12 6h1v1h-1zM14 6h1v1h-1zM15 6h1v1h-1zM16 6h1v1h-1zM17 6h1v1h-1zM19 6h1v1h-1zM8 7h1v1h-1zM9 7h1v1h-1zM11 7h1v1h-1zM18 7h1v1h-1zM19 7h1v1h-1zM20 7h1v1h-1zM0 8h1v1h-1zM1 8h1v1h-1zM3 8h1v1h-1zM7 8h1v1h-1zM9 8h1v1h-1zM10 8h1v1h-1zM12 8h1v1h-1zM14 8h1v1h-1zM18 8h1v1h-1zM20 8h1v1h-1zM24 8h1v1h-1zM25 8h1v1h-1zM26 8h1v1h-1zM28 8h1v1h-1zM4 9h1v1h-1zM5 9h1v1h-1zM7 9h1v1h-1zM10 9h1v1h-1zM16 9h1v1h-1zM17 9h1v1h-1zM20 9h1v1h-1zM21 9h1v1h-1zM22 9h1v1h-1zM25 9h1v1h-1zM28 9h1v1h-1zM1 10h1v1h-1zM2 10h1v1h-1zM3 10h1v1h-1zM9 10h1v1h-1zM11 10h1v1h-1zM17 10h1v1h-1zM18 10h1v1h-1zM19 10h1v1h-1zM25 10h1v1h-1zM27 10h1v1h-1zM28 10h1v1h-1zM1 11h1v1h-1zM3 11h1v1h-1zM4 11h1v1h-1zM6 11h1v1h-1zM7 11h1v1h-1zM14 11h1v1h-1zM19 11h1v1h-1zM20 11h1v1h-1zM21 11h1v1h-1zM22 11h1v1h-1zM23 11h1v1h-1zM24 11h1v1h-1zM27 11h1v1h-1zM28 11h1v1h-1zM0 12h1v1h-1zM2 12h1v1h-1zM3 12h1v1h-1zM5 12h1v1h-1zM8 12h1v1h-1zM9 12h1v1h-1zM10 12h1v1h-1zM11 12h1v1h-1zM14 12h1v1h-1zM17 12h1v1h-1zM18 12h1v1h-1zM20 12h1v1h-1zM21 12h1v1h-1zM22 12h1v1h-1zM27 12h1v1h-1zM28 12h1v1h-1zM0 13h1v1h-1zM1 13h1v1h-1zM2 13h1v1h-1zM3 13h1v1h-1zM4 13h1v1h-1zM5 13h1v1h-1zM9 13h1v1h-1zM15 13h1v1h-1zM16 13h1v1h-1zM27 13h1v1h-1zM2 14h1v1h-1zM3 14h1v1h-1zM4 14h1v1h-1zM10 14h1v1h-1zM11 14h1v1h-1zM13 14h1v1h-1zM19 14h1v1h-1zM23 14h1v1h-1zM25 14h1v1h-1zM26 14h1v1h-1zM27 14h1v1h-1zM0 15h1v1h-1zM3 15h1v1h-1zM6 15h1v1h-1zM7 15h1v1h-1zM9 15h1v1h-1zM10 15h1v1h-1zM11 15h1v1h-1zM12 15h1v1h-1zM15 15h1v1h-1zM16 15h1v1h-1zM19 15h1v1h-1zM20 15h1v1h-1zM22 15h1v1h-1zM26 15h1v1h-1zM27 15h1v1h-1zM7 16h1v1h-1zM8 16h1v1h-1zM10 16h1v1h-1zM12 16h1v1h-1zM13 16h1v1h-1zM17 16h1v1h-1zM19 16h1v1h-1zM21 16h1v1h-1zM25 16h1v1h-1zM0 17h1v1h-1zM6 17h1v1h-1zM8 17h1v1h-1zM9 17h1v1h-1zM12 17h1v1h-1zM13 17h1v1h-1zM14 17h1v1h-1zM18 17h1v1h-1zM19 17h1v1h-1zM20 17h1v1h-1zM21 17h1v1h-1zM23 17h1v1h-1zM24 17h1v1h-1zM26 17h1v1h-1zM27 17h1v1h-1zM28 17h1v1h-1zM0 18h1v1h-1zM2 18h1v1h-1zM7 18h1v1h-1zM15 18h1v1h-1zM16 18h1v1h-1zM19 18h1v1h-1zM21 18h1v1h-1zM23 18h1v1h-1zM24 18h1v1h-1zM25 18h1v1h-1zM26 18h1v1h-1zM27 18h1v1h-1zM28 18h1v1h-1zM1 19h1v1h-1zM2 19h1v1h-1zM3 19h1v1h-1zM6 19h1v1h-1zM8 19h1v1h-1zM9 19h1v1h-1zM12 19h1v1h-1zM14 19h1v1h-1zM16 19h1v1h-1zM17 19h1v1h-1zM18 19h1v1h-1zM21 19h1v1h-1zM24 19h1v1h-1zM25 19h1v1h-1zM26 19h1v1h-1zM27 19h1v1h-1zM9 20h1v1h-1zM11 20h1v1h-1zM13 20h1v1h-1zM17 20h1v1h-1zM25 20h1v1h-1zM26 20h1v1h-1zM27 20h1v1h-1zM28 20h1v1h-1zM14 21h1v1h-1zM16 21h1v1h-1zM17 21h1v1h-1zM26 21h1v1h-1zM28 21h1v1h-1zM10 22h1v1h-1zM11 22h1v1h-1zM16 22h1v1h-1zM26 22h1v1h-1zM27 22h1v1h-1zM28 22h1v1h-1zM8 23h1v1h-1zM12 23h1v1h-1zM13 23h1v1h-1zM14 23h1v1h-1zM15 23h1v1h-1zM16 23h1v1h-1zM17 23h1v1h-1zM18 23h1v1h-1zM19 23h1v1h-1zM25 23h1v1h-1zM27 23h1v1h-1zM28 23h1v1h-1zM8 24h1v1h-1zM10 24h1v1h-1zM11 24h1v1h-1zM12 24h1v1h-1zM13 24h1v1h-1zM14 24h1v1h-1zM15 24h1v1h-1zM28 24h1v1h-1zM13 25h1v1h-1zM15 25h1v1h-1zM16 25h1v1h-1zM17 25h1v1h-1zM22 25h1v1h-1zM25 25h1v1h-1zM9 26h1v1h-1zM10 26h1v1h-1zM16 26h1v1h-1zM22 26h1v1h-1zM25 26h1v1h-1zM26 26h1v1h-1zM9 27h1v1h-1zM14 27h1v1h-1zM15 27h1v1h-1zM16 27h1v1h-1zM17 27h1v1h-1zM18 27h1v1h-1zM22 27h1v1h-1zM23 27h1v1h-1zM25 27h1v1h-1zM26 27h1v1h-1zM27 27h1v1h-1zM28 27h1v1h-1zM8 28h1v1h-1zM9 28h1v1h-1zM13 28h1v1h-1zM17 28h1v1h-1zM21 28h1v1h-1zM23 28h1v1h-1zM24 28h1v1h-1zM25 28h1v1h-1zM27 28h1v1h-1zM28 28h1v1h-1zM8 6h1v1h-1zM6 8h1v1h-1zM10 6h1v1h-1zM6 10h1v1h-1zM12 6h1v1h-1zM6 12h1v1h-1zM14 6h1v1h-1zM6 14h1v1h-1zM16 6h1v1h-1zM6 16h1v1h-1zM18 6h1v1h-1zM6 18h1v1h-1zM20 6h1v1h-1zM6 20h1v1h-1zM0 0h7v7h-7zM1 1v5h5v-5zM2 2h3v3h-3zM22 0h7v7h-7zM23 1v5h5v-5zM24 2h3v3h-3zM0 22h7v7h-7zM1 23v5h5v-5zM2 24h3v3h-3zM20 20h5v5h-5zM21 21v3h3v-3zM22 22h1v1h-1z"/></svg><span>UPN QR</span></div>
+      </div>
+    </div>
+    <div class="c-tile c-news reveal">
+      <p class="c-kick" style="color:var(--accentInk)">Oznanila</p>
+      <h3 class="c-gt">Oznanila <em class="s">po e-pošti</em></h3>
+      <p class="c-gp">Enkrat na mesec, ko izidejo. Nič drugega.</p>
+      <form onsubmit="return false">
+        <label for="c-nl" class="c-kick" style="display:block;margin:0 0 10px 22px">Vaš e-naslov</label>
+        <div class="c-field"><input id="c-nl" type="email" autocomplete="email" placeholder="vas@naslov.si"><button class="btn" type="submit">Prijavi me</button></div>
+      </form>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer class="wrap c-foot" data-part="c">
+  <div class="c-foot-top">
+    <a class="c-brand" href="#top"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M12 2.5v19M6 8h12"/></svg>Župnija Pirniče <em class="s">pod Šmarno goro</em></a>
+    <a class="btn" href="#darovi">Daruj</a>
+  </div>
+  <div class="c-cols">
+    <div><h3>Župnija Pirniče</h3><p>[Naslov župnišča]</p></div>
+    <div><h3>Uradne ure</h3><p>[iz nastavitev]</p></div>
+    <div><h3>Kontakt</h3><p><a href="mailto:zupirnice@gmail.com">zupirnice@gmail.com</a></p></div>
+    <div><h3>Več</h3><ul><li><a href="#">Berila dneva</a></li><li><a href="#">Koledar (.ics)</a></li></ul></div>
+  </div>
+  <div class="c-legal"><span>© 2026 Župnija Pirniče</span><span>Marijina cerkev · Sv. Križ · Sv. Tomaž</span></div>
+</footer>
+
+<div class="c-appx" data-part="c">
+<!-- STATES -->
+<section class="wrap c-sec" id="stanja" aria-labelledby="c-st-h">
+  <div class="c-open reveal">
+    <p class="c-eye">Pripomoček »Danes«</p>
+    <h2 class="h2" id="c-st-h">Ko se dan <em class="s">spremeni</em></h2>
+    <p class="c-sub">Isti pripomoček »Danes« v vseh primerih, ki se v župniji zares zgodijo. Vsak primer pove, kaj velja, in pokaže naslednjo mašo.</p>
+  </div>
+  <div class="c-states">
+    <figure class="c-st reveal"><figcaption><span>1</span>Danes ni maše</figcaption><div class="widget">
+      <div class="top"><span>Ponedeljek, 2. november</span><span class="chip">jutri</span></div>
+      <p class="msg">Danes ni svete maše.</p>
+      <p class="sub">Naslednja je jutri ob <b style="color:var(--ink);font-variant-numeric:tabular-nums">18.00</b> v Marijini cerkvi.</p>
+      <ul class="ints"><li><b>18.00</b>+ Jože Novak, obl.</li></ul>
+    </div></figure>
+    <figure class="c-st reveal"><figcaption><span>2</span>Današnje maše so že mimo</figcaption><div class="widget">
+      <div class="top"><span>Jutri · četrtek, 29. oktober</span><span class="chip">jutri</span></div>
+      <div class="whead"><span class="t">18.00</span></div>
+      <p class="place">Marijina cerkev</p>
+      <ul class="ints"><li><b>18.00</b>Za farane</li></ul>
+    </div></figure>
+    <figure class="c-st reveal"><figcaption><span>3</span>Maša odpade</figcaption><div class="widget">
+      <div class="top"><span class="live">Danes · sreda, 28. oktober</span><span class="chip alert">ena maša odpade</span></div>
+      <div class="whead"><span class="t">18.00</span></div>
+      <p class="place">Marijina cerkev</p>
+      <div class="tl" aria-hidden="true"><span class="done" style="width:20%"></span><span class="m off" style="left:10%"></span><span class="m next" style="left:80%"></span><span class="now" style="left:20%"></span><span class="x" style="left:10%;color:#a23a2c">7.30</span><span class="x" style="left:80%">18.00</span></div>
+      <p class="note alert">Jutranja maša ob 7.30 pri Sv. Križu danes odpade. Namen je prestavljen na petek.</p>
+    </div></figure>
+    <figure class="c-st reveal"><figcaption><span>4</span>Nedelja ali praznik (dve maši)</figcaption><div class="widget">
+      <div class="top"><span class="live">Vsi sveti · nedelja</span><span class="chip">čez 40 min</span></div>
+      <div class="whead"><span class="t">8.00</span><span class="t2">nato 10.00</span></div>
+      <p class="place">Sv. Križ, nato Marijina cerkev</p>
+      <div class="tl" aria-hidden="true"><span class="done" style="width:8.9%"></span><span class="m next" style="left:13.3%"></span><span class="m" style="left:26.7%"></span><span class="now" style="left:8.9%"></span><span class="x" style="left:13.3%">8.00</span><span class="x" style="left:26.7%">10.00</span></div>
+      <ul class="ints"><li><b>8.00</b>Za farane</li><li><b>10.00</b>++ Franc in Ana Kralj</li></ul>
+    </div></figure>
+    <figure class="c-st reveal"><figcaption><span>5</span>Dolg namen in maša brez namena</figcaption><div class="widget">
+      <div class="top"><span class="live">Danes · petek, 30. oktober</span><span class="chip">čez 1 h</span></div>
+      <div class="whead"><span class="t">18.00</span></div>
+      <p class="place">Marijina cerkev</p>
+      <ul class="ints"><li><b>18.00</b>++ Jožefa in Milan Ptiček, obl. in ++ iz družin Črnuta</li><li><b>18.00</b>V zahvalo za 50 let skupnega življenja</li><li class="empty"><b>19.00</b>Namen še ni vpisan.</li></ul>
+    </div></figure>
+    <figure class="c-st reveal"><figcaption><span>6</span>Berila in oznanila manjkajo</figcaption><div class="widget">
+      <div class="top"><span>Bogoslužni dan</span></div>
+      <p class="msg">Berila so ta trenutek nedosegljiva.</p>
+      <p class="sub">Preberete jih lahko neposredno na hozana.si.</p>
+      <p class="note soft">Novembrska oznanila še niso objavljena. Do takrat veljajo oktobrska.</p>
+      <div class="acts"><a class="btn" href="#">Odpri hozana.si</a><a class="btn ghost" href="#">Oktobrska oznanila</a></div>
+    </div></figure>
+  </div>
+</section>
+
+<!-- PHONE -->
+<section class="wrap c-sec" id="telefon" aria-labelledby="c-ph-h">
+  <div class="c-open reveal">
+    <p class="c-eye">Na telefonu</p>
+    <h2 class="h2" id="c-ph-h">Na <em class="s">telefonu</em></h2>
+    <p class="c-sub">Ista stran v dlani. Današnja maša je prvo, kar vidite.</p>
+  </div>
+  <div class="c-stage reveal">
+    <div class="c-phone" role="img" aria-label="Domača stran na telefonu">
+      <div class="c-screen" aria-hidden="true">
+        <div class="c-island"></div>
+        <div class="c-status"><span>9.41</span><i><svg width="18" height="12" viewBox="0 0 18 12" fill="currentColor"><rect x="0" y="8" width="3" height="4" rx="1"/><rect x="5" y="5.5" width="3" height="6.5" rx="1"/><rect x="10" y="3" width="3" height="9" rx="1"/><rect x="15" y="0" width="3" height="12" rx="1"/></svg><svg width="26" height="12" viewBox="0 0 26 12" fill="none"><rect x=".5" y=".5" width="22" height="11" rx="3.5" stroke="currentColor" opacity=".45"/><rect x="2" y="2" width="16" height="8" rx="2" fill="currentColor"/><path d="M24 4v4c.8-.3 1.3-1.1 1.3-2S24.8 4.3 24 4z" fill="currentColor" opacity=".45"/></svg></i></div>
+        <div class="c-ph-hero">
+          <div class="c-ph-nav"><b><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M12 2.5v19M6 8h12"/></svg>Župnija Pirniče</b><span><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M4 8h16M4 16h16"/></svg></span></div>
+          <p class="c-ph-h1">Župnija Pirniče<em class="s">pod Šmarno goro</em></p>
+          <div class="widget">
+            <div class="top"><span class="live">Danes · sre, 28. 10.</span><span class="chip">čez 3 h 20</span></div>
+            <div class="whead"><span class="t">18.00</span></div>
+            <p class="place">Sveta maša · Marijina cerkev</p>
+            <div class="tl"><span class="done" style="width:57.8%"></span><span class="m past" style="left:10%"></span><span class="m next" style="left:80%"></span><span class="now" style="left:57.8%"></span><span class="x" style="left:10%">7.30</span><span class="x now-x" style="left:57.8%">zdaj</span><span class="x" style="left:80%">18.00</span></div>
+            <ul class="ints"><li>+ Marija Kos, 30. dan</li><li>++ Anton in Ivana Zupan, obl.</li></ul>
+          </div>
+        </div>
+        <div class="c-ph-body">
+          <div class="c-ph-tile"><span class="tag acc"><span class="dot"></span>Praznik</span><p>Sv. Simon in Juda Tadej</p><span class="btn">Današnja berila</span></div>
+        </div>
+        <div class="c-home"></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- EDITOR -->
+<section class="wrap c-sec c-ed-sec" id="urejevalnik" aria-labelledby="c-ed-h">
+  <div class="c-open reveal">
+    <p class="c-eye">Za župnika</p>
+    <h2 class="h2" id="c-ed-h">Urejevalnik <em class="s">v istem slogu</em></h2>
+    <p class="c-sub">Župnik tu ureja vso vsebino strani: domačo stran, strani, novice, galerije, cerkve, skupine, zakramente, molitev, darove in nastavitve.</p>
+  </div>
+  <div class="c-win reveal">
+    <aside class="c-side" aria-label="Urejevalnik">
+      <div class="c-lights" aria-hidden="true"><i></i><i></i><i></i></div>
+      <label class="c-search"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="M20 20l-3.5-3.5"/></svg><input type="search" placeholder="Iskanje" aria-label="Iskanje"></label>
+      <ul class="c-nav">
+        <li><a href="#"><span class="c-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 11l8-7 8 7v9h-5v-6H9v6H4z"/></svg></span>Domov</a></li>
+        <li><a href="#"><span class="c-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="M12 3v18M6 8.5h12"/></svg></span>Svete maše</a></li>
+        <li><a href="#"><span class="c-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M9 6h11M9 12h11M9 18h11M4.5 6h.01M4.5 12h.01M4.5 18h.01"/></svg></span>Nameni<span class="c-badge acc" aria-label="1 nov">1</span></a></li>
+        <li><a href="#"><span class="c-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linejoin="round"><path d="M6 3h9l4 4v14H6zM14 3v5h5"/></svg></span>Oznanila</a></li>
+        <li><a href="#"><span class="c-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 6h16v15H4zM4 10h16M8 3v4M16 3v4"/></svg></span>Dogodki</a></li>
+        <li><a href="#"><span class="c-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linejoin="round"><path d="M5 4.5h11a3 3 0 013 3V20H8a3 3 0 01-3-3zM5 17a3 3 0 013-3h11"/></svg></span>Verouk</a></li>
+      </ul>
+      <p class="c-g">Spletna stran</p>
+      <ul class="c-nav">
+        <li><a href="#" aria-current="page"><span class="c-ic n"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linejoin="round"><path d="M3.5 5h17v14h-17zM3.5 9.5h17"/></svg></span>Domača stran</a></li>
+        <li><a href="#"><span class="c-ic n"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linejoin="round"><path d="M7 3h10v18H7z"/></svg></span>Strani</a></li>
+        <li><a href="#"><span class="c-ic n"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 5h13v14H6a2 2 0 01-2-2zM17 9h3v8a2 2 0 01-2 2M8 9h5M8 13h5"/></svg></span>Novice</a></li>
+        <li><a href="#"><span class="c-ic n"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linejoin="round"><path d="M3 5h18v14H3zM3 16l5-5 4 4 3-3 6 6"/></svg></span>Galerije</a></li>
+        <li><a href="#"><span class="c-ic n"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2v5M10 4h4M5 21v-9l7-5 7 5v9zM10 21v-4h4v4"/></svg></span>Cerkve</a></li>
+        <li><a href="#"><span class="c-ic n"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><circle cx="9" cy="8" r="3"/><path d="M3 20a6 6 0 0112 0M16 5a3 3 0 010 6M21 20a6 6 0 00-3.5-5.4"/></svg></span>Skupine</a></li>
+        <li><a href="#"><span class="c-ic n"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M7 3h10l-1 6a4 4 0 01-8 0zM12 13v6M8 21h8"/></svg></span>Zakramenti</a></li>
+        <li><a href="#"><span class="c-ic n"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linejoin="round"><path d="M12 3c2.5 3.5 5 5.8 5 10a5 5 0 01-10 0c0-2.6 1.4-4 2.4-6 .8 1.2 1.6 2 2.6 3 .3-2.4 0-4.6 0-7z"/></svg></span>Molitev</a></li>
+        <li><a href="#"><span class="c-ic n"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linejoin="round"><path d="M12 20s-7.5-4.6-7.5-10.2A4.2 4.2 0 0112 7.3a4.2 4.2 0 017.5 2.5C19.5 15.4 12 20 12 20z"/></svg></span>Darovi</a></li>
+        <li><a href="#"><span class="c-ic n"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M4 7h9M17 7h3M4 17h3M11 17h9M15 4.5v5M9 14.5v5"/></svg></span>Nastavitve</a></li>
+      </ul>
+      <p class="c-g">Ljudje</p>
+      <ul class="c-nav">
+        <li><a href="#"><span class="c-ic n"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linejoin="round"><path d="M6 11h12v10H6zM8.5 11V8a3.5 3.5 0 017 0v3"/></svg></span>Dostopi</a></li>
+        <li><a href="#"><span class="c-ic n"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linejoin="round"><path d="M3 6h18v12H3zM3 7l9 6 9-6"/></svg></span>Naročniki</a></li>
+      </ul>
+    </aside>
+    <div class="c-main">
+      <div class="c-bar">
+        <p class="c-crumb"><span>Spletna stran ›</span> Domača stran</p>
+        <div class="c-bar-r"><span class="c-saved">Shranjeno</span><a class="btn ghost" href="#">Predogled</a><a class="btn" href="#">Objavi</a></div>
+      </div>
+      <div class="c-body">
+        <h3 class="c-title">Domača stran</h3>
+        <p class="c-lede">Kar uredite tu, se po objavi pokaže na zupnija-pirnice.si.</p>
+
+        <p class="c-gh">Glava</p>
+        <div class="c-grp">
+          <div class="c-r"><label for="c-e1">Naslov</label><input type="text" id="c-e1" value="Župnija Pirniče"></div>
+          <div class="c-r"><label for="c-e2">Dodatek (ležeče)</label><input type="text" id="c-e2" value="pod Šmarno goro"></div>
+          <div class="c-r"><label for="c-e3">Uvod</label><input type="text" id="c-e3" value="Marijina cerkev, Sv. Križ in Sv. Tomaž. Dobrodošli doma."></div>
+          <div class="c-r"><span class="c-k">Fotografija</span><span class="c-v">Zgornje Pirniče 01.jpg</span><span class="c-thumb" aria-hidden="true"></span><button class="c-link" type="button">Zamenjaj</button></div>
+        </div>
+
+        <p class="c-gh">Razdelki <small>Povleci za vrstni red</small></p>
+        <div class="c-grp ic">
+          <div class="c-r"><span class="c-grip" aria-hidden="true"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="M4 8h16M4 16h16"/></svg></span><span class="c-k">Danes</span><span class="c-v">Samodejno iz maš in namenov</span><label class="c-sw"><input type="checkbox" checked aria-label="Prikaži razdelek Danes"><span></span></label></div>
+          <div class="c-r"><span class="c-grip" aria-hidden="true"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="M4 8h16M4 16h16"/></svg></span><span class="c-k">Ta teden</span><span class="c-v">Bogoslužni dan, dogodek, oznanila, maše</span><label class="c-sw"><input type="checkbox" checked aria-label="Prikaži razdelek Ta teden"><span></span></label></div>
+          <div class="c-r"><span class="c-grip" aria-hidden="true"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="M4 8h16M4 16h16"/></svg></span><span class="c-k">Novice</span><span class="c-v">Zadnje 3</span><label class="c-sw"><input type="checkbox" checked aria-label="Prikaži razdelek Novice"><span></span></label></div>
+          <div class="c-r"><span class="c-grip" aria-hidden="true"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="M4 8h16M4 16h16"/></svg></span><span class="c-k">Molitev</span><span class="c-v">Iz strani »Molitev«</span><label class="c-sw"><input type="checkbox" checked aria-label="Prikaži razdelek Molitev"><span></span></label></div>
+          <div class="c-r"><span class="c-grip" aria-hidden="true"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="M4 8h16M4 16h16"/></svg></span><span class="c-k">Cerkve</span><span class="c-v">Vse 3</span><label class="c-sw"><input type="checkbox" checked aria-label="Prikaži razdelek Cerkve"><span></span></label></div>
+          <div class="c-r"><span class="c-grip" aria-hidden="true"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="M4 8h16M4 16h16"/></svg></span><span class="c-k">Darovi in e-pošta</span><span class="c-v">Iz »Darovi«</span><label class="c-sw"><input type="checkbox" checked aria-label="Prikaži razdelek Darovi in e-pošta"><span></span></label></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+</div>

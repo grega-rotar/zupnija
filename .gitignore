@@ -7,3 +7,7 @@ dist/
 *.log
 .DS_Store
 .git.bak/
+
+# Prototype and build screenshots (local evidence, not source)
+tasks/proto-v4/shots/
+tasks/build-v4/shots-pages/

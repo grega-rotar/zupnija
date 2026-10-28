@@ -1,0 +1,332 @@
+<!doctype html>
+<html lang="sl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Župnija Pirniče · prototip v2</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,500;0,600;1,500&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  /* "Vino in zlato": ivory parchment, altar wine, candle gold */
+  --bg:#f7f2e9; --bg2:#efe7da; --card:#fffcf6; --line:rgba(60,40,25,.10);
+  --ink:#2b2320; --ink2:#5b5048; --ink3:#776b61;
+  --blue:#6b1e2b; --blue2:#86293a; --blueSoft:#f5e7e4;
+  --deep1:#4a1520; --deep2:#7a2433;
+  --gold:#a67c2e; --goldSoft:#f5ead3; --red:#9b2f24; --redSoft:#f8e6e1;
+  --r-xl:32px; --r-lg:24px; --r-md:16px; --r-sm:12px;
+  --shadow:0 1px 2px rgba(60,40,25,.05),0 10px 40px rgba(60,40,25,.08);
+  --shadow-lift:0 2px 4px rgba(60,40,25,.06),0 22px 60px rgba(60,40,25,.14);
+  --serif:"Cormorant Garamond",Georgia,serif;
+  --sans:Inter,-apple-system,BlinkMacSystemFont,"SF Pro Text","Segoe UI",system-ui,sans-serif;
+}
+/* "Zlato in kamen": warm stone with bronze-gold as the accent */
+:root[data-palette="zlato"]{--blue:#6e521c;--blue2:#87662a;--blueSoft:#f3e9d3;--deep1:#3d2e14;--deep2:#6e521c;--bg:#f6f1e7;--bg2:#ece4d5}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:var(--sans);font-size:17px;line-height:1.55;-webkit-font-smoothing:antialiased;letter-spacing:-.005em}
+a{color:var(--blue2);text-decoration:none}a:hover{color:var(--blue)}
+h1,h2,h3,h4,p{margin:0}
+.serif{font-family:var(--serif);font-weight:500;letter-spacing:-.01em}
+.wrap{max-width:1160px;margin:0 auto;padding:0 24px}
+.eyebrow{font-size:13px;font-weight:600;letter-spacing:.02em;color:var(--ink3)}
+.pill{display:inline-flex;align-items:center;gap:6px;padding:5px 12px;border-radius:999px;font-size:13px;font-weight:600;line-height:1.3}
+.pill.blue{background:var(--blueSoft);color:var(--blue)}.pill.gold{background:var(--goldSoft);color:#7a5c1f}.pill.red{background:var(--redSoft);color:var(--red)}
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;min-height:46px;padding:0 22px;border-radius:999px;background:var(--blue);color:#fff;font:inherit;font-weight:600;font-size:16px;border:0;cursor:pointer;transition:transform .2s ease,background .2s ease,box-shadow .2s ease}
+.btn:hover{background:var(--blue2);color:#fff;transform:translateY(-1px)}
+.btn.soft{background:var(--blueSoft);color:var(--blue)}.btn.soft:hover{background:#efdcd8}
+.btn.light{background:rgba(255,255,255,.18);color:#fff;backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);border:1px solid rgba(255,255,255,.35)}
+.link{font-weight:600;display:inline-flex;align-items:center;gap:4px}
+.link:after{content:"›";font-size:20px;line-height:1;transition:transform .2s}.link:hover:after{transform:translateX(3px)}
+.card{background:var(--card);border-radius:var(--r-lg);box-shadow:var(--shadow);padding:28px;transition:transform .3s cubic-bezier(.2,.8,.2,1),box-shadow .3s}
+.card.hover:hover{transform:translateY(-3px);box-shadow:var(--shadow-lift)}
+.grid3{display:grid;gap:20px;grid-template-columns:repeat(auto-fit,minmax(min(100%,300px),1fr))}
+ul.clean{list-style:none;margin:0;padding:0}
+.reveal{opacity:0;transform:translateY(16px);transition:opacity .8s ease,transform .8s cubic-bezier(.2,.8,.2,1)}.reveal.in{opacity:1;transform:none}
+@media (prefers-reduced-motion:reduce){.reveal{opacity:1;transform:none;transition:none}*{scroll-behavior:auto}}
+
+/* proto bar */
+.proto{position:fixed;left:50%;bottom:18px;transform:translateX(-50%);z-index:100;display:flex;gap:4px;flex-wrap:wrap;justify-content:center;background:rgba(27,29,34,.82);backdrop-filter:blur(16px);-webkit-backdrop-filter:blur(16px);padding:6px;border-radius:999px;box-shadow:0 10px 30px rgba(0,0,0,.2);max-width:calc(100% - 24px)}
+.proto a{color:#fff;font-size:14px;font-weight:500;padding:8px 14px;border-radius:999px}.proto a:hover{background:rgba(255,255,255,.12);color:#fff}
+.proto .sep{width:1px;background:rgba(255,255,255,.2);margin:6px 4px}
+
+/* nav */
+.nav{position:sticky;top:0;z-index:40;background:rgba(247,242,233,.74);backdrop-filter:saturate(180%) blur(20px);-webkit-backdrop-filter:saturate(180%) blur(20px);border-bottom:1px solid var(--line)}
+.nav .wrap{height:60px;display:flex;align-items:center;gap:28px}
+.brand{display:flex;align-items:center;gap:10px;color:var(--ink);font-weight:600;font-size:16px;flex-grow:1}
+.brand svg{color:var(--gold)}
+.nav nav{display:flex;gap:26px;font-size:14px}.nav nav a{color:var(--ink2);font-weight:500}.nav nav a:hover{color:var(--ink)}
+.nav .btn{min-height:36px;padding:0 16px;font-size:14px}
+@media (max-width:900px){.nav nav{display:none}}
+
+/* hero */
+.hero{position:relative;overflow:hidden;color:#fff;min-height:620px;display:flex;align-items:flex-start;justify-content:center;text-align:center}
+.hero .img{position:absolute;inset:0;background:url(prototype-assets/zgornje-pirnice-2.jpg) center 62%/cover no-repeat;filter:sepia(.35) saturate(.85) brightness(.92)}
+.hero .shade{position:absolute;inset:0;background:
+  radial-gradient(55% 45% at 50% 22%,rgba(255,226,160,.45),rgba(255,226,160,0) 70%),
+  linear-gradient(180deg,rgba(60,30,20,.55) 0%,rgba(60,30,20,.25) 38%,rgba(247,242,233,0) 66%,var(--bg) 100%)}
+.hero .inner{position:relative;padding-top:96px;max-width:820px}
+.hero .mark{display:inline-flex;width:56px;height:56px;border-radius:50%;align-items:center;justify-content:center;background:rgba(255,255,255,.14);border:1px solid rgba(255,255,255,.35);backdrop-filter:blur(8px);margin-bottom:22px}
+.hero h1{font-size:clamp(48px,8vw,92px);line-height:.98}
+.hero p.sub{margin-top:14px;font-size:20px;color:rgba(255,255,255,.88)}
+.hero .verse{margin-top:22px;font-family:var(--serif);font-style:italic;font-size:22px;color:rgba(255,255,255,.92)}
+
+/* today */
+.today{position:relative;margin-top:-170px;z-index:5}
+.todaycard{background:rgba(255,255,255,.86);backdrop-filter:saturate(180%) blur(24px);-webkit-backdrop-filter:saturate(180%) blur(24px);border-radius:var(--r-xl);box-shadow:var(--shadow-lift);display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,340px),1fr));overflow:hidden;border:1px solid rgba(255,255,255,.7)}
+.todaycard .main{padding:36px 36px 30px;grid-column:span 2}
+@media (max-width:760px){.todaycard .main{grid-column:auto;padding:26px 22px}}
+.todaycard h2{font-size:clamp(34px,4.4vw,48px);line-height:1.05;margin-top:10px}
+.mass{display:flex;gap:18px;align-items:flex-start;padding:16px 18px;border-radius:var(--r-md);background:var(--bg);margin-top:12px}
+.mass .time{flex:none;width:78px;height:62px;border-radius:14px;background:#fff;box-shadow:inset 0 0 0 1px var(--line);display:flex;flex-direction:column;align-items:center;justify-content:center;font-weight:700;font-size:21px;font-variant-numeric:tabular-nums;letter-spacing:-.02em}
+.mass .time small{font-size:11px;font-weight:600;color:var(--ink3);letter-spacing:.02em}
+.mass.next{background:var(--blueSoft)}.mass.next .time{background:var(--blue);color:#fff;box-shadow:none}.mass.next .time small{color:rgba(255,255,255,.75)}
+.mass.past{opacity:.55}.mass.past .time{text-decoration:line-through}
+.mass .who{color:var(--ink2);margin-top:2px}
+.todaycard .lit{padding:36px 32px;background:linear-gradient(180deg,#fbf7ee,#f6efe0);display:flex;flex-direction:column;gap:14px;position:relative}
+.todaycard .lit:before{content:"";position:absolute;top:-60px;right:-60px;width:220px;height:220px;border-radius:50%;background:radial-gradient(circle,rgba(176,138,62,.18),rgba(176,138,62,0) 70%)}
+.read{display:grid;grid-template-columns:auto 1fr;gap:6px 14px;font-size:15px}.read dt{color:var(--ink3)}.read dd{margin:0;font-weight:500}
+
+/* sections */
+.sec{padding:72px 0 0}
+.sechead{display:flex;justify-content:space-between;align-items:flex-end;gap:16px;flex-wrap:wrap;margin-bottom:24px}
+.sechead h2{font-size:clamp(32px,3.6vw,44px);line-height:1.05}
+.big{font-size:44px;line-height:1;font-weight:700;letter-spacing:-.03em}
+.week li{display:flex;justify-content:space-between;gap:12px;padding:11px 0;border-bottom:1px solid var(--line);font-size:15px}.week li:last-child{border:0}.week li span:last-child{color:var(--ink2)}
+.photo{filter:sepia(.18) saturate(.9);border-radius:var(--r-lg);aspect-ratio:4/3;background:var(--bg2) center/cover no-repeat;box-shadow:var(--shadow);transition:transform .5s cubic-bezier(.2,.8,.2,1)}
+a:hover .photo{transform:scale(1.015)}
+.give{background:linear-gradient(160deg,var(--deep1),var(--deep2));color:#fff;border-radius:var(--r-xl);padding:44px;display:grid;gap:36px;grid-template-columns:repeat(auto-fit,minmax(min(100%,380px),1fr));position:relative;overflow:hidden}
+.give:before{content:"";position:absolute;left:-80px;top:-80px;width:320px;height:320px;border-radius:50%;background:radial-gradient(circle,rgba(255,236,190,.22),rgba(255,236,190,0) 70%)}
+.qr{width:128px;height:128px;border-radius:20px;background:#fff;display:flex;align-items:center;justify-content:center;color:var(--ink3);font-size:12px;flex:none}
+.field{display:flex;gap:8px;background:rgba(255,255,255,.14);border:1px solid rgba(255,255,255,.3);border-radius:999px;padding:5px;flex-wrap:wrap}
+.field input{flex:1 1 180px;min-height:44px;border:0;background:transparent;color:#fff;font:inherit;padding:0 16px;outline:none}
+.field input::placeholder{color:rgba(255,255,255,.7)}
+.field .btn{background:#fff;color:var(--blue)}
+footer{padding:56px 0 120px;color:var(--ink2);font-size:14px}
+footer .cols{display:grid;gap:28px;grid-template-columns:repeat(auto-fit,minmax(min(100%,200px),1fr));border-top:1px solid var(--line);padding-top:36px}
+footer b{display:block;color:var(--ink);margin-bottom:6px;font-weight:600}
+
+/* states + phone + editor */
+.block{margin:88px auto 0;max-width:1160px;padding:0 24px}
+.block > h2{font-size:40px}
+.block > p{color:var(--ink2);margin-top:6px;max-width:760px}
+.states{display:grid;gap:18px;grid-template-columns:repeat(auto-fit,minmax(min(100%,340px),1fr));margin-top:28px}
+.states .card h4{font-size:12px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:var(--gold);margin-bottom:12px}
+.phone{width:390px;max-width:100%;border-radius:48px;background:var(--bg);box-shadow:0 0 0 10px #1b1d22,0 30px 80px rgba(0,0,0,.25);overflow:hidden;margin:36px auto 0}
+.ed{margin-top:28px;border-radius:var(--r-xl);overflow:hidden;box-shadow:var(--shadow-lift);background:#fff;display:flex;flex-wrap:wrap;min-height:620px}
+.ed aside{flex:1 1 220px;max-width:260px;background:var(--bg);padding:22px 14px;border-right:1px solid var(--line)}
+.ed aside a{display:flex;align-items:center;gap:10px;padding:9px 12px;border-radius:12px;color:var(--ink2);font-size:15px;font-weight:500}
+.ed aside a.on{background:#fff;color:var(--ink);box-shadow:var(--shadow)}
+.ed aside .grp{font-size:12px;font-weight:600;color:var(--ink3);padding:16px 12px 6px}
+.ed main{flex:999 1 520px;min-width:0;padding:28px 32px}
+.row{display:flex;align-items:center;gap:14px;padding:14px 16px;border-radius:var(--r-md);background:var(--bg);margin-top:10px}
+.row .grow{flex:1;min-width:0}.row .grow p{color:var(--ink3);font-size:14px}
+.thumb{width:56px;height:42px;border-radius:10px;background:url(prototype-assets/zgornje-pirnice-2.jpg) center/cover;flex:none}
+label.f{display:block;font-size:13px;font-weight:600;color:var(--ink2);margin:18px 0 6px}
+.input{width:100%;min-height:46px;border-radius:14px;border:1px solid var(--line);background:var(--bg);padding:10px 14px;font:inherit}
+textarea.input{min-height:96px;resize:vertical}
+.seg{display:inline-flex;background:var(--bg2);border-radius:999px;padding:4px}.seg a{padding:6px 14px;border-radius:999px;font-size:14px;font-weight:600;color:var(--ink2)}.seg a.on{background:#fff;color:var(--ink);box-shadow:0 1px 3px rgba(0,0,0,.08)}
+</style>
+</head>
+<body>
+
+<div class="proto" aria-label="Prototip">
+  <a href="#top">Domov</a><a href="#stanja">Stanja</a><a href="#telefon">Telefon</a><a href="#urejevalnik">Urejevalnik</a>
+  <span class="sep"></span>
+  <a href="#" onclick="document.documentElement.dataset.palette='';return false">Vino in zlato</a>
+  <a href="#" onclick="document.documentElement.dataset.palette='zlato';return false">Zlato in kamen</a>
+</div>
+
+<!-- NAV -->
+<header class="nav" id="top"><div class="wrap">
+  <a class="brand" href="#"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" aria-hidden="true"><path d="M12 3v18M6.5 8.5h11"/></svg>Župnija Pirniče</a>
+  <nav aria-label="Glavni meni"><a href="#">Svete maše</a><a href="#">Oznanila</a><a href="#">Dogodki</a><a href="#">Zakramenti</a><a href="#">Molitev</a><a href="#">Župnija</a><a href="#">Kontakt</a></nav>
+  <a class="btn" href="#">Daruj</a>
+</div></header>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="img" aria-hidden="true"></div><div class="shade" aria-hidden="true"></div>
+  <div class="inner wrap">
+    <span class="mark" aria-hidden="true"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="1.6" stroke-linecap="round"><path d="M12 3v18M6.5 8.5h11"/></svg></span>
+    <h1 class="serif">Župnija Pirniče</h1>
+    <p class="sub">Dobrodošli v župniji Pirniče pod Šmarno goro.</p>
+    <p class="verse">»Pridite k meni vsi, ki ste utrujeni in obteženi.« <span style="font-style:normal;font-size:16px;opacity:.8">Mt 11,28</span></p>
+  </div>
+</section>
+
+<!-- TODAY -->
+<section class="today" aria-label="Danes"><div class="wrap">
+  <div class="todaycard reveal">
+    <div class="main">
+      <div style="display:flex;justify-content:space-between;gap:10px;flex-wrap:wrap;align-items:center">
+        <span class="eyebrow">Danes · sreda, 28. oktober</span>
+        <span class="pill blue"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg>Čez 3 h 20 min</span>
+      </div>
+      <h2 class="serif">Sveta maša danes ob 18.00</h2>
+      <ul class="clean" style="margin-top:14px">
+        <li class="mass past"><div class="time">7.30<small>MIMO</small></div><div><b>Sv. Križ</b><p class="who">Za zdravje</p></div></li>
+        <li class="mass next"><div class="time">18.00<small>ZVEČER</small></div><div><b>Marijina cerkev</b><p class="who">+ Marija Kos, 30. dan<br>++ Anton in Ivana Zupan, obl.</p></div></li>
+      </ul>
+      <div style="display:flex;gap:22px;flex-wrap:wrap;margin-top:20px"><a class="link" href="#">Maše in nameni ta teden</a><a class="link" href="#">Dodaj v koledar</a></div>
+    </div>
+    <div class="lit">
+      <span class="eyebrow" style="position:relative">Bogoslužni dan</span>
+      <h3 class="serif" style="font-size:32px;line-height:1.1;position:relative">Sv. Simon in Juda Tadej, apostola</h3>
+      <span class="pill red" style="align-self:flex-start">● Praznik</span>
+      <p class="serif" style="font-style:italic;font-size:22px;line-height:1.3;color:var(--ink2)">»[Vrstica dneva iz evangelija]«</p>
+      <dl class="read"><dt>Berilo</dt><dd>Ef 2,19-22</dd><dt>Psalm</dt><dd>Ps 18,2-5</dd><dt>Evangelij</dt><dd>Lk 6,12-16</dd></dl>
+      <a class="btn" href="#" style="margin-top:auto">Preberi današnja berila</a>
+      <p style="font-size:12px;color:var(--ink3);text-align:center">Vir: hozana.si</p>
+    </div>
+  </div>
+</div></section>
+
+<!-- CARDS -->
+<section class="wrap" style="padding-top:24px"><div class="grid3">
+  <a class="card hover reveal" href="#" style="color:inherit;display:flex;flex-direction:column;gap:10px">
+    <span class="pill gold" style="align-self:flex-start">Čez 4 dni</span>
+    <h3 class="serif" style="font-size:28px;line-height:1.1">Vsi sveti: molitev na pokopališču</h3>
+    <p style="color:var(--ink2)">Nedelja, 1. november · 14.00</p>
+    <span class="link" style="margin-top:auto;color:var(--blue2)">Vsi dogodki</span>
+  </a>
+  <div class="card reveal" style="display:flex;flex-direction:column;gap:10px">
+    <span class="eyebrow">Oznanila · Leto XLII, št. 10</span>
+    <h3 class="serif" style="font-size:28px;line-height:1.1">Oktober 2026</h3>
+    <p style="color:var(--ink2)">Rožnovenska Mati Božja · 10 obvestil · 7 srečanj</p>
+    <div style="display:flex;gap:10px;flex-wrap:wrap;margin-top:auto"><a class="btn" href="#">Preberi</a><a class="btn soft" href="#">Prenesi PDF</a></div>
+  </div>
+  <div class="card reveal">
+    <span class="eyebrow">Ta teden</span>
+    <ul class="clean week" style="margin-top:6px"><li><span>Četrtek 29.</span><span>18.00 · Marijina</span></li><li><span>Petek 30.</span><span>18.00 · Marijina</span></li><li><span>Sobota 31.</span><span>18.00 · Sv. Križ</span></li><li><span><b>Nedelja 1. · Vsi sveti</b></span><span>8.00 · 10.00</span></li></ul>
+  </div>
+</div></section>
+
+<!-- NEWS -->
+<section class="sec wrap">
+  <div class="sechead"><h2 class="serif">Iz župnijskega življenja</h2><a class="link" href="#">Vse novice</a></div>
+  <div class="grid3">
+    <a class="reveal" href="#" style="color:inherit"><div class="photo" style="background-image:url(prototype-assets/roznivenec.jpg)"></div><p class="eyebrow" style="margin-top:14px">25. oktober</p><h3 class="serif" style="font-size:26px;line-height:1.15;margin-top:4px">Rožnovenska pobožnost z otroki</h3></a>
+    <a class="reveal" href="#" style="color:inherit"><div class="photo" style="background-image:url(prototype-assets/zbor.jpg)"></div><p class="eyebrow" style="margin-top:14px">18. oktober</p><h3 class="serif" style="font-size:26px;line-height:1.15;margin-top:4px">Pevski zbor na srečanju zborov</h3></a>
+    <a class="reveal" href="#" style="color:inherit"><div class="photo" style="background-image:url(prototype-assets/obhajilo.jpg)"></div><p class="eyebrow" style="margin-top:14px">11. oktober</p><h3 class="serif" style="font-size:26px;line-height:1.15;margin-top:4px">Zahvala za prvo sveto obhajilo</h3></a>
+  </div>
+</section>
+
+<!-- PRAYER STRIP -->
+<section class="sec wrap">
+  <div class="reveal" style="position:relative;border-radius:var(--r-xl);overflow:hidden;min-height:380px;display:flex;align-items:flex-end;color:#fff;box-shadow:var(--shadow-lift)">
+    <div aria-hidden="true" style="position:absolute;inset:0;background:url(prototype-assets/svece.jpg) center 85%/cover"></div>
+    <div aria-hidden="true" style="position:absolute;inset:0;background:linear-gradient(90deg,rgba(30,15,10,.82) 0%,rgba(30,15,10,.55) 45%,rgba(30,15,10,.1) 100%)"></div>
+    <div style="position:relative;padding:40px;display:grid;gap:28px;grid-template-columns:repeat(auto-fit,minmax(min(100%,220px),1fr));width:100%;align-items:end">
+      <div><span class="eyebrow" style="color:#e9d3a4">Molitev in češčenje</span><h2 class="serif" style="font-size:44px;line-height:1.02;margin-top:6px">Pridite pred Najsvetejše</h2></div>
+      <div><p class="serif" style="font-size:30px">Prvi petek</p><p style="color:rgba(255,255,255,.82)">15.00–18.30 · Marijina cerkev</p></div>
+      <div><p class="serif" style="font-size:30px">Oktober</p><p style="color:rgba(255,255,255,.82)">Rožni venec pred večerno mašo</p></div>
+      <a class="btn light" href="#" style="justify-self:start">Vse molitvene ure</a>
+    </div>
+  </div>
+</section>
+
+<!-- CHURCHES -->
+<section class="sec wrap">
+  <div class="sechead"><h2 class="serif">Naše cerkve</h2><a class="link" href="#">Vse o cerkvah</a></div>
+  <div class="grid3">
+    <a class="reveal" href="#" style="color:inherit"><div class="photo" style="background-image:url(prototype-assets/spodnje-pirnice.jpg)"></div><h3 class="serif" style="font-size:26px;margin-top:14px">Marijina cerkev</h3><p style="color:var(--ink2);font-size:15px">Župnijska cerkev Marijinega vnebovzetja · nedelja 10.00</p></a>
+    <a class="reveal" href="#" style="color:inherit"><div class="photo" style="background-image:url(prototype-assets/sv-kriz.jpg)"></div><h3 class="serif" style="font-size:26px;margin-top:14px">Sv. Križ</h3><p style="color:var(--ink2);font-size:15px">Podružnična cerkev Povišanja sv. Križa · nedelja 8.00</p></a>
+    <a class="reveal" href="#" style="color:inherit"><div class="photo" style="background-image:url(prototype-assets/sv-tomaz.jpg);background-position:center 30%"></div><h3 class="serif" style="font-size:26px;margin-top:14px">Sv. Tomaž</h3><p style="color:var(--ink2);font-size:15px">Podružnična cerkev sv. Tomaža, apostola · ob praznikih</p></a>
+  </div>
+</section>
+
+<!-- GIVE -->
+<section class="sec wrap">
+  <div class="give reveal">
+    <div style="display:flex;gap:24px;flex-wrap:wrap;align-items:center;position:relative">
+      <div class="qr">[UPN QR]</div>
+      <div style="flex:1 1 200px"><h2 class="serif" style="font-size:36px;line-height:1.05">Podprite župnijo</h2><p style="color:rgba(255,255,255,.85);margin-top:8px">Skenirajte kodo v bančni aplikaciji ali nakažite na TRR [SI56 …].</p><a class="link" href="#" style="color:#fff;margin-top:10px">Vse o darovih</a></div>
+    </div>
+    <form onsubmit="return false" style="position:relative;display:flex;flex-direction:column;gap:12px;justify-content:center">
+      <h2 class="serif" style="font-size:36px;line-height:1.05">Oznanila po e-pošti</h2>
+      <label for="nl" style="color:rgba(255,255,255,.85)">Enkrat na mesec, ko izidejo nova oznanila. Nič drugega.</label>
+      <div class="field"><input id="nl" type="email" placeholder="vas@naslov.si"><button class="btn">Prijavi me</button></div>
+    </form>
+  </div>
+</section>
+
+<footer class="wrap"><div class="cols">
+  <div><b class="serif" style="font-size:22px;font-weight:500">Župnija Pirniče</b>[Naslov župnišča]</div>
+  <div><b>Uradne ure</b>[iz nastavitev]</div>
+  <div><b>Kontakt</b>zupirnice@gmail.com</div>
+  <div><b>Povezave</b><a href="#">Berila dneva</a> · <a href="#">Koledar (.ics)</a></div>
+</div></footer>
+
+<!-- STATES -->
+<section class="block" id="stanja">
+  <h2 class="serif">Stanja bloka »Danes«</h2>
+  <p>Vsaka situacija ima svoj stavek. Nalaganje izpuščeno: stran je pripravljena na strežniku.</p>
+  <div class="states">
+    <div class="card"><h4>Danes ni maše</h4><h3 class="serif" style="font-size:30px">Danes ni svete maše</h3><div class="mass next"><div class="time">18.00<small>TOR 3. 11.</small></div><div><b>Marijina cerkev</b><p class="who">+ Jože Novak, obl.</p></div></div></div>
+    <div class="card"><h4>Današnje so mimo</h4><h3 class="serif" style="font-size:30px">Jutri ob 18.00</h3><div class="mass next"><div class="time">18.00<small>JUTRI</small></div><div><b>Marijina cerkev</b><p class="who">Za farane</p></div></div></div>
+    <div class="card"><h4>Maša odpade</h4><div class="mass" style="background:var(--redSoft)"><div class="time" style="text-decoration:line-through">7.30<small>ODPADE</small></div><div><b>Sv. Križ</b><p class="who">Namen prestavljen na petek</p></div></div></div>
+    <div class="card"><h4>Nedelja</h4><p class="serif" style="font-size:28px">Vsi sveti</p><div class="mass next"><div class="time">8.00</div><div><b>Sv. Križ</b><p class="who">Za farane</p></div></div><div class="mass"><div class="time">10.00</div><div><b>Marijina cerkev</b><p class="who">++ Franc in Ana Kralj</p></div></div></div>
+    <div class="card"><h4>Brez namena · dolg namen</h4><div class="mass"><div class="time">18.00</div><div><b>Marijina cerkev</b><p class="who" style="color:var(--ink3)">Namen še ni vpisan</p></div></div><div class="mass"><div class="time">18.00</div><div><b>Marijina cerkev</b><p class="who">++ Jožefa in Milan Ptiček, obl. in ++ iz družin Črnuta · + Marija Kos, 30. dan · V zahvalo za 50 let skupnega življenja</p></div></div></div>
+    <div class="card"><h4>Berila nedosegljiva</h4><p style="color:var(--ink2)">Berila so ta trenutek nedosegljiva.</p><a class="link" href="#" style="margin-top:8px">Odpri na hozana.si</a></div>
+    <div class="card"><h4>Oznanila še niso naložena</h4><h3 class="serif" style="font-size:28px">November 2026</h3><p style="color:var(--ink2)">Novembrska oznanila še niso objavljena. Do takrat veljajo oktobrska.</p><a class="btn soft" href="#" style="margin-top:12px">Oznanila za oktober</a></div>
+    <div class="card"><h4>Posebno obdobje · advent</h4><span class="pill" style="background:#efeaf6;color:#5b4a8a">● Advent</span><h3 class="serif" style="font-size:28px;margin-top:10px">1. adventna nedelja</h3><p style="color:var(--ink2)">Barva obdobja kot oznaka in tanka svetloba v glavi strani.</p></div>
+    <div class="card"><h4>Prijava na e-pošto</h4><p style="padding:12px 16px;border-radius:14px;background:var(--blueSoft);color:var(--blue)">Hvala. Na vas@naslov.si smo poslali povezavo za potrditev.</p><p style="padding:12px 16px;border-radius:14px;background:var(--redSoft);color:var(--red);margin-top:8px">Vpišite veljaven e-poštni naslov.</p></div>
+  </div>
+</section>
+
+<!-- PHONE -->
+<section class="block" id="telefon">
+  <h2 class="serif">Na telefonu</h2>
+  <p>Ura in namen naslednje maše sta vidna brez drsenja.</p>
+  <div class="phone">
+    <div style="height:170px;background:linear-gradient(180deg,rgba(60,30,20,.5),rgba(60,30,20,.15) 55%,var(--bg)),url(prototype-assets/zgornje-pirnice-2.jpg) center 60%/cover;color:#fff;text-align:center;padding-top:48px"><p class="serif" style="font-size:36px">Župnija Pirniče</p></div>
+    <div style="margin:-36px 12px 0;position:relative;background:#fff;border-radius:28px;box-shadow:var(--shadow-lift);padding:22px 18px">
+      <div style="display:flex;justify-content:space-between;align-items:center"><span class="eyebrow">Danes · sre 28. 10.</span><span class="pill blue">Čez 3 h 20</span></div>
+      <h2 class="serif" style="font-size:32px;line-height:1.05;margin-top:8px">Sveta maša danes ob 18.00</h2>
+      <div class="mass next" style="padding:12px"><div class="time" style="width:66px;height:54px;font-size:18px">18.00</div><div><b>Marijina cerkev</b><p class="who" style="font-size:15px">+ Marija Kos, 30. dan · ++ Anton in Ivana Zupan, obl.</p></div></div>
+      <div class="mass past" style="padding:12px"><div class="time" style="width:66px;height:54px;font-size:18px">7.30</div><div><b>Sv. Križ</b></div></div>
+    </div>
+    <div style="margin:12px;background:linear-gradient(180deg,#fbf7ee,#f6efe0);border-radius:24px;padding:20px 18px;display:flex;flex-direction:column;gap:8px"><span class="eyebrow">Bogoslužni dan</span><p class="serif" style="font-size:24px;line-height:1.1">Sv. Simon in Juda Tadej</p><a class="btn" href="#">Današnja berila</a></div>
+    <div style="margin:12px 12px 28px;background:#fff;border-radius:24px;padding:18px;box-shadow:var(--shadow)"><span class="pill gold">Čez 4 dni</span><p class="serif" style="font-size:22px;margin-top:8px">Vsi sveti: molitev na pokopališču</p></div>
+  </div>
+</section>
+
+<!-- EDITOR -->
+<section class="block" id="urejevalnik" style="padding-bottom:140px">
+  <h2 class="serif">Urejevalnik v istem slogu</h2>
+  <p>Župnik ureja <b>vso</b> vsebino strani tukaj, brez Sanity Studia: domačo stran, strani, novice, galerije, cerkve, skupine, zakramente, darove, molitev in nastavitve. Primer: »Spletna stran → Domača stran«.</p>
+  <div class="ed">
+    <aside>
+      <a href="#" class="on">⌂&nbsp; Domov</a><a href="#">Svete maše</a><a href="#">Nameni <span class="pill blue" style="margin-left:auto;padding:2px 8px">1</span></a><a href="#">Oznanila</a><a href="#">Dogodki</a><a href="#">Verouk</a>
+      <div class="grp">Spletna stran</div>
+      <a href="#" style="background:#fff;color:var(--ink);box-shadow:var(--shadow)">Domača stran</a><a href="#">Strani</a><a href="#">Novice</a><a href="#">Galerije</a><a href="#">Cerkve</a><a href="#">Skupine</a><a href="#">Zakramenti</a><a href="#">Molitev</a><a href="#">Darovi</a><a href="#">Nastavitve</a>
+      <div class="grp">Ljudje</div><a href="#">Dostopi</a><a href="#">Naročniki</a>
+    </aside>
+    <main>
+      <div style="display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap">
+        <div><span class="eyebrow">Spletna stran</span><h3 class="serif" style="font-size:36px;line-height:1.05">Domača stran</h3></div>
+        <div style="display:flex;gap:8px"><a class="btn soft" href="#">Predogled</a><a class="btn" href="#">Objavi</a></div>
+      </div>
+      <div class="seg" style="margin-top:18px"><a href="#" class="on">Glava</a><a href="#">Bloki</a><a href="#">Dobrodošlica</a></div>
+      <label class="f" for="h1">Naslov</label><input id="h1" class="input" value="Župnija Pirniče">
+      <label class="f" for="h2">Podnaslov</label><input id="h2" class="input" value="Dobrodošli v župniji Pirniče pod Šmarno goro.">
+      <label class="f" for="h3">Misel v glavi</label><textarea id="h3" class="input">»Pridite k meni vsi, ki ste utrujeni in obteženi.« Mt 11,28</textarea>
+      <label class="f">Fotografija</label>
+      <div class="row"><div class="thumb"></div><div class="grow"><b>Zgornje Pirniče 02.jpg</b><p>2130 × 1550 · izrez: sredina</p></div><a class="btn soft" href="#" style="min-height:38px">Zamenjaj</a></div>
+      <label class="f">Bloki na domači strani (povleci za vrstni red)</label>
+      <div class="row"><span aria-hidden="true">⋮⋮</span><div class="grow"><b>Danes</b><p>Maše, nameni, bogoslužni dan · samodejno</p></div><span class="pill blue">Vedno</span></div>
+      <div class="row"><span aria-hidden="true">⋮⋮</span><div class="grow"><b>Dogodek · Oznanila · Ta teden</b><p>Samodejno</p></div><span class="pill blue">Vključeno</span></div>
+      <div class="row"><span aria-hidden="true">⋮⋮</span><div class="grow"><b>Iz župnijskega življenja</b><p>Zadnje 3 novice</p></div><span class="pill blue">Vključeno</span></div>
+      <div class="row"><span aria-hidden="true">⋮⋮</span><div class="grow"><b>Molitev in češčenje</b><p>Iz strani »Molitev«</p></div><span class="pill blue">Vključeno</span></div>
+      <div class="row"><span aria-hidden="true">⋮⋮</span><div class="grow"><b>Podprite župnijo · e-pošta</b><p>Iz »Darovi«</p></div><span class="pill blue">Vključeno</span></div>
+    </main>
+  </div>
+</section>
+
+<script>
+const io=new IntersectionObserver(es=>es.forEach(e=>{if(e.isIntersecting){e.target.classList.add('in');io.unobserve(e.target)}}),{threshold:.12});
+document.querySelectorAll('.reveal').forEach(el=>io.observe(el));
+</script>
+</body>
+</html>

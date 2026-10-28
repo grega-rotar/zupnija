@@ -17,9 +17,10 @@ export default async function PastEventsPage() {
     <>
       <PageHeader
         title="Pretekli dogodki"
+        accent="dogodki"
         eyebrow={<Breadcrumbs items={[{ label: "Dogodki", href: routes.events }, { label: "Pretekli" }]} />}
       />
-      <Section tight tone="paper-2">
+      <Section>
         <Container>
           <EventList events={events} emptyText="Preteklih dogodkov še ni." />
         </Container>

@@ -7,10 +7,10 @@ import { cn } from "@/lib/utils";
 
 type Props = { error: string | null; google: boolean };
 
-/* The site's contact form: text-small labels, rounded-sm stone-2 inputs, its buttons. */
+/* The editor's v4 field: small grey label, sunk input, gold ring on focus; the site's pill buttons. */
 const inputClass =
-  "block w-full min-h-12 rounded-sm border border-stone-2 bg-paper px-3.5 py-3 text-body text-ink placeholder:text-ink-3 " +
-  "focus:border-ink focus:outline-none focus-visible:outline-3 focus-visible:outline-gold focus-visible:outline-offset-2";
+  "block w-full min-h-12 rounded-sm bg-paper-2 px-4 py-3 text-body text-ink placeholder:text-ink-3 transition-colors " +
+  "hover:bg-paper-3 focus:bg-surface focus:shadow-[0_0_0_2px_var(--color-gold)] focus:outline-none";
 const stroke = "shrink-0 fill-none stroke-current [stroke-linecap:round] [stroke-linejoin:round] [stroke-width:1.75]";
 
 export function LoginForm({ error, google }: Props) {
@@ -49,12 +49,12 @@ export function LoginForm({ error, google }: Props) {
 
   if (stage === "sent") {
     return (
-      <div className="grid w-full max-w-sm gap-5">
-        <span className="flex size-16 items-center justify-center rounded-full bg-moss-soft text-moss-deep">
+      <div className="grid w-full max-w-md gap-5 rounded-lg bg-surface p-7 shadow-soft sm:p-10">
+        <span className="flex size-14 items-center justify-center rounded-md bg-gradient-to-b from-[#b8913f] to-[#8a6a26] text-white">
           <MailIcon className="size-7" />
         </span>
-        <h1 className="text-h2">Preverite e-pošto</h1>
-        <p className="text-ink-2">
+        <h1 className="text-[2rem] leading-[1.05] tracking-[-0.045em]">Preverite e-pošto</h1>
+        <p className="text-small text-ink-2">
           Na <b className="font-semibold text-ink">{email.trim()}</b> smo poslali povezavo za prijavo. Odprite jo na tej napravi. Velja 15 minut.
         </p>
         <p className="text-small text-ink-3">
@@ -69,19 +69,18 @@ export function LoginForm({ error, google }: Props) {
   }
 
   return (
-    <form className="grid w-full max-w-sm gap-5" onSubmit={send} noValidate>
+    <form className="grid w-full max-w-md gap-5 rounded-lg bg-surface p-7 shadow-soft sm:p-10" onSubmit={send} noValidate>
       <div>
-        <span className="mb-6 block h-px w-12 bg-gold" aria-hidden="true" />
-        <h1 className="text-h2">Prijava v urejanje</h1>
-        <p className="lede mt-3 text-ink-2">Vpišite e-pošto. Poslali vam bomo povezavo za prijavo, gesla ne potrebujete.</p>
+        <h1 className="text-[2rem] leading-[1.05] tracking-[-0.045em]">Prijava v urejanje</h1>
+        <p className="mt-2 text-small text-ink-3">Vpišite e-pošto. Poslali vam bomo povezavo za prijavo, gesla ne potrebujete.</p>
       </div>
       {message ? (
-        <p className="rounded-md border border-alert/30 bg-alert-soft px-4 py-3 text-body text-alert" role="alert">
+        <p className="rounded-md bg-alert-soft px-4 py-3 text-small text-alert" role="alert">
           {message}
         </p>
       ) : null}
       <label className="grid gap-1.5">
-        <span className="text-small font-medium text-ink">E-pošta</span>
+        <span className="pl-0.5 text-meta font-semibold text-ink-3">E-pošta</span>
         <input
           className={inputClass}
           type="email"
@@ -99,14 +98,14 @@ export function LoginForm({ error, google }: Props) {
       </button>
       {google ? (
         <>
-          <div className="flex items-center gap-3 text-small text-ink-3 before:h-px before:flex-1 before:bg-stone after:h-px after:flex-1 after:bg-stone">ali</div>
+          <div className="flex items-center gap-3 text-meta text-ink-3 before:h-px before:flex-1 before:bg-stone after:h-px after:flex-1 after:bg-stone">ali</div>
           <button type="button" className={cn(buttonClassName({ variant: "secondary" }), "w-full")} onClick={withGoogle} disabled={busy}>
             <GoogleIcon />
             Nadaljuj z Googlom
           </button>
         </>
       ) : null}
-      <p className="text-small text-ink-3">Dostop dodeli župnik. Če ga še nimate, ga prosite za povabilo.</p>
+      <p className="text-meta text-ink-3">Dostop dodeli župnik. Če ga še nimate, ga prosite za povabilo.</p>
     </form>
   );
 }

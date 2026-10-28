@@ -11,8 +11,9 @@ export const metadata: Metadata = { title: "Prijava — Urejanje", robots: { ind
 type Props = { searchParams: Promise<{ error?: string | string[] }> };
 
 /**
- * The site's language: its header (church mark, letter-spaced wordmark) and
- * its light PageHeader band (gold rule, display serif) beside the form.
+ * The editor's v4 language: the sidebar's translucent ground with the parish's
+ * name and one headline (Inter 700, one serif italic phrase) beside the form
+ * on a white tile.
  */
 export default async function LoginPage({ searchParams }: Props) {
   if (await getActor()) redirect("/");
@@ -21,21 +22,18 @@ export default async function LoginPage({ searchParams }: Props) {
   const host = new URL(adminOrigin()).host;
 
   return (
-    <div className="grid h-dvh grid-rows-[auto_1fr] overflow-auto bg-paper text-ink md:grid-cols-2 md:grid-rows-1">
-      <div className="flex flex-col justify-between gap-8 border-b border-stone bg-paper-2 px-4 py-6 sm:px-6 md:border-r md:border-b-0 md:p-12">
-        <div className="flex items-center gap-3">
-          <ChurchMark />
-          <span className="font-sans text-[0.8125rem] font-semibold uppercase leading-[1.15] tracking-[0.16em] text-ink">
-            Župnija
-            <br />
-            Pirniče
-          </span>
+    <div className="grid h-dvh grid-rows-[auto_1fr] overflow-auto bg-[#f5f4f1] text-ink md:grid-cols-2 md:grid-rows-1">
+      <div className="flex flex-col justify-between gap-6 border-b border-[rgb(20_12_4/0.07)] bg-[rgb(236_233_227/0.85)] px-4 py-5 sm:px-6 md:border-r md:border-b-0 md:p-12">
+        <div className="flex items-center gap-2.5">
+          <ChurchMark className="w-7" />
+          <span className="text-[0.9375rem] font-bold leading-tight tracking-[-0.02em] text-ink">Župnija Pirniče</span>
         </div>
         <div>
-          <span className="mb-7 block h-px w-12 bg-gold" aria-hidden="true" />
-          <blockquote className="max-w-[16ch] font-serif text-h2 md:text-h1">Oznanila, maše in nameni na enem mestu.</blockquote>
+          <blockquote className="max-w-[14ch] text-h2 font-bold md:text-h1">
+            Oznanila, maše in nameni <span className="accent">na enem mestu.</span>
+          </blockquote>
         </div>
-        <small className="text-small text-ink-3">{host}</small>
+        <small className="text-meta text-ink-3">{host}</small>
       </div>
       <div className="grid place-items-center px-4 py-8 sm:px-6">
         <LoginForm error={message} google={googleEnabled} />

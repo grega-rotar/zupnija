@@ -4,7 +4,7 @@ import { buildMetadata } from "@/lib/seo";
 import { routes } from "@/lib/routes";
 import { clean } from "@/lib/clean";
 import { PersonCard } from "@/components/sections/PageSections";
-import { Breadcrumbs, Container, EmptyState, PageHeader, Section } from "@/components/ui/primitives";
+import { Breadcrumbs, Container, EmptyState, PageHeader, Section, SectionHeading } from "@/components/ui/primitives";
 
 export async function generateMetadata(): Promise<Metadata> {
   const settings = await getSettings();
@@ -27,21 +27,22 @@ export default async function PeoplePage() {
     <>
       <PageHeader
         title="Duhovniki in sodelavci"
+        accent="sodelavci"
         eyebrow={<Breadcrumbs items={[{ label: "Župnija", href: routes.parish }, { label: "Duhovniki in sodelavci" }]} />}
       />
-      <Section tight tone="paper-2">
+      <Section>
         <Container>
           {!people.length ? <EmptyState title="Podatki še niso vpisani" /> : null}
           {clergy.length ? (
-            <div className="grid gap-5 md:grid-cols-2">
+            <div className={clergy.length > 1 ? "grid gap-5 md:grid-cols-2" : "mx-auto max-w-xl"}>
               {clergy.map((p) => (
                 <PersonCard key={p._id} person={p} card />
               ))}
             </div>
           ) : null}
           {staff.length ? (
-            <div className={clergy.length ? "mt-16 border-t border-stone pt-12" : ""}>
-              <h2 className="mb-8 text-h2">Sodelavci</h2>
+            <div className={clergy.length ? "mt-24 lg:mt-40" : ""}>
+              <SectionHeading title="Sodelavci" accent="Sodelavci" eyebrow="Župnija" />
               <div className="grid gap-5 md:grid-cols-2">
                 {staff.map((p) => (
                   <PersonCard key={p._id} person={p} card />

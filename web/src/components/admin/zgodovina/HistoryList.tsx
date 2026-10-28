@@ -40,30 +40,32 @@ export function HistoryList({ days }: { days: HistoryDay[] }) {
       {days.map((d) => (
         <section key={d.key} aria-label={d.label} style={{ display: "contents" }}>
           <p className="hday">{d.label}</p>
-          {d.entries.map((h) => (
-            <div key={h.id} className="hrow">
-              <time className="tnum">{h.at}</time>
-              <span className={`avatar${h.who?.isOwner ? " moss" : ""}`} aria-hidden="true">
-                {h.who?.short ?? "?"}
-              </span>
-              <div>
-                <b>{h.label}</b>
-                <p>
-                  {h.who?.name ?? "Nekdanji sodelavec"}
-                  {h.note ? ` · ${h.note}` : ""}
-                </p>
+          <div className="grp">
+            {d.entries.map((h) => (
+              <div key={h.id} className="hrow">
+                <time className="tnum">{h.at}</time>
+                <span className={`avatar${h.who?.isOwner ? " moss" : ""}`} aria-hidden="true">
+                  {h.who?.short ?? "?"}
+                </span>
+                <div>
+                  <b>{h.label}</b>
+                  <p>
+                    {h.who?.name ?? "Nekdanji sodelavec"}
+                    {h.note ? ` · ${h.note}` : ""}
+                  </p>
+                </div>
+                {h.undone ? (
+                  <Pill tone="line">razveljavljeno</Pill>
+                ) : h.canUndo ? (
+                  <Button size="sm" icon="undo" onClick={() => undo(h.id)} disabled={busy != null} aria-label={`Razveljavi: ${h.label}`}>
+                    Razveljavi
+                  </Button>
+                ) : (
+                  <span />
+                )}
               </div>
-              {h.undone ? (
-                <Pill tone="line">razveljavljeno</Pill>
-              ) : h.canUndo ? (
-                <Button size="sm" icon="undo" onClick={() => undo(h.id)} disabled={busy != null} aria-label={`Razveljavi: ${h.label}`}>
-                  Razveljavi
-                </Button>
-              ) : (
-                <span />
-              )}
-            </div>
-          ))}
+            ))}
+          </div>
         </section>
       ))}
     </div>

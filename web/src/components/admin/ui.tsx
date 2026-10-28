@@ -57,7 +57,7 @@ export function ButtonLink({ variant, size, block, icon, className, href, childr
   );
 }
 
-/** A 44 px square icon button, like the site header's search button. `label` is required (it's the only name). */
+/** A 44 px round icon button. `label` is required (it's the only name). */
 export function IconButton({ icon, label, className, type = "button", ...rest }: { icon: IconName; label: string } & React.ButtonHTMLAttributes<HTMLButtonElement>) {
   return (
     <button type={type} className={cn("iconbtn", className)} aria-label={label} {...rest}>
@@ -152,9 +152,9 @@ export function Field({ label, hint, as = "label", className, children }: {
 }
 
 /**
- * The page header, in the site's `PageHeader` language at app size: the short
- * gold rule, the display serif title (text-h1) and the italic serif lede.
- * `eyebrow` sits above the rule (the date on Domov).
+ * The page header, as the v4 prototype's window title: a bold, tightly
+ * tracked title and a small grey lede. `eyebrow` is the small gold label
+ * above it (the date on Domov). The `.rule` span is hidden in v4.
  */
 export function PageHead({ title, sub, action, eyebrow }: { title: React.ReactNode; sub?: React.ReactNode; action?: React.ReactNode; eyebrow?: React.ReactNode }) {
   return (

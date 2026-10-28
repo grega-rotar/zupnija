@@ -32,22 +32,22 @@ export default async function CatechesisPage() {
     <>
       <PageHero settings={settings} header="catechesisHeader" title={page?.title || "Verouk"} lede={page?.schoolYear ? `Veroučno leto ${page.schoolYear}` : undefined}>
         {page?.notice?.length ? (
-          <Notice className="mt-8 bg-paper/15 text-paper [&_.prose]:text-paper">
+          <Notice className="mx-auto mt-8 text-left">
             <RichText value={page.notice} />
           </Notice>
         ) : null}
       </PageHero>
 
-      <Section tone="paper-2" tight>
+      <Section>
         <Container>
-          <SectionHeading title="Urnik skupin" />
+          <SectionHeading eyebrow="Verouk" title="Urnik skupin" accent="skupin" />
           {groups.length ? (
-            <Card padded={false} className="px-5 sm:px-8">
+            <Card padded={false} className="px-6 py-2 sm:px-8">
               {/* Phones: one card per group. */}
-              <ul className="divide-y divide-stone md:hidden">
+              <ul className="divide-y divide-stone/70 md:hidden">
                 {groups.map((g) => (
                   <li key={g._id} className="py-4">
-                    <h3 className="font-serif text-lede text-ink">{g.title}</h3>
+                    <h3 className="text-[1.125rem] font-bold tracking-[-0.025em] text-ink">{g.title}</h3>
                     <dl className="mt-1.5 grid grid-cols-[5.5rem_1fr] gap-x-3 gap-y-1 text-small">
                       <dt className="text-ink-3">Termin</dt>
                       <dd className="text-ink">{sessionsLine(g.sessions)}</dd>
@@ -66,22 +66,22 @@ export default async function CatechesisPage() {
               {/* Larger screens: a table. */}
               <table className="hidden w-full border-collapse text-left md:table">
                 <thead>
-                  <tr className="border-b border-ink text-small text-ink-3">
-                    <th scope="col" className="py-2 pr-4 font-medium">
+                  <tr className="border-b border-stone/70 text-small text-ink-3">
+                    <th scope="col" className="py-4 pr-4 font-semibold">
                       Skupina
                     </th>
-                    <th scope="col" className="py-2 pr-4 font-medium">
+                    <th scope="col" className="py-4 pr-4 font-semibold">
                       Termin
                     </th>
-                    <th scope="col" className="py-2 font-medium">
+                    <th scope="col" className="py-4 font-semibold">
                       Prostor
                     </th>
                   </tr>
                 </thead>
-                <tbody className="divide-y divide-stone">
+                <tbody className="divide-y divide-stone/70">
                   {groups.map((g) => (
                     <tr key={g._id} className="align-top [&>*]:py-4">
-                      <th scope="row" className="py-3 pr-4 font-serif text-lede font-medium text-ink">
+                      <th scope="row" className="py-3 pr-4 text-[1.125rem] font-bold tracking-[-0.025em] text-ink">
                         {g.title}
                         <Cancellations items={g.cancellations} className="mt-1 font-sans" />
                       </th>
@@ -91,7 +91,7 @@ export default async function CatechesisPage() {
                             {g.sessions.map((x) => (
                               <li key={x._key} className="whitespace-nowrap">
                                 <span className="capitalize">{WEEKDAY_LABEL[clean(x.weekday) as Weekday] ?? x.weekday}</span>{" "}
-                                <span className="tnum font-medium">{formatTime(x.time)}</span>
+                                <span className="tnum font-semibold">{formatTime(x.time)}</span>
                               </li>
                             ))}
                           </ul>
@@ -117,21 +117,21 @@ export default async function CatechesisPage() {
       </Section>
 
       {page?.intro?.length || page?.enrollment?.length || page?.contact || docs.length ? (
-        <Section tight>
+        <Section>
           <Container className="grid gap-12 lg:grid-cols-[minmax(0,7fr)_minmax(0,5fr)] lg:gap-16">
             <div>
               {hasImage(page?.image) ? (
-                <SanityImage image={page.image} aspect={3 / 2} sizes="(min-width: 1024px) 40rem, 100vw" maxWidth={1400} className="mb-8 rounded-md" />
+                <SanityImage image={page.image} aspect={3 / 2} sizes="(min-width: 1024px) 40rem, 100vw" maxWidth={1400} className="mb-10 overflow-hidden rounded-lg shadow-soft" imgClassName="saturate-[.7]" />
               ) : null}
               <RichText value={page?.intro} size="lg" />
               {page?.enrollment?.length ? (
                 <section className="mt-10">
-                  <h2 className="mb-4 text-h2">Vpis</h2>
+                  <h2 className="mb-4 text-[2rem] font-bold tracking-[-0.045em]">Vpis</h2>
                   <RichText value={page.enrollment} />
                 </section>
               ) : null}
             </div>
-            <aside className="space-y-6">
+            <aside className="space-y-5">
               {page?.contact ? (
                 <Card>
                   <h2 className="mb-4 text-h3">Kontakt za verouk</h2>
@@ -139,8 +139,8 @@ export default async function CatechesisPage() {
                 </Card>
               ) : null}
               {docs.length ? (
-                <div>
-                  <h2 className="mb-3 text-h3">Dokumenti</h2>
+                <div className="rounded-lg bg-surface p-6 shadow-soft sm:p-8">
+                  <h2 className="mb-4 text-h3">Dokumenti</h2>
                   <ul className="space-y-2">
                     {docs.map((d) => (
                       <li key={d._id}>
@@ -150,7 +150,7 @@ export default async function CatechesisPage() {
                   </ul>
                 </div>
               ) : null}
-              <p className="text-small text-ink-2">
+              <p className="px-2 text-small text-ink-2">
                 Priprava na prvo sveto obhajilo in birmo: <TextLink href={routes.sacraments}>zakramenti</TextLink>
               </p>
             </aside>

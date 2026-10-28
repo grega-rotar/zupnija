@@ -1,0 +1,110 @@
+<style data-part="b">
+/* ===== Part B: news, prayer, churches ===== */
+.b-sec{padding-top:160px}
+.b-open{display:flex;flex-direction:column;align-items:center;text-align:center;margin:0 auto 56px;max-width:760px}
+.b-eye{font-size:13px;font-weight:600;color:var(--accentInk);letter-spacing:-.005em}
+.b-open .h2{margin-top:14px;text-wrap:balance}
+.b-sub{font-size:20px;line-height:1.4;letter-spacing:-.017em;color:var(--ink2);max-width:640px;margin-top:18px;text-wrap:balance}
+.b-open .more{margin-top:22px}
+.b-sec a:focus-visible{outline:3px solid var(--accent);outline-offset:4px;border-radius:var(--r)}
+.b-open a.more:focus-visible{border-radius:8px}
+
+/* news */
+.b-news{display:grid;gap:20px;grid-template-columns:repeat(3,minmax(0,1fr))}
+.b-card{display:flex;flex-direction:column;background:var(--surface);border-radius:var(--r);overflow:hidden;box-shadow:0 0 0 1px var(--line),var(--sh);transition:transform .5s var(--ease),box-shadow .5s var(--ease)}
+.b-card:hover{transform:translateY(-4px);box-shadow:0 0 0 1px var(--line),var(--sh2)}
+.b-card .b-img{aspect-ratio:4/3;overflow:hidden;background:var(--sunk);box-shadow:0 1px 0 var(--line)}
+.b-card .b-img i{display:block;width:100%;height:100%;background:center/cover;filter:saturate(.7);transition:transform .8s var(--ease)}
+.b-card:hover .b-img i{transform:scale(1.03)}
+.b-card .b-body{flex:1;display:flex;flex-direction:column;padding:26px 28px 28px}
+.b-card time{font-size:13px;font-weight:600;color:var(--ink3);font-variant-numeric:tabular-nums}
+.b-card h3{font-size:24px;font-weight:700;letter-spacing:-.035em;line-height:1.15;margin-top:8px;text-wrap:balance}
+.b-card .b-go{margin-top:auto;padding-top:22px;display:inline-flex;align-items:center;gap:6px;font-size:15px;font-weight:600;color:var(--accentInk)}
+.b-card .b-go svg{transition:transform .25s var(--ease)}.b-card:hover .b-go svg{transform:translateX(3px)}
+
+/* prayer */
+.b-prayer{position:relative;border-radius:40px;overflow:hidden;color:#fff;min-height:760px;display:flex;flex-direction:column;align-items:center;justify-content:space-between;text-align:center;padding:96px 48px 48px;isolation:isolate}
+.b-prayer .b-ph{position:absolute;inset:0;z-index:-2;background:url(prototype-assets/svece.jpg) 50% 100%/112% auto;filter:saturate(.85)}
+.b-prayer .b-shade{position:absolute;inset:0;z-index:-1;background:
+  linear-gradient(180deg,rgba(14,10,6,.86) 0%,rgba(14,10,6,.62) 34%,rgba(14,10,6,.12) 62%,rgba(14,10,6,0) 74%,rgba(14,10,6,.5) 100%)}
+.b-prayer .b-eye{color:#e6c987}
+.b-prayer .h2{font-size:clamp(44px,6vw,80px);margin-top:14px;letter-spacing:-.05em;text-wrap:balance}
+.b-prayer .h2 em{display:block;margin-top:.04em}
+.b-times{display:flex;gap:12px;flex-wrap:wrap;justify-content:center}
+.b-times div{display:flex;flex-direction:column;align-items:center;gap:2px;min-width:250px;padding:16px 24px;border-radius:22px;background:rgba(28,20,12,.38);backdrop-filter:saturate(140%) blur(24px);-webkit-backdrop-filter:saturate(140%) blur(24px);box-shadow:inset 0 0 0 1px rgba(255,255,255,.18)}
+.b-times b{font-size:19px;font-weight:650;letter-spacing:-.025em}
+.b-times span{font-size:14px;color:rgba(255,255,255,.86);font-variant-numeric:tabular-nums}
+
+/* churches */
+.b-ch{display:grid;gap:20px;grid-template-columns:repeat(3,minmax(0,1fr))}
+.b-church{position:relative;display:flex;align-items:flex-end;aspect-ratio:4/5;border-radius:var(--r);overflow:hidden;color:#fff;padding:28px;isolation:isolate;box-shadow:0 0 0 1px var(--line),var(--sh)}
+.b-church .b-ph{position:absolute;inset:0;z-index:-2;background:center/cover;filter:saturate(.42) sepia(.16);transition:transform .9s var(--ease)}
+.b-church:hover .b-ph{transform:scale(1.03)}
+.b-church:after{content:"";position:absolute;inset:0;z-index:-1;background:linear-gradient(180deg,rgba(246,239,223,.34) 0%,rgba(246,239,223,0) 38%,rgba(14,10,6,0) 46%,rgba(14,10,6,.78) 100%)}
+.b-church .b-txt{flex:1;min-width:0;padding-right:8px}
+.b-church h3{font-size:30px;font-weight:700;letter-spacing:-.04em;line-height:1.05}
+.b-church p{font-size:15px;line-height:1.35;color:rgba(255,255,255,.88);margin-top:6px}
+.b-church .b-arr{position:absolute;top:20px;right:20px;width:40px;height:40px;border-radius:50%;display:grid;place-items:center;background:rgba(255,255,255,.18);backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);box-shadow:inset 0 0 0 1px rgba(255,255,255,.26);transition:background .3s var(--ease)}
+.b-church:hover .b-arr{background:rgba(255,255,255,.3)}
+
+@media (max-width:900px){
+  .b-sec{padding-top:96px}
+  .b-open{margin-bottom:40px}
+  .b-sub{font-size:18px}
+  .b-news,.b-ch{grid-template-columns:1fr}
+  .b-church{aspect-ratio:1/1}
+  .b-prayer{min-height:640px;padding:64px 20px 20px;border-radius:32px}
+  .b-prayer .b-ph{background-size:auto 124%;background-position:54% 100%}
+  .b-times{width:100%;flex-direction:column;gap:0;border-radius:22px;background:rgba(28,20,12,.5);backdrop-filter:saturate(140%) blur(24px);-webkit-backdrop-filter:saturate(140%) blur(24px);box-shadow:inset 0 0 0 1px rgba(255,255,255,.18)}
+  .b-times div{min-width:0;background:none;backdrop-filter:none;-webkit-backdrop-filter:none;box-shadow:none;border-radius:0;padding:14px 16px}
+  .b-times div+div{box-shadow:inset 0 1px 0 rgba(255,255,255,.14)}
+  .b-church:after{background:linear-gradient(180deg,rgba(246,239,223,.34) 0%,rgba(246,239,223,0) 34%,rgba(14,10,6,0) 40%,rgba(14,10,6,.8) 100%)}
+}
+@media (prefers-reduced-motion:reduce){
+  .b-card,.b-card .b-img i,.b-church .b-ph{transition:none}
+  .b-card:hover{transform:none}.b-card:hover .b-img i,.b-church:hover .b-ph{transform:none}
+}
+</style>
+
+<!-- NEWS -->
+<section class="wrap b-sec" data-part="b" aria-labelledby="b-news-h">
+  <div class="b-open reveal">
+    <p class="b-eye">Novice</p>
+    <h2 class="h2" id="b-news-h">Iz <em class="s">življenja</em> župnije</h2>
+    <a class="more" href="#">Vse novice <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a>
+  </div>
+  <div class="b-news">
+    <a class="b-card reveal" href="#"><div class="b-img"><i style="background-image:url(prototype-assets/roznivenec.jpg)"></i></div><div class="b-body"><time datetime="2026-10-25">25. oktober</time><h3>Rožnovenska pobožnost z otroki</h3><span class="b-go">Preberi <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg></span></div></a>
+    <a class="b-card reveal" href="#"><div class="b-img"><i style="background-image:url(prototype-assets/zbor.jpg);filter:saturate(.5) sepia(.08)"></i></div><div class="b-body"><time datetime="2026-10-18">18. oktober</time><h3>Pevski zbor na srečanju zborov</h3><span class="b-go">Preberi <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg></span></div></a>
+    <a class="b-card reveal" href="#"><div class="b-img"><i style="background-image:url(prototype-assets/obhajilo.jpg);background-position:center 60%"></i></div><div class="b-body"><time datetime="2026-10-11">11. oktober</time><h3>Zahvala za prvo sveto obhajilo</h3><span class="b-go">Preberi <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg></span></div></a>
+  </div>
+</section>
+
+<!-- PRAYER -->
+<section class="wrap b-sec" data-part="b" aria-labelledby="b-pray-h">
+  <div class="b-prayer reveal">
+    <div class="b-ph" aria-hidden="true"></div><div class="b-shade" aria-hidden="true"></div>
+    <div>
+      <p class="b-eye">Molitev in češčenje</p>
+      <h2 class="h2" id="b-pray-h">Pridite pred <em class="s">Najsvetejše</em></h2>
+    </div>
+    <div class="b-times">
+      <div><b>Prvi petek</b><span>15.00–18.30 · Marijina cerkev</span></div>
+      <div><b>Oktober</b><span>Rožni venec pred večerno mašo</span></div>
+    </div>
+  </div>
+</section>
+
+<!-- CHURCHES -->
+<section class="wrap b-sec" data-part="b" aria-labelledby="b-ch-h">
+  <div class="b-open reveal">
+    <p class="b-eye">Cerkve</p>
+    <h2 class="h2" id="b-ch-h">Naše <em class="s">cerkve</em></h2>
+    <p class="b-sub">Tri cerkve pod Šmarno goro.</p>
+  </div>
+  <div class="b-ch">
+    <a class="b-church reveal" href="#"><div class="b-ph" style="background-image:url(prototype-assets/spodnje-pirnice.jpg);background-position:86% 80%;background-size:auto 200%"></div><div class="b-txt"><h3>Marijina cerkev</h3><p>Župnijska cerkev Marijinega vnebovzetja</p></div><span class="b-arr" aria-hidden="true"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg></span></a>
+    <a class="b-church reveal" href="#"><div class="b-ph" style="background-image:url(prototype-assets/sv-kriz.jpg);background-position:62% 78%;background-size:auto 132%"></div><div class="b-txt"><h3>Sv. Križ</h3><p>Podružnična cerkev Povišanja sv. Križa</p></div><span class="b-arr" aria-hidden="true"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg></span></a>
+    <a class="b-church reveal" href="#"><div class="b-ph" style="background-image:url(prototype-assets/sv-tomaz.jpg);background-position:40% 62%;background-size:118% auto"></div><div class="b-txt"><h3>Sv. Tomaž</h3><p>Podružnična cerkev sv. Tomaža, apostola</p></div><span class="b-arr" aria-hidden="true"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg></span></a>
+  </div>
+</section>

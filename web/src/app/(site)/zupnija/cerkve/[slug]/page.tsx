@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { getChurch, getChurchesBrief, getCurrentSchedules, getSettings } from "@/sanity/data";
+import { getChurchMasses } from "@/lib/data/masses";
 import { absoluteUrl, breadcrumbJsonLd, buildMetadata, type JsonLd } from "@/lib/seo";
 import { routes } from "@/lib/routes";
 import { clean } from "@/lib/clean";
@@ -13,7 +14,8 @@ import { SanityImage, hasImage, ImagePlaceholder } from "@/components/sanity/San
 import { PhotoGrid } from "@/components/gallery/PhotoGrid";
 import { ScheduleTable } from "@/components/masses/ScheduleTable";
 import { Icon, type IconName } from "@/components/ui/Icon";
-import { Breadcrumbs, Container, JsonLdScript, Section } from "@/components/ui/primitives";
+import { Breadcrumbs, Container, JsonLdScript, Section, SectionHeading, TextLink, headline, tile } from "@/components/ui/primitives";
+import { DayLeaf, MassRow, dayLines } from "@/components/masses/MassList";
 
 type Props = { params: Promise<{ slug: string }> };
 
@@ -26,7 +28,13 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 
 export default async function ChurchPage({ params }: Props) {
   const { slug } = await params;
-  const [settings, church, churches, schedules] = await Promise.all([getSettings(), getChurch(slug), getChurchesBrief(), getCurrentSchedules()]);
+  const [settings, church, churches, schedules, upcoming] = await Promise.all([
+    getSettings(),
+    getChurch(slug),
+    getChurchesBrief(),
+    getCurrentSchedules(),
+    getChurchMasses(slug, 14),
+  ]);
   if (!church) notFound();
 
   const regular = schedules.filter((s) => !s.validFrom && !s.validUntil);
@@ -58,152 +66,181 @@ export default async function ChurchPage({ params }: Props) {
 
   return (
     <>
-      <Section tight className="pt-8 sm:pt-10">
+      <header className="pb-2 pt-10 sm:pt-14 lg:pt-20">
+        <Container className="flex flex-col items-center text-center">
+          <Breadcrumbs
+            className="mb-6 text-ink-3 [&_[aria-current]]:text-gold-ink"
+            items={[{ label: "Domov", href: routes.home }, { label: "Cerkve", href: routes.churches }, { label: church.shortName }]}
+          />
+          <p className="eyebrow">{CHURCH_KIND_LABEL[clean(church.kind)] ?? "Cerkev"}</p>
+          <h1 className={cn("mt-3 max-w-5xl", headline.display)}>{church.shortName || church.name}</h1>
+          {church.shortName && church.shortName !== church.name ? <p className="lede mx-auto mt-5 max-w-[40rem] text-balance">{church.name}</p> : null}
+
+          {/* Church switcher */}
+          <nav aria-label="Cerkve" className="mt-8 flex flex-wrap justify-center gap-2">
+            {churches.map((c) => {
+              const current = c._id === church._id;
+              return (
+                <Link
+                  key={c._id}
+                  href={routes.church(c.slug)}
+                  aria-current={current ? "page" : undefined}
+                  className={cn(
+                    "inline-flex min-h-11 items-center rounded-full px-4 text-[0.9375rem] font-semibold no-underline transition-colors sm:px-5",
+                    current ? "bg-moss text-paper" : "bg-surface text-ink shadow-soft hover:bg-paper-2",
+                  )}
+                >
+                  {c.shortName}
+                </Link>
+              );
+            })}
+          </nav>
+        </Container>
+      </header>
+
+      <Section>
         <Container>
-          <Breadcrumbs className="text-ink-3" items={[{ label: "Domov", href: routes.home }, { label: "Cerkve", href: routes.churches }, { label: church.shortName }]} />
+          {/* Photograph + gallery */}
+          <div className="grid gap-4">
+            <div className="overflow-hidden rounded-[2rem] shadow-soft sm:rounded-xl [&>*]:max-sm:aspect-[4/3]!">
+              {hasImage(church.image) ? (
+                <SanityImage
+                  image={church.image}
+                  aspect={21 / 9}
+                  sizes="(min-width: 1280px) 77rem, 100vw"
+                  maxWidth={1800}
+                  priority
+                  imgClassName="[filter:saturate(.55)_sepia(.12)]"
+                />
+              ) : (
+                <ImagePlaceholder className="aspect-[4/3] sm:aspect-[21/9]" />
+              )}
+            </div>
+            {thumbs.length ? (
+              <div>
+                <PhotoGrid images={gallery} title={church.name} variant="thumbs" thumbs={thumbs.length} extra={extra} />
+              </div>
+            ) : null}
+          </div>
 
-          <div className="mt-6 grid gap-8 lg:grid-cols-[16rem_minmax(0,1fr)] lg:gap-10">
-            {/* Church switcher */}
-            <aside>
-              <Link href={routes.churches} className="inline-flex min-h-10 items-center gap-2 text-small text-ink-2 hover:text-ink">
-                <Icon name="arrow-left" size={16} />
-                Nazaj na cerkve
-              </Link>
-              <ul className="mt-3 flex gap-2 overflow-x-auto pb-1 no-scrollbar lg:flex-col lg:overflow-visible">
-                {churches.map((c) => {
-                  const current = c._id === church._id;
-                  return (
-                    <li key={c._id} className="shrink-0 lg:shrink">
-                      <Link
-                        href={routes.church(c.slug)}
-                        aria-current={current ? "page" : undefined}
-                        className={cn(
-                          "flex items-center gap-3 rounded-md border p-2.5 no-underline transition-colors",
-                          current ? "border-stone bg-paper-2" : "border-transparent hover:border-stone",
-                        )}
-                      >
-                        {hasImage(c.image) ? (
-                          <SanityImage image={c.image} aspect={1} sizes="3rem" maxWidth={120} decorative className="size-12 shrink-0 rounded-sm" />
-                        ) : (
-                          <span className="size-12 shrink-0 rounded-sm bg-paper-3" aria-hidden="true" />
-                        )}
-                        <span className="min-w-0">
-                          <span className="block text-small font-medium leading-tight text-ink">{c.shortName}</span>
-                          <span className="block text-meta text-ink-3">{c.address?.city ?? CHURCH_KIND_LABEL[clean(c.kind)]}</span>
-                        </span>
-                      </Link>
-                    </li>
-                  );
-                })}
-              </ul>
-            </aside>
+          <div className="mt-14 grid gap-10 lg:mt-20 lg:grid-cols-[minmax(0,3fr)_minmax(0,2fr)] lg:gap-16">
+            <div className="min-w-0">
+              {church.summary ? <p className="text-[clamp(1.375rem,1.2rem+0.8vw,1.875rem)] font-semibold leading-snug tracking-[-0.03em] text-ink">{church.summary}</p> : null}
+              {addr?.city ? (
+                <p className="mt-3 flex items-center gap-1.5 text-body text-ink-2">
+                  <Icon name="pin" size={16} className="text-gold-ink" />
+                  {addr.city}
+                </p>
+              ) : null}
+              <RichText value={church.description} className="mt-6" />
+              {church.history?.length ? (
+                <details className={cn(tile, "group/d mt-8 overflow-hidden")}>
+                  <summary className="flex min-h-14 cursor-pointer list-none items-center justify-between rounded-lg px-6 text-body font-semibold text-ink [&::-webkit-details-marker]:hidden">
+                    Več o zgodovini
+                    <Icon name="chevron-down" size={18} className="text-gold-ink transition-transform duration-300 group-open/d:rotate-180" />
+                  </summary>
+                  <div className="border-t border-stone/70 px-6 py-5">
+                    <RichText value={church.history} />
+                  </div>
+                </details>
+              ) : null}
+            </div>
 
-            <article>
-              {/* Photograph + gallery grid */}
-              <div className={cn("grid gap-3", thumbs.length ? "md:grid-cols-[minmax(0,3fr)_minmax(0,1.4fr)]" : "")}>
-                {hasImage(church.image) ? (
-                  <SanityImage image={church.image} aspect={3 / 2} sizes="(min-width: 1024px) 40rem, 100vw" maxWidth={1600} priority className="rounded-md" />
-                ) : (
-                  <ImagePlaceholder className="aspect-[3/2] rounded-md" />
-                )}
-                {thumbs.length ? (
-                  <PhotoGrid images={gallery} title={church.name} variant="thumbs" thumbs={thumbs.length} extra={extra} />
+            <aside className={cn(tile, "self-start p-6 sm:p-8")}>
+              <p className="eyebrow">Za obisk</p>
+              <h2 className="mt-2 text-[1.75rem] font-bold tracking-[-0.04em]">Informacije</h2>
+              <dl className="mt-5 space-y-5">
+                {addressLine ? (
+                  <Info icon="pin" label="Naslov">
+                    {addressLine}
+                  </Info>
                 ) : null}
-              </div>
-
-              <div className="mt-8 grid gap-8 lg:grid-cols-[minmax(0,3fr)_minmax(0,2fr)] lg:gap-12">
-                <div>
-                  <p className="text-small text-ink-3">{CHURCH_KIND_LABEL[clean(church.kind)] ?? "Cerkev"}</p>
-                  <h1 className="mt-1 text-h1">{church.name}</h1>
-                  {addr?.city ? (
-                    <p className="mt-3 flex items-center gap-1.5 text-body text-ink-2">
-                      <Icon name="pin" size={16} className="text-ink-3" />
-                      {addr.city}
-                    </p>
-                  ) : null}
-                  {church.summary ? <p className="lede mt-5 text-ink-2">{church.summary}</p> : null}
-                  <RichText value={church.description} className="mt-6" />
-                  {church.history?.length ? (
-                    <details className="mt-6 rounded-md border border-stone">
-                      <summary className="flex min-h-12 cursor-pointer list-none items-center justify-between px-4 text-[0.75rem] font-semibold uppercase tracking-[0.14em] text-ink [&::-webkit-details-marker]:hidden">
-                        Več o zgodovini
-                        <Icon name="chevron-down" size={18} className="text-ink-3" />
-                      </summary>
-                      <div className="border-t border-stone px-4 py-4">
-                        <RichText value={church.history} />
-                      </div>
-                    </details>
-                  ) : null}
-                </div>
-
-                <aside className="rounded-md border border-stone bg-paper-2 p-5 sm:p-6">
-                  <h2 className="text-h3">Informacije</h2>
-                  <dl className="mt-4 space-y-4">
-                    {addressLine ? (
-                      <Info icon="pin" label="Naslov">
-                        {addressLine}
-                      </Info>
-                    ) : null}
-                    {church.dedication ? (
-                      <Info icon="cross" label="Ime zavetnice / zavetnika">
-                        {church.dedication}
-                      </Info>
-                    ) : null}
-                    {church.patronFeast ? (
-                      <Info icon="calendar" label="Žegnanje">
-                        {church.patronFeast}
-                      </Info>
-                    ) : null}
-                    {church.parking?.length ? (
-                      <Info icon="pin" label="Parkiranje">
-                        <RichText value={church.parking} size="sm" />
-                      </Info>
-                    ) : null}
-                    {church.accessibility?.length ? (
-                      <Info icon="check" label="Dostopnost">
-                        <RichText value={church.accessibility} size="sm" />
-                      </Info>
-                    ) : null}
-                    {church.visitNotes?.length ? (
-                      <Info icon="clock" label="Za obiskovalce">
-                        <RichText value={church.visitNotes} size="sm" />
-                      </Info>
-                    ) : null}
-                  </dl>
-                  {mapsHref ? (
-                    <a
-                      href={mapsHref}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="mt-6 inline-flex min-h-10 items-center gap-2 text-[0.75rem] font-semibold uppercase tracking-[0.14em] text-ink hover:text-moss"
-                    >
-                      Prikaži na zemljevidu <Icon name="arrow-right" size={14} />
-                    </a>
-                  ) : null}
-                </aside>
-              </div>
-            </article>
+                {church.dedication ? (
+                  <Info icon="cross" label="Ime zavetnice / zavetnika">
+                    {church.dedication}
+                  </Info>
+                ) : null}
+                {church.patronFeast ? (
+                  <Info icon="calendar" label="Žegnanje">
+                    {church.patronFeast}
+                  </Info>
+                ) : null}
+                {church.parking?.length ? (
+                  <Info icon="pin" label="Parkiranje">
+                    <RichText value={church.parking} size="sm" />
+                  </Info>
+                ) : null}
+                {church.accessibility?.length ? (
+                  <Info icon="check" label="Dostopnost">
+                    <RichText value={church.accessibility} size="sm" />
+                  </Info>
+                ) : null}
+                {church.visitNotes?.length ? (
+                  <Info icon="clock" label="Za obiskovalce">
+                    <RichText value={church.visitNotes} size="sm" />
+                  </Info>
+                ) : null}
+              </dl>
+              {mapsHref ? (
+                <TextLink href={mapsHref} external className="mt-4">
+                  Prikaži na zemljevidu
+                </TextLink>
+              ) : null}
+            </aside>
           </div>
         </Container>
       </Section>
 
-      {hasSchedule ? (
-        <Section tight tone="paper-2" className="border-t border-stone">
-          <Container>
-            <div className="mb-6 flex flex-wrap items-baseline justify-between gap-4">
-              <h2 className="text-h2">Svete maše v tej cerkvi</h2>
-              <Link href={routes.masses} className="inline-flex min-h-10 items-center gap-2 text-[0.75rem] font-semibold uppercase tracking-[0.14em] text-ink hover:text-moss">
-                Današnje maše in spremembe <Icon name="arrow-right" size={14} />
-              </Link>
-            </div>
-            <div className="max-w-2xl space-y-10">
-              {regular.map((s) => (
-                <ScheduleTable key={s._id} schedule={s} churchId={church._id} showTitle={regular.length > 1} compact />
-              ))}
-            </div>
-          </Container>
-        </Section>
-      ) : null}
+      <Section aria-labelledby="mase-v-cerkvi">
+        <Container>
+          <SectionHeading
+            id="mase-v-cerkvi"
+            eyebrow="Bogoslužje"
+            title="Svete maše v tej cerkvi"
+            accent="v tej cerkvi"
+            lede="Maše in nameni v naslednjih dveh tednih."
+          />
+          <div className={cn("grid gap-5", hasSchedule && "lg:grid-cols-[minmax(0,3fr)_minmax(0,2fr)]")}>
+            {upcoming.length ? (
+              <ol className={cn(tile, "divide-y divide-stone/70 self-start px-6 sm:px-8")}>
+                {upcoming.map((day) => (
+                  <li key={day.date} className="flex gap-5 py-6">
+                    <DayLeaf date={day.date} />
+                    <div className="min-w-0 flex-1">
+                      {dayLines(day).title ? <p className="text-small font-medium text-ink-3">{dayLines(day).title}</p> : null}
+                      <ul className="divide-y divide-stone/70 [&>li:first-child]:pt-1 [&>li:last-child]:pb-0">
+                        {day.masses.map((m) => (
+                          <MassRow key={m.key} mass={m} showIntentions hideChurch />
+                        ))}
+                      </ul>
+                    </div>
+                  </li>
+                ))}
+              </ol>
+            ) : (
+              <div className={cn(tile, "self-start px-6 py-14 text-center")}>
+                <p className="text-body text-ink-2">V naslednjih dveh tednih tu ni svetih maš.</p>
+                <TextLink href={routes.masses} className="mt-2">
+                  Vse svete maše
+                </TextLink>
+              </div>
+            )}
+            {hasSchedule ? (
+              <div className="space-y-5 self-start">
+                {regular.map((s) => (
+                  <div key={s._id} className={cn(tile, "p-6 sm:p-8")}>
+                    <p className="eyebrow">Redni urnik</p>
+                    <ScheduleTable schedule={s} churchId={church._id} showTitle={regular.length > 1} compact />
+                  </div>
+                ))}
+                <TextLink href={routes.masses} className="px-2">
+                  Današnje maše in spremembe
+                </TextLink>
+              </div>
+            ) : null}
+          </div>
+        </Container>
+      </Section>
 
       <JsonLdScript data={jsonLd} />
       <JsonLdScript data={breadcrumbJsonLd([{ name: "Cerkve", path: routes.churches }, { name: church.name, path: routes.church(slug) }], settings)} />
@@ -214,9 +251,9 @@ export default async function ChurchPage({ params }: Props) {
 function Info({ icon, label, children }: { icon: IconName; label: string; children: React.ReactNode }) {
   return (
     <div className="flex gap-3">
-      <Icon name={icon} size={18} className="mt-0.5 shrink-0 text-ink-3" />
+      <Icon name={icon} size={18} className="mt-0.5 shrink-0 text-gold-ink" />
       <div className="min-w-0">
-        <dt className="text-small font-medium text-ink">{label}</dt>
+        <dt className="text-small font-semibold text-ink">{label}</dt>
         <dd className="text-small text-ink-2">{children}</dd>
       </div>
     </div>

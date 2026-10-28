@@ -34,13 +34,13 @@ export function PhotoGrid({ images, title, variant = "grid", thumbs = 3, extra =
 
   return (
     <Lightbox photos={lightboxPhotos} label={title ?? "Galerija"}>
-      <ul className={variant === "thumbs" ? "grid grid-cols-2 gap-3" : "grid grid-cols-2 gap-2 sm:grid-cols-3 sm:gap-3 lg:grid-cols-4"}>
+      <ul className={variant === "thumbs" ? "grid grid-cols-4 gap-3 sm:grid-cols-6 lg:grid-cols-8" : "grid grid-cols-2 gap-3 sm:grid-cols-3 lg:grid-cols-4 lg:gap-4"}>
         {shown.map((p, i) => (
           <li key={p._key ?? i}>
             <button
               type="button"
               data-lightbox-index={i}
-              className="group block w-full overflow-hidden rounded-sm focus-visible:outline-offset-2"
+              className="group block w-full overflow-hidden rounded-md focus-visible:outline-offset-2"
               aria-label={p.alt ? `Odpri fotografijo: ${p.alt}` : `Odpri fotografijo ${i + 1}`}
             >
               <SanityImage
@@ -49,7 +49,7 @@ export function PhotoGrid({ images, title, variant = "grid", thumbs = 3, extra =
                 sizes={variant === "thumbs" ? "10rem" : "(min-width: 1024px) 18rem, (min-width: 640px) 33vw, 50vw"}
                 maxWidth={variant === "thumbs" ? 400 : 700}
                 decorative
-                imgClassName="transition-transform duration-300 ease-out-soft group-hover:scale-[1.03] motion-reduce:transform-none"
+                imgClassName="saturate-[.8] transition-transform duration-500 ease-out-soft group-hover:scale-[1.03] motion-reduce:transform-none"
               />
             </button>
           </li>
@@ -59,10 +59,10 @@ export function PhotoGrid({ images, title, variant = "grid", thumbs = 3, extra =
             <button
               type="button"
               data-lightbox-index={thumbs}
-              className="flex aspect-square w-full flex-col items-center justify-center rounded-sm bg-moss text-paper hover:bg-moss-deep focus-visible:outline-offset-2"
+              className="flex aspect-square w-full flex-col items-center justify-center rounded-md bg-gold-soft text-gold-ink transition-colors hover:bg-paper-3 focus-visible:outline-offset-2"
             >
-              <span className="font-serif text-[1.75rem] leading-none">+{extra}</span>
-              <span className="mt-1 text-small">fotografij</span>
+              <span className="text-[1.75rem] font-bold leading-none tracking-[-0.04em]">+{extra}</span>
+              <span className="mt-1 text-small font-medium">fotografij</span>
             </button>
           </li>
         ) : null}

@@ -17,7 +17,7 @@ import "server-only";
 import { and, asc, eq, gte, inArray, lte } from "drizzle-orm";
 import { db, schema } from "@/db";
 import { today, nowTime, weekStart } from "@/lib/clock";
-import { addDays, dateRange, type IsoDate } from "@/lib/dates";
+import { addDays, compareTime, dateRange, type IsoDate } from "@/lib/dates";
 import type { Mass, MassDay } from "@/lib/masses";
 import { ensureMasses } from "@/lib/mase/ensure";
 import { FEASTS } from "@/lib/mase/format";
@@ -104,6 +104,23 @@ export async function getMassWeek(date: IsoDate) {
   const from = weekStart(date);
   const to = addDays(from, 6);
   return { from, to, days: await getMassDays(from, to) };
+}
+
+/**
+ * The Masses at one church (by slug) from now through the next `days` days,
+ * with their published intentions (US-011, the church page). Masses already
+ * past today and days without a Mass there are left out.
+ */
+export async function getChurchMasses(slug: string, days = 14): Promise<MassDay[]> {
+  const from = today();
+  const time = nowTime();
+  const list = await getMassDays(from, addDays(from, days - 1));
+  return list
+    .map((day) => ({
+      ...day,
+      masses: day.masses.filter((x) => x.church?.slug === slug && !(day.date === from && compareTime(x.time, time) < 0)),
+    }))
+    .filter((day) => day.masses.length > 0);
 }
 
 /** The days of getMassWeek: the same Masses and published intentions as the editor's week. */

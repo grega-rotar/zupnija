@@ -7,7 +7,7 @@ import { formatDate } from "@/lib/dates";
 import { SEARCH_TYPE_LABEL } from "@/lib/labels";
 import { truncate } from "@/lib/utils";
 import { Icon } from "@/components/ui/Icon";
-import { Container, EmptyState, PageHeader, Section, Tag } from "@/components/ui/primitives";
+import { Container, EmptyState, PageHeader, Section, Tag, buttonClassName } from "@/components/ui/primitives";
 
 export async function generateMetadata(): Promise<Metadata> {
   const settings = await getSettings();
@@ -23,8 +23,8 @@ export default async function SearchPage({ searchParams }: Props) {
 
   return (
     <>
-      <PageHeader title="Iskanje">
-        <form action={routes.search} method="get" role="search" className="mt-6 flex max-w-xl gap-2">
+      <PageHeader title="Kaj iščete?" accent="iščete" eyebrow={<p className="eyebrow">Iskanje</p>}>
+        <form action={routes.search} method="get" role="search" className="mt-8 flex w-full max-w-xl gap-2 rounded-full bg-surface p-1.5 shadow-soft">
           <label htmlFor="q" className="sr-only">
             Kaj iščete?
           </label>
@@ -35,24 +35,24 @@ export default async function SearchPage({ searchParams }: Props) {
             defaultValue={term}
             placeholder="npr. birma, romanje, krst …"
             autoFocus={!term}
-            className="min-h-12 flex-1 rounded-sm border border-stone-2 bg-paper px-4 text-body text-ink placeholder:text-ink-3 focus:border-ink focus:outline-none focus-visible:outline-3 focus-visible:outline-gold focus-visible:outline-offset-2"
+            className="min-h-11 min-w-0 flex-1 rounded-full bg-transparent px-4 text-body text-ink placeholder:text-ink-3 focus:outline-none focus-visible:outline-3 focus-visible:outline-gold focus-visible:outline-offset-2"
           />
-          <button type="submit" className="inline-flex min-h-12 items-center gap-2 rounded-sm bg-ink px-5 font-medium text-paper hover:bg-moss">
+          <button type="submit" className={buttonClassName()}>
             <Icon name="search" size={18} />
             Išči
           </button>
         </form>
       </PageHeader>
-      <Section tight>
-        <Container className="[&>*]:max-w-3xl">
+      <Section>
+        <Container width="prose">
           {!term ? (
-            <p className="text-body text-ink-2">Iščete lahko po oznanilih, dogodkih, novicah, straneh in dokumentih.</p>
+            <p className="text-center text-body text-ink-2">Iščete lahko po oznanilih, dogodkih, novicah, straneh in dokumentih.</p>
           ) : results.length ? (
             <>
-              <p className="mb-6 text-small text-ink-3" role="status">
+              <p className="mb-4 px-2 text-small font-medium text-ink-3" role="status">
                 {results.length} zadetkov za »{term}«
               </p>
-              <ul className="divide-y divide-stone border-y border-stone">
+              <ul className="divide-y divide-stone/70 rounded-lg bg-surface shadow-soft">
                 {results.map((r) => {
                   const href = r._type === "parishDocument" ? (r.fileUrl ? `${r.fileUrl}?dl=` : routes.documents) : pathForDocument(r._type, r.slug);
                   if (!href) return null;
@@ -60,18 +60,18 @@ export default async function SearchPage({ searchParams }: Props) {
                   const rawDate = typeof r.date === "string" ? r.date : null;
                   const date = rawDate ? formatDate(rawDate) : null;
                   return (
-                    <li key={r._id} className="py-4">
+                    <li key={r._id} className="px-6 py-5 sm:px-8">
                       <div className="flex flex-wrap items-center gap-2 text-meta text-ink-3">
                         <Tag>{SEARCH_TYPE_LABEL[r._type] ?? r._type}</Tag>
                         {date ? <span>{date}</span> : null}
                       </div>
-                      <h2 className="mt-1 font-serif text-h3 text-ink">
+                      <h2 className="mt-2 text-[1.25rem] font-bold leading-snug tracking-[-0.03em] text-ink">
                         {external ? (
-                          <a href={href} className="hover:underline">
+                          <a href={href} className="rounded-sm hover:text-gold-ink">
                             {r.title}
                           </a>
                         ) : (
-                          <Link href={href} className="hover:underline">
+                          <Link href={href} className="rounded-sm hover:text-gold-ink">
                             {r.title}
                           </Link>
                         )}

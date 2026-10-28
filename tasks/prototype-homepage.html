@@ -1,0 +1,255 @@
+<!doctype html>
+<html lang="sl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Domača stran · prototip</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,500;1,6..72,400&family=Source+Sans+3:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+:root{--paper:#fbfaf7;--paper2:#f3f0e9;--paper3:#e9e5db;--stone:#d9d3c5;--stone2:#b9b1a0;--ink:#1e2622;--ink2:#4a544e;--ink3:#6f7873;--moss:#3d5a47;--mossd:#2c4234;--mosss:#e4ebe4;--gold:#a8843a;--golds:#f3ead6;--alert:#8d3a2e;--alerts:#f6e6e1}
+/* Marijina modra: deep navy on warm paper */
+:root[data-palette="navy"]{--paper:#fbfaf8;--paper2:#f2f1ed;--paper3:#e6e5df;--stone:#d6d4cc;--stone2:#b3b0a6;--ink:#1c2330;--ink2:#465062;--ink3:#687284;--moss:#2e4a6e;--mossd:#1f344f;--mosss:#e2e9f1}
+/* Svetlejša modra: brighter blue, cooler paper */
+:root[data-palette="blue"]{--paper:#fafbfc;--paper2:#eff3f7;--paper3:#e2e8ef;--stone:#d3dbe4;--stone2:#a9b5c3;--ink:#18222e;--ink2:#435063;--ink3:#64707f;--moss:#2f5f93;--mossd:#21476f;--mosss:#e1ebf6}
+*{box-sizing:border-box}
+body{margin:0;background:var(--paper2);font-family:"Source Sans 3","Segoe UI",system-ui,sans-serif;color:var(--ink);font-size:17px;line-height:1.5}
+a{color:var(--moss);font-weight:600;text-decoration:none}a:hover{color:var(--mossd);text-decoration:underline}
+.serif{font-family:Newsreader,Georgia,serif;font-weight:400}
+.kick{margin:0;font-size:12px;font-weight:600;letter-spacing:.14em;text-transform:uppercase;color:var(--ink3)}
+.wrap{max-width:1200px;margin:0 auto;padding:0 24px}
+.btn{display:inline-flex;align-items:center;justify-content:center;min-height:44px;padding:0 18px;border-radius:4px;background:var(--moss);color:var(--paper);font-weight:600;border:0;font:inherit;font-weight:600;cursor:pointer}
+.btn:hover{background:var(--mossd);color:var(--paper);text-decoration:none}
+.btn.ghost{background:transparent;color:var(--ink);border:1px solid var(--stone2)}
+.chip{display:inline-flex;align-items:center;padding:3px 10px;border-radius:999px;font-size:13px;font-weight:600}
+.chip.moss{background:var(--mosss);color:var(--mossd)}.chip.red{background:var(--alerts);color:var(--alert)}.chip.gold{background:var(--golds);color:#6e5520}
+.card{background:var(--paper);border:1px solid var(--stone);border-radius:6px;padding:28px;display:flex;flex-direction:column;gap:12px}
+.grid{display:grid;gap:20px;grid-template-columns:repeat(auto-fit,minmax(min(100%,320px),1fr))}
+ul.plain{list-style:none;margin:0;padding:0}
+.mass{display:grid;grid-template-columns:72px 1fr;gap:16px;padding:14px 0;border-bottom:1px solid var(--stone)}
+.mass .t{font-size:22px;font-weight:600;font-variant-numeric:tabular-nums}
+.mass.past .t,.mass.past p{color:var(--ink3)}.mass.past .t{text-decoration:line-through}
+.mass.off .t{color:var(--ink3);text-decoration:line-through}
+.mass p{margin:0}.mass .who{color:var(--ink2);margin-top:2px}
+h1,h2,h3{margin:0}
+dl.read{margin:0;display:grid;grid-template-columns:auto 1fr;gap:4px 14px;font-size:15px}dl.read dt{color:var(--ink3)}dl.read dd{margin:0}
+.week li{display:flex;justify-content:space-between;gap:12px;padding:7px 0;border-bottom:1px solid var(--paper3);font-size:15px}.week li span:last-child{color:var(--ink2)}
+/* prototype chrome */
+.proto-bar{position:sticky;top:0;z-index:50;background:var(--ink);color:var(--paper);padding:10px 16px;display:flex;flex-wrap:wrap;gap:8px;align-items:center;font-size:15px}
+.proto-bar a{color:var(--paper);padding:6px 12px;border-radius:4px;border:1px solid #4a544e}.proto-bar a:hover{background:#2c3530;text-decoration:none}
+.variant{background:var(--paper);margin:40px auto;max-width:1440px;border:1px solid var(--stone);box-shadow:0 1px 0 var(--stone)}
+.vlabel{background:var(--paper3);padding:14px 24px;border-bottom:1px solid var(--stone)}
+.vlabel h2{font-size:22px}.vlabel p{margin:4px 0 0;color:var(--ink2);font-size:15px}
+/* shared site chrome */
+.hdr{border-bottom:1px solid var(--stone)}
+.hdr .wrap{min-height:72px;display:flex;flex-wrap:wrap;align-items:center;gap:12px 28px}
+.hdr .logo{font-family:Newsreader,Georgia,serif;font-size:24px;color:var(--ink);font-weight:400;flex-grow:1}
+.hdr nav{display:flex;flex-wrap:wrap;gap:4px 22px}.hdr nav a{color:var(--ink);font-weight:500}
+.ftr{border-top:1px solid var(--stone);background:var(--paper2)}
+.ftr .wrap{padding-top:40px;padding-bottom:48px;display:grid;gap:24px;grid-template-columns:repeat(auto-fit,minmax(min(100%,220px),1fr));font-size:15px;color:var(--ink2)}
+.ftr b{display:block;color:var(--ink);margin-bottom:4px}
+.qr{width:112px;height:112px;flex:none;background:var(--paper);border:1px solid var(--stone);border-radius:4px;display:flex;align-items:center;justify-content:center;color:var(--ink3);font-size:13px}
+.ph{background:var(--paper3);border-radius:4px;display:flex;align-items:center;justify-content:center;color:var(--ink3);font-size:14px}
+input[type=email]{flex:1 1 220px;min-height:44px;padding:0 14px;border:1px solid var(--stone2);border-radius:4px;background:var(--paper);font:inherit}
+.states{display:grid;gap:20px;grid-template-columns:repeat(auto-fit,minmax(min(100%,420px),1fr));padding:24px}
+.state h4{margin:0 0 10px;font-size:14px;font-weight:600;color:var(--alert);letter-spacing:.04em;text-transform:uppercase}
+.phone{width:390px;max-width:100%;margin:24px auto;border:1px solid var(--stone2);border-radius:28px;overflow:hidden;background:var(--paper)}
+</style>
+</head>
+<body>
+
+<div class="proto-bar">
+  <strong style="margin-right:8px">Domača stran · prototip (28. 10. 2026, sreda)</strong>
+  <a href="#A">A · Danes pod fotografijo</a>
+  <a href="#B">B · Dnevna tabla</a>
+  <a href="#C">C · Dva stolpca</a>
+  <a href="#S">Stanja</a>
+  <a href="#P">Telefon</a>
+  <span style="margin-left:auto">Barve:</span>
+  <a href="#" onclick="document.documentElement.dataset.palette='navy';return false">Marijina modra</a>
+  <a href="#" onclick="document.documentElement.dataset.palette='blue';return false">Svetlejša modra</a>
+  <a href="#" onclick="delete document.documentElement.dataset.palette;return false">Zdajšnja zelena</a>
+</div>
+<script>document.documentElement.dataset.palette='navy'</script>
+
+<!-- ============================ A ============================ -->
+<section class="variant" id="A">
+  <div class="vlabel"><h2 class="serif">A · Danes pod fotografijo</h2><p>Kot zdaj (fotografija na vrhu), a z enim velikim blokom »Danes«: maše z nameni levo, bogoslužni dan in berila desno. Pod njim dogodek, oznanila in ta teden.</p></div>
+
+  <header class="hdr"><div class="wrap"><span class="logo">Župnija Pirniče</span>
+    <nav><a href="#">Svete maše</a><a href="#">Oznanila</a><a href="#">Dogodki</a><a href="#">Zakramenti</a><a href="#">Župnija</a><a href="#">Kontakt</a></nav>
+    <a class="btn ghost" href="#">Daruj</a></div></header>
+
+  <div style="background:var(--mossd);color:var(--paper)"><div class="wrap" style="padding-top:64px;padding-bottom:120px">
+    <p class="kick" style="color:var(--mosss)">[Fotografija: Marijina cerkev]</p>
+    <h1 class="serif" style="font-size:56px;line-height:1.05;margin-top:10px">Župnija Pirniče</h1>
+    <p style="margin:8px 0 0;color:var(--mosss);font-size:19px">Sv. Križ · Marijina cerkev · Sv. Jakob na Gori</p>
+  </div></div>
+
+  <div class="wrap" style="margin-top:-80px;position:relative">
+    <div style="background:var(--paper);border:1px solid var(--stone);border-radius:6px;display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,340px),1fr))">
+      <div style="padding:32px;grid-column:span 2;display:flex;flex-direction:column;gap:16px;border-right:1px solid var(--stone)">
+        <div style="display:flex;flex-wrap:wrap;justify-content:space-between;gap:8px;align-items:baseline">
+          <p class="kick">Danes · sreda, 28. oktober</p><span class="chip moss">Naslednja čez 3 h 20 min</span></div>
+        <h2 class="serif" style="font-size:40px;line-height:1.1">Sveta maša danes ob 18.00</h2>
+        <ul class="plain" style="border-top:1px solid var(--stone)">
+          <li class="mass past"><span class="t">7.30</span><div><p><b>Sv. Križ</b> · že mimo</p><p class="who">Za zdravje</p></div></li>
+          <li class="mass"><span class="t">18.00</span><div><p><b>Marijina cerkev</b></p><p class="who">+ Marija Kos, 30. dan · ++ Anton in Ivana Zupan, obl.</p></div></li>
+        </ul>
+        <div style="display:flex;flex-wrap:wrap;gap:12px 24px"><a href="#">Maše in nameni ta teden →</a><a href="#">Dodaj v koledar</a></div>
+      </div>
+      <div style="padding:32px;background:var(--paper2);display:flex;flex-direction:column;gap:12px">
+        <p class="kick">Bogoslužni dan</p>
+        <h3 class="serif" style="font-size:26px;line-height:1.2">Sv. Simon in Juda Tadej, apostola</h3>
+        <span class="chip red" style="align-self:flex-start">Praznik</span>
+        <p class="serif" style="margin:0;font-style:italic;font-size:19px;color:var(--ink2)">»[Vrstica dneva iz evangelija]«</p>
+        <dl class="read"><dt>Berilo</dt><dd>Ef 2,19-22</dd><dt>Psalm</dt><dd>Ps 18,2-5</dd><dt>Evangelij</dt><dd>Lk 6,12-16</dd></dl>
+        <a class="btn" href="#" style="margin-top:auto">Preberi današnja berila</a>
+        <p style="margin:0;font-size:13px;color:var(--ink3)">Vir: hozana.si</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="wrap grid" style="padding-top:24px">
+    <div class="card"><p class="kick">Naslednji dogodek · čez 4 dni</p><h3 class="serif" style="font-size:26px">Vsi sveti: molitev na pokopališču</h3><p style="margin:0;color:var(--ink2)">Nedelja, 1. november · 14.00 · pokopališče</p><div style="margin-top:auto;display:flex;gap:20px;flex-wrap:wrap"><a href="#">Več o dogodku</a><a href="#">Vsi dogodki</a></div></div>
+    <div class="card"><p class="kick">Oznanila · Leto XLII, št. 10</p><h3 class="serif" style="font-size:26px">Oktober 2026</h3><p style="margin:0;color:var(--ink2)">Rožnovenska Mati Božja · 10 obvestil · 7 srečanj</p><div style="margin-top:auto;display:flex;gap:12px;flex-wrap:wrap"><a class="btn" href="#">Preberi oznanila</a><a class="btn ghost" href="#">Prenesi PDF</a></div></div>
+    <div class="card"><p class="kick">Ta teden</p><ul class="plain week"><li><span>Čet 29.</span><span>18.00 Marijina c.</span></li><li><span>Pet 30.</span><span>18.00 Marijina c.</span></li><li><span>Sob 31.</span><span>18.00 Sv. Križ</span></li><li><span><b>Ned 1. · Vsi sveti</b></span><span>8.00 · 10.00</span></li></ul><a href="#" style="margin-top:auto">Ves razpored →</a></div>
+  </div>
+
+  <div class="wrap" style="padding-top:56px">
+    <div style="display:flex;justify-content:space-between;flex-wrap:wrap;gap:12px;align-items:baseline;margin-bottom:18px"><h2 class="serif" style="font-size:34px">Iz župnijskega življenja</h2><a href="#">Vse novice</a></div>
+    <div class="grid">
+      <article><div class="ph" style="aspect-ratio:4/3">[Fotografija]</div><p style="margin:8px 0 0;font-size:14px;color:var(--ink3)">25. oktober 2026</p><h3 class="serif" style="font-size:22px">Rožnovenska pobožnost z otroki</h3></article>
+      <article><div class="ph" style="aspect-ratio:4/3">[Fotografija]</div><p style="margin:8px 0 0;font-size:14px;color:var(--ink3)">18. oktober 2026</p><h3 class="serif" style="font-size:22px">Župnijsko romanje</h3></article>
+      <article><div class="ph" style="aspect-ratio:4/3">[Fotografija]</div><p style="margin:8px 0 0;font-size:14px;color:var(--ink3)">11. oktober 2026</p><h3 class="serif" style="font-size:22px">Zakonski jubilanti</h3></article>
+    </div>
+  </div>
+
+  <div style="margin-top:56px;background:var(--paper2);border-top:1px solid var(--stone)"><div class="wrap grid" style="padding-top:44px;padding-bottom:44px;gap:40px">
+    <div style="display:flex;gap:24px;flex-wrap:wrap"><div class="qr">[UPN QR]</div><div style="flex:1 1 220px"><h2 class="serif" style="font-size:28px">Podprite župnijo</h2><p style="margin:6px 0;color:var(--ink2)">Skenirajte kodo v bančni aplikaciji ali nakažite na TRR [SI56 …].</p><a href="#">Vse o darovih →</a></div></div>
+    <form onsubmit="return false" style="display:flex;flex-direction:column;gap:10px"><h2 class="serif" style="font-size:28px">Oznanila po e-pošti</h2><label for="nlA" style="color:var(--ink2)">Ko izidejo nova oznanila, vam jih pošljemo. Enkrat na mesec.</label><div style="display:flex;gap:10px;flex-wrap:wrap"><input id="nlA" type="email" placeholder="vas@naslov.si"><button class="btn">Prijavi me</button></div></form>
+  </div></div>
+  <footer class="ftr"><div class="wrap"><div><b class="serif" style="font-size:20px;font-weight:400">Župnija Pirniče</b>[Naslov župnišča]</div><div><b>Uradne ure</b>[iz nastavitev]</div><div><b>Kontakt</b>zupirnice@gmail.com</div></div></footer>
+</section>
+
+<!-- ============================ B ============================ -->
+<section class="variant" id="B">
+  <div class="vlabel"><h2 class="serif">B · Dnevna tabla</h2><p>Brez velike fotografije. Vrh je datum in bogoslužni dan kot naslov časopisa; pod njim trak sedmih dni (danes izbran) z mašami in nameni izbranega dne. Fotografija gre nižje.</p></div>
+
+  <header class="hdr"><div class="wrap"><span class="logo">Župnija Pirniče</span>
+    <nav><a href="#">Svete maše</a><a href="#">Oznanila</a><a href="#">Dogodki</a><a href="#">Zakramenti</a><a href="#">Župnija</a><a href="#">Kontakt</a></nav>
+    <a class="btn ghost" href="#">Daruj</a></div></header>
+
+  <div class="wrap" style="padding-top:48px;padding-bottom:12px;display:flex;flex-wrap:wrap;gap:20px 48px;align-items:flex-end;justify-content:space-between">
+    <div><p class="kick">Sreda, 28. oktober 2026</p><h1 class="serif" style="font-size:52px;line-height:1.05;margin-top:8px">Sv. Simon in Juda Tadej, apostola</h1>
+      <p class="serif" style="margin:10px 0 0;font-style:italic;font-size:21px;color:var(--ink2)">»[Vrstica dneva iz evangelija]« <span style="font-style:normal;font-size:16px;color:var(--ink3)">· Lk 6,12-16</span></p></div>
+    <a class="btn" href="#">Današnja berila</a>
+  </div>
+
+  <div class="wrap" style="padding-top:24px">
+    <div role="tablist" aria-label="Dnevi" style="display:grid;grid-template-columns:repeat(7,minmax(0,1fr));border:1px solid var(--stone);border-radius:6px 6px 0 0;overflow:hidden">
+      <button style="all:unset;cursor:pointer;padding:12px;text-align:center;border-right:1px solid var(--stone);background:var(--paper2)"><span class="kick">Ned</span><br><span style="font-size:20px">25</span></button>
+      <button style="all:unset;cursor:pointer;padding:12px;text-align:center;border-right:1px solid var(--stone);background:var(--paper2)"><span class="kick">Pon</span><br><span style="font-size:20px">26</span></button>
+      <button style="all:unset;cursor:pointer;padding:12px;text-align:center;border-right:1px solid var(--stone);background:var(--paper2)"><span class="kick">Tor</span><br><span style="font-size:20px">27</span></button>
+      <button aria-selected="true" style="all:unset;cursor:pointer;padding:12px;text-align:center;border-right:1px solid var(--stone);background:var(--moss);color:var(--paper)"><span class="kick" style="color:var(--mosss)">Danes</span><br><span style="font-size:20px;font-weight:600">28</span></button>
+      <button style="all:unset;cursor:pointer;padding:12px;text-align:center;border-right:1px solid var(--stone)"><span class="kick">Čet</span><br><span style="font-size:20px">29</span></button>
+      <button style="all:unset;cursor:pointer;padding:12px;text-align:center;border-right:1px solid var(--stone)"><span class="kick">Pet</span><br><span style="font-size:20px">30</span></button>
+      <button style="all:unset;cursor:pointer;padding:12px;text-align:center"><span class="kick">Sob</span><br><span style="font-size:20px">31</span></button>
+    </div>
+    <div style="border:1px solid var(--stone);border-top:0;border-radius:0 0 6px 6px;padding:8px 28px 24px;display:grid;gap:32px;grid-template-columns:repeat(auto-fit,minmax(min(100%,360px),1fr))">
+      <ul class="plain" style="grid-column:span 2">
+        <li class="mass past"><span class="t">7.30</span><div><p><b>Sv. Križ</b> · že mimo</p><p class="who">Za zdravje</p></div></li>
+        <li class="mass" style="border-bottom:0"><span class="t">18.00</span><div><p><b>Marijina cerkev</b> <span class="chip moss" style="margin-left:6px">čez 3 h 20 min</span></p><p class="who">+ Marija Kos, 30. dan · ++ Anton in Ivana Zupan, obl.</p></div></li>
+      </ul>
+      <div style="padding-top:14px;display:flex;flex-direction:column;gap:8px"><p class="kick">Ta dan v župniji</p><p style="margin:0">19.15 Seja ŽPS · župnišče</p><a href="#" style="margin-top:auto">Ves mesec →</a></div>
+    </div>
+  </div>
+
+  <div class="wrap grid" style="padding-top:32px">
+    <div class="ph" style="min-height:260px;grid-column:span 2">[Fotografija: Marijina cerkev]</div>
+    <div class="card"><p class="kick">Oznanila · oktober 2026</p><h3 class="serif" style="font-size:24px">Rožnovenska Mati Božja</h3><p style="margin:0;color:var(--ink2)">10 obvestil · 7 srečanj</p><div style="margin-top:auto;display:flex;gap:12px;flex-wrap:wrap"><a class="btn" href="#">Preberi</a><a class="btn ghost" href="#">PDF</a></div></div>
+  </div>
+  <div class="wrap grid" style="padding-top:20px;padding-bottom:56px">
+    <div class="card"><p class="kick">Čez 4 dni</p><h3 class="serif" style="font-size:22px">Vsi sveti: molitev na pokopališču</h3><p style="margin:0;color:var(--ink2)">Ned 1. 11. · 14.00</p></div>
+    <div class="card"><p class="kick">Čez 9 dni</p><h3 class="serif" style="font-size:22px">Srečanje Karitas</h3><p style="margin:0;color:var(--ink2)">Pet 6. 11. · 19.00 · župnišče</p></div>
+    <div class="card"><p class="kick">Novica · 25. 10.</p><h3 class="serif" style="font-size:22px">Rožnovenska pobožnost z otroki</h3><a href="#" style="margin-top:auto">Vse novice →</a></div>
+  </div>
+  <div style="background:var(--paper2);border-top:1px solid var(--stone)"><div class="wrap grid" style="padding-top:40px;padding-bottom:40px;gap:40px">
+    <div style="display:flex;gap:24px;flex-wrap:wrap"><div class="qr">[UPN QR]</div><div style="flex:1 1 220px"><h2 class="serif" style="font-size:26px">Podprite župnijo</h2><p style="margin:6px 0;color:var(--ink2)">TRR [SI56 …] · namen: dar za župnijo</p></div></div>
+    <form onsubmit="return false" style="display:flex;flex-direction:column;gap:10px"><h2 class="serif" style="font-size:26px">Oznanila po e-pošti</h2><div style="display:flex;gap:10px;flex-wrap:wrap"><input type="email" aria-label="E-pošta" placeholder="vas@naslov.si"><button class="btn">Prijavi me</button></div></form>
+  </div></div>
+</section>
+
+<!-- ============================ C ============================ -->
+<section class="variant" id="C">
+  <div class="vlabel"><h2 class="serif">C · Dva stolpca</h2><p>Levo ozek stolpec »Danes« (ura naslednje maše v velikih številkah, nameni, bogoslužni dan); desno vse ostalo kot mirna stran. Na telefonu gre levi stolpec na vrh.</p></div>
+
+  <header class="hdr"><div class="wrap"><span class="logo">Župnija Pirniče</span>
+    <nav><a href="#">Svete maše</a><a href="#">Oznanila</a><a href="#">Dogodki</a><a href="#">Zakramenti</a><a href="#">Župnija</a><a href="#">Kontakt</a></nav>
+    <a class="btn ghost" href="#">Daruj</a></div></header>
+
+  <div class="wrap" style="padding-top:40px;padding-bottom:56px;display:flex;flex-wrap:wrap;gap:32px">
+    <aside style="flex:1 1 340px;max-width:400px;display:flex;flex-direction:column;gap:20px">
+      <div style="background:var(--mossd);color:var(--paper);border-radius:6px;padding:28px;display:flex;flex-direction:column;gap:10px">
+        <p class="kick" style="color:var(--mosss)">Danes · sreda, 28. oktober</p>
+        <p style="margin:0;color:var(--mosss)">Naslednja sveta maša</p>
+        <p class="serif" style="margin:0;font-size:84px;line-height:1;font-variant-numeric:tabular-nums">18.00</p>
+        <p style="margin:0;font-size:19px">Marijina cerkev · čez 3 h 20 min</p>
+        <p style="margin:6px 0 0;color:var(--mosss);border-top:1px solid #4a6a55;padding-top:12px">+ Marija Kos, 30. dan<br>++ Anton in Ivana Zupan, obl.</p>
+        <p style="margin:0;font-size:14px;color:#c9d6cb">Zjutraj: 7.30 Sv. Križ (Za zdravje)</p>
+      </div>
+      <div class="card" style="gap:10px"><p class="kick">Bogoslužni dan</p><h3 class="serif" style="font-size:24px">Sv. Simon in Juda Tadej, apostola</h3><span class="chip red" style="align-self:flex-start">Praznik</span><p class="serif" style="margin:0;font-style:italic;color:var(--ink2)">»[Vrstica dneva]«</p><a class="btn" href="#">Današnja berila</a></div>
+      <div class="card"><p class="kick">Ta teden</p><ul class="plain week"><li><span>Čet 29.</span><span>18.00</span></li><li><span>Pet 30.</span><span>18.00</span></li><li><span>Sob 31.</span><span>18.00</span></li><li><span><b>Ned 1.</b></span><span>8.00 · 10.00</span></li></ul></div>
+    </aside>
+    <main style="flex:999 1 560px;min-width:0;display:flex;flex-direction:column;gap:24px">
+      <div class="ph" style="min-height:300px">[Fotografija: Marijina cerkev]</div>
+      <div class="grid">
+        <div class="card"><p class="kick">Oznanila · oktober 2026</p><h3 class="serif" style="font-size:24px">Rožnovenska Mati Božja</h3><div style="display:flex;gap:12px;flex-wrap:wrap;margin-top:auto"><a class="btn" href="#">Preberi</a><a class="btn ghost" href="#">PDF</a></div></div>
+        <div class="card"><p class="kick">Naslednji dogodek · čez 4 dni</p><h3 class="serif" style="font-size:24px">Vsi sveti: molitev na pokopališču</h3><p style="margin:0;color:var(--ink2)">Ned 1. 11. · 14.00</p></div>
+      </div>
+      <h2 class="serif" style="font-size:30px;margin-top:12px">Iz župnijskega življenja</h2>
+      <div class="grid"><article><div class="ph" style="aspect-ratio:16/10">[Fotografija]</div><h3 class="serif" style="font-size:21px;margin-top:8px">Rožnovenska pobožnost z otroki</h3></article><article><div class="ph" style="aspect-ratio:16/10">[Fotografija]</div><h3 class="serif" style="font-size:21px;margin-top:8px">Župnijsko romanje</h3></article></div>
+      <div style="display:flex;gap:24px;flex-wrap:wrap;border-top:1px solid var(--stone);padding-top:24px"><div class="qr">[UPN QR]</div><div style="flex:1 1 240px"><h2 class="serif" style="font-size:26px">Podprite župnijo</h2><p style="margin:6px 0;color:var(--ink2)">TRR [SI56 …]</p><form onsubmit="return false" style="display:flex;gap:10px;flex-wrap:wrap;margin-top:12px"><input type="email" aria-label="E-pošta za oznanila" placeholder="Oznanila po e-pošti: vas@naslov.si"><button class="btn">Prijavi me</button></form></div></div>
+    </main>
+  </div>
+</section>
+
+<!-- ============================ STATES ============================ -->
+<section class="variant" id="S">
+  <div class="vlabel"><h2 class="serif">Stanja bloka »Danes«</h2><p>Narisano v slogu A; enaka pravila veljajo za B in C. Izpuščeno: »nalaganje« (stran je upodobljena na strežniku, ni vrtavke) in »prazen seznam novic« (blok se skrije, kot zdaj).</p></div>
+  <div class="states">
+    <div class="state card"><h4>1 · Danes ni maše</h4><p class="kick">Danes · ponedeljek, 2. november</p><h3 class="serif" style="font-size:30px">Danes ni svete maše</h3><p style="margin:0;color:var(--ink2)">Naslednja: <b>torek, 3. november, ob 18.00</b> · Marijina cerkev</p><p class="who" style="margin:0;color:var(--ink2)">+ Jože Novak, obl.</p></div>
+    <div class="state card"><h4>2 · Vse današnje maše so mimo (po 18.45)</h4><p class="kick">Jutri · četrtek, 29. oktober</p><h3 class="serif" style="font-size:30px">Jutri ob 18.00</h3><ul class="plain"><li class="mass"><span class="t">18.00</span><div><p><b>Marijina cerkev</b></p><p class="who">Za farane</p></div></li></ul><p style="margin:0;font-size:14px;color:var(--ink3)">Današnje maše: 7.30 in 18.00 (že mimo)</p></div>
+    <div class="state card"><h4>3 · Maša odpade</h4><p class="kick">Danes · sreda, 28. oktober</p><h3 class="serif" style="font-size:30px">Sveta maša danes ob 18.00</h3><ul class="plain"><li class="mass off"><span class="t">7.30</span><div><p><b>Sv. Križ</b> · <span style="color:var(--alert)">odpade</span></p><p class="who">Namen prestavljen na petek</p></div></li><li class="mass"><span class="t">18.00</span><div><p><b>Marijina cerkev</b></p><p class="who">+ Marija Kos, 30. dan</p></div></li></ul></div>
+    <div class="state card"><h4>4 · Nedelja (dve maši, nedeljsko ime, evangelij)</h4><p class="kick">Danes · nedelja, 1. november</p><h3 class="serif" style="font-size:30px">Vsi sveti</h3><p class="serif" style="margin:0;font-style:italic;color:var(--ink2)">»[Vrstica dneva]«</p><ul class="plain"><li class="mass"><span class="t">8.00</span><div><p><b>Sv. Križ</b></p><p class="who">Za farane</p></div></li><li class="mass"><span class="t">10.00</span><div><p><b>Marijina cerkev</b></p><p class="who">++ Franc in Ana Kralj</p></div></li></ul></div>
+    <div class="state card"><h4>5 · Maša brez vpisanega namena</h4><ul class="plain"><li class="mass"><span class="t">18.00</span><div><p><b>Marijina cerkev</b></p><p class="who" style="color:var(--ink3)">Namen še ni vpisan</p></div></li></ul></div>
+    <div class="state card"><h4>6 · Dolg namen (3 nameni na eni maši)</h4><ul class="plain"><li class="mass"><span class="t">18.00</span><div><p><b>Marijina cerkev</b></p><p class="who">++ Jožefa in Milan Ptiček, obl. in ++ iz družin Črnuta · + Marija Kos, 30. dan · V zahvalo za 50 let skupnega življenja</p></div></li></ul></div>
+    <div class="state card"><h4>7 · Berila niso dosegljiva (hozana ne odgovori)</h4><p class="kick">Bogoslužni dan</p><h3 class="serif" style="font-size:24px">Sv. Simon in Juda Tadej, apostola</h3><p style="margin:0;color:var(--ink2)">Berila so ta trenutek nedosegljiva.</p><a href="#">Odpri na hozana.si →</a></div>
+    <div class="state card"><h4>8 · Oznanila za ta mesec še niso naložena</h4><p class="kick">Oznanila</p><h3 class="serif" style="font-size:24px">November 2026</h3><p style="margin:0;color:var(--ink2)">Novembrska oznanila še niso objavljena. Do takrat veljajo oktobrska.</p><a class="btn ghost" href="#" style="align-self:flex-start">Oznanila za oktober</a></div>
+    <div class="state card"><h4>9 · Ni prihodnjih dogodkov</h4><p class="kick">Dogodki</p><p style="margin:0;color:var(--ink2)">V naslednjih tednih ni napovedanih dogodkov.</p><a href="#">Pretekli dogodki →</a></div>
+    <div class="state card"><h4>10 · Posebno obdobje (npr. advent)</h4><span class="chip" style="background:#ece8f3;color:#5b4a8a;align-self:flex-start">Advent</span><h3 class="serif" style="font-size:24px">1. adventna nedelja</h3><p style="margin:0;color:var(--ink2)">Barva obdobja se pokaže kot oznaka; postavitev ostane enaka.</p></div>
+    <div class="state card"><h4>11 · Prijava na e-pošto: potrjeno / napaka</h4><p style="margin:0;padding:10px 14px;border-radius:4px;background:var(--mosss);color:var(--mossd)">Hvala. Na vas@naslov.si smo poslali povezavo za potrditev.</p><p style="margin:0;padding:10px 14px;border-radius:4px;background:var(--alerts);color:var(--alert)">Vpišite veljaven e-poštni naslov.</p></div>
+  </div>
+</section>
+
+<!-- ============================ PHONE ============================ -->
+<section class="variant" id="P" style="background:var(--paper2)">
+  <div class="vlabel"><h2 class="serif">Telefon · 390 px (A)</h2><p>Vrstni red na telefonu: Danes → bogoslužni dan → dogodek → oznanila → ta teden → novice → darovi → e-pošta.</p></div>
+  <div class="phone">
+    <div style="display:flex;justify-content:space-between;align-items:center;padding:14px 16px;border-bottom:1px solid var(--stone)"><span class="serif" style="font-size:21px">Župnija Pirniče</span><button class="btn ghost" style="min-height:40px;padding:0 12px" aria-label="Meni">Meni</button></div>
+    <div style="padding:20px 16px;display:flex;flex-direction:column;gap:12px">
+      <div style="display:flex;justify-content:space-between;gap:8px;flex-wrap:wrap"><p class="kick">Danes · sre, 28. okt</p><span class="chip moss">čez 3 h 20 min</span></div>
+      <h2 class="serif" style="font-size:30px;line-height:1.1">Sveta maša danes ob 18.00</h2>
+      <ul class="plain" style="border-top:1px solid var(--stone)"><li class="mass past" style="grid-template-columns:56px 1fr"><span class="t" style="font-size:19px">7.30</span><div><p><b>Sv. Križ</b> · mimo</p></div></li><li class="mass" style="grid-template-columns:56px 1fr"><span class="t" style="font-size:19px">18.00</span><div><p><b>Marijina cerkev</b></p><p class="who">+ Marija Kos, 30. dan · ++ Anton in Ivana Zupan, obl.</p></div></li></ul>
+      <a href="#">Maše ta teden →</a>
+    </div>
+    <div style="padding:20px 16px;background:var(--paper2);border-top:1px solid var(--stone);display:flex;flex-direction:column;gap:10px"><p class="kick">Bogoslužni dan</p><h3 class="serif" style="font-size:22px">Sv. Simon in Juda Tadej, apostola</h3><p class="serif" style="margin:0;font-style:italic;color:var(--ink2)">»[Vrstica dneva]«</p><a class="btn" href="#">Današnja berila</a></div>
+    <div style="padding:16px;display:flex;flex-direction:column;gap:12px">
+      <div class="card" style="padding:20px"><p class="kick">Čez 4 dni</p><h3 class="serif" style="font-size:21px">Vsi sveti: molitev na pokopališču</h3></div>
+      <div class="card" style="padding:20px"><p class="kick">Oznanila · oktober</p><div style="display:flex;gap:10px"><a class="btn" href="#">Preberi</a><a class="btn ghost" href="#">PDF</a></div></div>
+    </div>
+  </div>
+</section>
+
+</body>
+</html>

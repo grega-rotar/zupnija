@@ -9,5 +9,5 @@
   font-weight: 600;
 }
 .form.form textarea[aria-invalid="true"] {
-  border-color: var(--color-alert);
+  box-shadow: 0 0 0 2px var(--color-alert);
 }

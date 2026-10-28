@@ -73,16 +73,16 @@ export function AttachmentLink({ attachment, className }: { attachment: Attachme
     <a
       href={`${url}?dl=`}
       className={cn(
-        "group flex min-h-12 items-center gap-3 rounded-md border border-stone bg-paper px-4 py-3 no-underline transition-colors hover:border-ink",
+        "group flex min-h-14 items-center gap-3 rounded-md bg-surface px-4 py-3 no-underline shadow-soft transition-shadow duration-300 hover:shadow-lift",
         className,
       )}
     >
-      <Icon name="document" size={22} className="shrink-0 text-ink-3" />
+      <Icon name="document" size={22} className="shrink-0 text-gold-ink" />
       <span className="min-w-0 flex-1">
-        <span className="block font-medium text-ink group-hover:underline">{attachment.title || "Priponka"}</span>
+        <span className="block font-semibold tracking-[-0.01em] text-ink">{attachment.title || "Priponka"}</span>
         {meta ? <span className="block text-meta text-ink-3">{meta}</span> : null}
       </span>
-      <Icon name="download" size={18} className="shrink-0 text-ink-3" />
+      <Icon name="download" size={18} className="shrink-0 text-gold-ink" />
     </a>
   );
 }

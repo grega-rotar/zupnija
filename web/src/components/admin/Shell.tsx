@@ -51,7 +51,9 @@ export function Shell({ me, approvals, children }: { me: ShellUser; approvals: n
           {items.map((n) => (
             <NavLinkWithSep key={n.href} sep={n.href === "/zgodovina"}>
               <Link href={n.href} aria-current={cur.href === n.href ? "page" : undefined}>
-                <Icon name={n.icon} />
+                <span className={`tile${GREY.has(n.href) ? " n" : ""}`}>
+                  <Icon name={n.icon} />
+                </span>
                 {n.label}
                 {n.href === "/" && badge ? (
                   <span className="count">{badge}</span>
@@ -70,6 +72,11 @@ export function Shell({ me, approvals, children }: { me: ShellUser; approvals: n
       </aside>
 
       <div className="mainwrap">
+        <header className="topbar">
+          <p className="crumb">
+            <span>Urejanje ›</span> {cur.label}
+          </p>
+        </header>
         <header className="phonebar">
           <ChurchMark />
           <Wordmark />
@@ -125,15 +132,12 @@ export function Shell({ me, approvals, children }: { me: ShellUser; approvals: n
   );
 }
 
-/** The site header's wordmark: letter-spaced caps on two lines. */
+/** Sidebar tiles are gold for the parish's work, grey for people and history (the prototype's two groups). */
+const GREY = new Set(["/ljudje", "/zgodovina"]);
+
+/** The parish's name, as in the prototype's window: one line, Inter 700. */
 function Wordmark() {
-  return (
-    <span className="wordmark">
-      Župnija
-      <br />
-      Pirniče
-    </span>
-  );
+  return <span className="wordmark">Župnija Pirniče</span>;
 }
 
 function NavLinkWithSep({ sep, children }: { sep: boolean; children: React.ReactNode }) {

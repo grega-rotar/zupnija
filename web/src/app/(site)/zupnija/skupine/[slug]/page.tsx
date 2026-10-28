@@ -9,7 +9,7 @@ import { SanityImage, hasImage } from "@/components/sanity/SanityImage";
 import { PhotoGrid } from "@/components/gallery/PhotoGrid";
 import { EventList } from "@/components/events/EventCard";
 import { PersonCard } from "@/components/sections/PageSections";
-import { Breadcrumbs, Container, JsonLdScript, MetaRow, PageHeader, Section, TextLink } from "@/components/ui/primitives";
+import { Breadcrumbs, Container, JsonLdScript, MetaRow, PageHeader, Section, SectionHeading, TextLink } from "@/components/ui/primitives";
 
 type Props = { params: Promise<{ slug: string }> };
 
@@ -36,22 +36,22 @@ export default async function GroupPage({ params }: Props) {
         lede={group.summary}
         eyebrow={<Breadcrumbs items={[{ label: "Župnija", href: routes.parish }, { label: "Skupine", href: routes.groups }, { label: group.title }]} />}
       />
-      <Section tight tone="paper-2">
+      <Section>
         <Container className="grid gap-12 lg:grid-cols-[minmax(0,7fr)_minmax(0,5fr)] lg:gap-16">
           <div>
             {hasImage(group.image) ? (
-              <SanityImage image={group.image} aspect={3 / 2} sizes="(min-width: 1024px) 40rem, 100vw" maxWidth={1400} priority className="mb-8 rounded-md" />
+              <SanityImage image={group.image} aspect={3 / 2} sizes="(min-width: 1024px) 40rem, 100vw" maxWidth={1400} priority className="mb-10 overflow-hidden rounded-lg shadow-soft" imgClassName="saturate-[.7]" />
             ) : null}
             <RichText value={group.description} size="lg" />
             {group.events?.length ? (
               <section className="mt-12">
-                <h2 className="mb-4 text-h3">Prihajajoči dogodki skupine</h2>
+                <h2 className="eyebrow mb-3">Prihajajoči dogodki skupine</h2>
                 <EventList events={group.events} />
               </section>
             ) : null}
           </div>
           <aside>
-            <div className="rounded-md border border-stone p-5 sm:p-6">
+            <div className="rounded-lg bg-surface p-6 shadow-soft sm:p-8">
               <h2 className="text-h3">Pridružite se</h2>
               <div className="mt-4 space-y-3">
                 {group.meetingSchedule ? <MetaRow icon="clock">{group.meetingSchedule}</MetaRow> : null}
@@ -73,12 +73,12 @@ export default async function GroupPage({ params }: Props) {
                 ) : null}
               </div>
               {group.contactPerson ? (
-                <div className="mt-6 border-t border-stone pt-5">
+                <div className="mt-6 border-t border-stone/70 pt-5">
                   <PersonCard person={group.contactPerson} />
                 </div>
               ) : null}
               {links.length ? (
-                <ul className="mt-6 space-y-1 border-t border-stone pt-5">
+                <ul className="mt-6 space-y-1 border-t border-stone/70 pt-5">
                   {links.map((l) => (
                     <li key={l.key}>
                       <TextLink href={l.href} external={isExternalHref(l.href)}>
@@ -93,9 +93,9 @@ export default async function GroupPage({ params }: Props) {
         </Container>
       </Section>
       {group.gallery?.length ? (
-        <Section tight tone="paper-2">
+        <Section>
           <Container>
-            <h2 className="mb-6 text-h2">Fotografije</h2>
+            <SectionHeading eyebrow="Fotografije" title="Utrinki skupine" accent="skupine" />
             <PhotoGrid images={group.gallery} title={group.title} />
           </Container>
         </Section>

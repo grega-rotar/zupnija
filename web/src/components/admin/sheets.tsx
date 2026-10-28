@@ -59,7 +59,7 @@ export function ProfileSheet({ me, onClose }: { me: ShellUser; onClose: () => vo
 
   return (
     <Panel eyebrow={me.title} title={me.name} sub={me.email} onClose={onClose}>
-      <div>
+      <div className="grp">
         <Switch label="Večje črke" hint="Vse besedilo malo večje." checked={big} onChange={toggleBig} />
       </div>
       <nav className="menu" aria-label="Profil">

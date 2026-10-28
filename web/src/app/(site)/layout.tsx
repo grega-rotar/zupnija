@@ -1,5 +1,4 @@
 import type { Metadata, Viewport } from "next";
-import { Newsreader, Source_Sans_3 } from "next/font/google";
 import { draftMode } from "next/headers";
 import { VisualEditing } from "next-sanity/visual-editing";
 import { SanityLive } from "@/sanity/live";
@@ -11,21 +10,8 @@ import { SkipLink } from "@/components/layout/SkipLink";
 import { UrgentBanner } from "@/components/layout/UrgentBanner";
 import { DisableDraftMode } from "@/components/layout/DisableDraftMode";
 import { JsonLdScript } from "@/components/ui/primitives";
+import { fontVariables } from "@/lib/fonts";
 import "../globals.css";
-
-const newsreader = Newsreader({
-  variable: "--font-newsreader",
-  subsets: ["latin", "latin-ext"],
-  display: "swap",
-  axes: ["opsz"],
-  style: ["normal", "italic"],
-});
-
-const sourceSans = Source_Sans_3({
-  variable: "--font-source-sans",
-  subsets: ["latin", "latin-ext"],
-  display: "swap",
-});
 
 export async function generateMetadata(): Promise<Metadata> {
   const settings = await getSettings();
@@ -48,7 +34,7 @@ export async function generateMetadata(): Promise<Metadata> {
 export const dynamic = "force-dynamic";
 
 export const viewport: Viewport = {
-  themeColor: "#fbfaf7",
+  themeColor: "#fafaf8",
   width: "device-width",
   initialScale: 1,
 };
@@ -58,7 +44,7 @@ export default async function RootLayout({ children }: { children: React.ReactNo
   const parishName = settings?.name || "Župnija Pirniče";
 
   return (
-    <html lang="sl" className={`${newsreader.variable} ${sourceSans.variable} h-full`}>
+    <html lang="sl" className={`${fontVariables} h-full`}>
       <body className="flex min-h-full flex-col">
         <SkipLink />
         <UrgentBanner items={urgent} />

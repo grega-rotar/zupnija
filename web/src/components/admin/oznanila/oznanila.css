@@ -1,7 +1,8 @@
 /*
  * Additions to admin.css for the monthly bulletin flow (source preview, the
- * month review, the month list). Site tokens only; the day rows are the
- * site's DayCard/MassRow language (DayLeaf, serif moss time, ChurchPill, gold †).
+ * month review, the month list). Site tokens and admin.css's app-only names
+ * only; the v4 rules in admin.css's header apply (white groups, small grey
+ * headings, tabular times, ChurchPill, gold †).
  */
 @layer components {
   /* ── Source column ── */
@@ -16,16 +17,15 @@
     flex: none;
   }
   .srclink {
-    color: var(--color-moss);
-    font-weight: 500;
-    text-decoration: underline;
-    text-decoration-color: color-mix(in srgb, var(--color-moss) 40%, transparent);
+    color: var(--gold-ink);
+    font-weight: 600;
+    font-size: var(--text-small);
     text-underline-offset: 4px;
     white-space: nowrap;
   }
   .srclink:hover {
     color: var(--color-moss-deep);
-    text-decoration-color: var(--color-moss);
+    text-decoration: underline;
   }
   .srcmeta > span:first-child {
     min-width: 0;
@@ -36,8 +36,8 @@
     position: relative;
     overflow: hidden;
     border-radius: var(--radius-md);
-    border: 1px solid var(--color-stone);
-    background: var(--color-paper-2);
+    box-shadow: var(--grp-sh);
+    background: var(--color-surface);
     height: calc(100dvh - 12rem);
     min-height: 26rem;
   }
@@ -60,7 +60,7 @@
   .pdffall .i {
     width: 2rem;
     height: 2rem;
-    color: var(--color-moss);
+    color: var(--gold-ink);
   }
   /* A spreadsheet as the source: a card instead of a preview. */
   .filecard {
@@ -72,19 +72,19 @@
     align-items: center;
     padding: 1.375rem;
     border-radius: var(--radius-md);
-    border: 1px solid var(--color-stone);
-    background: var(--color-paper-2);
+    background: var(--color-surface);
+    box-shadow: var(--grp-sh);
   }
   .filecard .fic {
     grid-row: span 2;
     width: 3.5rem;
     height: 4rem;
-    border-radius: var(--radius-sm);
-    border: 1px solid var(--color-stone);
-    background: var(--color-paper);
+    border-radius: 10px;
+    background: var(--tile-gold);
+    box-shadow: inset 0 0 0 0.5px rgb(0 0 0 / 0.1);
     display: grid;
     place-items: center;
-    color: var(--color-moss);
+    color: #fff;
   }
   .filecard .fic .i {
     width: 1.625rem;
@@ -103,13 +103,12 @@
     justify-self: start;
     margin-top: 0.5rem;
     min-height: 2.75rem;
-    color: var(--color-moss);
-    font-weight: 500;
+    color: var(--gold-ink);
+    font-weight: 600;
+    font-size: var(--text-small);
     display: inline-flex;
     gap: 0.375rem;
     align-items: center;
-    text-decoration: underline;
-    text-decoration-color: color-mix(in srgb, var(--color-moss) 40%, transparent);
     text-underline-offset: 4px;
   }
 
@@ -121,22 +120,22 @@
     justify-items: start;
     padding: 1.5rem;
     border-radius: var(--radius-md);
-    border-left: 3px solid var(--color-gold);
-    background: color-mix(in srgb, var(--color-gold-soft) 70%, transparent);
+    background: var(--color-gold-soft);
   }
   .infocard .ic {
-    width: 2.75rem;
-    height: 2.75rem;
-    border-radius: var(--radius-sm);
-    border: 1px solid var(--color-stone);
-    background: var(--color-paper);
+    width: 2.5rem;
+    height: 2.5rem;
+    border-radius: 10px;
+    background: var(--tile-gold);
+    box-shadow: inset 0 0 0 0.5px rgb(0 0 0 / 0.1);
     display: grid;
     place-items: center;
-    color: var(--color-moss);
+    color: #fff;
   }
   .infocard h2 {
-    font-size: var(--text-h3);
-    line-height: var(--text-h3--line-height);
+    font-size: 1.25rem;
+    letter-spacing: -0.03em;
+    line-height: 1.25;
   }
   .infocard p {
     color: var(--color-ink-2);
@@ -174,20 +173,24 @@
   .draft .blk > h3 {
     padding-top: 0.5rem;
   }
-  /* A week: the site's month heading (serif h3 over a stone rule), then its days. */
+  /* A week: the small grey group heading, then its days in one white group. */
   .mweek-h {
-    font-family: var(--font-serif);
-    font-size: var(--text-h3);
-    line-height: var(--text-h3--line-height);
-    color: var(--color-ink);
-    padding: 0.75rem 0 0.5rem;
-    border-bottom: 1px solid var(--color-stone);
+    font: var(--label);
+    letter-spacing: -0.005em;
+    color: var(--color-ink-3);
+    padding: 0.75rem 1rem 0.5rem;
   }
   .mweek:first-of-type .mweek-h {
     padding-top: 0;
   }
+  .mdays {
+    background: var(--color-surface);
+    border-radius: var(--grp-r);
+    box-shadow: var(--grp-sh);
+    padding: 0 1rem 0.5rem;
+  }
   .mdays > li + li {
-    border-top: 1px solid var(--color-stone);
+    border-top: 1px solid var(--hair);
   }
   .mday {
     display: grid;
@@ -208,14 +211,14 @@
     padding-top: 0.375rem;
   }
   .mday-h .sname {
-    font-family: var(--font-serif);
-    font-size: 1.25rem;
-    line-height: 1.25;
+    font-size: 1rem;
+    font-weight: 600;
+    letter-spacing: -0.02em;
+    line-height: 1.3;
   }
-  /* The liturgical title: serif italic, small (the site's quiet caption voice). */
+  /* The liturgical title: small grey italic (the quiet caption voice). */
   .mday-h .lit,
   .mday-h .gospel {
-    font-family: var(--font-serif);
     font-style: italic;
     font-size: var(--text-small);
     line-height: 1.4;
@@ -230,7 +233,7 @@
   .mday-h .tags .pill {
     white-space: normal;
   }
-  /* One Mass of the day: MassRow (serif moss time, church pill), its intentions under it. */
+  /* One Mass of the day: MassRow (tabular time, church pill), its intentions under it. */
   .mmass > li {
     display: grid;
     grid-template-columns: 4.25rem minmax(0, 1fr);
@@ -238,11 +241,12 @@
     padding: 0.625rem 0 0;
   }
   .mmass .mt {
-    font-family: var(--font-serif);
-    font-size: 1.625rem;
+    font-size: 1.25rem;
+    font-weight: 600;
+    font-variant-numeric: tabular-nums;
     line-height: 1;
-    letter-spacing: -0.02em;
-    color: var(--color-moss);
+    letter-spacing: -0.045em;
+    color: var(--color-ink);
     padding-top: 0.125rem;
   }
   .mints {
@@ -250,9 +254,8 @@
     display: grid;
   }
   .mints > li.flag {
-    background: color-mix(in srgb, var(--color-gold-soft) 70%, transparent);
-    border-left: 3px solid var(--color-gold);
-    border-radius: var(--radius-md);
+    background: var(--color-gold-soft);
+    border-radius: var(--grp-r);
     padding: 0.25rem 0.75rem 0.875rem;
     margin: 0.25rem 0;
   }
@@ -295,9 +298,9 @@
   .okpill {
     margin-left: 0.5rem;
     font-size: var(--text-meta);
-    font-weight: 500;
-    color: var(--color-moss-deep);
-    background: var(--color-moss-soft);
+    font-weight: 600;
+    color: var(--gold-ink);
+    background: var(--color-gold-soft);
     border-radius: 999px;
     padding: 1px 0.625rem;
     vertical-align: 1px;
@@ -316,19 +319,20 @@
     width: 1rem;
     height: 1rem;
   }
-  /* Edit or add an intention: the site's form on paper-2. */
+  /* Edit or add an intention: the form inset on the window's ground. */
   .iform {
     display: grid;
     gap: 0.75rem;
     padding: 1rem;
-    border-radius: var(--radius-md);
-    background: var(--color-paper-2);
+    border-radius: var(--grp-r);
+    background: var(--ed-bg);
+    box-shadow: inset 0 0 0 1px var(--hair);
     margin: 0.25rem 0 0.5rem;
   }
   .iform .chip,
   .evform .chip {
-    background: var(--color-paper);
-    box-shadow: inset 0 0 0 1px var(--color-stone);
+    background: var(--color-surface);
+    box-shadow: var(--grp-sh);
   }
   .iform .chip[aria-pressed="true"] {
     background: var(--color-moss);
@@ -355,19 +359,18 @@
     grid-template-columns: minmax(0, 1fr);
     gap: 0.625rem;
     padding: 0.875rem;
-    border-left: 3px solid var(--color-gold);
-    border-radius: var(--radius-md);
-    background: color-mix(in srgb, var(--color-gold-soft) 70%, transparent);
+    border-radius: var(--grp-r);
+    background: var(--color-gold-soft);
   }
   .draft .news > li.unplaced p {
     font-weight: 500;
   }
   .draft .news > li.unplaced textarea {
-    background: var(--color-paper);
+    background: var(--color-surface);
   }
   .draft .news > li.unplaced .chip {
-    background: var(--color-paper);
-    box-shadow: inset 0 0 0 1px var(--color-stone);
+    background: var(--color-surface);
+    box-shadow: var(--grp-sh);
   }
   .draft .news .iconbtn {
     color: var(--color-ink-3);
@@ -379,31 +382,30 @@
   /* Events from the notices: a switch row each. */
   .evs {
     display: grid;
-    border: 1px solid var(--color-stone);
-    border-radius: var(--radius-md);
-    background: var(--color-paper);
+    border-radius: var(--grp-r);
+    background: var(--color-surface);
+    box-shadow: var(--grp-sh);
+    overflow: hidden;
   }
   .evc {
     padding: 0.25rem 1rem 0.375rem;
   }
   .evc + .evc {
-    border-top: 1px solid var(--color-stone);
+    border-top: 1px solid var(--hair);
   }
   .evc .switch {
     border-top: 0;
   }
   .evc .switch b {
-    font-family: var(--font-serif);
-    font-weight: 400;
-    font-size: 1.1875rem;
-    line-height: 1.3;
+    font-weight: 600;
+    font-size: var(--text-small);
+    line-height: 1.35;
   }
   .evc.off .switch b {
     color: var(--color-ink-3);
   }
   .evc.flag {
-    background: color-mix(in srgb, var(--color-gold-soft) 70%, transparent);
-    box-shadow: inset 3px 0 0 var(--color-gold);
+    background: var(--color-gold-soft);
   }
   .evc .qbox {
     padding: 0 0 0.5rem;
@@ -421,9 +423,9 @@
 
   /* Article and prayer intention: a collapsible card with a preview. */
   .tblock {
-    border: 1px solid var(--color-stone);
-    border-radius: var(--radius-md);
-    background: var(--color-paper);
+    border-radius: var(--grp-r);
+    background: var(--color-surface);
+    box-shadow: var(--grp-sh);
   }
   .tblock summary {
     list-style: none;
@@ -431,22 +433,22 @@
     display: grid;
     gap: 0.25rem;
     padding: 1rem 1.25rem;
-    border-radius: var(--radius-md);
+    border-radius: var(--grp-r);
   }
   .tblock summary::-webkit-details-marker {
     display: none;
   }
   .tblock summary:hover {
-    background: var(--color-paper-2);
+    background: rgb(20 12 4 / 0.03);
   }
   .tblock summary b {
-    font-family: var(--font-serif);
-    font-weight: 400;
-    font-size: 1.375rem;
-    line-height: 1.25;
+    font-weight: 600;
+    font-size: 1.0625rem;
+    letter-spacing: -0.02em;
+    line-height: 1.3;
   }
   .tblock .pv {
-    color: var(--color-ink-2);
+    color: var(--color-ink-3);
     font-size: var(--text-small);
     display: -webkit-box;
     -webkit-line-clamp: 2;
@@ -457,8 +459,8 @@
     display: inline-flex;
     gap: 0.375rem;
     align-items: center;
-    color: var(--color-moss);
-    font-weight: 500;
+    color: var(--gold-ink);
+    font-weight: 600;
     font-size: var(--text-small);
     padding-top: 0.25rem;
   }

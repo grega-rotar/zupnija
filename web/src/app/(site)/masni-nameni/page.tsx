@@ -22,7 +22,7 @@ export async function generateMetadata(): Promise<Metadata> {
 type Props = { searchParams: Promise<{ teden?: string }> };
 
 const navButton =
-  "inline-flex min-h-11 items-center gap-1.5 rounded-sm border border-stone-2 px-3.5 text-small font-medium text-ink hover:border-ink";
+  "inline-flex min-h-11 items-center gap-1.5 rounded-full bg-surface px-4 text-[0.9375rem] font-semibold text-ink shadow-soft transition-colors hover:bg-paper-2";
 
 /**
  * Week view of Masses with intentions, Sunday to Saturday, with previous /
@@ -40,32 +40,32 @@ export default async function IntentionsPage({ searchParams }: Props) {
 
   return (
     <>
-      <PageHeader title="Mašni nameni" lede="Svete maše in nameni po dnevih. Nameni so vpisani za tekoči in prihodnji teden.">
-        <nav aria-label="Izbira tedna" className="mt-8 flex flex-wrap items-center gap-3">
+      <PageHeader title="Mašni nameni" accent="nameni" lede="Svete maše in nameni po dnevih. Nameni so vpisani za tekoči in prihodnji teden.">
+        <nav aria-label="Izbira tedna" className="mt-8 flex flex-wrap items-center justify-center gap-3">
           <Link href={routes.intentionsWeek(prev)} className={navButton}>
             <Icon name="arrow-left" size={16} />
             Prejšnji teden
           </Link>
-          <p className="min-w-0 px-1 font-serif text-h3 text-ink">
+          <p className="order-first w-full min-w-0 px-1 text-[1.375rem] font-bold tracking-[-0.035em] text-ink sm:order-none sm:w-auto">
             {formatWeekSpan(week.from, week.to)}
-            {isCurrent ? <span className="ml-2 text-small text-ink-3">ta teden</span> : null}
+            {isCurrent ? <span className="ml-2 text-small font-semibold text-gold-ink">ta teden</span> : null}
           </p>
           <Link href={routes.intentionsWeek(next)} className={navButton}>
             Naslednji teden
             <Icon name="arrow-right" size={16} />
           </Link>
           {!isCurrent ? (
-            <Link href={routes.intentions} className="inline-flex min-h-11 items-center px-2 text-small text-moss underline underline-offset-4">
+            <Link href={routes.intentions} className="inline-flex min-h-11 items-center px-2 text-[0.9375rem] font-semibold text-gold-ink hover:text-moss-deep">
               Nazaj na ta teden
             </Link>
           ) : null}
         </nav>
       </PageHeader>
 
-      <Section tone="paper-2" tight>
+      <Section>
         <Container>
           {!hasAnyIntentions ? (
-            <Notice className="mb-8">
+            <Notice className="mx-auto mb-8 text-center">
               Za ta teden nameni še niso vpisani. Prikazan je redni urnik svetih maš; nameni se objavijo ob nedeljah za prihodnji teden.
             </Notice>
           ) : null}
