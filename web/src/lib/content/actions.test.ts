@@ -204,11 +204,11 @@ describe("media", () => {
 
   it("renders the CDN parameters: rect + crop to a box, auto=format → webp, fit inside", async () => {
     const src = await png(400, 300);
-    const t = parseTransform(new URLSearchParams("rect=0,50,400,200&w=200&h=100&fit=crop&q=70&auto=format"), "png", "image/webp,*/*");
+    const t = parseTransform(new URLSearchParams("rect=0,50,400,200&w=200&h=100&fit=crop&q=70&auto=format"), "png");
     expect(t).toMatchObject({ rect: [0, 50, 400, 200], w: 200, h: 100, fit: "crop", format: "webp" });
     const meta = await sharp(await render(src, t)).metadata();
     expect(meta).toMatchObject({ format: "webp", width: 200, height: 100 });
-    const inside = await sharp(await render(src, parseTransform(new URLSearchParams("w=1000"), "png", ""))).metadata();
+    const inside = await sharp(await render(src, parseTransform(new URLSearchParams("w=1000"), "png"))).metadata();
     expect(inside).toMatchObject({ format: "png", width: 400, height: 300 });
   });
 });

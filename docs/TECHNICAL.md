@@ -487,7 +487,11 @@ delete). The site reads it through `src/lib/content/read.ts` (cache tag
 `--if-empty` on every start, after the migrations: the first start after
 migration 0002 fills `content` and `media` before the server listens; later
 starts see rows and do nothing. A failed first import is logged and does not
-stop the site. To run it by hand (e.g. after that failure):
+stop the site. Then, in the background while the server starts,
+`scripts/warm-media.mjs` loads every page in the sitemap and requests each
+image size it uses, so the WebP derivatives are on disk before a visitor
+asks (a first run takes about a minute; later runs only read the cache).
+To run the import by hand (e.g. after that failure):
 
 ```bash
 cd /srv/zupnija
