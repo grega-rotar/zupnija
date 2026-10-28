@@ -34,13 +34,14 @@ export default async function ContactPage() {
 
   return (
     <>
-      <PageHero settings={settings} header="contactHeader" title="Stopimo v stik" lede="Veseli bomo vašega sporočila." />
+      <PageHero settings={settings} header="contactHeader" title="Stopimo v stik" accent="v stik" crumbs={[{ label: "Kontakt" }]} lede="Veseli bomo vašega sporočila." />
 
-      <Section tight>
+      <Section>
         <Container>
           <div className="grid gap-5 lg:grid-cols-[minmax(0,1fr)_minmax(0,1.6fr)_minmax(0,1fr)]">
-            <div className="rounded-md border border-stone bg-paper-2 p-6 sm:p-7">
-              <h2 className="text-h3">Kontaktni podatki</h2>
+            <div className="rounded-lg bg-surface p-6 shadow-soft sm:p-8">
+              <p className="eyebrow">Župnišče</p>
+              <h2 className="mt-1 text-[1.5rem] font-bold tracking-[-0.035em]">Kontaktni podatki</h2>
               <ul className="mt-5 space-y-5">
                 {addressLine ? (
                   <Row icon="pin" label={settings?.name ?? "Župnišče"}>
@@ -103,34 +104,46 @@ export default async function ContactPage() {
                 ) : null}
               </ul>
               {pastor ? (
-                <div className="mt-6 flex items-center gap-4 border-t border-stone pt-5">
+                <div className="mt-6 flex items-center gap-4 border-t border-stone/70 pt-5">
                   {hasImage(pastor.photo) ? (
                     <SanityImage image={pastor.photo} aspect={1} sizes="3.5rem" maxWidth={160} className="size-14 shrink-0 rounded-full" />
                   ) : null}
                   <div>
-                    <p className="font-medium text-ink">{pastor.name}</p>
+                    <p className="font-semibold text-ink">{pastor.name}</p>
                     <p className="text-small text-ink-2">{pastor.roleTitle || "Župnik"}</p>
                   </div>
                 </div>
               ) : null}
             </div>
 
-            <div className="rounded-md border border-stone bg-paper-2 p-6 sm:p-7">
-              <h2 className="text-h3">Pošljite nam sporočilo</h2>
+            <div className="rounded-lg bg-surface p-6 shadow-soft sm:p-8">
+              <p className="eyebrow">Obrazec</p>
+              <h2 className="mt-1 text-[1.5rem] font-bold tracking-[-0.035em]">
+                Pošljite nam <span className="accent">sporočilo</span>
+              </h2>
               <p className="mt-1.5 text-small text-ink-2">Za dogovore o zakramentih se raje oglasite osebno; za vprašanja in predloge je obrazec dovolj.</p>
               <div className="mt-5">
                 <ContactForm />
               </div>
             </div>
 
-            <figure className="relative isolate min-h-[18rem] overflow-hidden rounded-md bg-ink text-paper">
+            <figure className="relative isolate min-h-[20rem] overflow-hidden rounded-lg bg-paper-3 text-paper shadow-soft">
               {hasImage(home?.tile?.image) ? (
-                <SanityImage image={home.tile.image} aspect={3 / 4} sizes="(min-width: 1024px) 20rem, 100vw" maxWidth={900} decorative fill className="-z-20" />
+                <SanityImage
+                  image={home.tile.image}
+                  aspect={3 / 4}
+                  sizes="(min-width: 1024px) 20rem, 100vw"
+                  maxWidth={900}
+                  decorative
+                  fill
+                  className="-z-20"
+                  imgClassName="[filter:saturate(.5)_sepia(.15)]"
+                />
               ) : null}
-              <div aria-hidden="true" className="absolute inset-0 -z-10 bg-[linear-gradient(180deg,rgb(20_28_24/0.1),rgb(20_28_24/0.7))]" />
-              <figcaption className="absolute inset-x-0 bottom-0 p-6 sm:p-7">
-                <p className="font-serif text-[1.375rem] leading-snug">{home?.tile?.text ?? settings?.tagline ?? ""}</p>
-                {home?.tile?.source ? <p className="mt-2 text-small text-paper/80">{home.tile.source}</p> : null}
+              <div aria-hidden="true" className="absolute inset-0 -z-10 bg-[linear-gradient(180deg,rgb(14_10_6/0.05)_30%,rgb(14_10_6/0.75)_100%)]" />
+              <figcaption className="absolute inset-x-0 bottom-0 p-6 sm:p-8">
+                <p className="font-serif text-[1.5rem] italic leading-snug">{home?.tile?.text ?? settings?.tagline ?? ""}</p>
+                {home?.tile?.source ? <p className="mt-2 text-small font-semibold text-paper/85">{home.tile.source}</p> : null}
               </figcaption>
             </figure>
           </div>
@@ -138,21 +151,22 @@ export default async function ContactPage() {
       </Section>
 
       {churches.length || hasDonations ? (
-        <Section tight tone="paper-2" className="border-t border-stone">
-          <Container className="grid gap-10 lg:grid-cols-2 lg:gap-16">
+        <Section>
+          <Container className="grid gap-5 lg:grid-cols-2">
             {churches.length ? (
-              <div>
-                <h2 className="text-h3">Cerkve</h2>
-                <ul className="mt-4 divide-y divide-stone border-y border-stone">
+              <div className="rounded-lg bg-surface p-6 shadow-soft sm:p-8">
+                <p className="eyebrow">Kje smo</p>
+                <h2 className="mt-1 text-[1.5rem] font-bold tracking-[-0.035em]">Cerkve</h2>
+                <ul className="mt-4 divide-y divide-stone/70">
                   {churches.map((c) => {
                     const line = [c.address?.street, c.address?.city].filter(Boolean).join(", ");
                     return (
                       <li key={c._id} className="flex items-center gap-4 py-3">
                         {hasImage(c.image) ? (
-                          <SanityImage image={c.image} aspect={1} sizes="3.5rem" maxWidth={160} decorative className="size-14 shrink-0 rounded-sm" />
+                          <SanityImage image={c.image} aspect={1} sizes="3.5rem" maxWidth={160} decorative className="size-14 shrink-0 overflow-hidden rounded-[0.875rem]" imgClassName="saturate-[.6]" />
                         ) : null}
                         <div className="min-w-0">
-                          <Link href={routes.church(c.slug)} className="font-serif text-lede text-ink hover:underline">
+                          <Link href={routes.church(c.slug)} className="rounded-sm text-body font-semibold text-ink hover:text-gold-ink">
                             {c.name}
                           </Link>
                           {line ? <p className="text-small text-ink-2">{line}</p> : null}
@@ -164,8 +178,9 @@ export default async function ContactPage() {
               </div>
             ) : null}
             {hasDonations ? (
-              <div>
-                <h2 className="text-h3">Darovi za župnijo</h2>
+              <div className="rounded-lg bg-[linear-gradient(165deg,var(--color-gold-soft)_0%,#fff_72%)] p-6 shadow-soft sm:p-8">
+                <p className="eyebrow">Podprite župnijo</p>
+                <h2 className="mt-1 text-[1.5rem] font-bold tracking-[-0.035em]">Darovi za župnijo</h2>
                 <RichText value={donations?.intro} className="mt-3 text-ink-2" />
                 <FactList
                   className="mt-3"
@@ -189,9 +204,9 @@ export default async function ContactPage() {
 function Row({ icon, label, children }: { icon: IconName; label: string; children: React.ReactNode }) {
   return (
     <li className="flex gap-3.5">
-      <Icon name={icon} size={20} className="mt-0.5 shrink-0 text-ink-3" />
+      <Icon name={icon} size={20} className="mt-0.5 shrink-0 text-gold-ink" />
       <div className="min-w-0 text-body text-ink-2">
-        <p className="font-medium text-ink">{label}</p>
+        <p className="font-semibold text-ink">{label}</p>
         <div>{children}</div>
       </div>
     </li>

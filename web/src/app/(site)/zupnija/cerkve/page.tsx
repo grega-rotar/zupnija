@@ -21,13 +21,14 @@ export default async function ChurchesPage() {
     <>
       <PageHeader
         title="Naše cerkve"
+        accent="cerkve"
         lede="Župnijska cerkev in podružnice. Pri vsaki najdete urnik svetih maš, naslov in dostop."
         eyebrow={<Breadcrumbs items={[{ label: "Župnija", href: routes.parish }, { label: "Cerkve" }]} />}
       />
-      <Section tight tone="paper-2">
+      <Section>
         <Container>
           {churches.length ? (
-            <div className="grid gap-x-8 gap-y-14 sm:grid-cols-2 lg:grid-cols-3">
+            <div className="grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
               {churches.map((c, i) => (
                 <ChurchCard key={c._id} church={c} priority={i < 2} />
               ))}

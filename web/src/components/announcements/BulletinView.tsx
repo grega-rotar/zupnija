@@ -8,7 +8,8 @@ import { textBlocks } from "@/lib/data/text";
 import { DayCard } from "@/components/masses/MassList";
 import { EventList, type EventCardData } from "@/components/events/EventCard";
 import { Icon } from "@/components/ui/Icon";
-import { TextLink } from "@/components/ui/primitives";
+import { TextLink, buttonClassName, headline, tile } from "@/components/ui/primitives";
+import { cn } from "@/lib/utils";
 
 type Props = {
   bulletin: PublicBulletin;
@@ -40,11 +41,10 @@ const plusSix = (s: IsoDate) => {
 };
 
 /**
- * The bulletin as an editorial spread: title and issue set large; the
- * article, the prayer intention, numbered notices and the period's meetings;
- * beside it the Masses and intentions, day by day, with links to every week
- * of the period. No boxes, except the prayer intention — rules and type
- * carry the structure.
+ * The bulletin as a v4 spread: a centered opening (title and issue set
+ * large, the PDF as a pill); then a white tile with the article, the prayer
+ * intention, numbered notices and the period's meetings; beside it a tile
+ * with the Masses and intentions, day by day, and every week of the period.
  */
 export function BulletinView({ bulletin, massDays, massHeading = "Svete maše in nameni", events, headingLevel = "h2" }: Props) {
   const Heading = headingLevel;
@@ -55,47 +55,41 @@ export function BulletinView({ bulletin, massDays, massHeading = "Svete maše in
 
   return (
     <article>
-      <header className="flex flex-col gap-6 sm:flex-row sm:items-end sm:justify-between">
-        <div className="max-w-3xl">
-          <p className="text-small font-medium text-ink-3">Oznanila župnije Pirniče</p>
-          <Heading className="mt-2 text-display">{bulletinLabel(bulletin)}</Heading>
-          {bulletin.issue ? <p className="mt-2 text-small uppercase tracking-[0.14em] text-ink-3">{bulletin.issue}</p> : null}
-        </div>
+      <header className="mx-auto mb-10 flex max-w-3xl flex-col items-center text-center lg:mb-14">
+        <p className="eyebrow">Oznanila župnije Pirniče</p>
+        <Heading className={cn("mt-3.5", headingLevel === "h1" ? headline.display : headline.h2)}>{bulletinLabel(bulletin)}</Heading>
+        {bulletin.issue ? <p className="lede mt-4">{bulletin.issue}</p> : null}
         {bulletin.pdfUrl ? (
-          <a
-            href={bulletin.pdfUrl}
-            className="inline-flex min-h-12 shrink-0 items-center justify-center gap-2 self-start rounded-sm bg-moss px-6 text-body font-medium text-paper transition-colors hover:bg-moss-deep sm:self-auto"
-          >
+          <a href={bulletin.pdfUrl} className={cn(buttonClassName(), "mt-7")}>
             <Icon name="download" size={18} />
             <span>Prenesi PDF</span>
           </a>
         ) : null}
       </header>
 
-      <div className="mt-12 grid gap-14 lg:grid-cols-[minmax(0,7fr)_minmax(0,5fr)] lg:gap-24">
-        <div className="min-w-0">
+      <div className="grid gap-5 lg:grid-cols-[minmax(0,7fr)_minmax(0,5fr)]">
+        <div className={cn(tile, "min-w-0 self-start p-6 sm:p-10")}>
           {bulletin.article ? (
-            <section className="mb-14 border-t border-stone pt-7">
-              {bulletin.article.title ? <Sub className="text-h2">{bulletin.article.title}</Sub> : null}
+            <section className="mb-12">
+              {bulletin.article.title ? <Sub className="text-[clamp(1.75rem,1.5rem+1vw,2.25rem)] font-bold leading-tight tracking-[-0.045em]">{bulletin.article.title}</Sub> : null}
               <RichText value={textBlocks(bulletin.article.text, `a${bulletin.id}`)} className="mt-4" />
             </section>
           ) : null}
 
           {bulletin.prayerIntention ? (
-            <section className="mb-14 rounded-md border border-stone bg-paper p-6 sm:p-7">
-              <p className="font-sans text-[0.75rem] font-semibold uppercase tracking-[0.14em] text-ink-3">Molitveni namen</p>
-              {bulletin.prayerIntention.title ? <Sub className="mt-3 font-serif text-h3 text-ink">{bulletin.prayerIntention.title}</Sub> : null}
+            <section className="mb-12 rounded-md bg-gold-soft p-6 sm:p-7">
+              <p className="eyebrow">Molitveni namen</p>
+              {bulletin.prayerIntention.title ? <Sub className="mt-2 font-serif text-[1.5rem] font-normal italic leading-snug text-ink">{bulletin.prayerIntention.title}</Sub> : null}
               <p className="mt-2 text-body text-ink-2">{bulletin.prayerIntention.text}</p>
-              <span className="mt-5 block h-px w-12 bg-gold" aria-hidden="true" />
             </section>
           ) : null}
 
-          <Sub className="mb-1 text-h3">Obvestila</Sub>
+          <Sub className="mb-2 text-[1.5rem] font-bold tracking-[-0.035em]">Obvestila</Sub>
           {items.length ? (
-            <ol className="divide-y divide-stone border-t border-stone">
+            <ol className="divide-y divide-stone/70">
               {items.map((item, i) => (
-                <li key={item.key} className="grid grid-cols-[3rem_1fr] gap-x-5 py-7 sm:grid-cols-[4rem_1fr] sm:gap-x-8">
-                  <span className="pt-0.5 font-serif text-[1.75rem] leading-none text-gold sm:text-[2rem]" aria-hidden="true">
+                <li key={item.key} className="grid grid-cols-[2.5rem_1fr] gap-x-4 py-6 sm:grid-cols-[3.5rem_1fr] sm:gap-x-6">
+                  <span className="pt-0.5 text-[1.5rem] font-bold leading-none tabular-nums tracking-[-0.04em] text-gold-ink sm:text-[1.75rem]" aria-hidden="true">
                     {i + 1}
                   </span>
                   <div className="min-w-0">
@@ -106,38 +100,37 @@ export function BulletinView({ bulletin, massDays, massHeading = "Svete maše in
               ))}
             </ol>
           ) : (
-            <p className="border-t border-stone pt-6 text-body text-ink-2">Ni posebnih obvestil.</p>
+            <p className="pt-4 text-body text-ink-2">Ni posebnih obvestil.</p>
           )}
 
           {events.length ? (
-            <section className="mt-14">
-              <Sub className="mb-5 text-h3">Srečanja in dogodki</Sub>
+            <section className="mt-12">
+              <Sub className="mb-4 text-[1.5rem] font-bold tracking-[-0.035em]">Srečanja in dogodki</Sub>
               <EventList events={events} />
             </section>
           ) : null}
         </div>
 
-        <aside className="min-w-0">
-          <div className="flex items-baseline justify-between gap-4">
-            <Sub className="text-small font-medium text-ink-3">{massHeading}</Sub>
-            {massDays[0] ? (
-              <Link href={routes.intentionsWeek(massDays[0].date)} className="text-small text-moss underline underline-offset-4 hover:text-moss-deep">
-                Odpri teden
-              </Link>
-            ) : null}
+        <aside className={cn(tile, "min-w-0 self-start p-6 sm:p-8")}>
+          <div className="flex items-center justify-between gap-4">
+            <div>
+              <p className="eyebrow">Svete maše in nameni</p>
+              <Sub className="mt-1 text-[1.5rem] font-bold tracking-[-0.035em]">{massHeading}</Sub>
+            </div>
+            {massDays[0] ? <TextLink href={routes.intentionsWeek(massDays[0].date)}>Odpri teden</TextLink> : null}
           </div>
-          <div className="mt-4 divide-y divide-stone border-t border-stone">
+          <div className="mt-4 divide-y divide-stone/70 border-t border-stone/70">
             {massDays.map((day) => (
               <DayCard key={day.date} day={day} today={t} showIntentions plain className="py-5" />
             ))}
           </div>
           {weeks.length > 1 ? (
-            <nav aria-label="Mašni nameni po tednih" className="mt-8 border-t border-stone pt-5">
-              <p className="text-meta text-ink-3">Mašni nameni po tednih</p>
+            <nav aria-label="Mašni nameni po tednih" className="mt-6 border-t border-stone/70 pt-5">
+              <p className="text-meta font-semibold text-ink-3">Mašni nameni po tednih</p>
               <ul className="mt-2 flex flex-wrap gap-x-4 gap-y-1 text-small">
                 {weeks.map((w) => (
                   <li key={w}>
-                    <Link href={routes.bulletin(w)} className="whitespace-nowrap text-ink-2 underline decoration-stone-2 underline-offset-4 hover:text-ink">
+                    <Link href={routes.bulletin(w)} className="whitespace-nowrap font-medium text-ink-2 hover:text-gold-ink">
                       {formatWeekSpan(w, plusSix(w))}
                     </Link>
                   </li>
@@ -145,7 +138,7 @@ export function BulletinView({ bulletin, massDays, massHeading = "Svete maše in
               </ul>
             </nav>
           ) : null}
-          <div className="mt-6">
+          <div className="mt-4">
             <TextLink href={routes.masses}>Redni urnik svetih maš</TextLink>
           </div>
         </aside>

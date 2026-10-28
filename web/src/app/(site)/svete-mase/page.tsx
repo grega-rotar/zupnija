@@ -4,17 +4,16 @@ import { getActiveSpecialPeriod, getChurchesBrief, getCurrentSchedules, getHomeP
 import { getMassDays, getUpcomingMasses } from "@/lib/data/masses";
 import { buildMetadata } from "@/lib/seo";
 import { routes } from "@/lib/routes";
-import { addDays, compareTime, formatDayHeading, formatDayNumber, formatMonthShort, formatTime, today } from "@/lib/dates";
+import { addDays, compareTime, formatDayHeading, formatTime, today } from "@/lib/dates";
 import { MASS_TYPE_LABEL, pickTodayOrNext, type Mass } from "@/lib/masses";
 import { clean } from "@/lib/clean";
-import { truncate } from "@/lib/utils";
-import { CHURCH_KIND_LABEL } from "@/lib/labels";
+import { cn, truncate } from "@/lib/utils";
 import { PageHero } from "@/components/layout/PageHero";
 import { ScheduleMatrix } from "@/components/masses/ScheduleMatrix";
-import { dayLines, MassRow, WeekGrid } from "@/components/masses/MassList";
-import { SanityImage, hasImage, ImagePlaceholder } from "@/components/sanity/SanityImage";
+import { dayLines, DayLeaf, MassRow, WeekGrid } from "@/components/masses/MassList";
+import { ChurchCard } from "@/components/churches/ChurchCard";
 import { Icon, type IconName } from "@/components/ui/Icon";
-import { Container, EmptyState, Notice, Section } from "@/components/ui/primitives";
+import { Container, EmptyState, Notice, Section, SectionHeading, TextLink, tile } from "@/components/ui/primitives";
 
 export async function generateMetadata(): Promise<Metadata> {
   const settings = await getSettings();
@@ -52,63 +51,64 @@ export default async function MassesPage() {
     .filter(({ date, mass }) => !(date === t && compareTime(mass.time, upcoming.time) < 0))
     .filter(({ mass }) => mass.status !== "cancelled" && (!mass.recurring || SPECIAL_TYPES.has(clean(mass.type))))
     .slice(0, 6);
+  const quote = home?.tile?.text && churches.length < 4 ? { text: home.tile.text, source: home.tile.source } : null;
 
   return (
     <>
-      <PageHero settings={settings} header="massesHeader" title="Svete maše" lede="Današnje maše, redni urnik po cerkvah in posebni termini.">
+      <PageHero settings={settings} header="massesHeader" title="Svete maše" accent="maše" lede="Današnje maše, redni urnik po cerkvah in posebni termini.">
         {period ? (
-          <Notice className="mt-8 bg-paper/15 text-paper">
-            <span className="font-medium">{period.title}</span>
-            {period.excerpt ? <span className="text-paper/85"> — {truncate(period.excerpt, 120)}</span> : null}{" "}
-            <Link href={routes.specialPeriod(period.slug)} className="whitespace-nowrap font-medium underline underline-offset-4">
+          <Notice className="mx-auto mt-8 text-left">
+            <span className="font-semibold">{period.title}</span>
+            {period.excerpt ? <span className="text-ink-2"> — {truncate(period.excerpt, 120)}</span> : null}{" "}
+            <Link href={routes.specialPeriod(period.slug)} className="whitespace-nowrap font-semibold text-gold-ink underline underline-offset-4">
               Program
             </Link>
           </Notice>
         ) : null}
+        <nav aria-label="Na tej strani" className="mt-8 flex flex-wrap justify-center gap-2">
+          <Pill href="#urnik" icon="calendar">
+            Tedenski urnik
+          </Pill>
+          <Pill href="#posebne" icon="calendar">
+            Posebni termini
+          </Pill>
+          <Pill href={routes.intentions} icon="document">
+            Mašni nameni
+          </Pill>
+          <Pill href="#cerkve" icon="pin">
+            Cerkve
+          </Pill>
+        </nav>
       </PageHero>
 
-      <Section tight>
+      <Section>
         <Container>
-          <nav aria-label="Na tej strani" className="-mt-2 mb-8 flex gap-2 overflow-x-auto pb-1 no-scrollbar">
-            <Pill href="#urnik" icon="calendar" active>
-              Tedenski urnik
-            </Pill>
-            <Pill href="#posebne" icon="calendar">
-              Posebni termini
-            </Pill>
-            <Pill href={routes.intentions} icon="document">
-              Mašni nameni
-            </Pill>
-            <Pill href="#cerkve" icon="pin">
-              Cerkve
-            </Pill>
-          </nav>
-
-          <div className="grid gap-6 lg:grid-cols-[minmax(0,2fr)_minmax(0,1fr)] lg:gap-8">
-            <div className="space-y-6">
-              <div className="rounded-md border border-stone bg-paper p-5 sm:p-7">
-                <h2 className="text-h2">{pick?.isToday ? "Danes" : "Naslednje svete maše"}</h2>
+          <div className="grid gap-5 lg:grid-cols-[minmax(0,2fr)_minmax(0,1fr)]">
+            <div className="space-y-5">
+              <div className={cn(tile, "p-6 sm:p-8")}>
+                <p className="eyebrow">{pick?.isToday ? "Danes" : "Naslednje svete maše"}</p>
                 {pick ? (
-                  <p className="mt-1.5 flex flex-wrap items-center gap-x-2 text-body text-ink-2">
-                    <Icon name="calendar" size={16} className="text-ink-3" />
-                    <span>{formatDayHeading(pick.day.date, true)}</span>
-                    {dayLines(pick.day).title ? <span className="text-ink-3">· {dayLines(pick.day).title}</span> : null}
-                  </p>
-                ) : null}
-                {pick && dayLines(pick.day).gospel ? <p className="mt-1 font-serif text-small italic text-ink-3">{dayLines(pick.day).gospel}</p> : null}
+                  <h2 className="mt-2 text-[clamp(1.75rem,1.4rem+1.4vw,2.5rem)] font-bold leading-tight tracking-[-0.045em]">
+                    {formatDayHeading(pick.day.date, true)}
+                  </h2>
+                ) : (
+                  <h2 className="mt-2 text-[clamp(1.75rem,1.4rem+1.4vw,2.5rem)] font-bold leading-tight tracking-[-0.045em]">Naslednje svete maše</h2>
+                )}
+                {pick && dayLines(pick.day).title ? <p className="mt-1.5 text-body text-ink-2">{dayLines(pick.day).title}</p> : null}
+                {pick && dayLines(pick.day).gospel ? <p className="mt-1 font-serif text-[1.125rem] italic text-ink-2">{dayLines(pick.day).gospel}</p> : null}
                 {pick ? (
-                  <ul className="mt-4 divide-y divide-stone border-t border-stone">
+                  <ul className="mt-5 divide-y divide-stone/70 border-t border-stone/70">
                     {pick.masses.map((m) => (
                       <MassRow key={m.key} mass={m} showIntentions />
                     ))}
                   </ul>
                 ) : (
-                  <p className="mt-4 border-t border-stone pt-4 text-body text-ink-2">V naslednjih dneh ni vpisanih svetih maš.</p>
+                  <p className="mt-5 border-t border-stone/70 pt-5 text-body text-ink-2">V naslednjih dneh ni vpisanih svetih maš.</p>
                 )}
-                <details className="mt-4 border-t border-stone pt-3">
-                  <summary className="flex min-h-11 cursor-pointer list-none items-center justify-between text-small font-medium text-ink [&::-webkit-details-marker]:hidden">
+                <details className="group/d mt-2 border-t border-stone/70 pt-2">
+                  <summary className="flex min-h-11 cursor-pointer list-none items-center justify-between rounded-full text-[0.9375rem] font-semibold text-gold-ink [&::-webkit-details-marker]:hidden">
                     Naslednjih sedem dni
-                    <Icon name="chevron-down" size={18} className="text-ink-3" />
+                    <Icon name="chevron-down" size={18} className="transition-transform duration-300 group-open/d:rotate-180" />
                   </summary>
                   <div className="pt-3">
                     <WeekGrid days={upcoming.days.slice(0, 7)} today={upcoming.today} time={upcoming.time} />
@@ -116,10 +116,13 @@ export default async function MassesPage() {
                 </details>
               </div>
 
-              <div id="urnik" className="scroll-mt-24 rounded-md border border-stone bg-paper p-5 sm:p-7">
-                <h2 className="text-h2">Redne svete maše</h2>
+              <div id="urnik" className={cn(tile, "scroll-mt-28 p-6 sm:p-8")}>
+                <p className="eyebrow">Tedenski urnik</p>
+                <h2 className="mt-2 text-[clamp(1.75rem,1.4rem+1.4vw,2.5rem)] font-bold leading-tight tracking-[-0.045em]">
+                  Redne <span className="accent">svete maše</span>
+                </h2>
                 {regular.length || seasonal.length ? (
-                  <div className="mt-5 space-y-10">
+                  <div className="mt-6 space-y-10">
                     {seasonal.map((s) => (
                       <ScheduleMatrix key={s._id} schedule={s} showTitle />
                     ))}
@@ -128,15 +131,15 @@ export default async function MassesPage() {
                     ))}
                   </div>
                 ) : (
-                  <div className="mt-5">
+                  <div className="mt-6">
                     <EmptyState title="Redni urnik še ni vpisan" text="Urnik svetih maš bo objavljen v kratkem." />
                   </div>
                 )}
-                <p className="mt-5 flex items-start gap-2.5 rounded-sm bg-paper-2 px-4 py-3 text-small text-ink-2">
-                  <Icon name="alert" size={18} className="mt-0.5 shrink-0 text-ink-3" />
+                <p className="mt-6 flex items-start gap-2.5 rounded-md bg-paper-2 px-5 py-4 text-small text-ink-2">
+                  <Icon name="alert" size={18} className="mt-0.5 shrink-0 text-gold-ink" />
                   <span>
                     Urnik se lahko spremeni. Za aktualne informacije preverite{" "}
-                    <Link href={routes.announcements} className="underline underline-offset-4 hover:text-ink">
+                    <Link href={routes.announcements} className="font-medium text-gold-ink underline underline-offset-4 hover:text-moss-deep">
                       tedenska oznanila
                     </Link>
                     .
@@ -145,74 +148,38 @@ export default async function MassesPage() {
               </div>
             </div>
 
-            <aside id="posebne" className="scroll-mt-24 self-start rounded-md border border-stone bg-paper-2 p-5 sm:p-7">
-              <h2 className="text-h3">Posebne svete maše</h2>
+            <aside id="posebne" className="scroll-mt-28 self-start rounded-lg bg-[linear-gradient(165deg,var(--color-gold-soft)_0%,#fff_72%)] p-6 shadow-soft sm:p-8">
+              <p className="eyebrow">Posebni termini</p>
+              <h2 className="mt-2 text-[1.75rem] font-bold leading-tight tracking-[-0.04em]">Posebne svete maše</h2>
               {specials.length ? (
-                <ul className="mt-5 space-y-3">
+                <ul className="mt-6 space-y-3">
                   {specials.map(({ date, mass }) => (
                     <SpecialRow key={mass.key} date={date} mass={mass} />
                   ))}
                 </ul>
               ) : (
-                <p className="mt-5 text-small text-ink-2">V naslednjih tednih ni napovedanih posebnih svetih maš.</p>
+                <p className="mt-5 text-body text-ink-2">V naslednjih tednih ni napovedanih posebnih svetih maš.</p>
               )}
-              <Link
-                href={routes.intentionsWeek(t)}
-                className="mt-6 flex min-h-12 items-center justify-center gap-2 rounded-sm border border-stone bg-paper text-[0.75rem] font-semibold uppercase tracking-[0.14em] text-ink hover:border-ink"
-              >
+              <TextLink href={routes.intentionsWeek(t)} className="mt-4">
                 Vsi posebni termini
-                <Icon name="arrow-right" size={14} />
-              </Link>
+              </TextLink>
             </aside>
           </div>
         </Container>
       </Section>
 
       {churches.length ? (
-        <Section tight id="cerkve" className="scroll-mt-24 border-t border-stone">
+        <Section id="cerkve" className="scroll-mt-24">
           <Container>
-            <div className="mb-8 flex flex-wrap items-end justify-between gap-4">
-              <h2 className="text-h2">Naše cerkve</h2>
-              <Link href={routes.churches} className="inline-flex min-h-10 items-center gap-2 text-[0.75rem] font-semibold uppercase tracking-[0.14em] text-ink hover:text-moss">
-                Vse cerkve <Icon name="arrow-right" size={14} />
-              </Link>
-            </div>
-            <div className="grid gap-5 sm:grid-cols-2 lg:grid-cols-4">
+            <SectionHeading eyebrow="Cerkve" title="Naše cerkve" accent="cerkve" lede="Urnik, naslov in dostop za vsako cerkev." action={{ label: "Vse cerkve", href: routes.churches }} />
+            <div className={cn("grid gap-5 sm:grid-cols-2", churches.length + (quote ? 1 : 0) > 3 ? "lg:grid-cols-4" : "lg:grid-cols-3")}>
               {churches.map((c) => (
-                <article key={c._id} className="group overflow-hidden rounded-md border border-stone bg-paper">
-                  <Link href={routes.church(c.slug)} className="block no-underline">
-                    {hasImage(c.image) ? (
-                      <SanityImage
-                        image={c.image}
-                        aspect={4 / 3}
-                        sizes="(min-width: 1024px) 18rem, (min-width: 640px) 50vw, 100vw"
-                        maxWidth={800}
-                        decorative
-                        imgClassName="transition-transform duration-700 ease-out-soft group-hover:scale-[1.02] motion-reduce:transform-none"
-                      />
-                    ) : (
-                      <ImagePlaceholder className="aspect-[4/3]" />
-                    )}
-                    <div className="p-4 sm:p-5">
-                      <h3 className="font-serif text-h3 leading-tight text-ink group-hover:underline">{c.name}</h3>
-                      <p className="mt-1 text-small text-ink-2">{c.address?.city ?? CHURCH_KIND_LABEL[clean(c.kind)]}</p>
-                      <span className="mt-4 inline-flex items-center gap-2 text-[0.75rem] font-semibold uppercase tracking-[0.14em] text-ink">
-                        Oglej si urnik <Icon name="arrow-right" size={14} />
-                      </span>
-                    </div>
-                  </Link>
-                </article>
+                <ChurchCard key={c._id} church={c} />
               ))}
-              {home?.tile?.text && churches.length < 4 ? (
-                <figure className="flex flex-col items-center justify-center rounded-md border border-stone bg-paper-2 p-8 text-center">
-                  <span className="font-serif text-[3rem] leading-none text-stone-2" aria-hidden="true">
-                    “
-                  </span>
-                  <blockquote className="mt-2 font-serif text-h3 leading-snug text-ink">{home.tile.text}</blockquote>
-                  {home.tile.source ? (
-                    <figcaption className="mt-3 text-[0.75rem] font-semibold uppercase tracking-[0.14em] text-ink-3">{home.tile.source}</figcaption>
-                  ) : null}
-                  <span className="mt-4 block h-px w-12 bg-gold" aria-hidden="true" />
+              {quote ? (
+                <figure className={cn(tile, "flex flex-col items-center justify-center p-8 text-center")}>
+                  <blockquote className="font-serif text-[1.625rem] italic leading-snug text-ink">{quote.text}</blockquote>
+                  {quote.source ? <figcaption className="eyebrow mt-4">{quote.source}</figcaption> : null}
                 </figure>
               ) : null}
             </div>
@@ -223,18 +190,17 @@ export default async function MassesPage() {
   );
 }
 
-function Pill({ href, icon, active, children }: { href: string; icon: IconName; active?: boolean; children: React.ReactNode }) {
+function Pill({ href, icon, children }: { href: string; icon: IconName; children: React.ReactNode }) {
   const classes =
-    "inline-flex min-h-12 shrink-0 items-center gap-2.5 rounded-sm px-5 text-body font-medium transition-colors " +
-    (active ? "bg-moss text-paper" : "bg-paper-2 text-ink hover:bg-paper-3");
+    "inline-flex min-h-11 items-center gap-2 rounded-full bg-surface px-4 sm:px-5 text-[0.9375rem] font-semibold text-ink shadow-soft transition-[transform,background-color] duration-200 hover:scale-[1.02] hover:bg-paper-2 motion-reduce:transform-none";
   return href.startsWith("#") ? (
     <a href={href} className={classes}>
-      <Icon name={icon} size={18} />
+      <Icon name={icon} size={17} className="text-gold-ink" />
       {children}
     </a>
   ) : (
     <Link href={href} className={classes}>
-      <Icon name={icon} size={18} />
+      <Icon name={icon} size={17} className="text-gold-ink" />
       {children}
     </Link>
   );
@@ -242,13 +208,10 @@ function Pill({ href, icon, active, children }: { href: string; icon: IconName; 
 
 function SpecialRow({ date, mass }: { date: string; mass: Mass }) {
   return (
-    <li className="grid grid-cols-[3.75rem_1fr] gap-4 rounded-md border border-stone bg-paper p-3.5">
-      <div className="flex flex-col items-center justify-center rounded-sm bg-paper-2 py-1.5 leading-none">
-        <span className="font-serif text-[1.625rem] text-ink">{formatDayNumber(date)}</span>
-        <span className="mt-1 text-[0.7rem] font-semibold uppercase tracking-wider text-ink-3">{formatMonthShort(date)}</span>
-      </div>
+    <li className="flex items-center gap-4 rounded-md bg-surface/80 p-3 shadow-[inset_0_0_0_1px_rgb(31_28_24/0.06)]">
+      <DayLeaf date={date} />
       <div className="min-w-0">
-        <p className="font-medium text-ink">{MASS_TYPE_LABEL[clean(mass.type)] ?? MASS_TYPE_LABEL.regular}</p>
+        <p className="font-semibold tracking-[-0.015em] text-ink">{MASS_TYPE_LABEL[clean(mass.type)] ?? MASS_TYPE_LABEL.regular}</p>
         <p className="text-small text-ink-2">{mass.church?.shortName ?? mass.church?.name}</p>
         <p className="text-small text-ink-3">
           ob {formatTime(mass.time)}

@@ -17,23 +17,24 @@ export default async function BulletinsPage() {
     <>
       <PageHeader
         title="Vsa oznanila"
+        accent="oznanila"
         lede="Objavljena oznanila župnije, najnovejša prva."
         eyebrow={
           <Breadcrumbs items={[{ label: "Oznanila", href: routes.announcements }, { label: "Vsa oznanila" }]} />
         }
       />
-      <Section tight tone="paper-2">
+      <Section>
         <Container>
           {list.length ? (
-            <ul className="grid gap-3 md:grid-cols-2">
+            <ul className="grid gap-4 md:grid-cols-2">
               {list.map((b) => (
                 <li key={b.id}>
                   <Link
                     href={routes.bulletin(b.periodStart)}
-                    className="flex min-h-14 items-center justify-between gap-4 rounded-md border border-stone bg-paper px-5 py-3 no-underline hover:border-stone-2 [&_span:first-child]:hover:underline"
+                    className="flex min-h-16 items-center justify-between gap-4 rounded-lg bg-surface px-6 py-4 no-underline shadow-soft transition-[transform,box-shadow] duration-500 ease-out-soft hover:-translate-y-0.5 hover:shadow-lift motion-reduce:transform-none"
                   >
-                    <span className="font-serif text-lede">{b.label}</span>
-                    <span className="text-small text-ink-3">{b.itemCount} {b.itemCount === 1 ? "obvestilo" : b.itemCount === 2 ? "obvestili" : b.itemCount < 5 && b.itemCount > 0 ? "obvestila" : "obvestil"}{b.hasPdf ? " · PDF" : ""}</span>
+                    <span className="text-[1.25rem] font-bold tracking-[-0.035em]">{b.label}</span>
+                    <span className="text-right text-small font-medium text-ink-3">{b.itemCount} {b.itemCount === 1 ? "obvestilo" : b.itemCount === 2 ? "obvestili" : b.itemCount < 5 && b.itemCount > 0 ? "obvestila" : "obvestil"}{b.hasPdf ? " · PDF" : ""}</span>
                   </Link>
                 </li>
               ))}

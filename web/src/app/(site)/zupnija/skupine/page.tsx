@@ -20,14 +20,15 @@ export default async function GroupsPage() {
   return (
     <>
       <PageHeader
-        title="Skupine"
+        title="Župnijske skupine"
+        accent="skupine"
         lede="Župnija živi po ljudeh, ki se srečujejo, pojejo, molijo in pomagajo. Vsaka skupina vas rada sprejme."
         eyebrow={<Breadcrumbs items={[{ label: "Župnija", href: routes.parish }, { label: "Skupine" }]} />}
       />
-      <Section tight tone="paper-2">
+      <Section>
         <Container>
           {groups.length ? (
-            <ul className="divide-y divide-stone border-y border-stone md:grid md:grid-cols-2 md:gap-x-12 md:divide-y-0 md:border-y-0 md:[&>li]:border-t md:[&>li]:border-stone">
+            <ul className="grid gap-5 md:grid-cols-2">
               {groups.map((g) => (
                 <GroupRow key={g._id} group={g} />
               ))}

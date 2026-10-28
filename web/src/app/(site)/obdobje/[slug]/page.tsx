@@ -11,7 +11,7 @@ import { ScheduleTable } from "@/components/masses/ScheduleTable";
 import { EventList } from "@/components/events/EventCard";
 import { AnnouncementList } from "@/components/announcements/AnnouncementCard";
 import { SEASON_COLOR } from "@/components/home/SpecialPeriodFeature";
-import { Container, Notice, PageHeader, Section, Tag, TextLink } from "@/components/ui/primitives";
+import { Container, Notice, PageHeader, Section, SectionHeading, Tag } from "@/components/ui/primitives";
 
 type Props = { params: Promise<{ slug: string }> };
 
@@ -36,50 +36,57 @@ export default async function SpecialPeriodPage({ params }: Props) {
   return (
     <>
       <PageHeader title={period.title}>
-        <div className="mt-5 flex flex-wrap items-center gap-3 text-small text-ink-3">
+        <div className="mt-6 flex flex-wrap items-center justify-center gap-3 text-small font-medium text-ink-2">
           <span style={{ backgroundColor: color }} className="inline-block size-2.5 rounded-full ring-2 ring-stone" aria-hidden="true" />
           <span>{formatDateSpan(period.activeFrom, period.activeUntil)}</span>
-          {over ? <Tag tone="onDark">Obdobje je minilo</Tag> : !active ? <Tag tone="onDark">Prihaja</Tag> : null}
+          {over ? <Tag>Obdobje je minilo</Tag> : !active ? <Tag tone="gold">Prihaja</Tag> : null}
         </div>
-        {period.officeHoursNote ? <Notice dark className="mt-6">{period.officeHoursNote}</Notice> : null}
+        {period.officeHoursNote ? <Notice className="mx-auto mt-6 text-left">{period.officeHoursNote}</Notice> : null}
       </PageHeader>
 
       {hasImage(period.image) ? (
-        <SanityImage image={period.image} aspect={21 / 9} sizes="100vw" maxWidth={2400} priority className="max-sm:aspect-[4/3]" />
+        <Container className="mt-10 lg:mt-14">
+          <SanityImage
+            image={period.image}
+            aspect={21 / 9}
+            sizes="(min-width: 1280px) 77rem, 100vw"
+            maxWidth={2400}
+            priority
+            className="overflow-hidden rounded-[2rem] shadow-soft max-sm:aspect-[4/3]! sm:rounded-xl"
+            imgClassName="[filter:saturate(.6)_sepia(.12)]"
+          />
+        </Container>
       ) : null}
 
-      <Section tight>
-        <Container className="[&>*]:max-w-3xl">
+      <Section>
+        <Container width="prose">
           <RichText value={period.message} size="lg" />
           <Attachments items={period.attachments} />
         </Container>
       </Section>
 
       {period.schedule?.entries?.length ? (
-        <Section tight tone="paper-2">
+        <Section>
           <Container>
-            <div className="mb-8 flex flex-wrap items-baseline justify-between gap-4">
-              <h2 className="text-h2">Svete maše</h2>
-              <TextLink href={routes.masses}>Vse svete maše</TextLink>
-            </div>
+            <SectionHeading eyebrow="Bogoslužje" title="Svete maše" accent="maše" action={{ label: "Vse svete maše", href: routes.masses }} />
             <ScheduleTable schedule={{ ...period.schedule, replacesRegular: null }} />
           </Container>
         </Section>
       ) : null}
 
       {period.events?.length ? (
-        <Section tight>
+        <Section>
           <Container>
-            <h2 className="mb-6 text-h2">Dogodki</h2>
+            <SectionHeading eyebrow="Dogodki" title="Kaj se pripravlja" accent="pripravlja" />
             <EventList events={period.events} />
           </Container>
         </Section>
       ) : null}
 
       {period.announcements?.length ? (
-        <Section tight className="border-t border-stone">
+        <Section>
           <Container>
-            <h2 className="mb-6 text-h2">Oznanila</h2>
+            <SectionHeading eyebrow="Oznanila" title="Kaj je novega" accent="novega" />
             <AnnouncementList items={period.announcements} />
           </Container>
         </Section>

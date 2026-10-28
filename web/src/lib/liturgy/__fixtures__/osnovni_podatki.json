@@ -1,0 +1,199 @@
+{
+ "redovi": [
+  {
+   "id": "kapucini",
+   "red": "kapucini"
+  },
+  {
+   "id": "noben",
+   "red": "brez izbire reda"
+  }
+ ],
+ "skofije": [
+  {
+   "id": "slovenija",
+   "skofija": "Splošni slovenski koledar"
+  },
+  {
+   "id": "ljubljana",
+   "skofija": "Ljubljana"
+  }
+ ],
+ "data": [
+  {
+   "id": "81",
+   "teza_opis": "",
+   "opis": "Sobota 1. tedna med letom",
+   "vrstica": "»Zdravnika ne potrebujejo zdravi, ampak bolni.« (Mr 2,17)",
+   "opis_dolgi": "Sobota 1. tedna med letom"
+  },
+  {
+   "id": "682",
+   "teza_opis": "",
+   "opis": "Petek 5. velikonočnega tedna",
+   "vrstica": "»Niste vi mene izvolili, ampak sem jaz vas izvolil in vas postavil, da greste in obrodite sad.« (Jn 15,16a)",
+   "opis_dolgi": "Petek 5. velikonočnega tedna"
+  },
+  {
+   "id": "1021",
+   "teza_opis": "praznik",
+   "opis": "Obletnica posvetitve ljubljanske stolnice",
+   "vrstica": "»Pride pa ura in je že zdaj, ko bodo pravi častilci častili Očeta v duhu in resnici. Prav takih častilcev si namreč želi Oče.« (Jn 4,23)",
+   "opis_dolgi": "Obletnica posvetitve ljubljanske stolnice, praznik"
+  },
+  {
+   "id": "508",
+   "teza_opis": "",
+   "opis": "Torek 30. tedna med letom",
+   "vrstica": "»Božje kraljestvo je podobno kvasu, ki ga je vzela žena in ga umesila dokler se ni vse prekvasilo.« (Lk 13,20-21)",
+   "opis_dolgi": "Torek 30. tedna med letom"
+  },
+  {
+   "id": "794",
+   "teza_opis": "praznik",
+   "opis": "Sv. Simon in Juda Tadej, apostola",
+   "vrstica": "»Poklical je k sebi svoje učence in si jih je izmed njih izbral dvanajst, katere je imenoval tudi apostole.« (Lk 6,13)",
+   "opis_dolgi": "Sv. Simon in Juda Tadej, apostola, praznik"
+  },
+  {
+   "id": "788",
+   "teza_opis": "slovesni praznik",
+   "opis": "Vsi sveti",
+   "vrstica": "»Blagor žalostnim, kajti potolaženi bodo.« (Mt 5,4)",
+   "opis_dolgi": "Vsi sveti, slovesni praznik"
+  },
+  {
+   "id": "1157",
+   "opis": "Sv. Anton Puščavnik",
+   "teza_opis": "obvezni god",
+   "vrstica": "»Če hočeš biti popoln, pojdi, prodaj, kar imaš, in daj ubogim in imel boš zaklad v nebesih; potem pridi in hodi za menoj!« (Mt 19,21)",
+   "opis_dolgi": "Sv. Anton Puščavnik, obvezni god"
+  }
+ ],
+ "map": [
+  {
+   "selektor": "2026-01-17-slovenija-kapucini",
+   "data_ids": [
+    "81",
+    "1157"
+   ]
+  },
+  {
+   "selektor": "2026-01-17-ljubljana-kapucini",
+   "data_ids": [
+    "81",
+    "1157"
+   ]
+  },
+  {
+   "selektor": "2026-01-17-slovenija-noben",
+   "data_ids": [
+    "81",
+    "1157"
+   ]
+  },
+  {
+   "selektor": "2026-01-17-ljubljana-noben",
+   "data_ids": [
+    "81",
+    "1157"
+   ]
+  },
+  {
+   "selektor": "2026-05-08-slovenija-kapucini",
+   "data_ids": [
+    "682"
+   ]
+  },
+  {
+   "selektor": "2026-05-08-ljubljana-kapucini",
+   "data_ids": [
+    "1021"
+   ]
+  },
+  {
+   "selektor": "2026-05-08-slovenija-noben",
+   "data_ids": [
+    "682"
+   ]
+  },
+  {
+   "selektor": "2026-05-08-ljubljana-noben",
+   "data_ids": [
+    "1021"
+   ]
+  },
+  {
+   "selektor": "2026-10-27-slovenija-kapucini",
+   "data_ids": [
+    "508"
+   ]
+  },
+  {
+   "selektor": "2026-10-27-ljubljana-kapucini",
+   "data_ids": [
+    "508"
+   ]
+  },
+  {
+   "selektor": "2026-10-27-slovenija-noben",
+   "data_ids": [
+    "508"
+   ]
+  },
+  {
+   "selektor": "2026-10-27-ljubljana-noben",
+   "data_ids": [
+    "508"
+   ]
+  },
+  {
+   "selektor": "2026-10-28-slovenija-kapucini",
+   "data_ids": [
+    "794"
+   ]
+  },
+  {
+   "selektor": "2026-10-28-ljubljana-kapucini",
+   "data_ids": [
+    "794"
+   ]
+  },
+  {
+   "selektor": "2026-10-28-slovenija-noben",
+   "data_ids": [
+    "794"
+   ]
+  },
+  {
+   "selektor": "2026-10-28-ljubljana-noben",
+   "data_ids": [
+    "794"
+   ]
+  },
+  {
+   "selektor": "2026-11-01-slovenija-kapucini",
+   "data_ids": [
+    "788"
+   ]
+  },
+  {
+   "selektor": "2026-11-01-ljubljana-kapucini",
+   "data_ids": [
+    "788"
+   ]
+  },
+  {
+   "selektor": "2026-11-01-slovenija-noben",
+   "data_ids": [
+    "788"
+   ]
+  },
+  {
+   "selektor": "2026-11-01-ljubljana-noben",
+   "data_ids": [
+    "788"
+   ]
+  }
+ ]
+}

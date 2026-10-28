@@ -19,11 +19,11 @@ export default async function GalleriesPage() {
   const galleries = await getGalleries();
   return (
     <>
-      <PageHeader title="Galerije" lede="Fotografije s praznovanj, romanj in srečanj." />
-      <Section tight tone="paper-2">
+      <PageHeader title="Galerije fotografij" accent="fotografij" lede="Fotografije s praznovanj, romanj in srečanj." eyebrow={<p className="eyebrow">Fotografije</p>} />
+      <Section>
         <Container>
           {galleries.length ? (
-            <div className="grid grid-cols-2 gap-x-6 gap-y-10 lg:grid-cols-3 lg:gap-x-8">
+            <div className="grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
               {galleries.map((g) => (
                 <GalleryCard key={g._id} gallery={g} />
               ))}

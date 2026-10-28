@@ -1,16 +1,16 @@
 "use client";
 
 import { useActionState, useEffect, useId, useRef } from "react";
-import { cn } from "@/lib/utils";
+import { buttonClassName } from "@/components/ui/primitives";
 import { Icon } from "@/components/ui/Icon";
 import { submitContactForm, type ContactFormState } from "./actions";
 
 const initial: ContactFormState = { status: "idle" };
 
 const inputClass =
-  "block w-full rounded-sm border border-stone-2 bg-paper px-3.5 py-3 text-body text-ink placeholder:text-ink-3 " +
-  "focus:border-ink focus:outline-none focus-visible:outline-3 focus-visible:outline-gold focus-visible:outline-offset-2 " +
-  "aria-[invalid=true]:border-alert";
+  "block w-full rounded-sm border-0 bg-paper-2 px-4 py-3 text-body text-ink shadow-[inset_0_0_0_1px_rgb(31_28_24/0.06)] placeholder:text-ink-3 transition-[background-color,box-shadow] " +
+  "focus:bg-surface focus:shadow-[inset_0_0_0_1px_var(--color-gold)] focus:outline-none focus-visible:outline-3 focus-visible:outline-gold/40 focus-visible:outline-offset-2 " +
+  "aria-[invalid=true]:shadow-[inset_0_0_0_1.5px_var(--color-alert)]";
 
 type FieldProps = {
   id: string;
@@ -81,9 +81,9 @@ export function ContactForm() {
 
   if (state.status === "success") {
     return (
-      <div ref={statusRef} tabIndex={-1} role="status" className="rounded-md border border-moss/30 bg-moss-soft p-5">
-        <p className="flex items-start gap-2 text-body text-moss-deep">
-          <Icon name="check" size={22} className="mt-0.5 shrink-0" />
+      <div ref={statusRef} tabIndex={-1} role="status" className="rounded-md bg-gold-soft p-5">
+        <p className="flex items-start gap-2 text-body text-ink">
+          <Icon name="check" size={22} className="mt-0.5 shrink-0 text-gold-ink" />
           {state.message}
         </p>
       </div>
@@ -95,7 +95,7 @@ export function ContactForm() {
   return (
     <form action={action} noValidate className="space-y-5">
       {state.status === "error" && state.message ? (
-        <div ref={statusRef} tabIndex={-1} role="alert" className="rounded-md border border-alert/30 bg-alert-soft p-4 text-body text-alert">
+        <div ref={statusRef} tabIndex={-1} role="alert" className="rounded-md bg-alert-soft p-4 text-body text-alert">
           {state.message}
         </div>
       ) : null}
@@ -121,9 +121,7 @@ export function ContactForm() {
         <button
           type="submit"
           disabled={pending}
-          className={cn(
-            "inline-flex min-h-12 items-center justify-center gap-2 rounded-sm bg-moss px-6 text-body font-medium text-paper transition-colors hover:bg-moss-deep disabled:opacity-60",
-          )}
+          className={buttonClassName()}
         >
           {pending ? "Pošiljam …" : "Pošlji sporočilo"}
         </button>

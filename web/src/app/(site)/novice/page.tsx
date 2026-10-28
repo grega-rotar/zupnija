@@ -19,8 +19,8 @@ export default async function NewsPage() {
   const articles = await getArticles();
   return (
     <>
-      <PageHeader title="Novice" lede="Iz življenja župnije." />
-      <Section tight tone="paper-2">
+      <PageHeader title="Iz življenja župnije" accent="življenja" lede="Novice, zahvale in utrinki iz župnije." eyebrow={<p className="eyebrow">Novice</p>} />
+      <Section>
         <Container>
           <ArticleList articles={articles} />
         </Container>

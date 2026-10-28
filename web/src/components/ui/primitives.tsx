@@ -5,16 +5,25 @@ import { Icon, type IconName } from "./Icon";
 
 // ───────────────────────── Layout ─────────────────────────
 
+/**
+ * The tile material of design v4: white, 28px radius, a hairline plus a very
+ * soft shadow, on the near-white page. `tileHover` adds the tiny lift for
+ * tiles that are links.
+ */
+export const tile = "rounded-lg bg-surface shadow-soft";
+export const tileHover =
+  "transition-[transform,box-shadow] duration-500 ease-out-soft hover:-translate-y-1 hover:shadow-lift motion-reduce:transform-none";
+
 type ContainerProps = ComponentProps<"div"> & { width?: "content" | "prose" | "wide" };
 
-/** Horizontal page gutter + max width. 16px gutters on phones, more on larger screens. */
+/** Horizontal page gutter (24px) + max width (1240px, as the prototype's `.wrap`). */
 export function Container({ width = "content", className, ...rest }: ContainerProps) {
   return (
     <div
       className={cn(
-        "mx-auto w-full px-4 sm:px-6 lg:px-8",
+        "mx-auto w-full px-6",
         width === "content" && "max-w-content",
-        width === "prose" && "max-w-prose",
+        width === "prose" && "max-w-[calc(var(--container-prose)+3rem)]",
         width === "wide" && "max-w-[88rem]",
         className,
       )}
@@ -26,31 +35,35 @@ export function Container({ width = "content", className, ...rest }: ContainerPr
 type SplitProps = { title?: string | null; titleId?: string; titleClassName?: string; className?: string; children: ReactNode };
 
 /**
- * Text block that lines up with the page title: heading in the left third,
- * text in the right two thirds on large screens, stacked on phones.
- * Without a title the text starts at the left edge.
+ * Text block under a centered heading: the v4 opening above one readable
+ * column, centered on the page. Without a title only the column shows.
  */
 export function Split({ title, titleId, titleClassName, className, children }: SplitProps) {
   return (
-    <Container className={cn("lg:grid lg:grid-cols-12 lg:gap-x-12", className)}>
+    <Container className={className}>
       {title ? (
-        <h2 id={titleId} className={cn("mb-5 text-h2 lg:col-span-4 lg:mb-0", titleClassName)}>
+        <h2 id={titleId} className={cn("mx-auto mb-10 max-w-3xl text-center lg:mb-14", headline.h2, titleClassName)}>
           {title}
         </h2>
       ) : null}
-      <div className="min-w-0 max-w-prose lg:col-span-8 lg:max-w-3xl">{children}</div>
+      <div className="mx-auto min-w-0 max-w-3xl">{children}</div>
     </Container>
   );
 }
 
 type SectionProps = ComponentProps<"section"> & { tone?: "paper" | "paper-2" | "ink"; tight?: boolean };
 
-/** Vertical rhythm for page sections. */
+/**
+ * Vertical rhythm for page sections: two neighbours sit 160px apart on
+ * desktop and 96px on phones (half of it each), as in the prototype.
+ * Sections share the one near-white ground; `paper-2` is a sunk band for
+ * the rare block that must stand apart.
+ */
 export function Section({ tone = "paper", tight, className, ...rest }: SectionProps) {
   return (
     <section
       className={cn(
-        tight ? "py-14 sm:py-20" : "py-20 sm:py-28",
+        tight ? "py-10 lg:py-14" : "py-12 lg:py-20",
         tone === "paper-2" && "bg-paper-2",
         tone === "ink" && "bg-ink text-paper",
         className,
@@ -62,15 +75,14 @@ export function Section({ tone = "paper", tight, className, ...rest }: SectionPr
 
 type CardProps = { children: ReactNode; className?: string; padded?: boolean; tone?: "paper" | "ink" };
 
-/** Raised surface: a sheet of paper on the stone ground. */
+/** Raised surface: a white tile on the near-white page. */
 export function Card({ padded = true, tone = "paper", className, children }: CardProps) {
   return (
     <div
       className={cn(
-        "rounded-md border",
-        tone === "paper" && "border-stone/80 bg-paper",
-        tone === "ink" && "border-paper/10 bg-ink text-paper",
-        padded && "p-5 sm:p-7",
+        tone === "paper" && tile,
+        tone === "ink" && "rounded-lg bg-ink text-paper",
+        padded && "p-6 sm:p-8",
         className,
       )}
     >
@@ -81,95 +93,127 @@ export function Card({ padded = true, tone = "paper", className, children }: Car
 
 // ───────────────────────── Headings ─────────────────────────
 
+/**
+ * A headline with its one Instrument Serif italic phrase: `phrase` is set in
+ * `.accent` where it occurs in `text`. Without a match the text stays plain.
+ */
+export function Accented({ text, phrase }: { text: string; phrase?: string | null }) {
+  const at = phrase ? text.lastIndexOf(phrase) : -1;
+  if (!phrase || at < 0) return <>{text}</>;
+  return (
+    <>
+      {text.slice(0, at)}
+      <span className="accent">{phrase}</span>
+      {text.slice(at + phrase.length)}
+    </>
+  );
+}
+
+/** Headline sizes of v4: `h2` is the prototype's section `.h2`, `display` the page title. */
+export const headline = {
+  display: "text-[clamp(2.75rem,1.4rem+5.4vw,5.5rem)] font-extrabold leading-[0.95] tracking-[-0.05em]",
+  h2: "text-[clamp(2.25rem,1.6rem+2.8vw,3.5rem)] font-bold leading-none tracking-[-0.045em]",
+  h3: "text-[1.5rem] font-bold leading-[1.15] tracking-[-0.035em]",
+};
+
 type SectionHeadingProps = {
   title: string;
+  /** The phrase of `title` set in the serif italic. */
+  accent?: string;
   id?: string;
   eyebrow?: string;
   lede?: string;
   action?: { label: string; href: string };
   as?: "h1" | "h2" | "h3";
+  /** `start` for headings inside a column; sections open centered. */
+  align?: "center" | "start";
   className?: string;
 };
 
-/** Section title with an optional "see all" action on the same line. */
-export function SectionHeading({ title, id, eyebrow, lede, action, as: Tag = "h2", className }: SectionHeadingProps) {
+/**
+ * The v4 section opening: a small gold eyebrow, the headline with one
+ * serif italic phrase, a calm subline and an optional "see all" link,
+ * centered, 56px above the content (40px on phones).
+ */
+export function SectionHeading({ title, accent, id, eyebrow, lede, action, as: Tag = "h2", align = "center", className }: SectionHeadingProps) {
+  const center = align === "center";
   return (
-    <div className={cn("mb-10 flex flex-wrap items-end justify-between gap-x-6 gap-y-3 sm:mb-14", className)}>
-      <div className="max-w-prose">
-        {eyebrow ? <p className="mb-2 text-small text-ink-3">{eyebrow}</p> : null}
-        <Tag id={id} className={cn(Tag === "h1" ? "text-h1" : Tag === "h2" ? "text-h2" : "text-h3")}>
-          {title}
-        </Tag>
-        {lede ? <p className="lede mt-4 text-ink-2">{lede}</p> : null}
-      </div>
-      {action ? <TextLink href={action.href}>{action.label}</TextLink> : null}
+    <div className={cn("mb-10 flex flex-col lg:mb-14", center ? "mx-auto max-w-3xl items-center text-center" : "items-start", className)}>
+      {eyebrow ? <p className="eyebrow mb-3.5">{eyebrow}</p> : null}
+      <Tag id={id} className={cn(Tag === "h3" ? headline.h3 : headline.h2)}>
+        <Accented text={title} phrase={accent} />
+      </Tag>
+      {lede ? <p className={cn("lede mt-4 max-w-[40rem] text-balance lg:mt-5", center && "mx-auto")}>{lede}</p> : null}
+      {action ? <TextLink href={action.href} className="mt-3 lg:mt-4">{action.label}</TextLink> : null}
     </div>
   );
 }
 
 type PageHeaderProps = {
   title: string;
+  /** The phrase of `title` set in the serif italic. */
+  accent?: string | null;
   lede?: string | null;
   eyebrow?: ReactNode;
   children?: ReactNode;
   className?: string;
-  /** Photograph behind the title (title turns white; a soft gradient keeps it readable). */
+  /** Photograph behind the title (title turns white; a warm shade keeps it readable). */
   image?: ReactNode;
   /** Short quotation shown under the lede on photo headers. */
   quote?: { text: string; source?: string | null } | null;
 };
 
 /**
- * Page title area used by every inner page. Light stone band by default;
- * pass `image` (a `<SanityImage fill />`) for the photographic variant.
+ * Page title area used by every inner page, as a centered v4 opening:
+ * breadcrumbs, the big Inter title with its serif italic phrase, the
+ * subline. Pass `image` (a `<SanityImage fill />`) for the photographic
+ * variant: the photo, desaturated, in a 40px rounded frame like the hero.
  */
-export function PageHeader({ title, lede, eyebrow, children, className, image, quote }: PageHeaderProps) {
+export function PageHeader({ title, accent, lede, eyebrow, children, className, image, quote }: PageHeaderProps) {
   if (image) {
     return (
-      <header className={cn("relative isolate overflow-hidden bg-ink text-paper", className)}>
-        <div className="absolute inset-0 -z-20">{image}</div>
-        <div aria-hidden="true" className="absolute inset-0 -z-10 bg-[linear-gradient(90deg,rgb(20_28_24/0.75)_0%,rgb(20_28_24/0.45)_50%,rgb(20_28_24/0.2)_100%)]" />
-        <Container className="flex min-h-[20rem] flex-col justify-end py-10 sm:min-h-[24rem] sm:py-14 lg:min-h-[26rem]">
-          {eyebrow ? <div className="mb-5 text-small text-paper/75 [&_a:hover]:text-paper [&_[aria-current]]:text-paper">{eyebrow}</div> : null}
-          <h1 className="max-w-4xl text-display text-paper">{title}</h1>
-          {lede ? <p className="mt-4 max-w-prose font-serif text-[clamp(1.25rem,1.05rem+0.9vw,1.75rem)] leading-snug text-paper">{lede}</p> : null}
+      <header className={cn("px-3 pt-3", className)}>
+        <div className="relative isolate flex min-h-[30rem] flex-col items-center justify-end overflow-hidden rounded-[2rem] px-6 pb-12 pt-28 text-center text-paper sm:min-h-[34rem] sm:rounded-xl sm:pb-16 lg:min-h-[38rem]">
+          <div className="absolute inset-0 -z-20 [&_img]:[filter:saturate(.5)_sepia(.2)_brightness(.98)]">{image}</div>
+          <div
+            aria-hidden="true"
+            className="absolute inset-0 -z-10 bg-[linear-gradient(180deg,rgb(18_13_8/0.5)_0%,rgb(18_13_8/0.22)_38%,rgb(18_13_8/0.3)_62%,rgb(18_13_8/0.7)_100%)]"
+          />
+          {eyebrow ? (
+            <div className="mb-5 flex justify-center text-[0.8125rem] font-medium text-paper/80 [&_a:hover]:text-paper [&_[aria-current]]:text-paper">{eyebrow}</div>
+          ) : null}
+          <h1 className={cn("max-w-5xl text-paper", headline.display)}>
+            <Accented text={title} phrase={accent} />
+          </h1>
+          {lede ? <p className="mx-auto mt-5 max-w-[40rem] text-balance text-[clamp(1.125rem,1rem+0.5vw,1.3125rem)] leading-snug text-paper/90">{lede}</p> : null}
           {quote?.text ? (
-            <blockquote className="mt-6 max-w-md text-paper/85">
-              <p className="lede text-[1.0625rem]">{quote.text}</p>
-              {quote.source ? <cite className="mt-1 block text-small not-italic text-paper/70">{quote.source}</cite> : null}
+            <blockquote className="mx-auto mt-6 max-w-md text-paper/85">
+              <p className="font-serif text-[1.25rem] italic leading-snug">{quote.text}</p>
+              {quote.source ? <cite className="mt-1 block text-[0.8125rem] not-italic text-paper/70">{quote.source}</cite> : null}
             </blockquote>
           ) : null}
           {children}
-        </Container>
+        </div>
       </header>
     );
   }
   return (
-    <header className={cn("border-b border-stone bg-paper-2", className)}>
-      <Container className="py-14 sm:py-20 lg:py-24">
-        {eyebrow ? <div className="mb-6 text-small text-ink-3 [&_[aria-current]]:text-ink-2">{eyebrow}</div> : null}
-        <span className="mb-7 block h-px w-12 bg-gold" aria-hidden="true" />
-        <h1 className="max-w-4xl text-display">{title}</h1>
-        {lede ? <p className="lede mt-6 max-w-prose text-ink-2">{lede}</p> : null}
+    <header className={cn("pb-2 pt-10 sm:pt-14 lg:pt-20", className)}>
+      <Container className="flex flex-col items-center text-center">
+        {eyebrow ? <div className="mb-6 flex justify-center text-[0.8125rem] font-medium text-ink-3 [&_[aria-current]]:text-gold-ink">{eyebrow}</div> : null}
+        <h1 className={cn("max-w-5xl", headline.display)}>
+          <Accented text={title} phrase={accent} />
+        </h1>
+        {lede ? <p className="lede mx-auto mt-5 max-w-[40rem] text-balance lg:mt-6">{lede}</p> : null}
         {children}
       </Container>
     </header>
   );
 }
 
-/** Highlighted note (temporary information). Works on light and dark ground. */
+/** Highlighted note (temporary information): a soft gold tile. */
 export function Notice({ children, className }: { children: ReactNode; dark?: boolean; className?: string }) {
-  return (
-    <div
-      className={cn(
-        "max-w-prose rounded-md border-l-[3px] border-gold px-4 py-3 text-body",
-        "bg-gold-soft/70 text-ink",
-        className,
-      )}
-    >
-      {children}
-    </div>
-  );
+  return <div className={cn("max-w-prose rounded-md bg-gold-soft px-5 py-4 text-body text-ink", className)}>{children}</div>;
 }
 
 // ───────────────────────── Links & buttons ─────────────────────────
@@ -187,13 +231,13 @@ type ButtonProps = {
 };
 
 const buttonShape =
-  "inline-flex items-center justify-center gap-2 rounded-sm font-medium tracking-[0.01em] transition-colors duration-200 " +
+  "inline-flex items-center justify-center gap-2 rounded-full font-semibold tracking-[-0.01em] transition-[color,background-color,border-color,transform] duration-200 hover:scale-[1.02] active:scale-[0.99] " +
   "focus-visible:outline-offset-4 disabled:opacity-60 disabled:pointer-events-none";
-const buttonBase = `${buttonShape} min-h-12 px-6 text-body`;
+const buttonBase = `${buttonShape} min-h-11 px-5 text-[0.9375rem]`;
 
 const buttonVariants = {
   primary: "bg-moss text-paper hover:bg-moss-deep",
-  secondary: "border border-ink/25 bg-transparent text-ink hover:border-ink",
+  secondary: "bg-surface text-ink shadow-[0_0_0_1px_rgb(31_28_24/0.1)] hover:bg-paper-2",
   ghost: "text-moss hover:bg-moss-soft",
   onDark: "bg-paper text-ink hover:bg-paper-2",
   // Only for the editor (buttonClassName): removing or cancelling something.
@@ -241,16 +285,16 @@ export function Button({ href, variant = "primary", size = "md", icon, className
   );
 }
 
-/** Inline text link with a small arrow — for "see all" actions. */
+/** Inline text link with a small arrow — for "see all" actions (the prototype's `.more`). */
 export function TextLink({ href, children, className, external }: { href: string; children: ReactNode; className?: string; external?: boolean }) {
   const classes = cn(
-    "group inline-flex min-h-11 items-center gap-1.5 text-body font-medium text-moss hover:text-moss-deep",
+    "group inline-flex min-h-11 items-center gap-1.5 rounded-full text-[0.9375rem] font-semibold tracking-[-0.01em] text-gold-ink hover:text-moss-deep",
     className,
   );
   const inner = (
     <>
-      <span className="underline decoration-moss/40 underline-offset-4 group-hover:decoration-moss">{children}</span>
-      <Icon name={external ? "external" : "arrow-right"} size={16} className="transition-transform duration-150 group-hover:translate-x-0.5" />
+      <span>{children}</span>
+      <Icon name={external ? "external" : "arrow-right"} size={15} className="transition-transform duration-200 ease-out-soft group-hover:translate-x-[3px] motion-reduce:transform-none" />
     </>
   );
   return external ? (
@@ -268,17 +312,16 @@ export function TextLink({ href, children, className, external }: { href: string
 
 type TagProps = { children: ReactNode; tone?: "neutral" | "moss" | "gold" | "alert" | "onDark"; className?: string };
 
-/** Small label: category, status. Never the only carrier of meaning. */
+/** Small pill label: category, status. Never the only carrier of meaning. */
 export function Tag({ children, tone = "neutral", className }: TagProps) {
   return (
     <span
       className={cn(
-        "inline-flex items-center rounded-full px-2.5 py-0.5 text-meta font-medium tracking-[0.01em]",
-        tone === "neutral" && "bg-paper-3 text-ink-2",
-        tone === "moss" && "bg-moss-soft text-moss-deep",
-        tone === "gold" && "bg-gold-soft text-[#6f5620]",
+        "inline-flex h-7 items-center gap-1.5 whitespace-nowrap rounded-full px-3 text-[0.8125rem] font-semibold tracking-[-0.005em]",
+        tone === "neutral" && "bg-paper-2 text-ink-2",
+        (tone === "moss" || tone === "gold") && "bg-gold-soft text-gold-ink",
         tone === "alert" && "bg-alert-soft text-alert",
-        tone === "onDark" && "bg-paper-3 text-ink-2",
+        tone === "onDark" && "bg-paper/15 text-paper backdrop-blur",
         className,
       )}
     >
@@ -291,7 +334,7 @@ export function Tag({ children, tone = "neutral", className }: TagProps) {
 export function MetaRow({ icon, children, className }: { icon: IconName; children: ReactNode; className?: string }) {
   return (
     <div className={cn("flex items-start gap-2 text-small text-ink-2", className)}>
-      <Icon name={icon} size={18} className="mt-0.5 shrink-0 text-ink-3" />
+      <Icon name={icon} size={18} className="mt-0.5 shrink-0 text-gold-ink" />
       <span className="min-w-0">{children}</span>
     </div>
   );
@@ -300,11 +343,11 @@ export function MetaRow({ icon, children, className }: { icon: IconName; childre
 /** Honest empty state: what is missing and, where useful, what to do. */
 export function EmptyState({ title, text, action }: { title: string; text?: string; action?: { label: string; href: string } }) {
   return (
-    <div className="rounded-md border border-dashed border-stone-2 bg-paper px-6 py-12 text-center">
-      <p className="font-serif text-h3 text-ink">{title}</p>
-      {text ? <p className="mx-auto mt-2 max-w-md text-small text-ink-2">{text}</p> : null}
+    <div className={cn(tile, "px-6 py-14 text-center sm:py-16")}>
+      <p className="text-[1.375rem] font-bold leading-tight tracking-[-0.03em] text-ink">{title}</p>
+      {text ? <p className="mx-auto mt-2 max-w-md text-body text-ink-2">{text}</p> : null}
       {action ? (
-        <div className="mt-5">
+        <div className="mt-3">
           <TextLink href={action.href}>{action.label}</TextLink>
         </div>
       ) : null}
@@ -315,20 +358,20 @@ export function EmptyState({ title, text, action }: { title: string; text?: stri
 /** Breadcrumb trail; the last item is the current page. */
 export function Breadcrumbs({ items, className }: { items: { label: string; href?: string }[]; className?: string }) {
   return (
-    <nav aria-label="Pot" className={cn("text-small", className)}>
+    <nav aria-label="Pot" className={cn("text-[0.8125rem] font-medium", className)}>
       <ol className="flex flex-wrap items-center gap-x-1.5 gap-y-1">
         {items.map((item, i) => {
           const last = i === items.length - 1;
           return (
             <li key={`${item.label}-${i}`} className="flex items-center gap-1.5">
               {item.href && !last ? (
-                <Link href={item.href} className="opacity-80 hover:underline hover:opacity-100">
+                <Link href={item.href} className="rounded-full hover:text-ink">
                   {item.label}
                 </Link>
               ) : (
                 <span aria-current={last ? "page" : undefined}>{item.label}</span>
               )}
-              {!last ? <Icon name="chevron-right" size={14} className="opacity-50" /> : null}
+              {!last ? <Icon name="chevron-right" size={13} className="opacity-50" /> : null}
             </li>
           );
         })}
@@ -342,10 +385,10 @@ export function FactList({ items, className }: { items: { label: string; value: 
   const visible = items.filter((i) => i.value !== null && i.value !== undefined && i.value !== "");
   if (!visible.length) return null;
   return (
-    <dl className={cn("divide-y divide-stone", className)}>
+    <dl className={cn("divide-y divide-stone/70", className)}>
       {visible.map((item) => (
         <div key={item.label} className="grid gap-1 py-3 sm:grid-cols-[10rem_1fr] sm:gap-6">
-          <dt className="text-small text-ink-3">{item.label}</dt>
+          <dt className="text-small font-medium text-ink-3">{item.label}</dt>
           <dd className="text-body text-ink">{item.value}</dd>
         </div>
       ))}

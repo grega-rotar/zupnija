@@ -35,17 +35,17 @@ export default async function ParishPage() {
 
   return (
     <>
-      <PageHero settings={settings} header="parishHeader" title={page?.title || "O župniji"} lede={page?.intro || settings?.tagline}>
-        {settings?.diocese ? <p className="mt-4 text-small opacity-75">{settings.diocese}</p> : null}
+      <PageHero settings={settings} header="parishHeader" title={page?.title || "O župniji"} accent="župniji" lede={page?.intro || settings?.tagline}>
+        {settings?.diocese ? <p className="mt-4 text-small font-medium opacity-80">{settings.diocese}</p> : null}
       </PageHero>
 
       <PageSections sections={page?.sections} />
 
       {churches.length ? (
-        <Section tight tone="paper-2">
+        <Section>
           <Container>
-            <SectionHeading title="Cerkve" action={{ label: "Vse o cerkvah", href: routes.churches }} />
-            <div className="grid gap-8 sm:grid-cols-2 lg:grid-cols-3 lg:gap-6">
+            <SectionHeading eyebrow="Cerkve" title="Naše cerkve" accent="cerkve" lede="Tri cerkve pod Šmarno goro." action={{ label: "Vse o cerkvah", href: routes.churches }} />
+            <div className="grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
               {churches.map((c) => (
                 <ChurchCard key={c._id} church={c} />
               ))}
@@ -55,10 +55,10 @@ export default async function ParishPage() {
       ) : null}
 
       {clergy.length ? (
-        <Section tight>
+        <Section>
           <Container>
-            <SectionHeading title="Duhovniki" action={{ label: "Vsi sodelavci", href: routes.people }} />
-            <div className="grid gap-5 md:grid-cols-2">
+            <SectionHeading eyebrow="Duhovniki" title="Kdo skrbi za župnijo" accent="za župnijo" action={{ label: "Vsi sodelavci", href: routes.people }} />
+            <div className={clergy.length > 1 ? "grid gap-5 md:grid-cols-2" : "mx-auto max-w-xl"}>
               {clergy.map((p) => (
                 <PersonCard key={p._id} person={p} card />
               ))}
@@ -68,10 +68,10 @@ export default async function ParishPage() {
       ) : null}
 
       {groups.length ? (
-        <Section tight tone="paper-2">
+        <Section>
           <Container>
-            <SectionHeading title="Skupine" action={{ label: "Vse skupine", href: routes.groups }} />
-            <ul className="divide-y divide-stone border-y border-stone md:grid md:grid-cols-2 md:gap-x-12 md:divide-y-0 md:border-y-0 md:[&>li]:border-t md:[&>li]:border-stone">
+            <SectionHeading eyebrow="Skupine" title="Župnija živi po ljudeh" accent="po ljudeh" action={{ label: "Vse skupine", href: routes.groups }} />
+            <ul className="grid gap-5 md:grid-cols-2">
               {groups.slice(0, 6).map((g) => (
                 <GroupRow key={g._id} group={g} />
               ))}

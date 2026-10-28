@@ -1,31 +1,37 @@
 @import "tailwindcss";
 
 /*
- * Design tokens — Župnija Pirniče
+ * Design tokens — Župnija Pirniče (design v4, tasks/prototype-homepage-v4.html)
  * ─────────────────────────────────────────────────────────────────────
- * Paper, stone and moss: lime-washed church walls, the fields under
- * Šmarna gora, a little gilding. One serif for what is said, one sans
- * for what is used. Colour is quiet so photography and type carry the page.
+ * Near-white surfaces, warm dark ink, one candle-gold accent and gold-brown
+ * buttons. Inter carries everything; one Instrument Serif italic phrase per
+ * headline is the sacred accent. No blue, no black blocks: dark tones only
+ * as overlays on photographs.
+ *
+ * The token names predate v4 (paper, stone, moss) and are kept so every
+ * component follows without edits: "moss" is now the primary gold-brown.
  */
 @theme {
-  --font-serif: var(--font-newsreader), "Iowan Old Style", "Palatino Linotype", Georgia, serif;
-  --font-sans: var(--font-source-sans), "Segoe UI", system-ui, sans-serif;
+  --font-serif: var(--font-instrument), "Instrument Serif", Georgia, serif;
+  --font-sans: var(--font-inter), "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", system-ui, sans-serif;
 
-  --color-paper: #fbfaf7;
-  --color-paper-2: #f3f0e9;
-  --color-paper-3: #e9e5db;
-  --color-stone: #d9d3c5;
-  --color-stone-2: #b9b1a0;
-  --color-ink: #1e2622;
-  --color-ink-2: #4a544e;
-  --color-ink-3: #6f7873;
-  --color-moss: #3d5a47;
-  --color-moss-deep: #2c4234;
-  --color-moss-soft: #e4ebe4;
-  --color-gold: #a8843a;
-  --color-gold-soft: #f3ead6;
-  --color-alert: #8d3a2e;
-  --color-alert-soft: #f6e6e1;
+  --color-paper: #fafaf8; /* page background */
+  --color-paper-2: #f2f1ee; /* sunk surfaces */
+  --color-paper-3: #e9e7e2;
+  --color-surface: #ffffff; /* tiles and cards */
+  --color-stone: #e5e2dc; /* hairlines */
+  --color-stone-2: #cdc7bd;
+  --color-ink: #1f1c18;
+  --color-ink-2: #4d4840;
+  --color-ink-3: #6f685e;
+  --color-moss: #7a5c1e; /* primary: buttons, links */
+  --color-moss-deep: #634a16;
+  --color-moss-soft: #f6efdf;
+  --color-gold: #a8822f; /* accent: live dots, timeline, focus */
+  --color-gold-ink: #7d5f1c; /* gold text on light */
+  --color-gold-soft: #f6efdf;
+  --color-alert: #a23a2c;
+  --color-alert-soft: #f9e7e3;
 
   /* Liturgical accents — used only as thin markers, never as page colour. */
   --color-season-advent: #5b4a8a;
@@ -34,35 +40,37 @@
   --color-season-easter: #c8a94c;
   --color-season-pentecost: #a63d2f;
   --color-season-marian: #3f5f8a;
-  --color-season-none: #3d5a47;
+  --color-season-none: #a8822f;
 
-  --radius-sm: 0.25rem;
-  --radius-md: 0.5rem;
-  --radius-lg: 0.75rem;
+  --radius-sm: 0.75rem; /* controls */
+  --radius-md: 1.125rem; /* inner tiles */
+  --radius-lg: 1.75rem; /* tiles and cards (28px) */
+  --radius-xl: 2.5rem; /* hero and full-bleed frames (40px) */
 
-  --shadow-soft: 0 1px 2px rgb(30 38 34 / 0.05), 0 8px 24px -12px rgb(30 38 34 / 0.18);
+  --shadow-soft: 0 0 0 1px rgb(31 28 24 / 0.06), 0 1px 2px rgb(31 28 24 / 0.04), 0 10px 32px -8px rgb(31 28 24 / 0.1);
+  --shadow-lift: 0 0 0 1px rgb(31 28 24 / 0.05), 0 2px 6px rgb(31 28 24 / 0.06), 0 30px 80px -10px rgb(31 28 24 / 0.22);
 
-  --container-content: 72rem;
+  --container-content: 77.5rem; /* 1240px */
   --container-prose: 42rem;
 
-  --ease-out-soft: cubic-bezier(0.22, 1, 0.36, 1);
+  --ease-out-soft: cubic-bezier(0.2, 0.8, 0.2, 1);
 
-  --text-display: clamp(2.5rem, 1.5rem + 4vw, 4.75rem);
-  --text-display--line-height: 1;
-  --text-display--letter-spacing: -0.025em;
-  --text-h1: clamp(2.125rem, 1.4rem + 2.8vw, 3.5rem);
-  --text-h1--line-height: 1.04;
-  --text-h1--letter-spacing: -0.02em;
-  --text-h2: clamp(1.75rem, 1.3rem + 1.7vw, 2.5rem);
-  --text-h2--line-height: 1.1;
-  --text-h2--letter-spacing: -0.015em;
-  --text-h3: clamp(1.3125rem, 1.15rem + 0.6vw, 1.625rem);
-  --text-h3--line-height: 1.22;
-  --text-h3--letter-spacing: -0.005em;
-  --text-lede: clamp(1.125rem, 1.05rem + 0.4vw, 1.375rem);
+  --text-display: clamp(3rem, 1.6rem + 6vw, 7rem);
+  --text-display--line-height: 0.95;
+  --text-display--letter-spacing: -0.05em;
+  --text-h1: clamp(2.5rem, 1.6rem + 3.6vw, 4.5rem);
+  --text-h1--line-height: 1;
+  --text-h1--letter-spacing: -0.045em;
+  --text-h2: clamp(2rem, 1.4rem + 2.6vw, 3.5rem);
+  --text-h2--line-height: 1.02;
+  --text-h2--letter-spacing: -0.04em;
+  --text-h3: clamp(1.25rem, 1.1rem + 0.6vw, 1.625rem);
+  --text-h3--line-height: 1.2;
+  --text-h3--letter-spacing: -0.025em;
+  --text-lede: clamp(1.125rem, 1.05rem + 0.35vw, 1.3125rem);
   --text-lede--line-height: 1.5;
   --text-body: 1.0625rem;
-  --text-body--line-height: 1.65;
+  --text-body--line-height: 1.6;
   --text-small: 0.9375rem;
   --text-small--line-height: 1.5;
   --text-meta: 0.8125rem;
@@ -124,21 +132,41 @@
   h2,
   h3,
   h4 {
-    font-family: var(--font-serif);
-    font-weight: 400;
-    font-variation-settings: "opsz" 72;
+    font-family: var(--font-sans);
+    font-weight: 700;
     color: var(--color-ink);
     text-wrap: balance;
   }
+  h3,
+  h4 {
+    font-weight: 650;
+  }
 
-  /* Ledes and quiet captions are set in the serif italic — the editorial voice. */
-  .lede {
+  body {
+    letter-spacing: -0.011em;
+  }
+
+  /* The one sacred accent: a single serif italic phrase inside a headline. */
+  .accent {
     font-family: var(--font-serif);
     font-style: italic;
     font-weight: 400;
-    font-variation-settings: "opsz" 24;
+    letter-spacing: -0.01em;
+  }
+
+  /* Sublines under headlines: calm sans in the second ink. */
+  .lede {
     font-size: var(--text-lede);
-    line-height: 1.45;
+    line-height: 1.5;
+    color: var(--color-ink-2);
+  }
+
+  /* Small gold label above a section headline. */
+  .eyebrow {
+    font-size: 0.8125rem;
+    font-weight: 600;
+    letter-spacing: -0.005em;
+    color: var(--color-gold-ink);
   }
 
 

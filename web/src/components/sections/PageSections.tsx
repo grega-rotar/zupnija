@@ -1,4 +1,3 @@
-import Link from "next/link";
 import type { PAGE_QUERY_RESULT } from "@/sanity/types.generated";
 import { getActiveSpecialPeriod, getCurrentSchedules, getSettings } from "@/sanity/data";
 import { getUpcomingEvents } from "@/lib/data/events";
@@ -16,7 +15,7 @@ import { ScheduleTable } from "@/components/masses/ScheduleTable";
 import { ContactBlock } from "@/components/contact/ContactBlock";
 import { ContactForm } from "@/components/forms/ContactForm";
 import { Faq } from "@/components/ui/Faq";
-import { Button, Container, Section, Split, TextLink } from "@/components/ui/primitives";
+import { Button, Container, Section, SectionHeading, Split, TextLink, headline, tile } from "@/components/ui/primitives";
 
 type Sections = NonNullable<NonNullable<PAGE_QUERY_RESULT>["sections"]>;
 type SectionOf<T extends Sections[number]["_type"]> = Extract<Sections[number], { _type: T }>;
@@ -68,18 +67,26 @@ export async function PageSections({ sections }: { sections: Sections | null | u
 
 function SectionTitle({ title, className }: { title?: string | null; className?: string }) {
   if (!title) return null;
-  return <h2 className={cn("mb-8 text-h2", className)}>{title}</h2>;
+  return <h2 className={cn("mx-auto mb-10 max-w-3xl text-center lg:mb-14", headline.h2, className)}>{title}</h2>;
 }
 
 function HeroSection({ section }: { section: SectionOf<"sectionHero"> }) {
   return (
-    <section className="pb-10 sm:pb-14">
+    <section className="py-12 lg:py-20">
       <Container>
-        <SanityImage image={section.image} aspect={21 / 9} sizes="100vw" maxWidth={2000} priority className="rounded-md max-sm:aspect-[4/3]" />
+        <SanityImage
+          image={section.image}
+          aspect={21 / 9}
+          sizes="100vw"
+          maxWidth={2000}
+          priority
+          className="overflow-hidden rounded-[2rem] shadow-soft max-sm:aspect-[4/3]! sm:rounded-xl"
+          imgClassName="[filter:saturate(.55)_sepia(.12)]"
+        />
         {section.title || section.text ? (
-          <div className="mt-6 max-w-prose">
-            {section.title ? <h2 className="text-h2">{section.title}</h2> : null}
-            {section.text ? <p className="mt-3 text-lede text-ink-2">{section.text}</p> : null}
+          <div className="mx-auto mt-10 max-w-3xl text-center">
+            {section.title ? <h2 className={headline.h2}>{section.title}</h2> : null}
+            {section.text ? <p className="lede mx-auto mt-4 max-w-[40rem] text-balance">{section.text}</p> : null}
           </div>
         ) : null}
       </Container>
@@ -89,7 +96,7 @@ function HeroSection({ section }: { section: SectionOf<"sectionHero"> }) {
 
 function RichTextSection({ section }: { section: SectionOf<"sectionRichText"> }) {
   return (
-    <Section tight>
+    <Section>
       <Split title={section.title}>
         <RichText value={section.body} size="lg" />
       </Split>
@@ -101,20 +108,27 @@ function TextImageSection({ section }: { section: SectionOf<"sectionTextImage"> 
   const imageLeft = clean(section.imageSide) === "left";
   const href = hrefFor(section.link);
   return (
-    <Section tight>
-      <Container className="grid gap-8 md:grid-cols-2 md:items-center md:gap-14">
+    <Section>
+      <Container className="grid gap-10 md:grid-cols-2 md:items-center md:gap-16">
         <div className={cn(imageLeft && "md:order-2")}>
-          <SectionTitle title={section.title} className="mb-4" />
+          {section.title ? <h2 className={cn("mb-5", headline.h2)}>{section.title}</h2> : null}
           <RichText value={section.body} size="lg" />
           {href && section.link?.label ? (
-            <div className="mt-6">
+            <div className="mt-4">
               <TextLink href={href} external={isExternalHref(href)}>
                 {section.link.label}
               </TextLink>
             </div>
           ) : null}
         </div>
-        <SanityImage image={section.image} aspect={4 / 3} sizes="(min-width: 768px) 50vw, 100vw" maxWidth={1200} className={cn("rounded-md", imageLeft && "md:order-1")} />
+        <SanityImage
+          image={section.image}
+          aspect={4 / 3}
+          sizes="(min-width: 768px) 50vw, 100vw"
+          maxWidth={1200}
+          className={cn("overflow-hidden rounded-lg shadow-soft", imageLeft && "md:order-1")}
+          imgClassName="saturate-[.7]"
+        />
       </Container>
     </Section>
   );
@@ -122,11 +136,11 @@ function TextImageSection({ section }: { section: SectionOf<"sectionTextImage"> 
 
 function QuoteSection({ section }: { section: SectionOf<"sectionQuote"> }) {
   return (
-    <Section tight>
+    <Section>
       <Container>
-        <figure className="max-w-3xl border-l-2 border-gold pl-6 sm:pl-8">
-          <blockquote className="font-serif text-h3 leading-snug text-ink sm:text-h2 sm:leading-snug">{section.quote}</blockquote>
-          {section.source ? <figcaption className="mt-3 text-small text-ink-3">{section.source}</figcaption> : null}
+        <figure className="mx-auto max-w-4xl text-center">
+          <blockquote className="text-balance font-serif text-[clamp(2rem,1.4rem+2.6vw,3.5rem)] italic leading-[1.12] tracking-[-0.015em] text-ink">{section.quote}</blockquote>
+          {section.source ? <figcaption className="eyebrow mt-5">{section.source}</figcaption> : null}
         </figure>
       </Container>
     </Section>
@@ -137,30 +151,54 @@ function GallerySection({ section }: { section: SectionOf<"sectionGallery"> }) {
   const images = section.gallery?.images ?? section.images;
   const title = section.title ?? section.gallery?.title;
   return (
-    <Section tight>
+    <Section>
       <Container>
-        <div className="mb-6 flex flex-wrap items-baseline justify-between gap-4">
-          <SectionTitle title={title} className="mb-0" />
-          {section.gallery?.slug ? (
-            <Link href={routes.gallery(section.gallery.slug)} className="text-small text-moss underline underline-offset-4">
-              Odpri galerijo
-            </Link>
-          ) : null}
-        </div>
+        {title ? (
+          <SectionHeading
+            title={title}
+            eyebrow="Fotografije"
+            action={
+              section.gallery?.slug
+                ? {
+                    label: "Odpri galerijo",
+                    href: routes.gallery(section.gallery.slug),
+                  }
+                : undefined
+            }
+          />
+        ) : null}
         <PhotoGrid images={images} title={title ?? "Galerija"} />
       </Container>
     </Section>
   );
 }
 
-export function PersonCard({ person, card }: { card?: boolean; person: { name: string; role?: string | null; roleTitle?: string | null; email?: string | null; phone?: string | null; showContact?: boolean | null; photo?: React.ComponentProps<typeof SanityImage>["image"]; bio?: React.ComponentProps<typeof RichText>["value"] } }) {
-  const role = personRole({ role: clean(person.role), roleTitle: person.roleTitle });
+export function PersonCard({
+  person,
+  card,
+}: {
+  card?: boolean;
+  person: {
+    name: string;
+    role?: string | null;
+    roleTitle?: string | null;
+    email?: string | null;
+    phone?: string | null;
+    showContact?: boolean | null;
+    photo?: React.ComponentProps<typeof SanityImage>["image"];
+    bio?: React.ComponentProps<typeof RichText>["value"];
+  };
+}) {
+  const role = personRole({
+    role: clean(person.role),
+    roleTitle: person.roleTitle,
+  });
   return (
-    <article className={cn("flex gap-5", card && "rounded-md border border-stone bg-paper p-5")}>
+    <article className={cn("flex gap-5", card && cn(tile, "p-5 sm:p-6"))}>
       {hasImage(person.photo) ? (
-        <SanityImage image={person.photo} aspect={4 / 5} sizes="7rem" maxWidth={320} className="w-24 shrink-0 rounded-sm sm:w-28" />
+        <SanityImage image={person.photo} aspect={4 / 5} sizes="7rem" maxWidth={320} className="w-24 shrink-0 overflow-hidden rounded-md sm:w-28" imgClassName="saturate-[.7]" />
       ) : (
-        <div className="flex aspect-[4/5] w-24 shrink-0 items-end justify-center rounded-sm bg-paper-2 sm:w-28" aria-hidden="true">
+        <div className="flex aspect-[4/5] w-24 shrink-0 items-end justify-center rounded-md bg-paper-2 sm:w-28" aria-hidden="true">
           <svg width="56" height="56" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1" className="text-stone-2">
             <circle cx="12" cy="9" r="4" />
             <path d="M4 22c0-4 4-6 8-6s8 2 8 6" />
@@ -168,19 +206,19 @@ export function PersonCard({ person, card }: { card?: boolean; person: { name: s
         </div>
       )}
       <div className="min-w-0">
-        <h3 className="font-serif text-h3 text-ink">{person.name}</h3>
-        {role ? <p className="text-small text-ink-2">{role}</p> : null}
+        <h3 className="text-[1.375rem] font-bold leading-snug tracking-[-0.035em] text-ink">{person.name}</h3>
+        {role ? <p className="eyebrow mt-0.5">{role}</p> : null}
         <RichText value={person.bio} size="sm" className="mt-2 text-ink-2" />
         {person.showContact !== false && (person.email || person.phone) ? (
           <p className="mt-2 text-small">
             {person.phone ? (
-              <a href={`tel:${person.phone.replace(/[^\d+]/g, "")}`} className="text-moss underline underline-offset-4">
+              <a href={`tel:${person.phone.replace(/[^\d+]/g, "")}`} className="font-medium text-gold-ink hover:text-moss-deep">
                 {person.phone}
               </a>
             ) : null}
             {person.phone && person.email ? <span className="text-ink-3"> · </span> : null}
             {person.email ? (
-              <a href={`mailto:${person.email}`} className="text-moss underline underline-offset-4">
+              <a href={`mailto:${person.email}`} className="font-medium text-gold-ink hover:text-moss-deep">
                 {person.email}
               </a>
             ) : null}
@@ -194,7 +232,7 @@ export function PersonCard({ person, card }: { card?: boolean; person: { name: s
 function PeopleSection({ section }: { section: SectionOf<"sectionPeople"> }) {
   if (!section.people?.length) return null;
   return (
-    <Section tight tone="paper-2">
+    <Section>
       <Container>
         <SectionTitle title={section.title} />
         <div className="grid gap-5 md:grid-cols-2">
@@ -210,10 +248,10 @@ function PeopleSection({ section }: { section: SectionOf<"sectionPeople"> }) {
 function ChurchesSection({ section }: { section: SectionOf<"sectionChurches"> }) {
   if (!section.churches?.length) return null;
   return (
-    <Section tight tone="paper-2">
+    <Section>
       <Container>
         <SectionTitle title={section.title} />
-        <div className="grid gap-8 sm:grid-cols-2 lg:grid-cols-3 lg:gap-6">
+        <div className="grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
           {section.churches.map((c) => (
             <ChurchCard key={c._id} church={c} />
           ))}
@@ -225,7 +263,7 @@ function ChurchesSection({ section }: { section: SectionOf<"sectionChurches"> })
 
 function FaqSection({ section }: { section: SectionOf<"sectionFaq"> }) {
   return (
-    <Section tight>
+    <Section>
       <Split title={section.title}>
         <Faq items={section.items ?? []} />
       </Split>
@@ -237,7 +275,7 @@ function DocumentsSection({ section }: { section: SectionOf<"sectionDocuments"> 
   const docs = (section.documents ?? []).filter((d) => d.file?.asset?.url);
   if (!docs.length) return null;
   return (
-    <Section tight>
+    <Section>
       <Split title={section.title}>
         <ul className="grid gap-2">
           {docs.map((d) => (
@@ -255,13 +293,15 @@ function DocumentsSection({ section }: { section: SectionOf<"sectionDocuments"> 
 async function ContactSection({ section }: { section: SectionOf<"sectionContact"> }) {
   const [settings, period] = await Promise.all([getSettings(), getActiveSpecialPeriod()]);
   return (
-    <Section tight tone="paper-2">
+    <Section>
       <Container>
         <SectionTitle title={section.title} />
         <ContactBlock settings={settings} officeHoursOverride={period?.officeHoursNote} />
         {section.showForm ? (
-          <div className="mt-12 max-w-2xl">
-            <h3 className="mb-4 text-h3">Pišite nam</h3>
+          <div className={cn(tile, "mx-auto mt-5 max-w-2xl p-6 sm:p-10")}>
+            <h3 className="mb-6 text-[1.75rem] font-bold tracking-[-0.04em]">
+              Pišite <span className="accent">nam</span>
+            </h3>
             <ContactForm />
           </div>
         ) : null}
@@ -273,12 +313,9 @@ async function ContactSection({ section }: { section: SectionOf<"sectionContact"
 async function EventsSection({ section }: { section: SectionOf<"sectionEvents"> }) {
   const events = await getUpcomingEvents(section.limit ?? 4);
   return (
-    <Section tight>
+    <Section>
       <Container>
-        <div className="mb-8 flex flex-wrap items-baseline justify-between gap-4">
-          <SectionTitle title={section.title ?? "Prihajajoči dogodki"} className="mb-0" />
-          <TextLink href={routes.events}>Vsi dogodki</TextLink>
-        </div>
+        <SectionHeading eyebrow="Dogodki" title={section.title ?? "Prihajajoči dogodki"} action={{ label: "Vsi dogodki", href: routes.events }} />
         <EventList events={events} />
       </Container>
     </Section>
@@ -290,12 +327,9 @@ async function MassScheduleSection({ section }: { section: SectionOf<"sectionMas
   const regular = schedules.filter((s) => !s.validFrom && !s.validUntil);
   if (!regular.length) return null;
   return (
-    <Section tight>
+    <Section>
       <Container>
-        <div className="mb-8 flex flex-wrap items-baseline justify-between gap-4">
-          <SectionTitle title={section.title ?? "Svete maše"} className="mb-0" />
-          <TextLink href={routes.masses}>Vse o svetih mašah</TextLink>
-        </div>
+        <SectionHeading eyebrow="Bogoslužje" title={section.title ?? "Svete maše"} action={{ label: "Vse o svetih mašah", href: routes.masses }} />
         <div className="space-y-12">
           {regular.map((s) => (
             <ScheduleTable key={s._id} schedule={s} churchId={section.church?._id} showTitle={regular.length > 1} />
@@ -309,17 +343,19 @@ async function MassScheduleSection({ section }: { section: SectionOf<"sectionMas
 function CtaSection({ section, first }: { section: SectionOf<"sectionCta">; first: boolean }) {
   const href = hrefFor(section.link);
   return (
-    <Section tight={!first} tone="paper-2">
-      <Container className="max-w-3xl text-center">
-        <h2 className="text-h2">{section.title}</h2>
-        {section.text ? <p className="mx-auto mt-3 max-w-prose text-lede text-ink-2">{section.text}</p> : null}
-        {href && section.link?.label ? (
-          <div className="mt-7">
-            <Button href={href} external={isExternalHref(href)} size="lg" icon={isExternalHref(href) ? "external" : "arrow-right"}>
-              {section.link.label}
-            </Button>
-          </div>
-        ) : null}
+    <Section tight={!first}>
+      <Container>
+        <div className="rounded-lg bg-[linear-gradient(165deg,var(--color-gold-soft)_0%,#fff_72%)] px-6 py-14 text-center shadow-soft sm:px-12 sm:py-20">
+          <h2 className={cn("mx-auto max-w-3xl", headline.h2)}>{section.title}</h2>
+          {section.text ? <p className="lede mx-auto mt-4 max-w-[40rem] text-balance">{section.text}</p> : null}
+          {href && section.link?.label ? (
+            <div className="mt-8">
+              <Button href={href} external={isExternalHref(href)} size="lg" icon={isExternalHref(href) ? "external" : "arrow-right"}>
+                {section.link.label}
+              </Button>
+            </div>
+          ) : null}
+        </div>
       </Container>
     </Section>
   );

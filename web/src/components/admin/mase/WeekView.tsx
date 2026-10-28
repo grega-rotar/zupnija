@@ -121,23 +121,23 @@ export function WeekView({ viewer, today, week, span, offset, prev, next, extraM
               </div>
             </div>
           ) : null}
-          {/* Each day is the site's DayCard (leaf, serif weekday, feast); each row its MassRow. */}
+          {/* Each day: the site's day leaf and weekday above a white group of MassRows. */}
           <div className="days" style={busy}>
             {days.map((d) => (
-              <section key={d.date} aria-labelledby={`dan-${d.date}`} className="rounded-md border border-stone bg-paper p-4 sm:p-5">
-                <div className="flex items-center gap-4 border-b border-stone pb-4">
+              <section key={d.date} aria-labelledby={`dan-${d.date}`} className="day">
+                <header>
                   <DayLeaf date={d.date} />
                   <div className="min-w-0">
-                    <h2 id={`dan-${d.date}`} className="font-serif text-h3 leading-tight text-ink capitalize">
+                    <h2 id={`dan-${d.date}`} className="text-[1.125rem] font-semibold leading-tight tracking-[-0.025em] text-ink capitalize">
                       {d.weekday}
                     </h2>
-                    {d.feast ? <p className="mt-1 text-small text-ink-2">{d.feast}</p> : null}
+                    {d.feast ? <p className="mt-0.5 text-meta text-ink-3">{d.feast}</p> : null}
                   </div>
                   {d.date === today ? (
-                    <Pill className="ml-auto self-start">danes</Pill>
+                    <Pill className="ml-auto self-center">danes</Pill>
                   ) : null}
-                </div>
-                <ul className="divide-y divide-stone">
+                </header>
+                <ul className="grp">
                   {d.masses.map((m) => (
                     <li key={m.id}>
                       <MassRow m={m} viewer={viewer} onOpen={() => url.openMass(m.id)} />
@@ -165,8 +165,8 @@ function findMass(week: Week, id: number): PanelMass | null {
 }
 
 /**
- * One Mass, laid out exactly like the site's MassRow (components/masses/MassList.tsx):
- * large serif time, type, outlined church pill, status pills, intentions with
+ * One Mass, laid out like the site's MassRow (components/masses/MassList.tsx):
+ * large tabular time, type, outlined church pill, status pills, intentions with
  * the gold prefix. As a button it opens the Mass panel; pending intentions and
  * "brez namena" are the editor's additions.
  */
@@ -176,21 +176,21 @@ function MassRow({ m, viewer, onOpen }: { m: MassView; viewer: Viewer; onOpen: (
   return (
     <button
       type="button"
-      className="mrow grid grid-cols-[4.75rem_minmax(0,1fr)_auto] gap-x-5 py-4"
+      className="mrow grid grid-cols-[4.25rem_minmax(0,1fr)_auto] gap-x-4 py-3.5"
       onClick={onOpen}
       aria-label={`${dayLabel(m.date)}, ${fT(m.time)}, ${m.church}`}
     >
       <time
         dateTime={m.time}
         className={cn(
-          "whitespace-nowrap font-serif text-[1.625rem] leading-none tracking-[-0.02em]",
-          off ? "text-ink-3 line-through decoration-1" : "text-moss",
+          "whitespace-nowrap pt-0.5 text-[1.375rem] font-semibold tabular-nums leading-none tracking-[-0.045em]",
+          off ? "text-ink-3 line-through decoration-1" : "text-ink",
         )}
       >
         {fT(m.time)}
       </time>
-      <div className="min-w-0 pt-1">
-        <p className="flex flex-wrap items-center gap-x-2.5 gap-y-1.5 text-body">
+      <div className="min-w-0">
+        <p className="flex flex-wrap items-center gap-x-2.5 gap-y-1.5 text-small">
           <span className={cn("font-medium", off && "text-ink-3 line-through")}>{typeShort(m.type)}</span>
           <ChurchPill name={m.church} dark={false} muted={off} />
           {off ? (
@@ -206,11 +206,11 @@ function MassRow({ m, viewer, onOpen }: { m: MassView; viewer: Viewer; onOpen: (
         </p>
         {off && m.cancelReason ? <p className="mt-1.5 text-small text-alert">{m.cancelReason}</p> : null}
         {off ? null : (
-          <ul className="ints mt-2.5 space-y-1 text-small text-ink-2">
+          <ul className="ints mt-2 space-y-1 text-small text-ink-2">
             {none ? (
               <li className="flex gap-2">
                 <span className="w-3 shrink-0" aria-hidden="true" />
-                <span className="font-serif italic text-ink-3">brez namena</span>
+                <span className="italic text-ink-3">brez namena</span>
               </li>
             ) : null}
             {m.intentions.map((i) => (

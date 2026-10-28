@@ -1,5 +1,4 @@
 import type { Metadata } from "next";
-import Link from "next/link";
 import { notFound, permanentRedirect } from "next/navigation";
 import { getHomePage, getSettings } from "@/sanity/data";
 import { getEvent } from "@/lib/data/events";
@@ -9,9 +8,10 @@ import { dateOf, formatDateSpan, formatDayHeading, formatTime, timeOf } from "@/
 import { clean } from "@/lib/clean";
 import { EVENT_CATEGORY_LABEL } from "@/lib/labels";
 import { RichText } from "@/components/sanity/RichText";
-import { ImagePlaceholder } from "@/components/sanity/SanityImage";
+import { DateLeaf } from "@/components/events/EventCard";
 import { Icon, type IconName } from "@/components/ui/Icon";
-import { Breadcrumbs, Container, JsonLdScript, Section, Tag } from "@/components/ui/primitives";
+import { Breadcrumbs, Container, JsonLdScript, Section, Tag, TextLink, headline, tile } from "@/components/ui/primitives";
+import { cn } from "@/lib/utils";
 
 type Props = { params: Promise<{ slug: string }> };
 
@@ -55,61 +55,48 @@ export default async function EventPage({ params }: Props) {
 
   return (
     <>
-      <Section tight className="pt-8 sm:pt-10">
-        <Container>
-          <Breadcrumbs className="text-ink-3" items={[{ label: "Domov", href: routes.home }, { label: "Dogodki", href: routes.events }, { label: event.title }]} />
-
-          <div className="mt-8 grid gap-8 lg:grid-cols-[minmax(0,5fr)_minmax(0,7fr)] lg:gap-12">
-            <div>
-              <Link href={routes.events} className="inline-flex min-h-10 items-center gap-2 text-small text-ink-2 hover:text-ink">
-                <Icon name="arrow-left" size={16} />
-                Nazaj na dogodke
-              </Link>
-              <div className="mt-4 flex flex-wrap items-center gap-2">
-                <Tag tone="moss">{EVENT_CATEGORY_LABEL[clean(event.category) ?? "other"]}</Tag>
-                {isPast ? <Tag>Dogodek je minil</Tag> : null}
-              </div>
-              <h1 className="mt-4 text-display">{event.title}</h1>
-
-              <ul className="mt-7 space-y-3 text-body text-ink">
-                <Meta icon="calendar">
-                  <time dateTime={event.start}>{multiDay ? formatDateSpan(startDate, endDate!) : formatDayHeading(startDate, true)}</time>
-                </Meta>
-                {!event.allDay ? (
-                  <Meta icon="clock">
-                    {event.end && !multiDay ? `${formatTime(timeOf(event.start))}–${formatTime(timeOf(event.end))}` : `Ob ${formatTime(timeOf(event.start))}`}
-                  </Meta>
-                ) : null}
-                {where ? <Meta icon="pin">{where}</Meta> : null}
-              </ul>
-            </div>
-
-            <div className="grid gap-5 md:grid-cols-[minmax(0,3fr)_minmax(0,1fr)]">
-              <ImagePlaceholder className="aspect-[4/3] rounded-md" />
-              {home?.tile?.text ? (
-                <figure className="flex flex-col items-center justify-center rounded-md border border-stone bg-paper-2 p-6 text-center">
-                  <Icon name="cross" size={28} className="text-moss" />
-                  <blockquote className="lede mt-4 text-ink">{home.tile.text}</blockquote>
-                  {home.tile.source ? <figcaption className="mt-2 text-small text-ink-3">{home.tile.source}</figcaption> : null}
-                </figure>
-              ) : null}
-            </div>
+      <header className="pb-2 pt-10 sm:pt-14 lg:pt-20">
+        <Container className="flex flex-col items-center text-center">
+          <Breadcrumbs
+            className="mb-6 text-ink-3 [&_[aria-current]]:text-gold-ink"
+            items={[{ label: "Domov", href: routes.home }, { label: "Dogodki", href: routes.events }, { label: event.title }]}
+          />
+          <div className="flex flex-wrap items-center justify-center gap-2">
+            <Tag tone="gold">{EVENT_CATEGORY_LABEL[clean(event.category) ?? "other"]}</Tag>
+            {isPast ? <Tag>Dogodek je minil</Tag> : null}
           </div>
+          <h1 className={cn("mt-5 max-w-5xl", headline.display)}>{event.title}</h1>
+          <ul className="mt-8 flex flex-wrap justify-center gap-2 text-[0.9375rem] font-semibold text-ink">
+            <Meta icon="calendar">
+              <time dateTime={event.start}>{multiDay ? formatDateSpan(startDate, endDate!) : formatDayHeading(startDate, true)}</time>
+            </Meta>
+            {!event.allDay ? (
+              <Meta icon="clock">
+                {event.end && !multiDay ? `${formatTime(timeOf(event.start))}–${formatTime(timeOf(event.end))}` : `Ob ${formatTime(timeOf(event.start))}`}
+              </Meta>
+            ) : null}
+            {where ? <Meta icon="pin">{where}</Meta> : null}
+          </ul>
         </Container>
-      </Section>
+      </header>
 
-      <Section tight className="border-t border-stone">
-        <Container className="grid gap-10 lg:grid-cols-[minmax(0,7fr)_minmax(0,5fr)] lg:gap-16">
-          <div>
-            <h2 className="mb-4 text-h3">Opis</h2>
-            {event.description?.length ? <RichText value={event.description} size="lg" /> : <p className="text-body text-ink-2">Podrobnosti bodo objavljene.</p>}
+      <Section>
+        <Container className="grid gap-5 lg:grid-cols-[minmax(0,7fr)_minmax(0,5fr)]">
+          <div className={cn(tile, "self-start p-6 sm:p-10")}>
+            <p className="eyebrow">Opis</p>
+            <div className="mt-4">
+              {event.description?.length ? <RichText value={event.description} size="lg" /> : <p className="text-body text-ink-2">Podrobnosti bodo objavljene.</p>}
+            </div>
           </div>
-          <aside className="space-y-6">
-            <div className="rounded-md border border-stone bg-paper-2 p-6">
-              <h2 className="text-h3">Praktične informacije</h2>
-              <dl className="mt-4 space-y-3 text-body">
+          <aside className="space-y-5 self-start">
+            <div className={cn(tile, "p-6 sm:p-8")}>
+              <div className="flex items-center gap-5">
+                <DateLeaf start={event.start} end={event.end} />
+                <h2 className="text-[1.5rem] font-bold leading-tight tracking-[-0.035em]">Praktične informacije</h2>
+              </div>
+              <dl className="mt-6 space-y-4 border-t border-stone/70 pt-5 text-body">
                 <div>
-                  <dt className="text-small text-ink-3">Kdaj</dt>
+                  <dt className="text-small font-semibold text-ink-3">Kdaj</dt>
                   <dd className="text-ink">
                     {multiDay ? formatDateSpan(startDate, endDate!) : formatDayHeading(startDate, true)}
                     {!event.allDay ? `, ${formatTime(timeOf(event.start))}` : ""}
@@ -117,12 +104,21 @@ export default async function EventPage({ params }: Props) {
                 </div>
                 {where ? (
                   <div>
-                    <dt className="text-small text-ink-3">Kje</dt>
+                    <dt className="text-small font-semibold text-ink-3">Kje</dt>
                     <dd className="text-ink">{where}</dd>
                   </div>
                 ) : null}
               </dl>
+              <TextLink href={routes.events} className="mt-4">
+                Vsi dogodki
+              </TextLink>
             </div>
+            {home?.tile?.text ? (
+              <figure className="rounded-lg bg-[linear-gradient(165deg,var(--color-gold-soft)_0%,#fff_72%)] p-8 text-center shadow-soft">
+                <blockquote className="font-serif text-[1.5rem] italic leading-snug text-ink">{home.tile.text}</blockquote>
+                {home.tile.source ? <figcaption className="eyebrow mt-3">{home.tile.source}</figcaption> : null}
+              </figure>
+            ) : null}
           </aside>
         </Container>
       </Section>
@@ -135,8 +131,8 @@ export default async function EventPage({ params }: Props) {
 
 function Meta({ icon, children }: { icon: IconName; children: React.ReactNode }) {
   return (
-    <li className="flex items-start gap-3">
-      <Icon name={icon} size={20} className="mt-0.5 shrink-0 text-ink-3" />
+    <li className="inline-flex min-h-11 items-center gap-2 rounded-full bg-surface px-5 shadow-soft">
+      <Icon name={icon} size={17} className="shrink-0 text-gold-ink" />
       <span className="min-w-0">{children}</span>
     </li>
   );

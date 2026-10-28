@@ -16,10 +16,11 @@ export default async function AnnouncementsArchivePage() {
     <>
       <PageHeader
         title="Arhiv oznanil"
+        accent="oznanil"
         lede="Oznanila, ki niso več aktualna."
         eyebrow={<Breadcrumbs items={[{ label: "Oznanila", href: routes.announcements }, { label: "Arhiv" }]} />}
       />
-      <Section tight tone="paper-2">
+      <Section>
         <Container>
           <AnnouncementList items={items} compact emptyText="Arhiv je še prazen." />
         </Container>

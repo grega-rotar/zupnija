@@ -49,20 +49,20 @@ export default async function AnnouncementPage({ params }: Props) {
         title={item.title}
         eyebrow={<Breadcrumbs items={[{ label: "Oznanila", href: routes.announcements }, { label: item.title }]} />}
       >
-        <div className="mt-5 flex flex-wrap items-center gap-3 text-small text-ink-3">
+        <div className="mt-6 flex flex-wrap items-center justify-center gap-3 text-small font-medium text-ink-3">
           <time dateTime={item.publishFrom}>{formatDate(dateOf(item.publishFrom))}</time>
           {importance === "urgent" ? (
             <Tag tone="alert">Nujno</Tag>
           ) : importance === "important" ? (
             <Tag tone="gold">Pomembno</Tag>
           ) : null}
-          {expired ? <Tag tone="onDark">Ni več aktualno</Tag> : null}
+          {expired ? <Tag>Ni več aktualno</Tag> : null}
         </div>
       </PageHeader>
-      <Section tight>
-        <Container>
-          <div className="max-w-prose">
-            {item.summary ? <p className="text-lede text-ink-2">{item.summary}</p> : null}
+      <Section>
+        <Container width="prose">
+          <div>
+            {item.summary ? <p className="text-[clamp(1.25rem,1.1rem+0.6vw,1.5rem)] font-semibold leading-snug tracking-[-0.025em] text-ink">{item.summary}</p> : null}
             <RichText value={item.body} className="mt-6" />
             {ctaHref && item.cta?.label ? (
               <div className="mt-8">
@@ -77,9 +77,9 @@ export default async function AnnouncementPage({ params }: Props) {
             ) : null}
             <Attachments items={item.attachments} />
             {item.relatedEvent ? (
-              <section className="mt-10">
-                <h2 className="mb-2 text-h3">Povezan dogodek</h2>
-                <ul>
+              <section className="mt-12">
+                <h2 className="eyebrow mb-3">Povezan dogodek</h2>
+                <ul className="overflow-hidden rounded-lg bg-surface shadow-soft">
                   <EventRow event={item.relatedEvent} />
                 </ul>
               </section>

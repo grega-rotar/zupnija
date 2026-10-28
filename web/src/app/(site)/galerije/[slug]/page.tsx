@@ -35,22 +35,22 @@ export default async function GalleryPage({ params }: Props) {
         title={gallery.title}
         eyebrow={<Breadcrumbs items={[{ label: "Galerije", href: routes.galleries }, { label: gallery.title }]} />}
       >
-        <p className="mt-5 text-small text-ink-3">
+        <p className="mt-5 text-small font-medium text-ink-3">
           <time dateTime={gallery.date}>{formatDateLong(gallery.date)}</time>
           {gallery.count ? ` · ${gallery.count} fotografij` : ""}
           {gallery.photographer ? ` · Foto: ${gallery.photographer}` : ""}
           {gallery.relatedEvent ? (
             <>
               {" · "}
-              <Link href={routes.event(gallery.relatedEvent.slug)} className="text-moss underline underline-offset-4 hover:text-moss-deep">
+              <Link href={routes.event(gallery.relatedEvent.slug)} className="text-gold-ink underline underline-offset-4 hover:text-moss-deep">
                 {gallery.relatedEvent.title}
               </Link>
             </>
           ) : null}
         </p>
-        <RichText value={gallery.description} className="mt-4 text-ink-2" />
+        <RichText value={gallery.description} className="mx-auto mt-4 text-ink-2" />
       </PageHeader>
-      <Section tight>
+      <Section>
         <Container>
           <PhotoGrid images={gallery.images} title={gallery.title} />
         </Container>

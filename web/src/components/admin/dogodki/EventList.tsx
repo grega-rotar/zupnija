@@ -33,28 +33,30 @@ export function EventList({ months, me }: { months: EventMonth[]; me: string }) 
         <p key={m.key} className="month">
           {m.month}
         </p>,
-        ...m.items.map((e) => (
-          <Link key={e.key} href={`/dogodki?dogodek=${eventParam(e)}`} scroll={false} prefetch={false} className={`ev ${s.link}`}>
-            <span className="datebox">
-              <b>{formatDayNumber(e.date)}</b>
-              <span>{formatWeekdayShort(e.date)}</span>
-            </span>
-            <span>
-              <h3>{e.title}</h3>
-              <p>
-                <span>{formatTime(e.time)}</span>
-                <span>· {e.place}</span>
-                {e.onFrontPage ? <Pill>na prvi strani</Pill> : null}
-                {e.pending ? (
-                  <Pill tone="gold">{e.pending.by === me ? "čaka župnika" : `čaka potrditev · ${firstOf(e.pending.byName)}`}</Pill>
-                ) : null}
-              </p>
-            </span>
-            <span className="chev">
-              <Icon name="r" />
-            </span>
-          </Link>
-        )),
+        <div key={`${m.key}-g`} className="grp">
+          {m.items.map((e) => (
+            <Link key={e.key} href={`/dogodki?dogodek=${eventParam(e)}`} scroll={false} prefetch={false} className={`ev ${s.link}`}>
+              <span className="datebox">
+                <b>{formatDayNumber(e.date)}</b>
+                <span>{formatWeekdayShort(e.date)}</span>
+              </span>
+              <span>
+                <h3>{e.title}</h3>
+                <p>
+                  <span>{formatTime(e.time)}</span>
+                  <span>· {e.place}</span>
+                  {e.onFrontPage ? <Pill>na prvi strani</Pill> : null}
+                  {e.pending ? (
+                    <Pill tone="gold">{e.pending.by === me ? "čaka župnika" : `čaka potrditev · ${firstOf(e.pending.byName)}`}</Pill>
+                  ) : null}
+                </p>
+              </span>
+              <span className="chev">
+                <Icon name="r" />
+              </span>
+            </Link>
+          ))}
+        </div>,
       ])}
     </div>
   );

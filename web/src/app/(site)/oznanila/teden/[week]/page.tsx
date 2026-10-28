@@ -55,14 +55,14 @@ export default async function BulletinWeekPage({ params }: Props) {
           lede="Za ta teden ni objavljenih oznanil."
           eyebrow={<Breadcrumbs items={[{ label: "Oznanila", href: routes.announcements }, { label: span }]} />}
         />
-        <Section tight tone="paper-2">
+        <Section>
           <Container>
-            <div className="divide-y divide-stone border-t border-stone">
+            <div className="grid gap-5 md:grid-cols-2 xl:grid-cols-3">
               {massDays.map((day) => (
-                <DayCard key={day.date} day={day} today={today()} showIntentions plain className="py-5" />
+                <DayCard key={day.date} day={day} today={today()} showIntentions />
               ))}
             </div>
-            <div className="mt-6">
+            <div className="mt-6 text-center">
               <TextLink href={routes.announcements}>Najnovejša oznanila</TextLink>
             </div>
           </Container>
@@ -73,10 +73,10 @@ export default async function BulletinWeekPage({ params }: Props) {
 
   const events = await getEventsInRange(bulletin.periodStart, bulletin.periodEnd);
   return (
-    <Section tight>
+    <Section className="pt-10 sm:pt-14 lg:pt-20">
       <Container>
         <Breadcrumbs
-          className="mb-8 text-ink-3"
+          className="mb-6 flex justify-center text-ink-3 [&_[aria-current]]:text-gold-ink"
           items={[
             { label: "Oznanila", href: routes.announcements },
             { label: "Vsa oznanila", href: routes.bulletins },

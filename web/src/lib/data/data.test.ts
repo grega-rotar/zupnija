@@ -17,7 +17,7 @@ import { eq } from "drizzle-orm";
 import { dayLines } from "@/lib/masses";
 import { getBulletinByStart, getBulletinCovering, getBulletinList, getCurrentBulletin, getPublishedPdf } from "./bulletins";
 import { getEvent, getEventsInRange, getHomeEvents, getPastEvents, getUpcomingEvents } from "./events";
-import { getMassDays, getMassWeek, getUpcomingMasses, getWeekMasses } from "./masses";
+import { getChurchMasses, getMassDays, getMassWeek, getUpcomingMasses, getWeekMasses } from "./masses";
 import { getCatechesisGroups } from "./verouk";
 
 let s: SeededParish;
@@ -98,6 +98,40 @@ describe("masses", () => {
     expect([w.from, w.to, w.days.length]).toEqual(["2026-10-25", "2026-10-31", 7]);
     const u = await getUpcomingMasses(7);
     expect([u.today, u.time, u.days.length, u.days[0].date]).toEqual(["2026-10-27", "10:00", 8, "2026-10-27"]);
+  });
+
+  it("getChurchMasses lists one church's Masses for the next 14 days, in order, with intentions (US-011)", async () => {
+    const [marija, kriz, tomaz] = await Promise.all([
+      getChurchMasses("marijino-vnebovzetje", 14),
+      getChurchMasses("sv-kriz", 14),
+      getChurchMasses("sv-tomaz", 14),
+    ]);
+    const rows = (days: typeof marija) => days.flatMap((d) => d.masses.map((x) => `${d.date} ${x.time} ${x.church?.shortName}`));
+    // Sv. Križ: Sunday 8.00, Monday and Friday 18.30, from Tuesday 27 Oct through Monday 9 Nov.
+    expect(rows(kriz)).toEqual([
+      "2026-10-30 18:30 Sv. Križ",
+      "2026-11-01 08:00 Sv. Križ",
+      "2026-11-02 18:30 Sv. Križ",
+      "2026-11-06 18:30 Sv. Križ",
+      "2026-11-08 08:00 Sv. Križ",
+      "2026-11-09 18:30 Sv. Križ",
+    ]);
+    expect(rows(marija)).toHaveLength(10);
+    expect(rows(marija).every((r) => r.endsWith("Marijina cerkev"))).toBe(true);
+    expect(rows(marija)).toEqual([...rows(marija)].sort());
+    const wed = marija.find((d) => d.date === "2026-10-28")!;
+    expect(wed.masses[0].intentions.map((x) => x.text)).toEqual(["Branko Babnik"]);
+    expect(tomaz).toEqual([]);
+  });
+
+  it("getChurchMasses leaves out today's Masses that are already over", async () => {
+    // 08:00 has passed at 10:00; 19:00 is still ahead.
+    await db.insert(schema.masses).values([
+      { date: "2026-10-27", time: "08:00", churchId: s.churches.kriz, source: "manual" },
+      { date: "2026-10-27", time: "19:00", churchId: s.churches.kriz, source: "manual" },
+    ]);
+    const kriz = await getChurchMasses("sv-kriz", 1);
+    expect(kriz.flatMap((d) => d.masses.map((x) => `${d.date} ${x.time}`))).toEqual(["2026-10-27 19:00"]);
   });
 });
 

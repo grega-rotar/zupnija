@@ -16,7 +16,7 @@ import { PageHero } from "@/components/layout/PageHero";
 import { BulletinView } from "@/components/announcements/BulletinView";
 import { SanityImage, hasImage } from "@/components/sanity/SanityImage";
 import { Icon } from "@/components/ui/Icon";
-import { Container, EmptyState, Section, Tag } from "@/components/ui/primitives";
+import { Container, EmptyState, Section, Tag, TextLink } from "@/components/ui/primitives";
 
 export async function generateMetadata(): Promise<Metadata> {
   const settings = await getSettings();
@@ -63,22 +63,22 @@ export default async function AnnouncementsPage({ searchParams }: Props) {
 
   return (
     <>
-      <PageHero settings={settings} header="announcementsHeader" title="Oznanila" lede="Kar je trenutno pomembno v župniji." />
+      <PageHero settings={settings} header="announcementsHeader" title="Oznanila župnije" accent="župnije" crumbs={[{ label: "Oznanila" }]} lede="Kar je trenutno pomembno v župniji." />
 
-      <Section tight>
+      <Section>
         <Container>
-          <div className="grid gap-8 lg:grid-cols-[minmax(0,2fr)_minmax(0,1fr)] lg:gap-8">
+          <div className="grid gap-5 lg:grid-cols-[minmax(0,2fr)_minmax(0,1fr)]">
             <div>
               {/* Filters */}
-              <nav aria-label="Vrsta oznanil" className="-mt-2 mb-6 flex gap-2 overflow-x-auto pb-1 no-scrollbar">
+              <nav aria-label="Vrsta oznanil" className="-mx-6 mb-5 flex gap-2 overflow-x-auto px-6 py-1 no-scrollbar sm:mx-0 sm:px-0">
                 {filters.map((f) => (
                   <Link
                     key={f.key}
                     href={f.key ? `${routes.announcements}?vrsta=${f.key}` : routes.announcements}
                     aria-current={f.key === filter ? "true" : undefined}
                     className={cn(
-                      "inline-flex min-h-12 shrink-0 items-center rounded-sm px-5 text-body font-medium transition-colors",
-                      f.key === filter ? "bg-moss text-paper" : "bg-paper-2 text-ink hover:bg-paper-3",
+                      "inline-flex min-h-11 shrink-0 items-center rounded-full px-5 text-[0.9375rem] font-semibold transition-colors",
+                      f.key === filter ? "bg-moss text-paper" : "bg-surface text-ink shadow-soft hover:bg-paper-2",
                     )}
                   >
                     {f.label}
@@ -87,22 +87,22 @@ export default async function AnnouncementsPage({ searchParams }: Props) {
               </nav>
 
               {shown.length ? (
-                <ul className="space-y-4">
+                <ul className="space-y-5">
                   {shown.map((a) => {
                     const category = clean(a.category) ?? "notice";
                     const importance = clean(a.importance);
                     const ctaHref = hrefFor(a.cta);
                     return (
-                      <li key={a._id} className="overflow-hidden rounded-md border border-stone bg-paper">
-                        <article className={cn("grid gap-5 p-4 sm:gap-6 sm:p-5", hasImage(a.image) && "sm:grid-cols-[16rem_1fr]")}>
+                      <li key={a._id} className="overflow-hidden rounded-lg bg-surface shadow-soft">
+                        <article className={cn("grid gap-5 p-5 sm:gap-7 sm:p-7", hasImage(a.image) && "sm:grid-cols-[15rem_1fr]")}>
                           {hasImage(a.image) ? (
                             <Link href={routes.announcement(a.slug)} className="block" tabIndex={-1} aria-hidden="true">
-                              <SanityImage image={a.image} aspect={4 / 3} sizes="(min-width: 640px) 16rem, 100vw" maxWidth={800} decorative className="rounded-sm" />
+                              <SanityImage image={a.image} aspect={4 / 3} sizes="(min-width: 640px) 16rem, 100vw" maxWidth={800} decorative className="overflow-hidden rounded-md" imgClassName="saturate-[.7]" />
                             </Link>
                           ) : null}
                           <div className="flex min-w-0 flex-col">
                             <div className="flex flex-wrap items-center gap-2">
-                              <Tag tone={importance === "urgent" ? "alert" : importance === "important" ? "gold" : "moss"}>
+                              <Tag tone={importance === "urgent" ? "alert" : importance === "important" ? "gold" : "neutral"}>
                                 {importance === "urgent" ? "Nujno" : ANNOUNCEMENT_CATEGORY_LABEL[category] ?? "Obvestilo"}
                               </Tag>
                               {a.hasAttachments ? (
@@ -111,30 +111,27 @@ export default async function AnnouncementsPage({ searchParams }: Props) {
                                 </span>
                               ) : null}
                             </div>
-                            <h2 className="mt-2 font-serif text-[1.5rem] leading-tight text-ink sm:text-[1.75rem]">
-                              <Link href={routes.announcement(a.slug)} className="hover:underline">
+                            <h2 className="mt-3 text-[1.5rem] font-bold leading-tight tracking-[-0.035em] text-ink sm:text-[1.75rem]">
+                              <Link href={routes.announcement(a.slug)} className="rounded-sm hover:text-gold-ink">
                                 {a.title}
                               </Link>
                             </h2>
-                            <p className="mt-2 flex items-center gap-1.5 text-small text-ink-3">
-                              <Icon name="calendar" size={15} />
+                            <p className="mt-2 flex flex-wrap items-center gap-1.5 text-small font-medium text-ink-3">
+                              <Icon name="calendar" size={15} className="text-gold-ink" />
                               <time dateTime={a.publishFrom}>{formatDate(dateOf(a.publishFrom))}</time>
                               {a.publishUntil ? <span>· velja do {formatDate(dateOf(a.publishUntil))}</span> : null}
                             </p>
                             {a.summary ? <p className="mt-3 text-body text-ink-2">{a.summary}</p> : null}
-                            <div className="mt-4 flex flex-wrap gap-x-6 gap-y-1">
-                              <Link
-                                href={routes.announcement(a.slug)}
-                                className="inline-flex min-h-10 items-center gap-2 text-[0.75rem] font-semibold uppercase tracking-[0.14em] text-ink hover:text-moss"
-                              >
-                                Preberi več <Icon name="arrow-right" size={14} />
+                            <div className="mt-3 flex flex-wrap gap-x-6 gap-y-1">
+                              <Link href={routes.announcement(a.slug)} className="group/m inline-flex min-h-10 items-center gap-1.5 text-[0.9375rem] font-semibold text-gold-ink hover:text-moss-deep">
+                                Preberi več <Icon name="arrow-right" size={14} className="transition-transform group-hover/m:translate-x-[3px]" />
                               </Link>
                               {ctaHref && a.cta?.label ? (
                                 <a
                                   href={ctaHref}
                                   target={isExternalHref(ctaHref) ? "_blank" : undefined}
                                   rel={isExternalHref(ctaHref) ? "noopener noreferrer" : undefined}
-                                  className="inline-flex min-h-10 items-center gap-2 text-[0.75rem] font-semibold uppercase tracking-[0.14em] text-moss hover:text-moss-deep"
+                                  className="inline-flex min-h-10 items-center gap-1.5 text-[0.9375rem] font-semibold text-gold-ink hover:text-moss-deep"
                                 >
                                   {a.cta.label} <Icon name={isExternalHref(ctaHref) ? "external" : "arrow-right"} size={14} />
                                 </a>
@@ -150,23 +147,21 @@ export default async function AnnouncementsPage({ searchParams }: Props) {
                 <EmptyState title="Ni oznanil" text="Trenutno ni aktualnih oznanil te vrste." action={{ label: "Arhiv oznanil", href: routes.announcementsArchive }} />
               )}
 
-              <p className="mt-8">
-                <Link href={routes.announcementsArchive} className="inline-flex min-h-10 items-center gap-2 text-[0.75rem] font-semibold uppercase tracking-[0.14em] text-ink hover:text-moss">
-                  Arhiv oznanil <Icon name="arrow-right" size={14} />
-                </Link>
+              <p className="mt-6 text-center">
+                <TextLink href={routes.announcementsArchive}>Arhiv oznanil</TextLink>
               </p>
             </div>
 
             {/* Sidebar */}
-            <aside className="space-y-6 lg:pt-14">
-              <section aria-labelledby="oznanila-zupnije" className="rounded-md border border-stone bg-paper-2 p-6 sm:p-7">
-                <h2 id="oznanila-zupnije" className="flex items-center gap-2 font-sans text-[0.75rem] font-semibold uppercase tracking-[0.14em] text-ink-3">
+            <aside className="space-y-5 lg:pt-[3.75rem]">
+              <section aria-labelledby="oznanila-zupnije" className="rounded-lg bg-[linear-gradient(165deg,var(--color-gold-soft)_0%,#fff_72%)] p-6 shadow-soft sm:p-8">
+                <h2 id="oznanila-zupnije" className="eyebrow flex items-center gap-2">
                   <Icon name="document" size={16} className="shrink-0" />
                   Oznanila župnije
                 </h2>
                 {bulletin ? (
                   <>
-                    <p className="mt-4 font-serif text-h2 text-ink lg:text-[1.75rem] xl:text-h2">{bulletinLabel(bulletin)}</p>
+                    <p className="mt-3 text-[2.25rem] font-bold leading-none tracking-[-0.045em] text-ink">{bulletinLabel(bulletin)}</p>
                     {bulletin.issue ? <p className="mt-1 text-small text-ink-3">{bulletin.issue}</p> : null}
                   </>
                 ) : (
@@ -174,23 +169,23 @@ export default async function AnnouncementsPage({ searchParams }: Props) {
                 )}
                 {bulletin ? (
                   <div className="mt-3 flex flex-wrap gap-x-5 gap-y-1">
-                    <a href="#mesecna" className="inline-flex min-h-10 items-center gap-2 text-small text-ink-2 underline decoration-stone-2 underline-offset-4 hover:text-ink">
+                    <a href="#mesecna" className="inline-flex min-h-10 items-center gap-2 text-[0.9375rem] font-semibold text-gold-ink hover:text-moss-deep">
                       Preberi na tej strani
                     </a>
                     {bulletin.pdfUrl ? (
-                      <a href={bulletin.pdfUrl} className="inline-flex min-h-10 items-center gap-1.5 text-small text-moss underline underline-offset-4 hover:text-moss-deep">
+                      <a href={bulletin.pdfUrl} className="inline-flex min-h-10 items-center gap-1.5 text-[0.9375rem] font-semibold text-gold-ink hover:text-moss-deep">
                         <Icon name="download" size={15} /> Prenesi PDF
                       </a>
                     ) : null}
                   </div>
                 ) : null}
                 {olderBulletins.length ? (
-                  <div className="mt-5 border-t border-stone pt-4">
-                    <h3 className="text-meta text-ink-3">Prejšnja oznanila</h3>
+                  <div className="mt-5 border-t border-stone/70 pt-4">
+                    <h3 className="text-meta font-semibold text-ink-3">Prejšnja oznanila</h3>
                     <ul className="mt-2 flex flex-wrap gap-x-4 gap-y-1 text-small">
                       {olderBulletins.map((b) => (
                         <li key={b.id}>
-                          <Link href={routes.bulletin(b.periodStart)} className="whitespace-nowrap text-ink-2 underline decoration-stone-2 underline-offset-4 hover:text-ink">
+                          <Link href={routes.bulletin(b.periodStart)} className="whitespace-nowrap font-medium text-ink-2 hover:text-gold-ink">
                             {b.label}
                           </Link>
                         </li>
@@ -201,44 +196,38 @@ export default async function AnnouncementsPage({ searchParams }: Props) {
               </section>
 
               {home?.tile?.text ? (
-                <figure className="rounded-md border border-stone bg-paper-2 px-6 py-7 text-center">
-                  <span className="font-serif text-[3rem] leading-none text-stone-2" aria-hidden="true">
-                    “
-                  </span>
-                  <blockquote className="lede mt-1 text-ink">{home.tile.text}</blockquote>
-                  {home.tile.source ? <figcaption className="mt-2 text-small text-ink-2">{home.tile.source}</figcaption> : null}
-                  <span className="mx-auto mt-4 block h-px w-12 bg-gold" aria-hidden="true" />
+                <figure className="rounded-lg bg-surface px-7 py-9 text-center shadow-soft">
+                  <blockquote className="font-serif text-[1.5rem] italic leading-snug text-ink">{home.tile.text}</blockquote>
+                  {home.tile.source ? <figcaption className="eyebrow mt-3">{home.tile.source}</figcaption> : null}
                 </figure>
               ) : null}
 
               {events.length ? (
                 <div>
-                  <div className="mb-4 flex items-baseline justify-between gap-4">
-                    <h2 className="text-h3">Prihajajoči dogodki</h2>
-                    <Link href={routes.events} className="text-[0.75rem] font-semibold uppercase tracking-[0.14em] text-ink hover:text-moss">
-                      Vsi dogodki
-                    </Link>
+                  <div className="mb-2 flex items-center justify-between gap-4 px-2">
+                    <h2 className="text-[1.25rem] font-bold tracking-[-0.03em]">Prihajajoči dogodki</h2>
+                    <TextLink href={routes.events}>Vsi</TextLink>
                   </div>
-                  <ul className="overflow-hidden rounded-md border border-stone bg-paper">
+                  <ul className="overflow-hidden rounded-lg bg-surface shadow-soft">
                     {events.map((e) => {
                       const d = dateOf(e.start);
                       const where = e.church?.shortName ?? e.locationName;
                       return (
-                        <li key={e._id} className="border-b border-stone last:border-b-0">
-                          <Link href={routes.event(e.slug)} className="group grid grid-cols-[4rem_1fr_auto] items-center gap-4 p-3.5 no-underline">
-                            <span className="flex flex-col items-center rounded-sm bg-paper-2 py-1.5 leading-none">
-                              <span className="font-serif text-[1.5rem] text-ink">{formatDayNumber(d)}</span>
-                              <span className="mt-1 text-[0.7rem] font-semibold uppercase tracking-wider text-ink-3">{formatMonthShort(d)}</span>
+                        <li key={e._id} className="border-b border-stone/70 last:border-b-0">
+                          <Link href={routes.event(e.slug)} className="group grid grid-cols-[3.5rem_1fr_auto] items-center gap-4 px-5 py-4 no-underline transition-colors hover:bg-paper">
+                            <span className="flex flex-col overflow-hidden rounded-[0.875rem] bg-surface text-center leading-none shadow-soft">
+                              <span className="bg-moss py-[3px] text-[0.625rem] font-bold uppercase tracking-[0.08em] text-paper">{formatMonthShort(d)}</span>
+                              <span className="py-1.5 text-[1.375rem] font-bold tabular-nums tracking-[-0.05em] text-ink">{formatDayNumber(d)}</span>
                             </span>
                             <span className="min-w-0">
-                              <span className="block font-serif text-lede leading-tight text-ink group-hover:underline">{e.title}</span>
-                              <span className="mt-1 flex items-center gap-1.5 text-small text-ink-2">
-                                <Icon name={where ? "pin" : "clock"} size={14} className="text-ink-3" />
+                              <span className="block text-body font-semibold leading-snug tracking-[-0.015em] text-ink">{e.title}</span>
+                              <span className="mt-0.5 flex items-center gap-1.5 text-small text-ink-2">
+                                <Icon name={where ? "pin" : "clock"} size={14} className="text-gold-ink" />
                                 {e.allDay ? "" : `${formatTime(timeOf(e.start))}`}
                                 {where ? `${e.allDay ? "" : ", "}${where}` : ""}
                               </span>
                             </span>
-                            <Icon name="arrow-right" size={16} className="text-ink-3 transition-transform group-hover:translate-x-0.5" />
+                            <Icon name="arrow-right" size={16} className="text-gold-ink transition-transform group-hover:translate-x-[3px]" />
                           </Link>
                         </li>
                       );
@@ -248,13 +237,10 @@ export default async function AnnouncementsPage({ searchParams }: Props) {
               ) : null}
 
               {hasImage(home?.tile?.image) && settings?.tagline ? (
-                <figure className="relative isolate min-h-[14rem] overflow-hidden rounded-md bg-ink text-paper">
-                  <SanityImage image={home.tile.image} aspect={4 / 3} sizes="(min-width: 1024px) 24rem, 100vw" maxWidth={1000} decorative fill className="-z-20" />
-                  <div aria-hidden="true" className="absolute inset-0 -z-10 bg-[linear-gradient(90deg,rgb(20_28_24/0.05),rgb(20_28_24/0.6))]" />
-                  <figcaption className="absolute inset-y-0 right-0 flex w-1/2 flex-col items-end justify-center p-6 text-right font-serif text-lede leading-snug">
-                    {settings.tagline}
-                    <span className="mt-3 block h-px w-10 bg-paper/70" aria-hidden="true" />
-                  </figcaption>
+                <figure className="relative isolate min-h-[16rem] overflow-hidden rounded-lg bg-paper-3 text-paper shadow-soft">
+                  <SanityImage image={home.tile.image} aspect={4 / 3} sizes="(min-width: 1024px) 24rem, 100vw" maxWidth={1000} decorative fill className="-z-20" imgClassName="[filter:saturate(.5)_sepia(.15)]" />
+                  <div aria-hidden="true" className="absolute inset-0 -z-10 bg-[linear-gradient(180deg,rgb(14_10_6/0)_35%,rgb(14_10_6/0.75)_100%)]" />
+                  <figcaption className="absolute inset-x-0 bottom-0 p-6 font-serif text-[1.375rem] italic leading-snug">{settings.tagline}</figcaption>
                 </figure>
               ) : null}
             </aside>
@@ -263,7 +249,7 @@ export default async function AnnouncementsPage({ searchParams }: Props) {
       </Section>
 
       {bulletin ? (
-        <Section tone="paper-2" id="mesecna" className="scroll-mt-16 border-t border-stone">
+        <Section id="mesecna" className="scroll-mt-24">
           <span id="tedenska" aria-hidden="true" />
           <Container>
             <BulletinView bulletin={bulletin} massDays={massDays} massHeading={massHeading} events={bulletin.events} />

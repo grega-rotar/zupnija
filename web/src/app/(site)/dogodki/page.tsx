@@ -21,11 +21,11 @@ export default async function EventsPage() {
   const [settings, events] = await Promise.all([getSettings(), getUpcomingEvents()]);
   return (
     <>
-      <PageHero settings={settings} header="eventsHeader" title="Dogodki" lede="Kaj se pripravlja v župniji v prihodnjih tednih." />
-      <Section tight tone="paper-2">
+      <PageHero settings={settings} header="eventsHeader" title="Kaj se pripravlja" accent="pripravlja" crumbs={[{ label: "Dogodki" }]} lede="Kaj se pripravlja v župniji v prihodnjih tednih." />
+      <Section>
         <Container>
           <EventList events={events} />
-          <p className="mt-8">
+          <p className="mt-6 text-center">
             <TextLink href={routes.eventsArchive}>Pretekli dogodki</TextLink>
           </p>
         </Container>
