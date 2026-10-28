@@ -23,7 +23,9 @@ services:
     volumes:
       - uploads:/data/uploads
       - claude:/data/claude
-      - /etc/claude-pool:/etc/claude-pool:ro
+      # The pool's token folder on the host. On t4a it is rokomet-stats' pool (same accounts,
+      # owned by deploy = uid 1000 = the container's node user): CLAUDE_POOL_HOST_DIR in .env.
+      - ${CLAUDE_POOL_HOST_DIR:-/etc/claude-pool}:/etc/claude-pool:ro
     depends_on:
       db:
         condition: service_healthy
