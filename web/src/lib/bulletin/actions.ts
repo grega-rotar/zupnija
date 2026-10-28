@@ -23,6 +23,7 @@ import { defineAction } from "@/lib/admin/engine";
 import { UserError } from "@/lib/admin/errors";
 import { now } from "@/lib/clock";
 import { ensureMasses } from "@/lib/mase/ensure";
+import { queueBulletin } from "@/lib/newsletter/service";
 import { intentionKey } from "./intentions";
 import { allIntentions, periodLabel, readableDraftSchema, type DatedIntention, type DraftEvent, type ReadableDraft } from "./types";
 
@@ -205,6 +206,15 @@ export const publishBulletinAction = defineAction<P>({
       });
       events++;
     }
+
+    // The newsletter (lib/newsletter): queued once per bulletin; before the tracked update so undo keeps mailed_at.
+    await queueBulletin(tx, b.id, {
+      period: periodLabel(draft.period.start, draft.period.end),
+      issue: draft.period.issue,
+      article: draft.article,
+      notices: draft.notices.map((x) => x.text),
+      events: draft.events.map((x) => resolveEvent(x, p.resolutions)).filter((x) => x.include),
+    });
 
     await track.update("bulletins", b.id, {
       status: "published",

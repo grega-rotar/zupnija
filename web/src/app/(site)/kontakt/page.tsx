@@ -11,7 +11,9 @@ import { ContactForm } from "@/components/forms/ContactForm";
 import { RichText } from "@/components/sanity/RichText";
 import { SanityImage, hasImage } from "@/components/sanity/SanityImage";
 import { Icon, type IconName } from "@/components/ui/Icon";
-import { Container, FactList, Section } from "@/components/ui/primitives";
+import { Container, Section, TextLink } from "@/components/ui/primitives";
+import { BankDetails } from "@/components/giving/BankDetails";
+import { getGiving } from "@/lib/giving/donations";
 
 export async function generateMetadata(): Promise<Metadata> {
   const settings = await getSettings();
@@ -29,6 +31,7 @@ export default async function ContactPage() {
   const addressLine = [address?.street, [address?.postalCode, address?.city].filter(Boolean).join(" ")].filter(Boolean).join(", ");
   const mapsHref = addressLine ? `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(addressLine)}` : null;
   const donations = settings?.donations;
+  const giving = await getGiving();
   const hasDonations = Boolean(donations?.iban || donations?.intro?.length);
   const pastor = settings?.pastor;
 
@@ -182,16 +185,14 @@ export default async function ContactPage() {
                 <p className="eyebrow">Podprite župnijo</p>
                 <h2 className="mt-1 text-[1.5rem] font-bold tracking-[-0.035em]">Darovi za župnijo</h2>
                 <RichText value={donations?.intro} className="mt-3 text-ink-2" />
-                <FactList
-                  className="mt-3"
-                  items={[
-                    { label: "Prejemnik", value: donations?.recipient },
-                    { label: "IBAN", value: donations?.iban ? <span className="tnum">{donations.iban}</span> : null },
-                    { label: "BIC", value: donations?.bic },
-                    { label: "Sklic", value: donations?.reference },
-                    { label: "Namen", value: donations?.purpose },
-                  ]}
-                />
+                {giving ? (
+                  <>
+                    <BankDetails giving={giving} className="mt-3" />
+                    <TextLink href={routes.donate} className="mt-4">
+                      UPN QR koda in nameni darovanja
+                    </TextLink>
+                  </>
+                ) : null}
               </div>
             ) : null}
           </Container>

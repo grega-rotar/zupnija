@@ -10,7 +10,7 @@ import { AttachmentLink, RichText } from "@/components/sanity/RichText";
 import { SanityImage, hasImage } from "@/components/sanity/SanityImage";
 import { PersonCard } from "@/components/sections/PageSections";
 import { PageHero } from "@/components/layout/PageHero";
-import { Card, Container, EmptyState, Notice, Section, SectionHeading, TextLink } from "@/components/ui/primitives";
+import { Button, Card, Container, EmptyState, Notice, Section, SectionHeading, TextLink } from "@/components/ui/primitives";
 
 export async function generateMetadata(): Promise<Metadata> {
   const [settings, data] = await Promise.all([getSettings(), getCatechesis(false)]);
@@ -130,6 +130,9 @@ export default async function CatechesisPage() {
                   <RichText value={page.enrollment} />
                 </section>
               ) : null}
+              <Button href="/verouk/vpis" className="mt-8">
+                Vpiši otroka na spletu
+              </Button>
             </div>
             <aside className="space-y-5">
               {page?.contact ? (

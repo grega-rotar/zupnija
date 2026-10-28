@@ -32,6 +32,8 @@ const SITE: Array<[ContentType, string, IconName]> = [
   ["sacrament", "Zakramenti", "chalice"],
   ["catechesisPage", "Verouk (stran)", "book"],
   ["massSchedule", "Urnik maš (opomba)", "cal"],
+  ["prayerPage", "Molitev", "star"],
+  ["donationPurpose", "Nameni darovanja", "spark"],
   ["specialPeriod", "Posebna obdobja", "spark"],
   ["settings", "Nastavitve", "sliders"],
 ];

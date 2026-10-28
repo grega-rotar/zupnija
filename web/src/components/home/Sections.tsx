@@ -5,8 +5,17 @@ import { routes } from "@/lib/routes";
 import { cn } from "@/lib/utils";
 import { RichText } from "@/components/sanity/RichText";
 import { SanityImage, hasImage, ImagePlaceholder } from "@/components/sanity/SanityImage";
+import { NewsletterTile } from "@/components/newsletter/NewsletterTile";
+import { HomeGivingQr } from "@/components/giving/HomeGivingQr";
 import { Arrow } from "./Arrow";
 import s from "./home.module.css";
+
+/**
+ * News and church cards: three columns in the 1240px container (24px padding,
+ * 20px gaps) from 901px, one column (100vw minus the padding) below
+ * (home.module.css). A 412px phone at 1.75x then downloads 640px, not 768px.
+ */
+const CARD_SIZES = "(min-width: 1240px) 384px, (min-width: 901px) calc((100vw - 88px) / 3), calc(100vw - 48px)";
 
 /** "Iz življenja župnije": the three latest articles. */
 export function News({ articles }: { articles: HOME_ARTICLES_QUERY_RESULT }) {
@@ -27,7 +36,7 @@ export function News({ articles }: { articles: HOME_ARTICLES_QUERY_RESULT }) {
           <Link key={a._id} className={cn(s.card, s.reveal)} href={routes.article(a.slug)} data-reveal>
             <div className={s.img}>
               {hasImage(a.image) ? (
-                <SanityImage image={a.image} sizes="(min-width: 900px) 400px, 100vw" maxWidth={900} decorative fill />
+                <SanityImage image={a.image} sizes={CARD_SIZES} maxWidth={900} decorative fill />
               ) : (
                 <ImagePlaceholder className="absolute inset-0" />
               )}
@@ -66,7 +75,7 @@ export function Churches({ churches }: { churches: Church[] }) {
           <Link key={c._id} className={cn(s.church, s.reveal)} href={routes.church(c.slug)} data-reveal>
             {hasImage(c.image) ? (
               <div className={s.ph} aria-hidden="true">
-                <SanityImage image={c.image} sizes="(min-width: 900px) 400px, 100vw" maxWidth={1000} decorative fill />
+                <SanityImage image={c.image} sizes={CARD_SIZES} maxWidth={1000} decorative fill />
               </div>
             ) : null}
             <div className={s.txt}>
@@ -122,8 +131,10 @@ export function Giving({ donations }: { donations: NonNullable<SETTINGS_QUERY_RE
                 </div>
               ))}
             </dl>
+            <HomeGivingQr />
           </div>
         </div>
+        <NewsletterTile className={s.reveal} />
       </div>
     </section>
   );

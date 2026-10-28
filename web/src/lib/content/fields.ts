@@ -34,6 +34,8 @@ export const CONTENT_TYPES = [
   "parishGroup",
   "sacrament",
   "massSchedule",
+  "prayerPage",
+  "donationPurpose",
 ] as const;
 export type ContentType = (typeof CONTENT_TYPES)[number];
 /** Reference targets: content types, plus Sanity types that now live in their own tables. */
@@ -1011,6 +1013,63 @@ export const TYPES: Record<ContentType, TypeDef> = {
       seo("Iskalniki in deljenje", "seo"),
     ],
     publicPath: pathFor("sacrament"),
+  },
+
+  // /molitev and the homepage's "Pridite pred Najsvetejše" band (PRD US-012).
+  prayerPage: {
+    type: "prayerPage",
+    label: "Molitev in češčenje",
+    plural: "Molitev",
+    newLabel: "Molitev",
+    area: "zupnija",
+    singleton: true,
+    titleField: "title",
+    fields: [
+      { kind: "string", name: "title", label: "Naslov strani", required: true, initial: "Molitev in češčenje" },
+      { kind: "richText", name: "intro", label: "Uvod", variant: "simple" },
+      { kind: "image", name: "image", label: "Slika", help: "Prikazana na domači strani za pasom »Pridite pred Najsvetejše«." },
+      {
+        kind: "array",
+        name: "items",
+        label: "Molitvene ure",
+        help: "Npr. »Češčenje Najsvetejšega · prvi petek v mesecu, 15.00–18.30 · Marijina cerkev«. Brez vnosov stran ni prikazana.",
+        of: [
+          {
+            type: "prayerItem",
+            label: "Molitvena ura",
+            fields: [
+              { kind: "string", name: "title", label: "Kaj", required: true, max: 120 },
+              { kind: "string", name: "when", label: "Kdaj", required: true, max: 120 },
+              { kind: "string", name: "place", label: "Kje", max: 120 },
+              { kind: "text", name: "note", label: "Opomba", rows: 2, max: 300 },
+              { kind: "boolean", name: "onHome", label: "Prikaži na domači strani" },
+            ],
+          },
+        ],
+      },
+    ],
+    publicPath: () => "/molitev",
+  },
+
+  // A purpose with its own UPN QR on /daruj, e.g. »Oratorij 2027 · 40 €« (PRD US-009).
+  donationPurpose: {
+    type: "donationPurpose",
+    label: "Namen darovanja",
+    plural: "Nameni darovanja",
+    newLabel: "Nov namen",
+    area: "zupnija",
+    orderable: true,
+    titleField: "title",
+    subtitle: (d) => [d.amount ? `${d.amount} €` : "", d.until ? `do ${formatDate(String(d.until))}` : ""].filter(Boolean).join(" · "),
+    fields: [
+      { kind: "string", name: "title", label: "Naslov", required: true, max: 80, help: "Npr. »Oratorij 2027«." },
+      { kind: "text", name: "description", label: "Opis", rows: 2, max: 300 },
+      { kind: "number", name: "amount", label: "Znesek (€)", help: "Prazno: znesek vpiše darovalec." },
+      { kind: "string", name: "purpose", label: "Namen plačila na UPN", required: true, max: 42, help: "Do 42 znakov, npr. »Oratorij 2027 – prispevek«." },
+      { kind: "string", name: "reference", label: "Referenca", max: 26, help: "Npr. »SI00 2027«. Prazno: uporabi se referenca iz Nastavitev." },
+      { kind: "date", name: "until", label: "Prikaži do", help: "Po tem dnevu namen ni več prikazan." },
+    ],
+    publicPath: () => "/daruj",
   },
 
   // Only the note and validity live here; the Mass times are edited under Maše in nameni.

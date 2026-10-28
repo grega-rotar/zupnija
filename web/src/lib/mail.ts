@@ -61,7 +61,8 @@ export async function sendContactMessage(to: string, msg: ContactMessage): Promi
 
 // ── Generic messages (sign-in links, invitations) ──────────────────────────
 
-export type OutgoingMail = { to: string; subject: string; text: string; html?: string };
+/** `headers`: extra mail headers (the newsletter's List-Unsubscribe). */
+export type OutgoingMail = { to: string; subject: string; text: string; html?: string; headers?: Record<string, string> };
 export type OutboxEntry = OutgoingMail & { at: string };
 
 const OUTBOX_MAX = 50;
@@ -98,7 +99,7 @@ export async function sendMail(mail: OutgoingMail): Promise<SendResult> {
     const res = await fetch("https://api.resend.com/emails", {
       method: "POST",
       headers: { Authorization: `Bearer ${apiKey}`, "Content-Type": "application/json" },
-      body: JSON.stringify({ from, to: [mail.to], subject: mail.subject, text: mail.text, html: mail.html }),
+      body: JSON.stringify({ from, to: [mail.to], subject: mail.subject, text: mail.text, html: mail.html, headers: mail.headers }),
     });
     if (!res.ok) {
       const body = await res.text().catch(() => "");

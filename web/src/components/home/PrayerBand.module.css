@@ -1,0 +1,154 @@
+/*
+ * "Pridite pred Najsvetejše", ported from tasks/proto-v4/partials/b.html
+ * (.b-prayer). Lives inside home.module.css's .root, so its variables apply.
+ */
+.band {
+  position: relative;
+  border-radius: 40px;
+  overflow: hidden;
+  color: #fff;
+  min-height: 760px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: space-between;
+  gap: 48px;
+  text-align: center;
+  padding: 96px 48px 48px;
+  isolation: isolate;
+  background: #2a2118;
+}
+.ph {
+  position: absolute;
+  inset: 0;
+  z-index: -2;
+}
+.ph img {
+  object-fit: cover;
+  object-position: 50% 100%;
+  filter: saturate(0.85);
+}
+.candles {
+  background: url(./prayer-svece.webp) 50% 100% / 112% auto no-repeat;
+  filter: saturate(0.85);
+}
+.shade {
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  background: linear-gradient(180deg, rgb(14 10 6 / 0.86) 0%, rgb(14 10 6 / 0.62) 34%, rgb(14 10 6 / 0.12) 62%, rgb(14 10 6 / 0) 74%, rgb(14 10 6 / 0.5) 100%);
+}
+.eye {
+  font-size: 13px;
+  font-weight: 600;
+  letter-spacing: -0.005em;
+  color: #e6c987;
+}
+.h2 {
+  color: #fff;
+  font-size: clamp(44px, 6vw, 80px);
+  margin-top: 14px;
+  letter-spacing: -0.05em;
+  text-wrap: balance;
+}
+.h2 em {
+  display: block;
+  margin-top: 0.04em;
+}
+.foot {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 14px;
+  width: 100%;
+}
+.times {
+  display: flex;
+  gap: 12px;
+  flex-wrap: wrap;
+  justify-content: center;
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+.times li {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 2px;
+  min-width: 250px;
+  max-width: 420px;
+  padding: 16px 24px;
+  border-radius: 22px;
+  background: rgb(28 20 12 / 0.38);
+  backdrop-filter: saturate(140%) blur(24px);
+  -webkit-backdrop-filter: saturate(140%) blur(24px);
+  box-shadow: inset 0 0 0 1px rgb(255 255 255 / 0.18);
+}
+.times b {
+  font-size: 19px;
+  font-weight: 650;
+  letter-spacing: -0.025em;
+  line-height: 1.25;
+}
+.times span {
+  font-size: 14px;
+  color: rgb(255 255 255 / 0.86);
+  font-variant-numeric: tabular-nums;
+}
+.more {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  min-height: 44px;
+  padding: 0 14px;
+  font-size: 14px;
+  font-weight: 600;
+  color: rgb(255 255 255 / 0.9) !important;
+}
+.more:hover {
+  color: #fff !important;
+  text-decoration: underline;
+  text-underline-offset: 4px;
+}
+
+@media (max-width: 900px) {
+  .band {
+    min-height: 640px;
+    padding: 64px 20px 20px;
+    border-radius: 32px;
+  }
+  .candles {
+    background-size: auto 124%;
+    background-position: 54% 100%;
+  }
+  .ph img {
+    object-position: 54% 100%;
+  }
+  .times {
+    width: 100%;
+    flex-direction: column;
+    gap: 0;
+    border-radius: 22px;
+    background: rgb(28 20 12 / 0.5);
+    backdrop-filter: saturate(140%) blur(24px);
+    -webkit-backdrop-filter: saturate(140%) blur(24px);
+    box-shadow: inset 0 0 0 1px rgb(255 255 255 / 0.18);
+  }
+  .times li {
+    min-width: 0;
+    max-width: none;
+    background: none;
+    backdrop-filter: none;
+    -webkit-backdrop-filter: none;
+    box-shadow: none;
+    border-radius: 0;
+    padding: 14px 16px;
+  }
+  .times li + li {
+    box-shadow: inset 0 1px 0 rgb(255 255 255 / 0.14);
+  }
+  .foot {
+    gap: 6px;
+  }
+}

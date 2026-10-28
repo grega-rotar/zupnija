@@ -85,9 +85,9 @@ function LiturgyTile({ date, liturgy }: { date: IsoDate; liturgy: LiturgicalDay 
         </div>
       ) : null}
       <div className={s.foot}>
-        <a className={s.btn} href={liturgy.url} target="_blank" rel="noopener noreferrer">
+        <Link className={s.btn} href={liturgy.date === date ? routes.readings : routes.readingsOn(liturgy.date)}>
           Preberi današnja berila
-        </a>
+        </Link>
         <span className={s.label}>Vir: {liturgy.source === "oznanila" ? "oznanila in hozana.si" : "hozana.si"}</span>
       </div>
     </article>

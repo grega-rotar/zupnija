@@ -16,6 +16,8 @@ const nextConfig: NextConfig = {
   trailingSlash: false,
   poweredByHeader: false,
   experimental: {
+    // Public pages are deliberately not cached as HTML (no ISR, no CDN): see the comment on `dynamic`
+    // in src/app/(site)/layout.tsx. `inlineCss` was measured and left off: +35 kB gzip per page, no LCP gain.
     // Bulletin uploads (oznanila) go through a server action: up to 20 MB plus multipart overhead.
     serverActions: { bodySizeLimit: "21mb" },
     // proxy.ts buffers request bodies (default 10 MB); without this a large upload would be cut off.

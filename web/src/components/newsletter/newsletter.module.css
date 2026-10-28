@@ -1,0 +1,141 @@
+/* "Oznanila po e-pošti" (tasks/proto-v4/partials/c.html: .c-news, .c-field, .c-fine). */
+.tile {
+  background: radial-gradient(120% 100% at 100% 0%, #f6ead0 0%, #fbf6ec 45%, #fff 80%);
+  border-radius: 28px;
+  box-shadow: 0 0 0 1px rgb(14 14 16 / 0.07), 0 1px 1px rgb(0 0 0 / 0.03), 0 8px 32px rgb(0 0 0 / 0.06);
+  padding: 44px;
+  display: flex;
+  flex-direction: column;
+}
+.kick {
+  font-size: 13px;
+  font-weight: 600;
+  letter-spacing: -0.005em;
+  color: var(--color-gold-ink);
+}
+.tile .gt {
+  font-size: 32px;
+  font-weight: 700;
+  letter-spacing: -0.04em;
+  line-height: 1.08;
+  margin-top: 10px;
+  text-wrap: balance;
+}
+.tile .gp {
+  font-size: 17px;
+  color: var(--color-ink-2);
+  margin-top: 12px;
+  line-height: 1.5;
+  max-width: 360px;
+}
+.tile .form {
+  margin-top: auto;
+  padding-top: 28px;
+}
+
+.form {
+  position: relative;
+}
+.form .label {
+  display: block;
+  margin: 0 0 10px 22px;
+  font-size: 13px;
+  font-weight: 600;
+  letter-spacing: -0.005em;
+  color: var(--color-ink-3);
+}
+.field {
+  display: flex;
+  gap: 6px;
+  align-items: center;
+  background: #fff;
+  border-radius: 999px;
+  padding: 6px;
+  box-shadow: 0 0 0 1px rgb(20 12 4 / 0.09), 0 6px 20px rgb(20 12 4 / 0.06);
+  transition: box-shadow 0.25s;
+}
+.field:focus-within {
+  box-shadow: 0 0 0 2px var(--color-gold), 0 6px 20px rgb(20 12 4 / 0.06);
+}
+.field[data-invalid] {
+  box-shadow: 0 0 0 1.5px var(--color-alert), 0 6px 20px rgb(20 12 4 / 0.06);
+}
+.field input {
+  flex: 1;
+  min-width: 0;
+  height: 44px;
+  border: 0;
+  background: transparent;
+  color: var(--color-ink);
+  font: inherit;
+  font-size: 16px;
+  padding: 0 0 0 16px;
+  outline: none;
+}
+.field input::placeholder {
+  color: var(--color-ink-3);
+}
+.btn {
+  flex: none;
+  height: 44px;
+  padding: 0 20px;
+  border-radius: 999px;
+  background: var(--color-moss);
+  color: #fff;
+  font-size: 15px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background-color 0.2s, transform 0.2s;
+}
+.btn:hover {
+  background: #8d6b25;
+}
+.btn:focus-visible {
+  outline: 2px solid var(--color-gold);
+  outline-offset: 3px;
+}
+.btn:disabled {
+  opacity: 0.7;
+  cursor: progress;
+}
+.form .msg {
+  font-size: 13px;
+  color: var(--color-ink-3);
+  margin-top: 12px;
+  padding-left: 22px;
+}
+.form .ok {
+  color: var(--color-ink);
+  font-weight: 500;
+}
+.form .err {
+  color: var(--color-alert);
+  font-weight: 500;
+}
+.hp {
+  position: absolute;
+  left: -9999px;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+}
+
+@media (max-width: 620px) {
+  .tile {
+    padding: 28px;
+  }
+  .tile .gt {
+    font-size: 28px;
+  }
+  .form .label,
+  .form .msg {
+    padding-left: 0;
+    margin-left: 0;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .field,
+  .btn {
+    transition: none;
+  }
+}

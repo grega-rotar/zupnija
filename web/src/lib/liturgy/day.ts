@@ -1,8 +1,8 @@
 /**
  * The liturgical day for the homepage (US-003): what the published bulletin
  * wrote into calendar_days wins, then hozana.si's free day file, then nothing.
- * Readings: hozana's api.php needs a key we don't have yet, so `readings` is
- * empty and the site links to the day on hozana.si.
+ * Readings: the references from hozana's api.php when HOZANA_API_KEY is set
+ * (readings-data.ts), otherwise empty; /berila has the full text.
  */
 import "server-only";
 import { eq } from "drizzle-orm";
@@ -11,6 +11,7 @@ import { db, schema } from "@/db";
 import type { IsoDate } from "@/lib/dates";
 import { cached } from "@/lib/data/cache";
 import { fetchHozanaDay, hozanaUrl, type HozanaDay } from "./hozana";
+import { getReadings } from "./readings-data";
 
 export type Reading = { label: "Berilo" | "Psalm" | "Evangelij" | string; ref: string };
 
@@ -61,14 +62,15 @@ async function hozanaDay(date: IsoDate): Promise<HozanaDay | null> {
 /** calendar_days (the bulletin) → hozana.si → null. */
 export async function getLiturgicalDay(date: IsoDate): Promise<LiturgicalDay | null> {
   const url = hozanaUrl(date);
-  const cal = await calendarDay(date);
+  const [cal, full] = await Promise.all([calendarDay(date), getReadings(date, date)]);
+  const readings: Reading[] = full.available ? full.readings.map((r) => ({ label: r.label, ref: r.ref })).filter((r) => r.ref) : [];
   if (cal?.title) {
     // The bulletin has no rank; hozana's is used when it names the same day.
     const hz = await hozanaDay(date);
     const rank = hz && hz.title.toLowerCase() === cal.title.toLowerCase() ? hz.rank : null;
-    return { date, title: cal.title, rank, sundayName: cal.sundayName, gospelLine: cal.gospel || hz?.gospelLine || null, readings: [], source: "oznanila", url };
+    return { date, title: cal.title, rank, sundayName: cal.sundayName, gospelLine: cal.gospel || hz?.gospelLine || null, readings, source: "oznanila", url };
   }
   const hz = await hozanaDay(date);
   if (!hz) return null;
-  return { date, title: hz.title, rank: hz.rank, sundayName: null, gospelLine: hz.gospelLine, readings: [], source: "hozana", url };
+  return { date, title: hz.title, rank: hz.rank, sundayName: null, gospelLine: hz.gospelLine, readings, source: "hozana", url };
 }

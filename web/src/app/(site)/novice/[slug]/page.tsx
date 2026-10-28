@@ -10,6 +10,7 @@ import { Figure, hasImage } from "@/components/sanity/SanityImage";
 import { PhotoGrid } from "@/components/gallery/PhotoGrid";
 import { ArticleCard } from "@/components/articles/ArticleCard";
 import { EventRow } from "@/components/events/EventCard";
+import { Share } from "@/components/share/Share";
 import { Breadcrumbs, Container, JsonLdScript, Section, SectionHeading, headline, tile } from "@/components/ui/primitives";
 import { cn } from "@/lib/utils";
 
@@ -60,6 +61,7 @@ export default async function ArticlePage({ params }: Props) {
             </p>
             <h1 className={cn("mt-3 max-w-4xl", headline.display)}>{article.title}</h1>
             {article.excerpt ? <p className="lede mx-auto mt-5 max-w-[40rem] text-balance lg:mt-6">{article.excerpt}</p> : null}
+            <Share title={article.title} url={absoluteUrl(routes.article(slug), settings)} className="mt-6" />
           </Container>
         </header>
 

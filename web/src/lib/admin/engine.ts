@@ -37,6 +37,9 @@ export const TRACKED = {
   app_settings: schema.appSettings,
   user: schema.user,
   content: schema.content,
+  intention_requests: schema.intentionRequests,
+  sacrament_requests: schema.sacramentRequests,
+  catechesis_enrolments: schema.catechesisEnrolments,
 } as const;
 /** Primary-key column name per table: `id`, except calendar_days (`date`) and app_settings (`key`). */
 const PK: Partial<Record<keyof typeof TRACKED, string>> = { calendar_days: "date", app_settings: "key" };

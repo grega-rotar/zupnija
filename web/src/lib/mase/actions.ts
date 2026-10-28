@@ -13,6 +13,7 @@ import { UserError } from "@/lib/admin/errors";
 import { now } from "@/lib/clock";
 import { addDays } from "@/lib/dates";
 import { ensureMasses } from "./ensure";
+import { openIntentionRequest } from "./requests";
 import { dayLabel, kindPrefix, timeLabel } from "./format";
 
 const m = schema.masses;
@@ -55,20 +56,28 @@ export const addIntention = defineAction({
       .min(1, "Vpišite, za koga je namen.")
       .max(200, "Največ 200 znakov."),
     kind: z.enum(["deceased", "thanksgiving", "other"]),
+    /** Set when the intention comes from a visitor's request (Prošnje): it is marked done with it (US-007). */
+    requestId: z.number().int().optional(),
   }),
   label: (p) => `Nov namen ${kindPrefix(p.kind)} ${p.text}`,
   check: async (p, tx) => {
     const { mass } = await loadMass(tx, p.massId);
     if (mass.status === "cancelled") throw new UserError("Maša je bila medtem odpovedana.");
+    if (p.requestId != null) await openIntentionRequest(tx, p.requestId);
   },
-  apply: async (p, { track, tx, requestedBy }) =>
-    track.insert("intentions", {
+  apply: async (p, { track, tx, actor, requestedBy }) => {
+    const row = await track.insert("intentions", {
       massId: p.massId,
       kind: p.kind,
       text: p.text,
       position: await nextPosition(tx, p.massId),
       createdBy: requestedBy,
-    }),
+    });
+    if (p.requestId != null) {
+      await track.update("intention_requests", p.requestId, { status: "done", intentionId: row.id, decidedBy: actor.id, decidedAt: now() });
+    }
+    return row;
+  },
   tags: ["masses"],
 });
 

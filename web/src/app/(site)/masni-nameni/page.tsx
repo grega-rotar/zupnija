@@ -74,6 +74,12 @@ export default async function IntentionsPage({ searchParams }: Props) {
               <DayCard key={day.date} day={day} today={t} showIntentions headingLevel="h2" />
             ))}
           </div>
+          <p className="mt-10 text-center">
+            <Link href="/masni-nameni/prosnja" className={navButton}>
+              Prosite za mašni namen
+              <Icon name="arrow-right" size={16} />
+            </Link>
+          </p>
         </Container>
       </Section>
     </>

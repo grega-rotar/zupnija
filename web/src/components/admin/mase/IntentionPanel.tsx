@@ -14,13 +14,22 @@ import type { Viewer } from "./WeekView";
 
 export type UpcomingMass = MassView & { label: string };
 
+/** A visitor's request being written down as an intention (Prošnje): prefills the panel. */
+export type IntentionPrefill = { requestId: number; massId?: number; text: string; kind: IntentionKind; from: string };
+
 /** "Nov namen" (the prototype's pIntent): pick an upcoming Mass, grouped by day. */
-export function IntentionPanel({ masses, viewer, onClose }: { masses: UpcomingMass[]; viewer: Viewer; onClose: () => void }) {
+export function IntentionPanel({ masses, viewer, onClose, prefill, onSaved }: {
+  masses: UpcomingMass[];
+  viewer: Viewer;
+  onClose: () => void;
+  prefill?: IntentionPrefill;
+  onSaved?: () => void;
+}) {
   const toast = useToast();
   const [busy, startTransition] = useTransition();
-  const [mid, setMid] = useState<number | undefined>(masses[0]?.id);
-  const [text, setText] = useState("");
-  const [kind, setKind] = useState<IntentionKind>("deceased");
+  const [mid, setMid] = useState<number | undefined>(prefill?.massId ?? masses[0]?.id);
+  const [text, setText] = useState(prefill?.text ?? "");
+  const [kind, setKind] = useState<IntentionKind>(prefill?.kind ?? "deceased");
   const [err, setErr] = useState<string | undefined>();
   const textRef = useRef<HTMLInputElement>(null);
   const ask = viewer.approval;
@@ -40,7 +49,7 @@ export function IntentionPanel({ masses, viewer, onClose }: { masses: UpcomingMa
       return;
     }
     startTransition(async () => {
-      const r = await addIntention(mid, text, kind);
+      const r = await addIntention(mid, text, kind, prefill?.requestId);
       if (!r.ok) {
         if (fieldOf(r.error)) setErr(r.error);
         else toast.show({ text: r.error === "forbidden" ? "Tega ne morete spremeniti." : r.error, tone: "error" });
@@ -48,6 +57,7 @@ export function IntentionPanel({ masses, viewer, onClose }: { masses: UpcomingMa
       }
       markChanged();
       toast.show({ text: r.data.pending ? "Poslano župniku v potrditev." : "Shranjeno. Namen je že na strani.", historyId: r.data.historyId });
+      onSaved?.();
       onClose();
     });
   };
@@ -56,7 +66,7 @@ export function IntentionPanel({ masses, viewer, onClose }: { masses: UpcomingMa
     <Panel
       eyebrow="Maše in nameni"
       title="Nov namen"
-      sub="Izberite mašo in vpišite, za koga se daruje."
+      sub={prefill ? `Prošnja: ${prefill.from}` : "Izberite mašo in vpišite, za koga se daruje."}
       onClose={onClose}
       footer={
         <>

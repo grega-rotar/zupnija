@@ -10,6 +10,7 @@ import { HomeHero } from "@/components/home/HomeHero";
 import { ThisWeek } from "@/components/home/ThisWeek";
 import { Churches, Giving, News } from "@/components/home/Sections";
 import { Reveal } from "@/components/home/Reveal";
+import { PrayerBand } from "@/components/home/PrayerBand";
 import s from "@/components/home/home.module.css";
 
 export async function generateMetadata(): Promise<Metadata> {
@@ -48,6 +49,7 @@ export default async function HomePage() {
       <HomeHero home={home} parishName={parishName} block={block} />
       <ThisWeek date={block.date} liturgy={liturgy} event={featured[0] ?? upcoming[0] ?? null} bulletin={bulletin} week={week} />
       <News articles={articles} />
+      <PrayerBand />
       <Churches churches={churches} />
       <Giving donations={settings?.donations} />
       <Reveal />

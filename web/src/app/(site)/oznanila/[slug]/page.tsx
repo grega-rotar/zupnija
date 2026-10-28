@@ -1,7 +1,8 @@
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import { getAnnouncement, getSettings } from "@/sanity/data";
-import { buildMetadata, breadcrumbJsonLd } from "@/lib/seo";
+import { absoluteUrl, buildMetadata, breadcrumbJsonLd } from "@/lib/seo";
+import { Share } from "@/components/share/Share";
 import { routes } from "@/lib/routes";
 import { dateOf, formatDate } from "@/lib/dates";
 import { hrefFor, isExternalHref } from "@/lib/links";
@@ -58,6 +59,7 @@ export default async function AnnouncementPage({ params }: Props) {
           ) : null}
           {expired ? <Tag>Ni več aktualno</Tag> : null}
         </div>
+        <Share title={item.title} url={absoluteUrl(routes.announcement(slug), settings)} className="mt-5" />
       </PageHeader>
       <Section>
         <Container width="prose">

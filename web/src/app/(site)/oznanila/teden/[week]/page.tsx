@@ -4,7 +4,8 @@ import { getSettings } from "@/sanity/data";
 import { bulletinLabel, getBulletinCovering } from "@/lib/data/bulletins";
 import { getEventsInRange } from "@/lib/data/events";
 import { getMassDays } from "@/lib/data/masses";
-import { buildMetadata } from "@/lib/seo";
+import { absoluteUrl, buildMetadata } from "@/lib/seo";
+import { Share } from "@/components/share/Share";
 import { routes } from "@/lib/routes";
 import { addDays, formatWeekSpan, isIsoDate, startOfWeek } from "@/lib/dates";
 import { BulletinView } from "@/components/announcements/BulletinView";
@@ -71,7 +72,7 @@ export default async function BulletinWeekPage({ params }: Props) {
     );
   }
 
-  const events = await getEventsInRange(bulletin.periodStart, bulletin.periodEnd);
+  const [events, settings] = await Promise.all([getEventsInRange(bulletin.periodStart, bulletin.periodEnd), getSettings()]);
   return (
     <Section className="pt-10 sm:pt-14 lg:pt-20">
       <Container>
@@ -84,6 +85,9 @@ export default async function BulletinWeekPage({ params }: Props) {
           ]}
         />
         <BulletinView bulletin={bulletin} massDays={massDays} massHeading={formatWeekSpan(week, end)} events={events} headingLevel="h1" />
+        <div className="mt-8 flex justify-center">
+          <Share title={`Oznanila ${bulletinLabel(bulletin)}`} url={absoluteUrl(routes.bulletin(date), settings)} />
+        </div>
       </Container>
     </Section>
   );

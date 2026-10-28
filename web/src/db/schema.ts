@@ -251,6 +251,8 @@ export const bulletins = pgTable("bulletins", {
   error: text("error"),
   publishedAt: ts("published_at"),
   publishedBy: text("published_by").references(() => user.id, { onDelete: "set null" }),
+  /** When the newsletter was queued for this bulletin: set once, so a re-publish never mails again. */
+  mailedAt: ts("mailed_at"),
   createdAt: created(),
   updatedAt: updated(),
 });
@@ -372,4 +374,109 @@ export const history = pgTable(
     createdAt: ts("created_at").notNull().default(sql`now()`),
   },
   (t) => [index("history_created").on(t.createdAt)],
+);
+
+// ── Newsletter and outgoing mail (PRD US-005, tasks/contract-complete.md) ───
+export const subscriberStatusEnum = pgEnum("subscriber_status", ["pending", "active", "unsubscribed"]);
+
+/** People who get each published bulletin by e-mail (double opt-in). */
+export const newsletterSubscribers = pgTable("newsletter_subscribers", {
+  id: serial("id").primaryKey(),
+  email: text("email").notNull().unique(), // lower-cased
+  status: subscriberStatusEnum("status").notNull().default("pending"),
+  token: text("token").notNull().unique(), // confirm + unsubscribe link
+  consentAt: ts("consent_at").notNull(),
+  confirmedAt: ts("confirmed_at"),
+  unsubscribedAt: ts("unsubscribed_at"),
+  createdAt: created(),
+});
+
+export const outboxStatusEnum = pgEnum("outbox_status", ["queued", "sent", "failed"]);
+
+/** Bulk mail waiting for the throttled sender (/api/cron/outbox). One-off mails go out directly. */
+export const outbox = pgTable(
+  "outbox",
+  {
+    id: serial("id").primaryKey(),
+    kind: text("kind").notNull(), // "newsletter"
+    ref: text("ref"), // e.g. "bulletin:12"
+    to: text("to").notNull(),
+    subject: text("subject").notNull(),
+    text: text("text").notNull(),
+    html: text("html"),
+    headers: jsonb("headers").notNull().default({}),
+    status: outboxStatusEnum("status").notNull().default("queued"),
+    attempts: integer("attempts").notNull().default(0),
+    sendAfter: ts("send_after").notNull().defaultNow(),
+    sentAt: ts("sent_at"),
+    error: text("error"),
+    createdAt: created(),
+  },
+  (t) => [index("outbox_due").on(t.status, t.sendAfter)],
+);
+
+// ── Requests from the public forms (PRD US-006/007/008) ─────────────────────
+export const requestStatusEnum = pgEnum("request_status", ["new", "done", "declined"]);
+
+/** An online Verouk enrolment. `data` holds the whole form (parents, child, consents). */
+export const catechesisEnrolments = pgTable("catechesis_enrolments", {
+  id: serial("id").primaryKey(),
+  number: text("number").notNull().unique(), // "V-2026-0001"
+  schoolYear: text("school_year").notNull(), // "2026/2027"
+  childName: text("child_name").notNull(),
+  grade: integer("grade").notNull(),
+  groupId: integer("group_id").references(() => catechesisGroups.id, { onDelete: "set null" }),
+  data: jsonb("data").notNull(),
+  status: requestStatusEnum("status").notNull().default("new"),
+  createdAt: created(),
+});
+
+/** Someone asking for a Mass intention; the editor turns it into a real intention. */
+export const intentionRequests = pgTable(
+  "intention_requests",
+  {
+    id: serial("id").primaryKey(),
+    name: text("name").notNull(),
+    contact: text("contact").notNull(), // phone or e-mail
+    text: text("text").notNull(),
+    preferredDate: date("preferred_date"),
+    churchSlug: text("church_slug"),
+    note: text("note"),
+    status: requestStatusEnum("status").notNull().default("new"),
+    intentionId: integer("intention_id").references(() => intentions.id, { onDelete: "set null" }),
+    decidedBy: text("decided_by").references(() => user.id, { onDelete: "set null" }),
+    decidedAt: ts("decided_at"),
+    declineNote: text("decline_note"),
+    createdAt: created(),
+  },
+  (t) => [index("intention_requests_status").on(t.status)],
+);
+
+/** An enquiry about a sacrament (baptism, wedding, sick call, funeral …). */
+export const sacramentRequests = pgTable(
+  "sacrament_requests",
+  {
+    id: serial("id").primaryKey(),
+    kind: text("kind").notNull(), // krst | prvo_obhajilo | birma | poroka | bolnisko_maziljenje | pogreb | drugo
+    name: text("name").notNull(),
+    contact: text("contact").notNull(),
+    preferredDate: date("preferred_date"),
+    message: text("message").notNull(),
+    status: requestStatusEnum("status").notNull().default("new"),
+    resolvedBy: text("resolved_by").references(() => user.id, { onDelete: "set null" }),
+    resolvedAt: ts("resolved_at"),
+    createdAt: created(),
+  },
+  (t) => [index("sacrament_requests_status").on(t.status)],
+);
+
+/** Hits per form and IP for the public forms' rate limit (5 per 10 minutes). Old rows are pruned on write. */
+export const rateLimitHits = pgTable(
+  "rate_limit_hits",
+  {
+    id: serial("id").primaryKey(),
+    key: text("key").notNull(), // "<form>:<ip>"
+    createdAt: created(),
+  },
+  (t) => [index("rate_limit_hits_key").on(t.key, t.createdAt)],
 );

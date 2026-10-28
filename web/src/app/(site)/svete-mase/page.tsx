@@ -2,7 +2,8 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { getActiveSpecialPeriod, getChurchesBrief, getCurrentSchedules, getHomePage, getSettings } from "@/sanity/data";
 import { getMassDays, getUpcomingMasses } from "@/lib/data/masses";
-import { buildMetadata } from "@/lib/seo";
+import { absoluteUrl, buildMetadata } from "@/lib/seo";
+import { SubscribeCalendar } from "@/components/share/SubscribeCalendar";
 import { routes } from "@/lib/routes";
 import { addDays, compareTime, formatDayHeading, formatTime, today } from "@/lib/dates";
 import { MASS_TYPE_LABEL, pickTodayOrNext, type Mass } from "@/lib/masses";
@@ -79,6 +80,7 @@ export default async function MassesPage() {
             Cerkve
           </Pill>
         </nav>
+        <SubscribeCalendar feedUrl={absoluteUrl(routes.calendarFeed, settings)} className="mt-5" />
       </PageHero>
 
       <Section>

@@ -1,0 +1,161 @@
+/* The request inboxes (Prošnje, Vpisi, povpraševanja). Site tokens only; the rest is admin.css. */
+
+/* Screen tabs: the week bar's segmented control, as links. */
+.tabs {
+  display: inline-flex;
+  gap: 2px;
+  padding: 2px;
+  margin-bottom: 1.25rem;
+  justify-self: start;
+  width: max-content;
+  border-radius: 999px;
+  background: rgb(20 12 4 / 0.06);
+  max-width: 100%;
+  overflow-x: auto;
+}
+.tabs a {
+  min-height: 2.25rem;
+  padding: 0 0.875rem;
+  border-radius: 999px;
+  font-weight: 500;
+  font-size: var(--text-meta);
+  color: var(--color-ink-2);
+  display: inline-flex;
+  align-items: center;
+  gap: 0.375rem;
+  white-space: nowrap;
+  transition: background-color 0.15s, color 0.15s, box-shadow 0.15s;
+}
+.tabs a:hover {
+  color: var(--color-ink);
+}
+.tabs a[aria-current="page"] {
+  background: var(--color-surface);
+  color: var(--color-ink);
+  font-weight: 600;
+  box-shadow: 0 1px 3px rgb(20 12 4 / 0.12), 0 0 0 0.5px rgb(20 12 4 / 0.06);
+}
+.tabs a:focus-visible {
+  outline: 3px solid color-mix(in srgb, var(--color-gold) 45%, transparent);
+  outline-offset: 2px;
+}
+.count {
+  min-width: 1.25rem;
+  height: 1.25rem;
+  padding: 0 0.375rem;
+  border-radius: 999px;
+  background: var(--color-moss);
+  color: #fff;
+  font-size: 0.75rem;
+  font-weight: 650;
+  display: inline-grid;
+  place-items: center;
+  font-variant-numeric: tabular-nums;
+}
+
+/* One request: what, who and when, the actions on the right (below on phones). */
+.list {
+  display: grid;
+  background: var(--color-surface);
+  border-radius: var(--grp-r);
+  box-shadow: var(--grp-sh);
+  overflow: hidden;
+}
+.req {
+  position: relative;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  gap: 0.375rem 1rem;
+  padding: 1rem;
+  align-items: start;
+}
+.req + .req::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 1rem;
+  right: 0;
+  height: 1px;
+  background: var(--hair);
+}
+.req h3 {
+  font-size: 1rem;
+  font-weight: 600;
+  letter-spacing: -0.02em;
+  line-height: 1.35;
+}
+.req .meta {
+  color: var(--color-ink-3);
+  font-size: var(--text-meta);
+  margin-top: 2px;
+}
+.req .note {
+  color: var(--color-ink-2);
+  font-size: var(--text-small);
+  font-style: italic;
+  margin-top: 0.375rem;
+}
+.req .acts {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  justify-content: flex-end;
+}
+@container (max-width: 640px) {
+  .req {
+    grid-template-columns: minmax(0, 1fr);
+  }
+  .req .acts {
+    justify-content: flex-start;
+  }
+}
+
+/* Vpisi: a toolbar, then one row per child. */
+.bar {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.75rem 1rem;
+  margin-bottom: 1rem;
+}
+.bar > :first-child {
+  flex: 1 1 18rem;
+}
+.facts {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.25rem 0.875rem;
+  color: var(--color-ink-2);
+  font-size: var(--text-small);
+  margin-top: 0.375rem;
+}
+.consent {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.25rem;
+}
+.consent :global(.i) {
+  width: 1rem;
+  height: 1rem;
+}
+.yes {
+  color: var(--color-gold-ink);
+}
+.no {
+  color: var(--color-ink-3);
+  text-decoration: line-through;
+}
+.num {
+  font-variant-numeric: tabular-nums;
+  color: var(--color-ink-3);
+  font-size: var(--text-meta);
+}
+.done {
+  margin-top: 2rem;
+}
+.done h2 {
+  font-size: var(--text-small);
+  font-weight: 600;
+  color: var(--color-ink-3);
+  margin: 0 0 0.5rem 1rem;
+}
