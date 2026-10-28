@@ -79,11 +79,12 @@ export type Transform = {
 };
 
 /**
- * The transform a query string asks for. `accept` is the request's Accept
- * header (auto=format → webp when the browser takes it). `original` is the
- * stored format.
+ * The transform a query string asks for. auto=format → WebP for everyone
+ * (every browser the parish uses reads it, and one answer per URL lets
+ * Cloudflare cache it; AVIF is too slow to encode on first view).
+ * `original` is the stored format.
  */
-export function parseTransform(sp: URLSearchParams, original: Format, accept: string): Transform {
+export function parseTransform(sp: URLSearchParams, original: Format): Transform {
   const rectParts = (sp.get("rect") ?? "").split(",").map((x) => Math.round(Number(x)));
   const rect = rectParts.length === 4 && rectParts.every((n) => Number.isFinite(n) && n >= 0) && rectParts[2] > 0 && rectParts[3] > 0
     ? (rectParts as Transform["rect"])
@@ -92,7 +93,7 @@ export function parseTransform(sp: URLSearchParams, original: Format, accept: st
   const format: Format =
     fm === "jpg" || fm === "png" || fm === "webp" || fm === "avif"
       ? fm
-      : sp.get("auto") === "format" && accept.includes("image/webp")
+      : sp.get("auto") === "format"
         ? "webp"
         : original;
   return {
@@ -126,12 +127,36 @@ function gravity(crop: string | null): string | number {
   return v + h || "centre";
 }
 
-/** Apply a transform with sharp. */
-export async function render(input: Buffer, t: Transform): Promise<Buffer> {
-  // Apply the EXIF orientation first, so rect and sizes are in the upright image's pixels.
-  const upright = await sharp(input, { failOn: "none" }).rotate().toBuffer({ resolveWithObject: true });
-  let img = sharp(upright.data);
-  let { width, height } = upright.info;
+// At most two renders at once: each holds a decoded photo in memory and a CPU core.
+let running = 0;
+const waiting: (() => void)[] = [];
+async function slot<T>(work: () => Promise<T>): Promise<T> {
+  if (running >= 2) await new Promise<void>((go) => waiting.push(go));
+  running++;
+  try {
+    return await work();
+  } finally {
+    running--;
+    waiting.shift()?.();
+  }
+}
+
+/**
+ * Apply a transform with sharp, in one pipeline: the photo is decoded once
+ * (large JPEGs shrink while decoding), oriented, cut, resized and encoded
+ * once. Never re-encode the full-size original on the way.
+ */
+export function render(input: Buffer, t: Transform): Promise<Buffer> {
+  return slot(() => renderNow(input, t));
+}
+
+async function renderNow(input: Buffer, t: Transform): Promise<Buffer> {
+  // rect and sizes are in the upright image's pixels (EXIF orientation 5–8 swaps the sides).
+  const meta = await sharp(input, { failOn: "none" }).metadata();
+  const turned = (meta.orientation ?? 1) >= 5;
+  let width = (turned ? meta.height : meta.width) ?? 1;
+  let height = (turned ? meta.width : meta.height) ?? 1;
+  let img = sharp(input, { failOn: "none", sequentialRead: true }).autoOrient();
 
   if (t.rect) {
     const [x, y, w, h] = t.rect;
@@ -139,7 +164,7 @@ export async function render(input: Buffer, t: Transform): Promise<Buffer> {
     const top = Math.min(y, height - 1);
     const rw = Math.min(w, width - left);
     const rh = Math.min(h, height - top);
-    img = sharp(await img.extract({ left, top, width: rw, height: rh }).toBuffer());
+    img = img.extract({ left, top, width: rw, height: rh }); // before resize: cut from the original
     width = rw;
     height = rh;
   }
@@ -147,13 +172,13 @@ export async function render(input: Buffer, t: Transform): Promise<Buffer> {
   if (t.w || t.h) {
     if (t.fit === "crop" && t.w && t.h) {
       if (t.crop === "focalpoint" && t.fpX != null && t.fpY != null) {
-        // Scale to cover, then cut the box centred on the focal point.
+        // Scale to cover, then cut the box centred on the focal point (extract after resize).
         const scale = Math.max(t.w / width, t.h / height);
-        const sw = Math.round(width * scale);
-        const sh = Math.round(height * scale);
+        const sw = Math.max(t.w, Math.round(width * scale));
+        const sh = Math.max(t.h, Math.round(height * scale));
         const left = Math.min(Math.max(0, Math.round(t.fpX * sw - t.w / 2)), sw - t.w);
         const top = Math.min(Math.max(0, Math.round(t.fpY * sh - t.h / 2)), sh - t.h);
-        img = sharp(await img.resize(sw, sh).toBuffer()).extract({ left, top, width: t.w, height: t.h });
+        img = img.resize(sw, sh, { fit: "fill" }).extract({ left, top, width: t.w, height: t.h });
       } else {
         img = img.resize(t.w, t.h, { fit: "cover", position: gravity(t.crop) });
       }
@@ -171,7 +196,7 @@ export async function render(input: Buffer, t: Transform): Promise<Buffer> {
 
   switch (t.format) {
     case "webp":
-      return img.webp({ quality: t.q }).toBuffer();
+      return img.webp({ quality: t.q, effort: 4 }).toBuffer();
     case "avif":
       return img.avif({ quality: t.q }).toBuffer();
     case "png":

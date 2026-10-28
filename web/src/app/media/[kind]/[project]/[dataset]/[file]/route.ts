@@ -43,6 +43,18 @@ export async function GET(request: Request, { params }: { params: Promise<{ kind
   const { kind, file } = await params;
   const id = idFromFileName(kind, file);
   if (!id) return notFound();
+  const url = new URL(request.url);
+
+  // A derivative made before is sent straight from the cache: no database, no original.
+  const ext = id.slice(id.lastIndexOf("-") + 1).toLowerCase();
+  const originalFormat = FORMAT_OF[ext];
+  const t = kind === "images" && originalFormat ? parseTransform(url.searchParams, originalFormat) : null;
+  const cacheFile = t && !isIdentity(t, originalFormat!) ? path.join(/*turbopackIgnore: true*/ uploadDir(), "media-cache", id, `${transformKey(t)}.${t.format}`) : null;
+  if (t && cacheFile) {
+    const hit = await readFile(cacheFile).catch(() => null);
+    if (hit) return derivative(hit, t.format);
+  }
+
   const [row] = await db.select().from(schema.media).where(eq(schema.media.id, id));
   if (!row) return notFound();
 
@@ -52,7 +64,6 @@ export async function GET(request: Request, { params }: { params: Promise<{ kind
   } catch {
     return notFound();
   }
-  const url = new URL(request.url);
 
   if (row.kind === "file") {
     const dl = url.searchParams.get("dl");
@@ -67,33 +78,23 @@ export async function GET(request: Request, { params }: { params: Promise<{ kind
     });
   }
 
-  const ext = id.slice(id.lastIndexOf("-") + 1).toLowerCase();
-  const originalFormat = FORMAT_OF[ext];
-  const accept = request.headers.get("accept") ?? "";
-  const vary: Record<string, string> = url.searchParams.get("auto") === "format" ? { Vary: "Accept" } : {};
-  // Formats sharp doesn't write (gif, svg …) are only ever sent as they are.
-  if (!originalFormat) {
+  // Formats sharp doesn't write (gif, svg …) and untouched originals are sent as they are.
+  if (!t || !cacheFile) {
     return new Response(new Uint8Array(original), { headers: { "Content-Type": row.mime, "Cache-Control": IMMUTABLE } });
   }
 
-  const t = parseTransform(url.searchParams, originalFormat, accept);
-  if (isIdentity(t, originalFormat)) {
-    return new Response(new Uint8Array(original), { headers: { "Content-Type": row.mime, "Cache-Control": IMMUTABLE, ...vary } });
-  }
-
-  const cacheFile = path.join(/*turbopackIgnore: true*/ uploadDir(), "media-cache", id, `${transformKey(t)}.${t.format}`);
   let out: Buffer;
   try {
-    out = await readFile(cacheFile);
+    out = await render(original, t);
   } catch {
-    try {
-      out = await render(original, t);
-    } catch {
-      return notFound();
-    }
-    await writeAtomic(cacheFile, out).catch(() => {});
+    return notFound();
   }
-  return new Response(new Uint8Array(out), {
-    headers: { "Content-Type": formatMime(t.format), "Content-Length": String(out.byteLength), "Cache-Control": IMMUTABLE, ...vary },
+  await writeAtomic(cacheFile, out).catch(() => {});
+  return derivative(out, t.format);
+}
+
+function derivative(bytes: Buffer, format: Format) {
+  return new Response(new Uint8Array(bytes), {
+    headers: { "Content-Type": formatMime(format), "Content-Length": String(bytes.byteLength), "Cache-Control": IMMUTABLE },
   });
 }
