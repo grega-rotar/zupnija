@@ -10,11 +10,10 @@ type Props = { searchParams: Promise<{ stanje?: string | string[] }> };
 async function Result({ searchParams }: Props) {
   const { stanje } = await searchParams;
   if (stanje === "neveljavna")
-    return <NewsletterNotice title="Povezava ni" accent="veljavna." lede="Morda je zastarela ali ni cela. Če se želite odjaviti, nam pišite in vas bomo odjavili." />;
+    return <NewsletterNotice title="Povezava ni veljavna." lede="Morda je zastarela ali ni cela. Če se želite odjaviti, nam pišite in vas bomo odjavili." />;
   return (
     <NewsletterNotice
-      title="Odjavljeni"
-      accent="ste."
+      title="Odjavljeni ste."
       lede="Oznanil vam ne bomo več pošiljali. Če si premislite, se lahko kadar koli znova prijavite z obrazcem na dnu strani."
     />
   );

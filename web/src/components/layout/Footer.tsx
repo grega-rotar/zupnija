@@ -131,13 +131,11 @@ export function Footer({ settings }: { settings: SETTINGS_QUERY_RESULT | null })
           © {year} {name}
         </span>
         <ul className="flex flex-wrap gap-x-5 gap-y-1">
-          {settings?.privacyPage?.slug ? (
-            <li>
-              <Link href={routes.page(settings.privacyPage.slug)} className={link}>
-                {settings.privacyPage.title || "Zasebnost"}
-              </Link>
-            </li>
-          ) : null}
+          <li>
+            <Link href={routes.privacy} className={link}>
+              Zasebnost
+            </Link>
+          </li>
           {settings?.legalPage?.slug ? (
             <li>
               <Link href={routes.page(settings.legalPage.slug)} className={link}>

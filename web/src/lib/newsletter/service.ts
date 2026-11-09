@@ -1,13 +1,14 @@
 /**
- * Bulletins by e-mail (PRD US-005): double opt-in subscribe, confirm and
- * unsubscribe by the subscriber's token, queueing a published bulletin for
+ * Bulletins by e-mail (PRD US-005, ZUP-19): double opt-in subscribe, confirm
+ * by a single-use token valid 48 hours, unsubscribe by the subscriber's
+ * permanent token, the cleanup of unconfirmed addresses, queueing a published bulletin for
  * every active subscriber, and the numbers the editor's "Naročniki" tab shows.
  *
  * The confirmation goes out at once (sendMail). The bulletin goes only into
  * `outbox`; /api/cron/outbox sends it, throttled (lib/mail/outbox.ts).
  */
 import { randomBytes } from "node:crypto";
-import { and, count, desc, eq, isNotNull, sql } from "drizzle-orm";
+import { and, count, desc, eq, gte, isNotNull, isNull, lt, ne, or, sql } from "drizzle-orm";
 import { db, schema, type Tx } from "@/db";
 import { now } from "@/lib/clock";
 import { sendMail } from "@/lib/mail";
@@ -22,44 +23,78 @@ export const NEWSLETTER_KIND = "newsletter";
 
 export const confirmUrl = (token: string) => absoluteUrl(`/obvestila/potrdi?token=${encodeURIComponent(token)}`);
 export const unsubscribeUrl = (token: string) => absoluteUrl(`/obvestila/odjava?token=${encodeURIComponent(token)}`);
-/** "Hvala. Na vas@primer.si smo poslali povezavo za potrditev." The same whether or not the address was already subscribed. */
-export const thankYou = (email: string) => `Hvala. Na ${email} smo poslali povezavo za potrditev.`;
+/** The answer to every accepted signup (ZUP-19), whether or not the address is already subscribed or was just sent a mail. */
+export const THANK_YOU = "Na vaš elektronski naslov smo poslali sporočilo s povezavo za potrditev prijave.";
+
+/** A confirmation link is valid this long; an unconfirmed address is deleted after it (deleteUnconfirmed). */
+export const CONFIRM_VALID_MS = 48 * 60 * 60 * 1000;
+/** At most one confirmation mail per address in this time. */
+export const RESEND_AFTER_MS = 10 * 60 * 1000;
 
 const newToken = () => randomBytes(24).toString("base64url");
+const ago = (ms: number) => new Date(now().getTime() - ms);
 
 /**
- * Subscribe `email` (already validated). A new or unsubscribed address
- * becomes pending and gets the confirmation mail; a pending one gets it
- * again; an active one gets nothing, so the answer never reveals who is
- * subscribed.
+ * Subscribe `email` (already validated) by double opt-in (ZUP-19). A new or
+ * unsubscribed address becomes pending and gets a confirmation mail with a
+ * fresh single-use token; a pending one gets a new mail (and token) only if
+ * the last one is older than 10 minutes; an active one gets nothing. The
+ * caller says the same in every case, so nobody learns who is subscribed.
  */
 export async function subscribe(email: string): Promise<void> {
   const address = email.trim().toLowerCase();
+  const confirmToken = newToken();
+  const at = now();
   const [row] = await db.select().from(s).where(eq(s.email, address));
   if (row?.status === "active") return;
-  let token = row?.token;
   if (row) {
-    await db.update(s).set({ status: "pending", consentAt: now(), unsubscribedAt: null }).where(eq(s.id, row.id));
+    // Conditional, so two submits at once send one mail.
+    const [updated] = await db
+      .update(s)
+      .set({ status: "pending", confirmToken, confirmSentAt: at, consentAt: at, unsubscribedAt: null })
+      .where(and(eq(s.id, row.id), ne(s.status, "active"), or(isNull(s.confirmSentAt), lt(s.confirmSentAt, ago(RESEND_AFTER_MS)))))
+      .returning({ id: s.id });
+    if (!updated) return;
   } else {
-    token = newToken();
     // A double submit races here; the unique e-mail keeps one row.
-    const [created] = await db.insert(s).values({ email: address, token, consentAt: now() }).onConflictDoNothing().returning();
+    const [created] = await db
+      .insert(s)
+      .values({ email: address, token: newToken(), confirmToken, confirmSentAt: at, consentAt: at })
+      .onConflictDoNothing()
+      .returning();
     if (!created) return;
   }
-  const mail = confirmMail(confirmUrl(token!));
+  const mail = confirmMail(confirmUrl(confirmToken));
   await sendMail({ to: address, ...mail });
 }
 
-export type ConfirmResult = "confirmed" | "already" | "invalid";
+export type ConfirmResult = "confirmed" | "invalid";
 
-/** The link in the confirmation mail. An unsubscribed address must subscribe again. */
+/**
+ * The link in the confirmation mail: pending → active, once. The token is
+ * cleared on use, and a token older than 48 hours, a newer mail's
+ * replacement or an unsubscribed address's no longer works.
+ */
 export async function confirm(token: string | null | undefined): Promise<ConfirmResult> {
   if (!token) return "invalid";
-  const [row] = await db.select().from(s).where(eq(s.token, token));
-  if (!row || row.status === "unsubscribed") return "invalid";
-  if (row.status === "active") return "already";
-  await db.update(s).set({ status: "active", confirmedAt: now() }).where(eq(s.id, row.id));
-  return "confirmed";
+  const [row] = await db
+    .update(s)
+    .set({ status: "active", confirmedAt: now(), confirmToken: null })
+    .where(and(eq(s.confirmToken, token), eq(s.status, "pending"), gte(s.confirmSentAt, ago(CONFIRM_VALID_MS))))
+    .returning({ id: s.id });
+  return row ? "confirmed" : "invalid";
+}
+
+/**
+ * Deletes addresses still unconfirmed 48 hours after their last confirmation
+ * mail (ZUP-19). /api/cron/outbox runs it every 5 minutes. Returns how many.
+ */
+export async function deleteUnconfirmed(): Promise<number> {
+  const gone = await db
+    .delete(s)
+    .where(and(eq(s.status, "pending"), or(isNull(s.confirmSentAt), lt(s.confirmSentAt, ago(CONFIRM_VALID_MS)))))
+    .returning({ id: s.id });
+  return gone.length;
 }
 
 /** The link in every mail and the one-click POST. Queued mails to the address are dropped. */
@@ -68,7 +103,7 @@ export async function unsubscribe(token: string | null | undefined): Promise<"do
   const [row] = await db.select().from(s).where(eq(s.token, token));
   if (!row) return "invalid";
   if (row.status !== "unsubscribed") {
-    await db.update(s).set({ status: "unsubscribed", unsubscribedAt: now() }).where(eq(s.id, row.id));
+    await db.update(s).set({ status: "unsubscribed", unsubscribedAt: now(), confirmToken: null }).where(eq(s.id, row.id));
   }
   await db
     .update(o)

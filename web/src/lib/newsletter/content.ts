@@ -5,7 +5,7 @@
  */
 import { formatDayHeading, formatTime } from "@/lib/dates";
 
-export const CONFIRM_SUBJECT = "Potrdite prijavo na oznanila župnije Pirniče";
+export const CONFIRM_SUBJECT = "Potrdite prijavo na oznanila Župnije Pirniče";
 
 export type Mail = { subject: string; text: string; html: string };
 
@@ -32,24 +32,19 @@ const button = (href: string, label: string) =>
 const link = (href: string, label: string) => `<a href="${esc(href)}" style="color:${C.moss};font-weight:600">${esc(label)}</a>`;
 const h = (text: string) => `<h2 style="margin:28px 0 8px;font-size:17px;font-weight:700;letter-spacing:-0.02em;color:${C.ink}">${esc(text)}</h2>`;
 
+/** The confirmation mail's wording, verbatim from ZUP-19 (the link is the "Potrdi prijavo" button). */
+export const CONFIRM_GREETING = "Pozdravljeni!";
+export const CONFIRM_BODY = "Na spletni strani zupnija-pirnice.si ste se naročili na prejemanje mesečnih oznanil. S klikom na spodnjo povezavo potrdite svoj namen.";
+export const CONFIRM_BUTTON = "Potrdi prijavo";
+export const CONFIRM_IGNORE = "Če se niste naročili, sporočilo prezrite – brez potrditve vam oznanil ne bomo pošiljali.";
+
 export function confirmMail(confirmUrl: string): Mail {
-  const text = [
-    "Pozdravljeni,",
-    "",
-    "prejeli smo prijavo na oznanila župnije Pirniče po e-pošti. Prijavo potrdite s klikom na povezavo:",
-    "",
-    confirmUrl,
-    "",
-    "Če se niste prijavili vi, to sporočilo prezrite. Brez potrditve vam ne bomo pošiljali ničesar.",
-    "",
-    "Župnija Pirniče",
-  ].join("\n");
-  const body = `<p style="margin:0 0 6px;font-size:13px;font-weight:600;color:${C.gold}">Oznanila po e-pošti</p>
-<h1 style="margin:0 0 14px;font-size:24px;font-weight:700;letter-spacing:-0.03em">Potrdite prijavo</h1>
-<p style="margin:0 0 22px;color:${C.ink2}">Prejeli smo prijavo na oznanila župnije Pirniče po e-pošti. Enkrat na mesec, ko izidejo. Nič drugega.</p>
-<p style="margin:0 0 22px">${button(confirmUrl, "Potrdi prijavo")}</p>
-<p style="margin:0;font-size:14px;color:${C.ink3}">Ali odprite to povezavo: <a href="${esc(confirmUrl)}" style="color:${C.moss};word-break:break-all">${esc(confirmUrl)}</a></p>`;
-  return { subject: CONFIRM_SUBJECT, text, html: frame(CONFIRM_SUBJECT, body, "Če se niste prijavili vi, to sporočilo prezrite. Brez potrditve vam ne bomo pošiljali ničesar.") };
+  const text = [CONFIRM_GREETING, "", CONFIRM_BODY, "", `${CONFIRM_BUTTON}: ${confirmUrl}`, "", CONFIRM_IGNORE].join("\n");
+  const body = `<p style="margin:0 0 14px">${esc(CONFIRM_GREETING)}</p>
+<p style="margin:0 0 24px;color:${C.ink2}">${esc(CONFIRM_BODY)}</p>
+<p style="margin:0 0 24px">${button(confirmUrl, CONFIRM_BUTTON)}</p>
+<p style="margin:0;color:${C.ink2}">${esc(CONFIRM_IGNORE)}</p>`;
+  return { subject: CONFIRM_SUBJECT, text, html: frame(CONFIRM_SUBJECT, body, "") };
 }
 
 export type BulletinMailInput = {

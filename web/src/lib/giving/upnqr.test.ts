@@ -1,4 +1,6 @@
 import { describe, expect, it } from "vitest";
+import type { SETTINGS_QUERY_RESULT } from "@/sanity/types.generated";
+import { givingFrom } from "./donations";
 import { buildUpnQr, encodeIso88592, parseUpnQr, upnAmount, upnQrSymbol, upnText } from "./upnqr";
 
 /**
@@ -209,5 +211,41 @@ describe("UPN QR symbol", () => {
     const payload = buildUpnQr({ iban: "SI56 0202 1026 2993 393", name: long, address: long, city: long, purpose: long, amount: 999999999.99, reference: "SI12" + "1".repeat(30), deadline: "2027-07-01" });
     expect(encodeIso88592(payload).length).toBeLessThanOrEqual(411);
     expect(decode(payload).text).toBe(payload);
+  });
+});
+
+describe("the parish's UPN card (ZUP-17)", () => {
+  // Nastavitve → Darovi and the Kontakt address, as the site has them.
+  const settings = {
+    name: "Župnija Pirniče",
+    address: { street: "Zgornje Pirniče 74b", postalCode: "1215", city: "Medvode" },
+    donations: { iban: "SI56 0202 1026 2993 393", recipient: "Župnija Pirniče", purpose: "Dar za župnijo", bic: null, reference: null, intro: null },
+  } as unknown as SETTINGS_QUERY_RESULT;
+
+  it("prints ZUP-17's values, and the scanned QR carries exactly the printed ones", () => {
+    const g = givingFrom(settings, [], "2026-11-09")!;
+    expect(g.slip).toEqual({
+      code: "CHAR",
+      purpose: "Dar za župnijo",
+      iban: "SI56 0202 1026 2993 393",
+      reference: "SI99",
+      name: "Župnija Pirniče",
+      street: "Zgornje Pirniče 74b",
+      city: "1215 Medvode",
+    });
+    const scanned = parseUpnQr(decode(g.payload).text);
+    expect(scanned).toMatchObject({
+      code: g.slip.code,
+      purpose: g.slip.purpose,
+      iban: g.slip.iban.replace(/ /g, ""),
+      reference: g.slip.reference,
+      name: g.slip.name,
+      street: g.slip.street,
+      city: g.slip.city,
+      // The payer's side and the amount are left to the payer.
+      amount: "",
+      payerName: "",
+      payerIban: "",
+    });
   });
 });

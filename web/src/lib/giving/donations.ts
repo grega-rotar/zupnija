@@ -11,7 +11,7 @@ import type { SETTINGS_QUERY_RESULT } from "@/sanity/types.generated";
 import { contentStore } from "@/lib/content/read";
 import { today } from "@/lib/clock";
 import { getSettings } from "@/sanity/data";
-import { buildUpnQr } from "./upnqr";
+import { buildUpnQr, parseUpnQr } from "./upnqr";
 
 type Donations = NonNullable<NonNullable<SETTINGS_QUERY_RESULT>["donations"]>;
 
@@ -23,6 +23,22 @@ export type GivingPurpose = {
   purpose: string;
   until: string | null;
   payload: string;
+};
+
+/**
+ * What the UPN card prints (components/giving/UpnSlip.tsx), read back from the
+ * general QR payload, so the printed fields and the code cannot differ. The
+ * payer's side and the amount stay empty: the payer fills them in.
+ */
+export type UpnSlipFields = {
+  code: string;
+  purpose: string;
+  /** In groups of four, for reading; `Giving.iban` is the one to copy. */
+  iban: string;
+  reference: string;
+  name: string;
+  street: string;
+  city: string;
 };
 
 export type Giving = {
@@ -39,6 +55,8 @@ export type Giving = {
   city: string | null;
   /** The general QR: no amount, the settings' purpose. */
   payload: string;
+  /** The general QR's fields, for the UPN card. */
+  slip: UpnSlipFields;
   purposes: GivingPurpose[];
 };
 
@@ -48,6 +66,12 @@ const str = (v: unknown) => (typeof v === "string" && v.trim() ? v.trim() : null
 
 /** "SI56 0202 1026 2993 393" from any spacing. */
 export const groupIban = (iban: string) => iban.replace(/\s+/g, "").toUpperCase().replace(/(.{4})(?=.)/g, "$1 ");
+
+/** The payee's side of a payload, as the UPN card prints it. */
+export function slipOf(payload: string): UpnSlipFields {
+  const f = parseUpnQr(payload);
+  return { code: f.code, purpose: f.purpose, iban: groupIban(f.iban), reference: f.reference, name: f.name, street: f.street, city: f.city };
+}
 
 /** The page's data from settings and the purpose documents (in their editor order); null without a usable IBAN. */
 export function givingFrom(settings: SETTINGS_QUERY_RESULT | null, docs: PurposeDoc[], on: string): Giving | null {
@@ -87,6 +111,7 @@ export function givingFrom(settings: SETTINGS_QUERY_RESULT | null, docs: Purpose
     street: base.address,
     city: base.city,
     payload,
+    slip: slipOf(payload),
     purposes,
   };
 }

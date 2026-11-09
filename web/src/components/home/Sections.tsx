@@ -3,10 +3,9 @@ import type { CHURCHES_QUERY_RESULT, HOME_ARTICLES_QUERY_RESULT, SETTINGS_QUERY_
 import { dateOf, formatDayMonth } from "@/lib/dates";
 import { routes } from "@/lib/routes";
 import { cn } from "@/lib/utils";
-import { RichText } from "@/components/sanity/RichText";
 import { SanityImage, hasImage, ImagePlaceholder } from "@/components/sanity/SanityImage";
-import { NewsletterTile } from "@/components/newsletter/NewsletterTile";
-import { HomeGivingQr } from "@/components/giving/HomeGivingQr";
+import { UpnSlip } from "@/components/giving/UpnSlip";
+import { getGiving } from "@/lib/giving/donations";
 import { Arrow } from "./Arrow";
 import s from "./home.module.css";
 
@@ -92,49 +91,29 @@ export function Churches({ churches }: { churches: Church[] }) {
   );
 }
 
-/** "Podprite župnijo": the bank details from Sanity settings.donations; hidden without an IBAN. */
-export function Giving({ donations }: { donations: NonNullable<SETTINGS_QUERY_RESULT>["donations"] | null | undefined }) {
+/**
+ * "Podprite župnijo" (ZUP-17): one full-width card shaped as a filled-in UPN
+ * (components/giving/UpnSlip.tsx), then "Vse o darovih". Hidden without an
+ * IBAN. The newsletter signup is only in the footer.
+ */
+export async function Giving({ donations }: { donations: NonNullable<SETTINGS_QUERY_RESULT>["donations"] | null | undefined }) {
   if (!donations?.iban) return null;
-  const rows = [
-    { label: "Prejemnik", value: donations.recipient },
-    { label: "TRR (IBAN)", value: donations.iban },
-    { label: "BIC", value: donations.bic },
-    { label: "Sklic", value: donations.reference },
-    { label: "Namen", value: donations.purpose },
-  ].filter((r): r is { label: string; value: string } => Boolean(r.value));
+  const giving = await getGiving();
+  if (!giving) return null;
   return (
     <section className={cn(s.wrap, s.sec)} id="darovi" aria-labelledby="darovi-h">
       <div className={cn(s.open, s.reveal)} data-reveal>
-        <p className={s.eye}>Darovi</p>
         <h2 className={s.h2} id="darovi-h">
-          Podprite <em className="accent">župnijo</em>
+          Podprite župnijo
         </h2>
         <p className={s.subl}>Vaš dar pomaga pri skrbi za cerkve in življenje župnije.</p>
       </div>
-      <div className={s.give}>
-        <div className={cn(s.giveTile, s.reveal)} data-reveal>
-          <p className={s.kick}>Darovi</p>
-          <h3 className={s.gt}>
-            Dar z <em className="accent">nakazilom</em>
-          </h3>
-          {donations.intro?.length ? (
-            <RichText value={donations.intro} size="sm" className={s.gp} />
-          ) : (
-            <p className={s.gp}>Nakažete ga lahko v spletni ali mobilni banki.</p>
-          )}
-          <div className={s.trr}>
-            <dl>
-              {rows.map((r) => (
-                <div key={r.label}>
-                  <dt>{r.label}</dt>
-                  <dd>{r.value}</dd>
-                </div>
-              ))}
-            </dl>
-            <HomeGivingQr />
-          </div>
-        </div>
-        <NewsletterTile className={s.reveal} />
+      <div className={cn(s.give, s.reveal)} data-reveal>
+        <UpnSlip giving={giving} />
+        <Link href={routes.donate} className={s.giveMore}>
+          Vse o darovih
+          <span aria-hidden="true">→</span>
+        </Link>
       </div>
     </section>
   );
