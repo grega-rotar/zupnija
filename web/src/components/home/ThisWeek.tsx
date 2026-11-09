@@ -211,7 +211,9 @@ function WeekTile({ week }: { week: WeekAheadDay[] }) {
                         <s>{m.label}</s> odpade
                       </>
                     ) : (
-                      `${m.label} ${m.church}`
+                      <>
+                        {m.label} <span className={s.ch}>{m.church}</span>
+                      </>
                     )}
                   </span>
                 ))}

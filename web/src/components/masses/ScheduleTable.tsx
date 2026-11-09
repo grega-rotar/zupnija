@@ -59,12 +59,12 @@ export function ScheduleTable({ schedule, churchId, churchImages, showTitle = tr
                 {!compact ? (
                   <h4 id={`urnik-${schedule._id}-${church._id}`} className="text-h4">
                     <Link href={routes.church(church.slug)} className="hover:underline">
-                      {church.name}
+                      {church.shortName || church.name}
                     </Link>
                   </h4>
                 ) : (
                   <h4 id={`urnik-${schedule._id}-${church._id}`} className="sr-only">
-                    {church.name}
+                    {church.shortName || church.name}
                   </h4>
                 )}
                 <dl className={cn("divide-y divide-stone/70", !compact && "mt-4 border-t border-stone/70")}>
