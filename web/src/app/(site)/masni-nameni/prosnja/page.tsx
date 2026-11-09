@@ -23,19 +23,16 @@ export default async function IntentionRequestPage() {
   return (
     <FormPage
       title="Prošnja za mašni namen"
-      accent="mašni namen"
-      lede="Napišite, za koga naj se daruje maša. Župnik vas bo poklical ali vam pisal."
       crumbs={[{ label: "Mašni nameni", href: routes.intentions }, { label: "Prošnja" }]}
-      eyebrow="Prošnja"
       heading={
         <>
-          Za koga naj se <span className="accent">daruje</span>
+          Za koga naj se daruje
         </>
       }
       intro="Prošnja še ni potrjen namen. Župnik vas bo poklical ali vam pisal. Dar za mašo prinesete v župnišče."
       aside={
         <>
-          <AsideTile eyebrow="Dobro je vedeti" title="Kako poteka" warm>
+          <AsideTile title="Kako poteka" warm>
             <p>Župnik pogleda, kateri dnevi so še prosti, in se z vami dogovori za dan in uro.</p>
             <p>Namen je na strani Mašni nameni, ko je vpisan. Na spletu ne plačujete ničesar.</p>
           </AsideTile>

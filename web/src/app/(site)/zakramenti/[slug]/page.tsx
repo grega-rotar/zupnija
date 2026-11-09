@@ -9,7 +9,7 @@ import { SanityImage, hasImage } from "@/components/sanity/SanityImage";
 import { PersonCard } from "@/components/sections/PageSections";
 import { Faq } from "@/components/ui/Faq";
 import { Icon } from "@/components/ui/Icon";
-import { Breadcrumbs, Button, Container, JsonLdScript, PageHeader, Section, TextLink } from "@/components/ui/primitives";
+import { Button, Container, JsonLdScript, PageHeader, Section, TextLink } from "@/components/ui/primitives";
 import { enquiryKind } from "@/lib/sacraments/kinds";
 
 type Props = { params: Promise<{ slug: string }> };
@@ -47,9 +47,7 @@ export default async function SacramentPage({ params }: Props) {
   return (
     <>
       <PageHeader
-        title={s.title}
-        lede={s.summary}
-        eyebrow={<Breadcrumbs items={[{ label: "Zakramenti", href: routes.sacraments }, { label: s.title }]} />}
+        title={s.title} crumbs={[{ label: "Zakramenti", href: routes.sacraments }, { label: s.title }]}
       />
       <Section>
         <Container className="grid gap-12 lg:grid-cols-[minmax(0,7fr)_minmax(0,5fr)] lg:gap-16">
@@ -61,8 +59,8 @@ export default async function SacramentPage({ params }: Props) {
 
             {s.steps?.length ? (
               <section className="mt-12">
-                <h2 className="mb-6 text-[2rem] font-bold tracking-[-0.045em]">
-                  Kako <span className="accent">poteka</span>
+                <h2 className="mb-6 text-h3">
+                  Kako poteka
                 </h2>
                 <ol className="space-y-5">
                   {s.steps.map((step, i) => (
@@ -71,7 +69,7 @@ export default async function SacramentPage({ params }: Props) {
                         {i + 1}
                       </span>
                       <div className="pt-1">
-                        <h3 className="text-[1.25rem] font-bold tracking-[-0.03em] text-ink">
+                        <h3 className="text-ink text-h4">
                           <span className="sr-only">Korak {i + 1}: </span>
                           {step.title}
                         </h3>
@@ -85,8 +83,8 @@ export default async function SacramentPage({ params }: Props) {
 
             {faq.length ? (
               <section className="mt-12">
-                <h2 className="mb-6 text-[2rem] font-bold tracking-[-0.045em]">
-                  Pogosta <span className="accent">vprašanja</span>
+                <h2 className="mb-6 text-h3">
+                  Pogosta vprašanja
                 </h2>
                 <Faq items={faq} />
               </section>

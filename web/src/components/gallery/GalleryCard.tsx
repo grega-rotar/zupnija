@@ -31,7 +31,7 @@ export function GalleryCard({ gallery }: { gallery: Gallery }) {
           {formatDate(gallery.date)}
           {gallery.count ? ` · ${gallery.count} fotografij` : ""}
         </p>
-        <h3 className="mt-2 text-[1.375rem] font-bold leading-[1.15] tracking-[-0.035em] text-ink">{gallery.title}</h3>
+        <h3 className="mt-2 text-ink">{gallery.title}</h3>
       </div>
     </Link>
   );

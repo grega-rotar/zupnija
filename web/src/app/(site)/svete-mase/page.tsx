@@ -56,7 +56,7 @@ export default async function MassesPage() {
 
   return (
     <>
-      <PageHero settings={settings} header="massesHeader" title="Svete maše" accent="maše" lede="Današnje maše, redni urnik po cerkvah in posebni termini.">
+      <PageHero settings={settings} header="massesHeader" title="Svete maše">
         {period ? (
           <Notice className="mx-auto mt-8 text-left">
             <span className="font-semibold">{period.title}</span>
@@ -88,16 +88,10 @@ export default async function MassesPage() {
           <div className="grid gap-5 lg:grid-cols-[minmax(0,2fr)_minmax(0,1fr)]">
             <div className="space-y-5">
               <div className={cn(tile, "p-6 sm:p-8")}>
-                <p className="eyebrow">{pick?.isToday ? "Danes" : "Naslednje svete maše"}</p>
-                {pick ? (
-                  <h2 className="mt-2 text-[clamp(1.75rem,1.4rem+1.4vw,2.5rem)] font-bold leading-tight tracking-[-0.045em]">
-                    {formatDayHeading(pick.day.date, true)}
-                  </h2>
-                ) : (
-                  <h2 className="mt-2 text-[clamp(1.75rem,1.4rem+1.4vw,2.5rem)] font-bold leading-tight tracking-[-0.045em]">Naslednje svete maše</h2>
-                )}
+                <h2 className="text-h3">{pick?.isToday ? "Danes" : "Naslednje svete maše"}</h2>
+                {pick ? <p className="mt-1.5 text-body font-semibold text-ink">{formatDayHeading(pick.day.date, true)}</p> : null}
                 {pick && dayLines(pick.day).title ? <p className="mt-1.5 text-body text-ink-2">{dayLines(pick.day).title}</p> : null}
-                {pick && dayLines(pick.day).gospel ? <p className="mt-1 font-serif text-[1.125rem] italic text-ink-2">{dayLines(pick.day).gospel}</p> : null}
+                {pick && dayLines(pick.day).gospel ? <p className="mt-1 text-body text-ink-3">{dayLines(pick.day).gospel}</p> : null}
                 {pick ? (
                   <ul className="mt-5 divide-y divide-stone/70 border-t border-stone/70">
                     {pick.masses.map((m) => (
@@ -119,9 +113,8 @@ export default async function MassesPage() {
               </div>
 
               <div id="urnik" className={cn(tile, "scroll-mt-28 p-6 sm:p-8")}>
-                <p className="eyebrow">Tedenski urnik</p>
-                <h2 className="mt-2 text-[clamp(1.75rem,1.4rem+1.4vw,2.5rem)] font-bold leading-tight tracking-[-0.045em]">
-                  Redne <span className="accent">svete maše</span>
+                <h2 className="text-h3">
+                  Redne svete maše
                 </h2>
                 {regular.length || seasonal.length ? (
                   <div className="mt-6 space-y-10">
@@ -151,8 +144,7 @@ export default async function MassesPage() {
             </div>
 
             <aside id="posebne" className="scroll-mt-28 self-start rounded-lg bg-[linear-gradient(165deg,var(--color-gold-soft)_0%,#fff_72%)] p-6 shadow-soft sm:p-8">
-              <p className="eyebrow">Posebni termini</p>
-              <h2 className="mt-2 text-[1.75rem] font-bold leading-tight tracking-[-0.04em]">Posebne svete maše</h2>
+              <h2 className="text-h3">Posebne svete maše</h2>
               {specials.length ? (
                 <ul className="mt-6 space-y-3">
                   {specials.map(({ date, mass }) => (
@@ -173,15 +165,15 @@ export default async function MassesPage() {
       {churches.length ? (
         <Section id="cerkve" className="scroll-mt-24">
           <Container>
-            <SectionHeading eyebrow="Cerkve" title="Naše cerkve" accent="cerkve" lede="Urnik, naslov in dostop za vsako cerkev." action={{ label: "Vse cerkve", href: routes.churches }} />
+            <SectionHeading title="Naše cerkve" action={{ label: "Vse cerkve", href: routes.churches }} />
             <div className={cn("grid gap-5 sm:grid-cols-2", churches.length + (quote ? 1 : 0) > 3 ? "lg:grid-cols-4" : "lg:grid-cols-3")}>
               {churches.map((c) => (
                 <ChurchCard key={c._id} church={c} />
               ))}
               {quote ? (
                 <figure className={cn(tile, "flex flex-col items-center justify-center p-8 text-center")}>
-                  <blockquote className="font-serif text-[1.625rem] italic leading-snug text-ink">{quote.text}</blockquote>
-                  {quote.source ? <figcaption className="eyebrow mt-4">{quote.source}</figcaption> : null}
+                  <blockquote className="text-[1.375rem] font-medium leading-snug tracking-[-0.02em] text-ink">{quote.text}</blockquote>
+                  {quote.source ? <figcaption className="mt-4 text-meta font-semibold text-gold-ink">{quote.source}</figcaption> : null}
                 </figure>
               ) : null}
             </div>

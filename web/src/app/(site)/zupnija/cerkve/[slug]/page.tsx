@@ -5,16 +5,14 @@ import { getChurch, getChurchesBrief, getCurrentSchedules, getSettings } from "@
 import { getChurchMasses } from "@/lib/data/masses";
 import { absoluteUrl, breadcrumbJsonLd, buildMetadata, type JsonLd } from "@/lib/seo";
 import { routes } from "@/lib/routes";
-import { clean } from "@/lib/clean";
 import { cn } from "@/lib/utils";
-import { CHURCH_KIND_LABEL } from "@/lib/labels";
 import { urlFor } from "@/sanity/image";
 import { RichText } from "@/components/sanity/RichText";
 import { SanityImage, hasImage, ImagePlaceholder } from "@/components/sanity/SanityImage";
 import { PhotoGrid } from "@/components/gallery/PhotoGrid";
 import { ScheduleTable } from "@/components/masses/ScheduleTable";
 import { Icon, type IconName } from "@/components/ui/Icon";
-import { Breadcrumbs, Container, JsonLdScript, Section, SectionHeading, TextLink, headline, tile } from "@/components/ui/primitives";
+import { Breadcrumbs, Container, JsonLdScript, Section, SectionHeading, TextLink, tile } from "@/components/ui/primitives";
 import { DayLeaf, MassRow, dayLines } from "@/components/masses/MassList";
 
 type Props = { params: Promise<{ slug: string }> };
@@ -72,9 +70,7 @@ export default async function ChurchPage({ params }: Props) {
             className="mb-6 text-ink-3 [&_[aria-current]]:text-gold-ink"
             items={[{ label: "Domov", href: routes.home }, { label: "Cerkve", href: routes.churches }, { label: church.shortName }]}
           />
-          <p className="eyebrow">{CHURCH_KIND_LABEL[clean(church.kind)] ?? "Cerkev"}</p>
-          <h1 className={cn("mt-3 max-w-5xl", headline.display)}>{church.shortName || church.name}</h1>
-          {church.shortName && church.shortName !== church.name ? <p className="lede mx-auto mt-5 max-w-[40rem] text-balance">{church.name}</p> : null}
+          <h1 className="max-w-5xl">{church.shortName || church.name}</h1>
 
           {/* Church switcher */}
           <nav aria-label="Cerkve" className="mt-8 flex flex-wrap justify-center gap-2">
@@ -147,8 +143,7 @@ export default async function ChurchPage({ params }: Props) {
             </div>
 
             <aside className={cn(tile, "self-start p-6 sm:p-8")}>
-              <p className="eyebrow">Za obisk</p>
-              <h2 className="mt-2 text-[1.75rem] font-bold tracking-[-0.04em]">Informacije</h2>
+              <h2 className="text-h3">Informacije</h2>
               <dl className="mt-5 space-y-5">
                 {addressLine ? (
                   <Info icon="pin" label="Naslov">
@@ -195,9 +190,7 @@ export default async function ChurchPage({ params }: Props) {
         <Container>
           <SectionHeading
             id="mase-v-cerkvi"
-            eyebrow="Bogoslužje"
             title="Svete maše v tej cerkvi"
-            accent="v tej cerkvi"
             lede="Maše in nameni v naslednjih dveh tednih."
           />
           <div className={cn("grid gap-5", hasSchedule && "lg:grid-cols-[minmax(0,3fr)_minmax(0,2fr)]")}>
@@ -229,7 +222,7 @@ export default async function ChurchPage({ params }: Props) {
               <div className="space-y-5 self-start">
                 {regular.map((s) => (
                   <div key={s._id} className={cn(tile, "p-6 sm:p-8")}>
-                    <p className="eyebrow">Redni urnik</p>
+                    {regular.length > 1 ? null : <h3 className="mb-4">Redni urnik</h3>}
                     <ScheduleTable schedule={s} churchId={church._id} showTitle={regular.length > 1} compact />
                   </div>
                 ))}

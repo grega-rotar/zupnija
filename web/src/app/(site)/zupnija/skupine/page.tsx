@@ -5,7 +5,7 @@ import { routes } from "@/lib/routes";
 import { GroupRow } from "@/components/groups/GroupRow";
 import { GroupSearch } from "@/components/groups/GroupSearch";
 import { groupSearchText, queryParam } from "@/components/groups/groupSearch";
-import { Breadcrumbs, Container, EmptyState, PageHeader, Section } from "@/components/ui/primitives";
+import { Container, EmptyState, PageHeader, Section } from "@/components/ui/primitives";
 
 export async function generateMetadata(): Promise<Metadata> {
   const settings = await getSettings();
@@ -24,10 +24,7 @@ export default async function GroupsPage({ searchParams }: Props) {
   return (
     <>
       <PageHeader
-        title="Župnijske skupine"
-        accent="skupine"
-        lede="Župnija živi po ljudeh, ki se srečujejo, pojejo, molijo in pomagajo. Vsaka skupina vas rada sprejme."
-        eyebrow={<Breadcrumbs items={[{ label: "Župnija", href: routes.parish }, { label: "Skupine" }]} />}
+        title="Župnijske skupine" crumbs={[{ label: "Župnija", href: routes.parish }, { label: "Skupine" }]}
       />
       <Section>
         <Container>

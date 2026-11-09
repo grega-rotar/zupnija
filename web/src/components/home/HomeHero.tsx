@@ -7,8 +7,8 @@ import s from "./home.module.css";
 type Props = { home: HOME_PAGE_QUERY_RESULT; parishName: string; block: TodayBlock };
 
 /**
- * The photograph of the place in a rounded frame, the parish's name on it,
- * and the "Danes" widget docked over its lower edge.
+ * The photograph of the place in a rounded frame, only the parish's name on
+ * it (ZUP-10), and the "Danes" widget docked over its lower edge.
  */
 export function HomeHero({ home, parishName, block }: Props) {
   return (
@@ -21,11 +21,7 @@ export function HomeHero({ home, parishName, block }: Props) {
         ) : null}
         <div className={s.sh} aria-hidden="true" />
         <div className={s.copy}>
-          <h1 id="hero-title">
-            {home?.heroTitle || parishName}
-            <em className="accent">pod Šmarno goro</em>
-          </h1>
-          <p className={s.lede}>Marijina cerkev, Sv. Križ in Sv. Tomaž. Dobrodošli doma.</p>
+          <h1 id="hero-title">{home?.heroTitle || parishName}</h1>
         </div>
       </div>
       <div className={s.dock}>

@@ -35,7 +35,7 @@ export function Footer({ settings }: { settings: SETTINGS_QUERY_RESULT | null })
             <path d="M12 2.5v19M6 8h12" />
           </svg>
           {name}
-          <em className="accent ml-0.5 hidden text-[19px] text-ink-3 md:inline">pod Šmarno goro</em>
+          <span className="ml-0.5 hidden font-medium text-ink-3 md:inline">pod Šmarno goro</span>
         </Link>
         <Link
           href={`${routes.home}#darovi`}
@@ -47,7 +47,7 @@ export function Footer({ settings }: { settings: SETTINGS_QUERY_RESULT | null })
 
       <div className="grid grid-cols-2 gap-x-6 gap-y-7 py-8 md:grid-cols-4">
         <div>
-          <h2 className="mb-2 text-[13px] font-semibold tracking-[-0.005em] text-ink">{name}</h2>
+          <h2 className="mb-2 text-[0.875rem] tracking-[-0.01em] text-ink">{name}</h2>
           <address className="not-italic">
             {lines.map((l) => (
               <p key={l}>{l}</p>
@@ -56,7 +56,7 @@ export function Footer({ settings }: { settings: SETTINGS_QUERY_RESULT | null })
           </address>
         </div>
         <div>
-          <h2 className="mb-2 text-[13px] font-semibold tracking-[-0.005em] text-ink">Uradne ure</h2>
+          <h2 className="mb-2 text-[0.875rem] tracking-[-0.01em] text-ink">Uradne ure</h2>
           {settings?.officeHours?.length ? (
             <ul className="grid gap-1">
               {settings.officeHours.map((h) => (
@@ -78,7 +78,7 @@ export function Footer({ settings }: { settings: SETTINGS_QUERY_RESULT | null })
           )}
         </div>
         <div>
-          <h2 className="mb-2 text-[13px] font-semibold tracking-[-0.005em] text-ink">Kontakt</h2>
+          <h2 className="mb-2 text-[0.875rem] tracking-[-0.01em] text-ink">Kontakt</h2>
           <ul className="grid gap-1">
             {settings?.email ? (
               <li>
@@ -104,7 +104,7 @@ export function Footer({ settings }: { settings: SETTINGS_QUERY_RESULT | null })
           </ul>
         </div>
         <nav aria-label="Več">
-          <h2 className="mb-2 text-[13px] font-semibold tracking-[-0.005em] text-ink">Več</h2>
+          <h2 className="mb-2 text-[0.875rem] tracking-[-0.01em] text-ink">Več</h2>
           <ul className="grid gap-1">
             <li>
               <Link href={routes.readings} className={link}>
@@ -145,7 +145,7 @@ export function Footer({ settings }: { settings: SETTINGS_QUERY_RESULT | null })
               </Link>
             </li>
           ) : null}
-          <li>Marijina cerkev · Sv. Križ · Sv. Tomaž</li>
+          <li>Cerkev Marije Vnebovzete · Cerkev sv. Križa · Cerkev sv. Tomaža</li>
         </ul>
       </div>
     </footer>

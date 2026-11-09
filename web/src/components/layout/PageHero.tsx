@@ -1,8 +1,7 @@
 import type { ReactNode } from "react";
 import type { SETTINGS_QUERY_RESULT } from "@/sanity/types.generated";
-import { routes } from "@/lib/routes";
 import { SanityImage, hasImage } from "@/components/sanity/SanityImage";
-import { Breadcrumbs, PageHeader } from "@/components/ui/primitives";
+import { PageHeader } from "@/components/ui/primitives";
 
 type HeaderKey = "massesHeader" | "announcementsHeader" | "eventsHeader" | "parishHeader" | "catechesisHeader" | "contactHeader";
 
@@ -10,36 +9,25 @@ type Props = {
   settings: SETTINGS_QUERY_RESULT | null;
   header: HeaderKey;
   title: string;
-  /** The phrase of `title` set in the serif italic. */
-  accent?: string;
-  /** Fallback line when the editor has not written one. */
-  lede?: string | null;
   crumbs?: { label: string; href?: string }[];
+  /** Shown under the photo frame, never on it. */
   children?: ReactNode;
 };
 
 /**
- * Header for the main sections: the editor's photograph, short line and
- * quotation from »Nastavitve župnije → Glave strani«, in the rounded photo
- * frame of the homepage hero. Without a photo it quietly becomes the light,
- * centered header.
+ * Header for the main sections: the editor's photograph from »Nastavitve
+ * župnije → Glave strani« with only the breadcrumbs and the title on it
+ * (ZUP-14), in the rounded photo frame of the homepage hero. Without a
+ * photo it quietly becomes the light, centered header.
  */
-export function PageHero({ settings, header, title, accent, lede, crumbs, children }: Props) {
+export function PageHero({ settings, header, title, crumbs, children }: Props) {
   const h = settings?.[header];
   const image = hasImage(h?.image) ? (
     <SanityImage image={h.image} aspect={21 / 9} sizes="100vw" maxWidth={2400} priority quality={74} decorative fill />
   ) : null;
-  const trail = [{ label: "Domov", href: routes.home }, ...(crumbs ?? [{ label: title }])];
 
   return (
-    <PageHeader
-      title={title}
-      accent={accent}
-      lede={h?.tagline || lede}
-      image={image}
-      quote={h?.quote?.text ? { text: h.quote.text, source: h.quote.source } : null}
-      eyebrow={<Breadcrumbs items={trail} />}
-    >
+    <PageHeader title={title} crumbs={crumbs} image={image}>
       {children}
     </PageHeader>
   );

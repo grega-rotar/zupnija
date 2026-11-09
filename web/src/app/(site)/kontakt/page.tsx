@@ -37,14 +37,13 @@ export default async function ContactPage() {
 
   return (
     <>
-      <PageHero settings={settings} header="contactHeader" title="Stopimo v stik" accent="v stik" crumbs={[{ label: "Kontakt" }]} lede="Veseli bomo vašega sporočila." />
+      <PageHero settings={settings} header="contactHeader" title="Stopimo v stik" crumbs={[{ label: "Kontakt" }]} />
 
       <Section>
         <Container>
           <div className="grid gap-5 lg:grid-cols-[minmax(0,1fr)_minmax(0,1.6fr)_minmax(0,1fr)]">
             <div className="rounded-lg bg-surface p-6 shadow-soft sm:p-8">
-              <p className="eyebrow">Župnišče</p>
-              <h2 className="mt-1 text-[1.5rem] font-bold tracking-[-0.035em]">Kontaktni podatki</h2>
+              <h2 className="text-h3">Kontaktni podatki</h2>
               <ul className="mt-5 space-y-5">
                 {addressLine ? (
                   <Row icon="pin" label={settings?.name ?? "Župnišče"}>
@@ -120,9 +119,8 @@ export default async function ContactPage() {
             </div>
 
             <div className="rounded-lg bg-surface p-6 shadow-soft sm:p-8">
-              <p className="eyebrow">Obrazec</p>
-              <h2 className="mt-1 text-[1.5rem] font-bold tracking-[-0.035em]">
-                Pošljite nam <span className="accent">sporočilo</span>
+              <h2 className="text-h3">
+                Pošljite nam sporočilo
               </h2>
               <p className="mt-1.5 text-small text-ink-2">Za dogovore o zakramentih se raje oglasite osebno; za vprašanja in predloge je obrazec dovolj.</p>
               <div className="mt-5">
@@ -145,7 +143,7 @@ export default async function ContactPage() {
               ) : null}
               <div aria-hidden="true" className="absolute inset-0 -z-10 bg-[linear-gradient(180deg,rgb(14_10_6/0.05)_30%,rgb(14_10_6/0.75)_100%)]" />
               <figcaption className="absolute inset-x-0 bottom-0 p-6 sm:p-8">
-                <p className="font-serif text-[1.5rem] italic leading-snug">{home?.tile?.text ?? settings?.tagline ?? ""}</p>
+                <p className="text-[1.375rem] font-medium leading-snug tracking-[-0.02em]">{home?.tile?.text ?? settings?.tagline ?? ""}</p>
                 {home?.tile?.source ? <p className="mt-2 text-small font-semibold text-paper/85">{home.tile.source}</p> : null}
               </figcaption>
             </figure>
@@ -158,8 +156,7 @@ export default async function ContactPage() {
           <Container className="grid gap-5 lg:grid-cols-2">
             {churches.length ? (
               <div className="rounded-lg bg-surface p-6 shadow-soft sm:p-8">
-                <p className="eyebrow">Kje smo</p>
-                <h2 className="mt-1 text-[1.5rem] font-bold tracking-[-0.035em]">Cerkve</h2>
+                <h2 className="text-h3">Cerkve</h2>
                 <ul className="mt-4 divide-y divide-stone/70">
                   {churches.map((c) => {
                     const line = [c.address?.street, c.address?.city].filter(Boolean).join(", ");
@@ -170,7 +167,7 @@ export default async function ContactPage() {
                         ) : null}
                         <div className="min-w-0">
                           <Link href={routes.church(c.slug)} className="rounded-sm text-body font-semibold text-ink hover:text-gold-ink">
-                            {c.name}
+                            {c.shortName || c.name}
                           </Link>
                           {line ? <p className="text-small text-ink-2">{line}</p> : null}
                         </div>
@@ -182,8 +179,7 @@ export default async function ContactPage() {
             ) : null}
             {hasDonations ? (
               <div className="rounded-lg bg-[linear-gradient(165deg,var(--color-gold-soft)_0%,#fff_72%)] p-6 shadow-soft sm:p-8">
-                <p className="eyebrow">Podprite župnijo</p>
-                <h2 className="mt-1 text-[1.5rem] font-bold tracking-[-0.035em]">Darovi za župnijo</h2>
+                <h2 className="text-h3">Darovi za župnijo</h2>
                 <RichText value={donations?.intro} className="mt-3 text-ink-2" />
                 {giving ? (
                   <>

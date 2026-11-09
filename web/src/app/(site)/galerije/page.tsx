@@ -19,7 +19,7 @@ export default async function GalleriesPage() {
   const galleries = await getGalleries();
   return (
     <>
-      <PageHeader title="Galerije fotografij" accent="fotografij" lede="Fotografije s praznovanj, romanj in srečanj." eyebrow={<p className="eyebrow">Fotografije</p>} />
+      <PageHeader title="Galerije fotografij" />
       <Section>
         <Container>
           {galleries.length ? (

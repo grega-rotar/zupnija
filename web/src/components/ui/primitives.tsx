@@ -1,5 +1,6 @@
 import Link from "next/link";
 import type { ComponentProps, ReactNode } from "react";
+import { routes } from "@/lib/routes";
 import { cn } from "@/lib/utils";
 import { Icon, type IconName } from "./Icon";
 
@@ -42,7 +43,7 @@ export function Split({ title, titleId, titleClassName, className, children }: S
   return (
     <Container className={className}>
       {title ? (
-        <h2 id={titleId} className={cn("mx-auto mb-10 max-w-3xl text-center lg:mb-14", headline.h2, titleClassName)}>
+        <h2 id={titleId} className={cn("mx-auto mb-10 max-w-3xl text-center lg:mb-14", titleClassName)}>
           {title}
         </h2>
       ) : null}
@@ -94,34 +95,22 @@ export function Card({ padded = true, tone = "paper", className, children }: Car
 // ───────────────────────── Headings ─────────────────────────
 
 /**
- * A headline with its one Instrument Serif italic phrase: `phrase` is set in
- * `.accent` where it occurs in `text`. Without a match the text stays plain.
+ * Heading sizes as token classes. The sizes themselves live in globals.css
+ * (`--text-display` … `--text-h4`, ZUP-14); an h1–h4 already takes the size
+ * of its level, so these are only for a heading whose look differs from its
+ * level, e.g. a card title that is an h2 in the outline.
  */
-export function Accented({ text, phrase }: { text: string; phrase?: string | null }) {
-  const at = phrase ? text.lastIndexOf(phrase) : -1;
-  if (!phrase || at < 0) return <>{text}</>;
-  return (
-    <>
-      {text.slice(0, at)}
-      <span className="accent">{phrase}</span>
-      {text.slice(at + phrase.length)}
-    </>
-  );
-}
-
-/** Headline sizes of v4: `h2` is the prototype's section `.h2`, `display` the page title. */
 export const headline = {
-  display: "text-[clamp(2.75rem,1.4rem+5.4vw,5.5rem)] font-extrabold leading-[0.95] tracking-[-0.05em]",
-  h2: "text-[clamp(2.25rem,1.6rem+2.8vw,3.5rem)] font-bold leading-none tracking-[-0.045em]",
-  h3: "text-[1.5rem] font-bold leading-[1.15] tracking-[-0.035em]",
+  display: "text-display",
+  h1: "text-h1",
+  h2: "text-h2",
+  h3: "text-h3",
+  h4: "text-h4",
 };
 
 type SectionHeadingProps = {
   title: string;
-  /** The phrase of `title` set in the serif italic. */
-  accent?: string;
   id?: string;
-  eyebrow?: string;
   lede?: string;
   action?: { label: string; href: string };
   as?: "h1" | "h2" | "h3";
@@ -131,80 +120,65 @@ type SectionHeadingProps = {
 };
 
 /**
- * The v4 section opening: a small gold eyebrow, the headline with one
- * serif italic phrase, a calm subline and an optional "see all" link,
- * centered, 56px above the content (40px on phones).
+ * The v4 section opening: the headline, a calm subline and an optional
+ * "see all" link, centered, 56px above the content (40px on phones).
+ * No label above the headline (ZUP-14).
  */
-export function SectionHeading({ title, accent, id, eyebrow, lede, action, as: Tag = "h2", align = "center", className }: SectionHeadingProps) {
+export function SectionHeading({ title, id, lede, action, as: Tag = "h2", align = "center", className }: SectionHeadingProps) {
   const center = align === "center";
   return (
     <div className={cn("mb-10 flex flex-col lg:mb-14", center ? "mx-auto max-w-3xl items-center text-center" : "items-start", className)}>
-      {eyebrow ? <p className="eyebrow mb-3.5">{eyebrow}</p> : null}
-      <Tag id={id} className={cn(Tag === "h3" ? headline.h3 : headline.h2)}>
-        <Accented text={title} phrase={accent} />
-      </Tag>
+      <Tag id={id}>{title}</Tag>
       {lede ? <p className={cn("lede mt-4 max-w-[40rem] text-balance lg:mt-5", center && "mx-auto")}>{lede}</p> : null}
       {action ? <TextLink href={action.href} className="mt-3 lg:mt-4">{action.label}</TextLink> : null}
     </div>
   );
 }
 
+type Crumb = { label: string; href?: string };
+
 type PageHeaderProps = {
   title: string;
-  /** The phrase of `title` set in the serif italic. */
-  accent?: string | null;
-  lede?: string | null;
-  eyebrow?: ReactNode;
+  /** The trail after »Domov«; without it the page title alone. */
+  crumbs?: Crumb[];
+  /** Controls or facts that belong under the title (a search box, a date); never a subline. */
   children?: ReactNode;
   className?: string;
   /** Photograph behind the title (title turns white; a warm shade keeps it readable). */
   image?: ReactNode;
-  /** Short quotation shown under the lede on photo headers. */
-  quote?: { text: string; source?: string | null } | null;
 };
 
 /**
- * Page title area used by every inner page, as a centered v4 opening:
- * breadcrumbs, the big Inter title with its serif italic phrase, the
- * subline. Pass `image` (a `<SanityImage fill />`) for the photographic
- * variant: the photo, desaturated, in a 40px rounded frame like the hero.
+ * Page title area used by every inner page: only the breadcrumbs and the
+ * h1 (ZUP-14), centered. Pass `image` (a `<SanityImage fill />`) for the
+ * photographic variant: the photo, desaturated, in a 40px rounded frame
+ * like the hero; `children` then follow under the frame, never on it.
  */
-export function PageHeader({ title, accent, lede, eyebrow, children, className, image, quote }: PageHeaderProps) {
+export function PageHeader({ title, crumbs, children, className, image }: PageHeaderProps) {
+  const trail = <Breadcrumbs items={[{ label: "Domov", href: routes.home }, ...(crumbs ?? [{ label: title }])]} />;
   if (image) {
     return (
-      <header className={cn("px-3 pt-3", className)}>
-        <div className="relative isolate flex min-h-[30rem] flex-col items-center justify-end overflow-hidden rounded-[2rem] px-6 pb-12 pt-28 text-center text-paper sm:min-h-[34rem] sm:rounded-xl sm:pb-16 lg:min-h-[38rem]">
-          <div className="absolute inset-0 -z-20 [&_img]:[filter:saturate(.5)_sepia(.2)_brightness(.98)]">{image}</div>
-          <div
-            aria-hidden="true"
-            className="absolute inset-0 -z-10 bg-[linear-gradient(180deg,rgb(18_13_8/0.5)_0%,rgb(18_13_8/0.22)_38%,rgb(18_13_8/0.3)_62%,rgb(18_13_8/0.7)_100%)]"
-          />
-          {eyebrow ? (
-            <div className="mb-5 flex justify-center text-[0.8125rem] font-medium text-paper/80 [&_a:hover]:text-paper [&_[aria-current]]:text-paper">{eyebrow}</div>
-          ) : null}
-          <h1 className={cn("max-w-5xl text-paper", headline.display)}>
-            <Accented text={title} phrase={accent} />
-          </h1>
-          {lede ? <p className="mx-auto mt-5 max-w-[40rem] text-balance text-[clamp(1.125rem,1rem+0.5vw,1.3125rem)] leading-snug text-paper/90">{lede}</p> : null}
-          {quote?.text ? (
-            <blockquote className="mx-auto mt-6 max-w-md text-paper/85">
-              <p className="font-serif text-[1.25rem] italic leading-snug">{quote.text}</p>
-              {quote.source ? <cite className="mt-1 block text-[0.8125rem] not-italic text-paper/70">{quote.source}</cite> : null}
-            </blockquote>
-          ) : null}
-          {children}
-        </div>
-      </header>
+      <>
+        <header className={cn("px-3 pt-3", className)}>
+          <div className="relative isolate flex min-h-[26rem] flex-col items-center justify-end overflow-hidden rounded-[2rem] px-6 pb-12 pt-28 text-center text-paper sm:min-h-[30rem] sm:rounded-xl sm:pb-16 lg:min-h-[34rem]">
+            <div className="absolute inset-0 -z-20 [&_img]:[filter:saturate(.5)_sepia(.2)_brightness(.98)]">{image}</div>
+            <div
+              aria-hidden="true"
+              className="absolute inset-0 -z-10 bg-[linear-gradient(180deg,rgb(18_13_8/0.5)_0%,rgb(18_13_8/0.22)_38%,rgb(18_13_8/0.3)_62%,rgb(18_13_8/0.7)_100%)]"
+            />
+            <div className="mb-5 flex justify-center text-[0.8125rem] font-medium text-paper/80 [&_a:hover]:text-paper [&_[aria-current]]:text-paper">{trail}</div>
+            <h1 className="max-w-5xl text-paper">{title}</h1>
+          </div>
+        </header>
+        {children ? <Container className="flex flex-col items-center pt-8 text-center sm:pt-10 [&>:first-child]:mt-0">{children}</Container> : null}
+      </>
     );
   }
   return (
     <header className={cn("pb-2 pt-10 sm:pt-14 lg:pt-20", className)}>
       <Container className="flex flex-col items-center text-center">
-        {eyebrow ? <div className="mb-6 flex justify-center text-[0.8125rem] font-medium text-ink-3 [&_[aria-current]]:text-gold-ink">{eyebrow}</div> : null}
-        <h1 className={cn("max-w-5xl", headline.display)}>
-          <Accented text={title} phrase={accent} />
-        </h1>
-        {lede ? <p className="lede mx-auto mt-5 max-w-[40rem] text-balance lg:mt-6">{lede}</p> : null}
+        <div className="mb-6 flex justify-center text-[0.8125rem] font-medium text-ink-3 [&_[aria-current]]:text-gold-ink">{trail}</div>
+        <h1 className="max-w-5xl">{title}</h1>
         {children}
       </Container>
     </header>

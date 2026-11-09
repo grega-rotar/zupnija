@@ -21,7 +21,7 @@ export function GroupRow({ group }: { group: Group }) {
           <SanityImage image={group.image} aspect={1} sizes="5rem" maxWidth={220} decorative className="overflow-hidden rounded-md" imgClassName="saturate-[.7]" />
         ) : null}
         <div className="min-w-0">
-          <h3 className="text-[1.25rem] font-bold leading-snug tracking-[-0.03em] text-ink">{group.title}</h3>
+          <h3 className="text-ink text-h4">{group.title}</h3>
           {group.summary ? <p className="mt-1 text-small text-ink-2">{group.summary}</p> : null}
           {meta ? <p className="mt-1.5 text-meta font-medium text-ink-3">{meta}</p> : null}
         </div>

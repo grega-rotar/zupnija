@@ -27,20 +27,17 @@ export default async function SacramentEnquiryPage({ searchParams }: Props) {
   return (
     <FormPage
       title="Povpraševanje o zakramentih"
-      accent="zakramentih"
-      lede="Pripravljate krst, poroko ali kaj drugega? Pišite nam, oglasili se vam bomo."
       crumbs={[{ label: "Zakramenti", href: routes.sacraments }, { label: "Povpraševanje" }]}
-      eyebrow="Povpraševanje"
       heading={
         <>
-          Kako vam lahko <span className="accent">pomagamo</span>
+          Kako vam lahko pomagamo
         </>
       }
       intro="Odgovorimo po telefonu ali e-pošti, običajno v nekaj dneh."
       aside={
         <>
           {emergency ? (
-            <AsideTile eyebrow="Nujno" title={emergency.label} warm>
+            <AsideTile title={emergency.label} warm>
               <p>
                 Ko gre za bolnika ali pogreb, ne čakajte na odgovor. Pokličite:{" "}
                 <a href={telHref(emergency.phone)} className="whitespace-nowrap font-semibold text-gold-ink hover:underline">

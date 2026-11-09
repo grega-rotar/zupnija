@@ -9,7 +9,7 @@ import { SanityImage, hasImage } from "@/components/sanity/SanityImage";
 import { PhotoGrid } from "@/components/gallery/PhotoGrid";
 import { EventList } from "@/components/events/EventCard";
 import { PersonCard } from "@/components/sections/PageSections";
-import { Breadcrumbs, Container, JsonLdScript, MetaRow, PageHeader, Section, SectionHeading, TextLink } from "@/components/ui/primitives";
+import { Container, JsonLdScript, MetaRow, PageHeader, Section, SectionHeading, TextLink } from "@/components/ui/primitives";
 
 type Props = { params: Promise<{ slug: string }> };
 
@@ -32,9 +32,7 @@ export default async function GroupPage({ params }: Props) {
   return (
     <>
       <PageHeader
-        title={group.title}
-        lede={group.summary}
-        eyebrow={<Breadcrumbs items={[{ label: "Župnija", href: routes.parish }, { label: "Skupine", href: routes.groups }, { label: group.title }]} />}
+        title={group.title} crumbs={[{ label: "Župnija", href: routes.parish }, { label: "Skupine", href: routes.groups }, { label: group.title }]}
       />
       <Section>
         <Container className="grid gap-12 lg:grid-cols-[minmax(0,7fr)_minmax(0,5fr)] lg:gap-16">
@@ -45,7 +43,7 @@ export default async function GroupPage({ params }: Props) {
             <RichText value={group.description} size="lg" />
             {group.events?.length ? (
               <section className="mt-12">
-                <h2 className="eyebrow mb-3">Prihajajoči dogodki skupine</h2>
+                <h2 className="mb-4 text-h3">Prihajajoči dogodki skupine</h2>
                 <EventList events={group.events} />
               </section>
             ) : null}
@@ -95,7 +93,7 @@ export default async function GroupPage({ params }: Props) {
       {group.gallery?.length ? (
         <Section>
           <Container>
-            <SectionHeading eyebrow="Fotografije" title="Utrinki skupine" accent="skupine" />
+            <SectionHeading title="Utrinki skupine" />
             <PhotoGrid images={group.gallery} title={group.title} />
           </Container>
         </Section>

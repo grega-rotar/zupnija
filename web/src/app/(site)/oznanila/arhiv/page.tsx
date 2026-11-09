@@ -3,7 +3,7 @@ import { getArchivedAnnouncements, getSettings } from "@/sanity/data";
 import { buildMetadata } from "@/lib/seo";
 import { routes } from "@/lib/routes";
 import { AnnouncementList } from "@/components/announcements/AnnouncementCard";
-import { Breadcrumbs, Container, PageHeader, Section } from "@/components/ui/primitives";
+import { Container, PageHeader, Section } from "@/components/ui/primitives";
 
 export async function generateMetadata(): Promise<Metadata> {
   const settings = await getSettings();
@@ -15,10 +15,7 @@ export default async function AnnouncementsArchivePage() {
   return (
     <>
       <PageHeader
-        title="Arhiv oznanil"
-        accent="oznanil"
-        lede="Oznanila, ki niso več aktualna."
-        eyebrow={<Breadcrumbs items={[{ label: "Oznanila", href: routes.announcements }, { label: "Arhiv" }]} />}
+        title="Arhiv oznanil" crumbs={[{ label: "Oznanila", href: routes.announcements }, { label: "Arhiv" }]}
       />
       <Section>
         <Container>

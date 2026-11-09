@@ -1,18 +1,16 @@
-import { Button, Container, Section, headline } from "@/components/ui/primitives";
+import { Button, Container, Section } from "@/components/ui/primitives";
 import { routes } from "@/lib/routes";
-import { cn } from "@/lib/utils";
 
 /**
  * The confirm and unsubscribe pages' message (/obvestila/potrdi, /obvestila/odjava),
- * centered like the site's 404: eyebrow, a headline with one serif phrase, a lede.
+ * centered like the site's 404: the headline and a lede.
  */
 export function NewsletterNotice({ title, accent, lede }: { title: string; accent: string; lede: string }) {
   return (
     <Section>
       <Container width="prose" className="flex flex-col items-center py-10 text-center lg:py-16">
-        <p className="eyebrow">Oznanila po e-pošti</p>
-        <h1 className={cn("mt-3 text-balance", headline.h2)}>
-          {title} <span className="accent">{accent}</span>
+        <h1 className="text-balance">
+          {title} {accent}
         </h1>
         <p className="lede mt-5 text-balance">{lede}</p>
         <div className="mt-9 flex flex-wrap justify-center gap-3">

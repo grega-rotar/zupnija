@@ -6,7 +6,7 @@ import { formatDate } from "@/lib/dates";
 import { clean } from "@/lib/clean";
 import { DOCUMENT_CATEGORY_LABEL } from "@/lib/labels";
 import { AttachmentLink } from "@/components/sanity/RichText";
-import { Breadcrumbs, Container, EmptyState, PageHeader, Section, tile } from "@/components/ui/primitives";
+import { Container, EmptyState, PageHeader, Section, tile } from "@/components/ui/primitives";
 import { cn } from "@/lib/utils";
 
 export async function generateMetadata(): Promise<Metadata> {
@@ -33,17 +33,14 @@ export default async function DocumentsPage() {
   return (
     <>
       <PageHeader
-        title="Dokumenti za prenos"
-        accent="za prenos"
-        lede="Obrazci, prijavnice in informacije za prenos."
-        eyebrow={<Breadcrumbs items={[{ label: "Župnija", href: routes.parish }, { label: "Dokumenti" }]} />}
+        title="Dokumenti za prenos" crumbs={[{ label: "Župnija", href: routes.parish }, { label: "Dokumenti" }]}
       />
       <Section>
         {ordered.length ? (
           <Container width="prose" className="space-y-5">
             {ordered.map((cat) => (
               <section key={cat} aria-labelledby={`dok-${cat}`} className={cn(tile, "p-6 sm:p-8")}>
-                <h2 id={`dok-${cat}`} className="mb-4 text-[1.375rem] font-bold tracking-[-0.035em]">
+                <h2 id={`dok-${cat}`} className="mb-4 text-h3">
                   {DOCUMENT_CATEGORY_LABEL[cat] ?? cat}
                 </h2>
                 <ul className="space-y-2">

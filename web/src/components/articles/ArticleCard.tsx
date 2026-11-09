@@ -32,7 +32,7 @@ export function ArticleCard({ article, priority }: { article: ArticleData; prior
         <time dateTime={article.publishedAt} className="text-[0.8125rem] font-semibold text-ink-3">
           {formatDate(dateOf(article.publishedAt))}
         </time>
-        <h3 className="mt-2 text-[1.5rem] font-bold leading-[1.15] tracking-[-0.035em] text-ink">{article.title}</h3>
+        <h3 className="mt-2 text-ink">{article.title}</h3>
         {article.excerpt ? <p className="mt-2 line-clamp-3 text-small text-ink-2">{article.excerpt}</p> : null}
         <span className="mt-auto inline-flex items-center gap-1.5 pt-5 text-[0.9375rem] font-semibold text-gold-ink">
           Preberi <Icon name="arrow-right" size={14} className="transition-transform duration-200 group-hover:translate-x-[3px] motion-reduce:transform-none" />

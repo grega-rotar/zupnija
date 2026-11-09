@@ -21,7 +21,7 @@ export default async function EventsPage() {
   const [settings, events] = await Promise.all([getSettings(), getUpcomingEvents()]);
   return (
     <>
-      <PageHero settings={settings} header="eventsHeader" title="Kaj se pripravlja" accent="pripravlja" crumbs={[{ label: "Dogodki" }]} lede="Kaj se pripravlja v župniji v prihodnjih tednih." />
+      <PageHero settings={settings} header="eventsHeader" title="Kaj se pripravlja" crumbs={[{ label: "Dogodki" }]} />
       <Section>
         <Container>
           <EventList events={events} />

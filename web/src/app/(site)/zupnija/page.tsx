@@ -35,16 +35,14 @@ export default async function ParishPage() {
 
   return (
     <>
-      <PageHero settings={settings} header="parishHeader" title={page?.title || "O župniji"} accent="župniji" lede={page?.intro || settings?.tagline}>
-        {settings?.diocese ? <p className="mt-4 text-small font-medium opacity-80">{settings.diocese}</p> : null}
-      </PageHero>
+      <PageHero settings={settings} header="parishHeader" title={page?.title || "O župniji"} />
 
       <PageSections sections={page?.sections} />
 
       {churches.length ? (
         <Section>
           <Container>
-            <SectionHeading eyebrow="Cerkve" title="Naše cerkve" accent="cerkve" lede="Tri cerkve pod Šmarno goro." action={{ label: "Vse o cerkvah", href: routes.churches }} />
+            <SectionHeading title="Naše cerkve" action={{ label: "Vse o cerkvah", href: routes.churches }} />
             <div className="grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
               {churches.map((c) => (
                 <ChurchCard key={c._id} church={c} />
@@ -57,7 +55,7 @@ export default async function ParishPage() {
       {clergy.length ? (
         <Section>
           <Container>
-            <SectionHeading eyebrow="Duhovniki" title="Kdo skrbi za župnijo" accent="za župnijo" action={{ label: "Vsi sodelavci", href: routes.people }} />
+            <SectionHeading title="Kdo skrbi za župnijo" action={{ label: "Vsi sodelavci", href: routes.people }} />
             <div className={clergy.length > 1 ? "grid gap-5 md:grid-cols-2" : "mx-auto max-w-xl"}>
               {clergy.map((p) => (
                 <PersonCard key={p._id} person={p} card />
@@ -70,7 +68,7 @@ export default async function ParishPage() {
       {groups.length ? (
         <Section>
           <Container>
-            <SectionHeading eyebrow="Skupine" title="Župnija živi po ljudeh" accent="po ljudeh" action={{ label: "Vse skupine", href: routes.groups }} />
+            <SectionHeading title="Župnija živi po ljudeh" action={{ label: "Vse skupine", href: routes.groups }} />
             <ul className="grid gap-5 md:grid-cols-2">
               {groups.slice(0, 6).map((g) => (
                 <GroupRow key={g._id} group={g} />

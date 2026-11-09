@@ -29,7 +29,7 @@ export function DayTitle({ day, tone = "paper", className }: { day: Pick<MassDay
     <div className={cn("mt-1 text-small", dark ? "text-paper/70" : "text-ink-2", className)}>
       {title ? <p>{title}</p> : null}
       {sunday ? <p className={dark ? "text-paper/60" : "text-ink-3"}>{sunday}</p> : null}
-      {gospel ? <p className={cn("font-serif italic", dark ? "text-paper/60" : "text-ink-3")}>{gospel}</p> : null}
+      {gospel ? <p className={cn(dark ? "text-paper/60" : "text-ink-3")}>{gospel}</p> : null}
     </div>
   );
 }
@@ -200,7 +200,7 @@ export function DayCard({ day, masses, today, showIntentions, size = "md", tone 
       <div className={cn("flex items-center gap-4 border-b pb-5", dark ? "border-paper/15" : "border-stone/70")}>
         <DayLeaf date={day.date} tone={tone} size={size} />
         <div className="min-w-0">
-          <Heading id={`dan-${day.date}`} className={cn("font-bold leading-tight", size === "lg" ? "text-[2rem] tracking-[-0.045em]" : "text-[1.375rem] tracking-[-0.035em]", dark ? "text-paper" : "text-ink")}>
+          <Heading id={`dan-${day.date}`} className={cn(size === "lg" ? "text-h3" : "text-h4", dark ? "text-paper" : "text-ink")}>
             {heading}
           </Heading>
           <DayTitle day={day} tone={tone} />
@@ -256,7 +256,7 @@ export function WeekGrid({ days, today, time, tone = "paper" }: { days: MassDay[
                 <li className={cn("text-body", dark ? "text-paper/40" : "text-ink-3")}>—</li>
               )}
               {dayLines(day).title ? <li className={cn("text-meta", dark ? "text-paper/50" : "text-ink-3")}>{dayLines(day).title}</li> : null}
-              {dayLines(day).gospel ? <li className={cn("font-serif text-meta italic", dark ? "text-paper/50" : "text-ink-3")}>{dayLines(day).gospel}</li> : null}
+              {dayLines(day).gospel ? <li className={cn("text-meta", dark ? "text-paper/50" : "text-ink-3")}>{dayLines(day).gospel}</li> : null}
             </ul>
           </li>
         );

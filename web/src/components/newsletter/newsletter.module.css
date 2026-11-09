@@ -7,18 +7,10 @@
   display: flex;
   flex-direction: column;
 }
-.kick {
-  font-size: 13px;
-  font-weight: 600;
-  letter-spacing: -0.005em;
-  color: var(--color-gold-ink);
-}
 .tile .gt {
-  font-size: 32px;
-  font-weight: 700;
-  letter-spacing: -0.04em;
-  line-height: 1.08;
-  margin-top: 10px;
+  font-size: var(--text-h3);
+  letter-spacing: var(--text-h3--letter-spacing);
+  line-height: var(--text-h3--line-height);
   text-wrap: balance;
 }
 .tile .gp {
@@ -123,9 +115,6 @@
 @media (max-width: 620px) {
   .tile {
     padding: 28px;
-  }
-  .tile .gt {
-    font-size: 28px;
   }
   .form .label,
   .form .msg {

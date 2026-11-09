@@ -3,8 +3,6 @@ import Link from "next/link";
 import { getSacraments, getSettings } from "@/sanity/data";
 import { buildMetadata } from "@/lib/seo";
 import { routes } from "@/lib/routes";
-import { clean } from "@/lib/clean";
-import { SACRAMENT_KIND_LABEL } from "@/lib/labels";
 import { SanityImage, hasImage } from "@/components/sanity/SanityImage";
 import { Container, EmptyState, PageHeader, Section, TextLink, tile, tileHover } from "@/components/ui/primitives";
 import { cn } from "@/lib/utils";
@@ -23,7 +21,7 @@ export default async function SacramentsPage() {
   const sacraments = await getSacraments();
   return (
     <>
-      <PageHeader title="Sveti zakramenti" accent="zakramenti" eyebrow={<p className="eyebrow">Krst, poroka, pogreb</p>} lede="Kako se dogovoriti za krst, poroko, pogreb in druge zakramente, kaj prinesti in na koga se obrniti." />
+      <PageHeader title="Sveti zakramenti" />
       <Section>
         <Container>
           {sacraments.length ? (
@@ -39,8 +37,7 @@ export default async function SacramentsPage() {
                       </div>
                     )}
                     <div className="min-w-0">
-                      <p className="eyebrow">{SACRAMENT_KIND_LABEL[clean(s.kind)] ?? "Zakrament"}</p>
-                      <h2 className="mt-1 text-[1.375rem] font-bold leading-snug tracking-[-0.035em] text-ink">{s.title}</h2>
+                      <h2 className="text-h3">{s.title}</h2>
                       {s.summary ? <p className="mt-1 text-small text-ink-2">{s.summary}</p> : null}
                     </div>
                   </Link>

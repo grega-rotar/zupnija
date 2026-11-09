@@ -50,7 +50,8 @@ export default async function ReadingsPage({ searchParams }: Props) {
 
   return (
     <>
-      <PageHeader title="Berila dneva" accent="dneva" lede={`${near ? `${relativeDayLabel(date, t)} · ` : ""}${formatDayHeading(date, true)}`}>
+      <PageHeader title="Berila dneva">
+        <p className="mt-5 text-small font-medium text-ink-3">{`${near ? `${relativeDayLabel(date, t)} · ` : ""}${formatDayHeading(date, true)}`}</p>
         <nav aria-label="Izbira dneva" className="mt-8 flex flex-wrap items-center justify-center gap-3">
           <Link href={routes.readingsOn(addDays(date, -1))} className={navButton}>
             <Icon name="arrow-left" size={16} />
@@ -70,7 +71,7 @@ export default async function ReadingsPage({ searchParams }: Props) {
 
       <Section>
         <Container width="prose" className="grid gap-5">
-          <DayTile date={date} liturgy={liturgy} readings={readings} />
+          <DayTile liturgy={liturgy} readings={readings} />
           {readings.available ? (
             readings.readings.map((r) => <ReadingTile key={r.label} reading={r} />)
           ) : (
@@ -89,7 +90,7 @@ export default async function ReadingsPage({ searchParams }: Props) {
 }
 
 /** The liturgical day: rank, title, Sunday name and the Gospel line. */
-function DayTile({ date, liturgy, readings }: { date: IsoDate; liturgy: LiturgicalDay | null; readings: Readings }) {
+function DayTile({ liturgy, readings }: { liturgy: LiturgicalDay | null; readings: Readings }) {
   const title = liturgy?.title ?? (readings.available ? readings.title : null);
   const rank = liturgy?.rank ?? (readings.available ? readings.rank : null);
   const line = liturgy?.gospelLine ?? (readings.available ? readings.gospelLine : null);
@@ -98,13 +99,16 @@ function DayTile({ date, liturgy, readings }: { date: IsoDate; liturgy: Liturgic
   const verse = line?.match(/^(.*?)\s*(?:\(([^()]+)\))?$/);
   return (
     <div className={cn(tile, "p-6 text-center sm:p-10")}>
-      <p className="eyebrow">{rank ? capitalise(rank) : formatDayHeading(date)}</p>
-      {title ? <h2 className="mx-auto mt-3 max-w-[30rem] text-balance text-[clamp(1.75rem,1.4rem+1.6vw,2.5rem)] font-bold leading-[1.05] tracking-[-0.04em]">{title}</h2> : null}
-      {liturgy?.sundayName && liturgy.sundayName !== title ? <p className="mt-2 text-small font-medium text-ink-3">{liturgy.sundayName}</p> : null}
+      {title ? <h2 className="mx-auto max-w-[30rem] text-balance text-h3">{title}</h2> : null}
+      {rank || (liturgy?.sundayName && liturgy.sundayName !== title) ? (
+        <p className={cn("text-small font-medium text-ink-3", title && "mt-2")}>
+          {[rank ? capitalise(rank) : null, liturgy?.sundayName && liturgy.sundayName !== title ? liturgy.sundayName : null].filter(Boolean).join(" · ")}
+        </p>
+      ) : null}
       {verse ? (
-        <p className="mx-auto mt-5 max-w-[34rem] text-balance font-serif text-[1.375rem] italic leading-snug text-ink-2">
+        <p className="mx-auto mt-5 max-w-[34rem] text-balance text-[1.25rem] font-medium leading-snug tracking-[-0.02em] text-ink-2">
           {verse[1]}
-          {verse[2] ? <span className="mt-1.5 block font-sans text-[0.8125rem] font-semibold not-italic text-gold-ink">{verse[2]}</span> : null}
+          {verse[2] ? <span className="mt-1.5 block text-[0.8125rem] font-semibold tracking-normal text-gold-ink">{verse[2]}</span> : null}
         </p>
       ) : null}
     </div>
@@ -116,12 +120,12 @@ function ReadingTile({ reading: r }: { reading: ReadingPart }) {
   return (
     <article className={cn(tile, "p-6 sm:p-10")} aria-labelledby={`berilo-${r.label}`}>
       <div className="flex flex-wrap items-baseline justify-between gap-x-4 gap-y-1">
-        <h2 id={`berilo-${r.label}`} className="text-[0.8125rem] font-semibold uppercase tracking-[0.08em] text-gold-ink">
+        <h2 id={`berilo-${r.label}`} className="text-h3">
           {r.label}
         </h2>
         {r.ref ? <p className="tnum text-small font-semibold text-ink-3">{r.ref}</p> : null}
       </div>
-      {r.title ? <h3 className="mt-3 text-[1.5rem] font-bold leading-[1.15] tracking-[-0.035em]">{r.title}</h3> : null}
+      {r.title ? <p className="mt-1.5 text-body font-semibold text-ink-2">{r.title}</p> : null}
       {r.intro ? <p className="mt-1.5 text-small italic text-ink-3">{r.intro}</p> : null}
       {r.acclamation ? (
         <p className="mt-4 rounded-md bg-paper-2 px-4 py-3 text-small text-ink-2">
@@ -129,8 +133,8 @@ function ReadingTile({ reading: r }: { reading: ReadingPart }) {
         </p>
       ) : null}
       {r.response ? (
-        <p className="mt-4 font-serif text-[1.375rem] italic leading-snug text-ink">
-          <span className="mr-2 font-sans text-[0.8125rem] font-semibold not-italic text-gold-ink">Odpev</span>»{r.response}«
+        <p className="mt-4 text-[1.25rem] font-medium leading-snug tracking-[-0.02em] text-ink">
+          <span className="mr-2 text-[0.8125rem] font-semibold tracking-normal text-gold-ink">Odpev</span>»{r.response}«
         </p>
       ) : null}
       <div className={cn("mt-5 grid gap-4 text-[1.0625rem] leading-[1.65] text-ink", psalm && "gap-5")}>

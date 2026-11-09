@@ -254,17 +254,6 @@ const OPENING_HOURS_ITEM: ArrayItem = {
   ],
 };
 
-const quote = (name: string, label: string, textMax: number, help?: string): Field => ({
-  kind: "object",
-  name,
-  label,
-  help,
-  fields: [
-    { kind: "text", name: "text", label: "Besedilo", rows: 2, max: textMax },
-    { kind: "string", name: "source", label: "Vir", max: 40 },
-  ],
-});
-
 const seo = (label = "Iskalniki in deljenje", group?: string, help?: string): Field => ({
   kind: "object",
   type: "seo",
@@ -287,9 +276,8 @@ const pageHeader = (name: string, title: string): Field => ({
   label: `Glava strani: ${title}`,
   group: "headers",
   fields: [
+    // Only the photo: the header shows the breadcrumbs and the title, no subline or quotation (ZUP-14).
     { kind: "image", name: "image", label: "Fotografija", help: "Vodoravna fotografija za ozadje naslova. Brez nje ima stran svetlo glavo." },
-    { kind: "string", name: "tagline", label: "Kratka vrstica pod naslovom", help: "Npr. »Skupaj pred Gospodom.«", max: 80 },
-    quote("quote", "Misel", 200),
   ],
 });
 
@@ -573,10 +561,9 @@ export const TYPES: Record<ContentType, TypeDef> = {
     titleField: "heroTitle",
     fields: [
       { kind: "image", name: "heroImage", label: "Glavna fotografija", required: true, help: "Velika fotografija na vrhu domače strani. Najbolje vodoravna, cerkev ali kraj." },
-      { kind: "string", name: "heroEyebrow", label: "Kratka vrstica nad naslovom", max: 40, help: "Neobvezno, npr. »Skupaj na poti vere«." },
+      // The photo carries only the title (ZUP-10): no line above it, no text or quotation under it.
       { kind: "string", name: "heroTitle", label: "Naslov", max: 60, help: "Če je prazno, se uporabi ime župnije." },
-      { kind: "text", name: "heroText", label: "Uvodno besedilo", rows: 3, max: 240, help: "Ena ali dve mirni povedi dobrodošlice. Brez oglaševalskega tona." },
-      quote("heroQuote", "Svetopisemska misel v naslovni sliki", 200, "Neobvezno. Kratek navedek in vir, npr. Mt 18,20."),
+      { kind: "text", name: "heroText", label: "Kratek opis domače strani", rows: 3, max: 240, help: "Za iskalnike in deljenje, kadar opis za iskalnike ni vpisan. Na strani se ne prikaže." },
       {
         kind: "object",
         name: "tile",
@@ -869,7 +856,7 @@ export const TYPES: Record<ContentType, TypeDef> = {
         group: "basic",
         required: true,
         max: 30,
-        help: "Uporabi se v urnikih in na majhnih zaslonih, npr. »Sv. Križ«.",
+        help: "Ime, ki ga stran prikazuje povsod: na karticah, v urnikih maš in na strani cerkve, npr. »Cerkev sv. Križa«.",
       },
       slug("name", 80, "basic"),
       { kind: "select", name: "kind", label: "Vrsta", group: "basic", options: CHURCH_KINDS, layout: "radio", required: true, initial: "filial" },

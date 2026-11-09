@@ -4,7 +4,7 @@ import { getSettings } from "@/sanity/data";
 import { getBulletinList } from "@/lib/data/bulletins";
 import { buildMetadata } from "@/lib/seo";
 import { routes } from "@/lib/routes";
-import { Breadcrumbs, Container, EmptyState, PageHeader, Section } from "@/components/ui/primitives";
+import { Container, EmptyState, PageHeader, Section } from "@/components/ui/primitives";
 
 export async function generateMetadata(): Promise<Metadata> {
   const settings = await getSettings();
@@ -16,12 +16,7 @@ export default async function BulletinsPage() {
   return (
     <>
       <PageHeader
-        title="Vsa oznanila"
-        accent="oznanila"
-        lede="Objavljena oznanila župnije, najnovejša prva."
-        eyebrow={
-          <Breadcrumbs items={[{ label: "Oznanila", href: routes.announcements }, { label: "Vsa oznanila" }]} />
-        }
+        title="Vsa oznanila" crumbs={[{ label: "Oznanila", href: routes.announcements }, { label: "Vsa oznanila" }]}
       />
       <Section>
         <Container>
