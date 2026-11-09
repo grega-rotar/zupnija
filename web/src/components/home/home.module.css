@@ -51,17 +51,11 @@
   color: var(--ink3);
   letter-spacing: -0.005em;
 }
+/* Heading sizes come from the tokens in globals.css (ZUP-14). */
 .h2 {
-  font-size: clamp(36px, 4.6vw, 56px);
-  font-weight: 700;
-  letter-spacing: -0.045em;
-  line-height: 1;
-}
-.serif {
-  font-family: var(--font-serif);
-  font-style: italic;
-  font-weight: 400;
-  letter-spacing: -0.01em;
+  font-size: var(--text-h2);
+  letter-spacing: var(--text-h2--letter-spacing);
+  line-height: var(--text-h2--line-height);
 }
 .btn {
   display: inline-flex;
@@ -129,14 +123,7 @@
   max-width: 820px;
   margin: 0 auto 56px;
 }
-.eye {
-  font-size: 13px;
-  font-weight: 600;
-  color: var(--accentInk);
-  letter-spacing: -0.005em;
-}
 .open .h2 {
-  margin-top: 12px;
   text-wrap: balance;
 }
 .subl {
@@ -208,28 +195,11 @@
 }
 .hero h1 {
   color: #fff;
-  font-size: clamp(54px, 7.4vw, 104px);
-  font-weight: 800;
-  letter-spacing: -0.055em;
-  line-height: 0.92;
+  font-size: var(--text-display);
+  letter-spacing: var(--text-display--letter-spacing);
+  line-height: var(--text-display--line-height);
   text-wrap: balance;
   hyphens: manual;
-}
-.hero h1 em {
-  display: block;
-  font-size: 0.66em;
-  line-height: 1.08;
-  letter-spacing: -0.015em;
-  color: rgb(255 255 255 / 0.92);
-  margin-top: 4px;
-}
-.lede {
-  margin: 22px auto 0;
-  font-size: clamp(17px, 1.5vw, 21px);
-  line-height: 1.4;
-  color: rgb(255 255 255 / 0.86);
-  max-width: 620px;
-  text-wrap: balance;
 }
 .dock {
   position: relative;
@@ -256,6 +226,7 @@
 }
 .widget h2 {
   font: inherit;
+  font-weight: var(--font-weight-heading);
   color: inherit;
   margin: 0;
 }
@@ -328,10 +299,9 @@
   margin-top: 6px;
 }
 .msg {
-  font-size: 24px;
-  font-weight: 600;
-  letter-spacing: -0.035em;
-  line-height: 1.15;
+  font-size: var(--text-h3);
+  letter-spacing: var(--text-h3--letter-spacing);
+  line-height: var(--text-h3--line-height);
   margin-top: 12px;
 }
 .sub {
@@ -520,10 +490,9 @@ a.tile:hover {
   gap: 12px;
 }
 .lit h3 {
-  font-size: clamp(34px, 3.8vw, 54px);
-  font-weight: 700;
-  letter-spacing: -0.045em;
-  line-height: 1.02;
+  font-size: var(--text-h3);
+  letter-spacing: var(--text-h3--letter-spacing);
+  line-height: var(--text-h3--line-height);
   text-wrap: balance;
   margin-top: 6px;
 }
@@ -534,15 +503,13 @@ a.tile:hover {
   letter-spacing: -0.02em;
 }
 .verse {
-  font-family: var(--font-serif);
-  font-style: italic;
-  font-size: clamp(23px, 2.2vw, 30px);
-  line-height: 1.25;
+  font-size: clamp(20px, 1.9vw, 25px);
+  font-weight: 500;
+  letter-spacing: -0.02em;
+  line-height: 1.3;
   color: var(--ink2);
 }
 .verseRef {
-  font-family: var(--font-sans);
-  font-style: normal;
   font-size: 14px;
   font-weight: 600;
   color: var(--ink3);
@@ -620,10 +587,9 @@ a.tile:hover {
   padding: 0 0 10px;
 }
 .evt h3 {
-  font-size: 20px;
-  font-weight: 650;
-  letter-spacing: -0.025em;
-  line-height: 1.22;
+  font-size: var(--text-h4);
+  letter-spacing: var(--text-h4--letter-spacing);
+  line-height: var(--text-h4--line-height);
   margin-top: auto;
   text-wrap: balance;
 }
@@ -776,10 +742,9 @@ a.tile:hover {
   font-variant-numeric: tabular-nums;
 }
 .card h3 {
-  font-size: 24px;
-  font-weight: 700;
-  letter-spacing: -0.035em;
-  line-height: 1.15;
+  font-size: var(--text-h3);
+  letter-spacing: var(--text-h3--letter-spacing);
+  line-height: var(--text-h3--line-height);
   margin-top: 8px;
   text-wrap: balance;
 }
@@ -845,10 +810,9 @@ a.tile:hover {
 }
 .church h3 {
   color: #fff;
-  font-size: 30px;
-  font-weight: 700;
-  letter-spacing: -0.04em;
-  line-height: 1.05;
+  font-size: var(--text-h3);
+  letter-spacing: var(--text-h3--letter-spacing);
+  line-height: var(--text-h3--line-height);
 }
 .church p {
   font-size: 15px;
@@ -876,69 +840,30 @@ a.tile:hover {
 }
 
 /* ---------- give ---------- */
+/* One full-width UPN card (components/giving/UpnSlip.tsx), then "Vse o darovih". */
 .give {
-  display: grid;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
   gap: 20px;
-  /* Giving and the newsletter side by side, as in the prototype; stacked on phones. */
-  grid-template-columns: repeat(auto-fit, minmax(min(100%, 440px), 1fr));
-  align-items: stretch;
   max-width: 1240px;
   margin: 0 auto;
 }
-.giveTile {
-  background: var(--surface);
-  border-radius: var(--r);
-  box-shadow: 0 0 0 1px var(--line), var(--sh);
-  padding: 44px;
-  display: flex;
-  flex-direction: column;
+.give > :first-child {
+  align-self: stretch;
 }
-.kick {
-  font-size: 13px;
+.giveMore {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  min-height: 44px;
+  font-size: 15px;
   font-weight: 600;
-  color: var(--ink3);
-  letter-spacing: -0.005em;
+  color: var(--accentInk) !important;
+  text-underline-offset: 4px;
 }
-.gt {
-  font-size: 32px;
-  font-weight: 700;
-  letter-spacing: -0.04em;
-  line-height: 1.08;
-  margin-top: 10px;
-  text-wrap: balance;
-}
-.gp {
-  font-size: 17px;
-  color: var(--ink2);
-  margin-top: 12px;
-  line-height: 1.5;
-  max-width: 520px;
-}
-.trr {
-  margin-top: auto;
-  padding-top: 24px;
-  display: flex;
-  flex-wrap: wrap;
-  gap: 14px 36px;
-  align-items: flex-end;
-}
-.trr dl {
-  margin: 0;
-  display: flex;
-  flex-wrap: wrap;
-  gap: 14px 36px;
-}
-.trr dt {
-  font-size: 12px;
-  font-weight: 600;
-  color: var(--ink3);
-}
-.trr dd {
-  margin: 2px 0 0;
-  font-size: 17px;
-  font-weight: 600;
-  letter-spacing: -0.01em;
-  font-variant-numeric: tabular-nums;
+.giveMore:hover {
+  text-decoration: underline !important;
 }
 
 /* ---------- responsive ---------- */
@@ -1015,12 +940,6 @@ a.tile:hover {
   }
   .dock .widget {
     padding: 22px 22px 20px;
-  }
-  .giveTile {
-    padding: 28px;
-  }
-  .gt {
-    font-size: 28px;
   }
 }
 @media (prefers-reduced-motion: reduce) {

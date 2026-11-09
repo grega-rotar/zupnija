@@ -15,7 +15,7 @@ import { ScheduleTable } from "@/components/masses/ScheduleTable";
 import { ContactBlock } from "@/components/contact/ContactBlock";
 import { ContactForm } from "@/components/forms/ContactForm";
 import { Faq } from "@/components/ui/Faq";
-import { Button, Container, Section, SectionHeading, Split, TextLink, headline, tile } from "@/components/ui/primitives";
+import { Button, Container, Section, SectionHeading, Split, TextLink, tile } from "@/components/ui/primitives";
 
 type Sections = NonNullable<NonNullable<PAGE_QUERY_RESULT>["sections"]>;
 type SectionOf<T extends Sections[number]["_type"]> = Extract<Sections[number], { _type: T }>;
@@ -67,7 +67,7 @@ export async function PageSections({ sections }: { sections: Sections | null | u
 
 function SectionTitle({ title, className }: { title?: string | null; className?: string }) {
   if (!title) return null;
-  return <h2 className={cn("mx-auto mb-10 max-w-3xl text-center lg:mb-14", headline.h2, className)}>{title}</h2>;
+  return <h2 className={cn("mx-auto mb-10 max-w-3xl text-center lg:mb-14", className)}>{title}</h2>;
 }
 
 function HeroSection({ section }: { section: SectionOf<"sectionHero"> }) {
@@ -85,7 +85,7 @@ function HeroSection({ section }: { section: SectionOf<"sectionHero"> }) {
         />
         {section.title || section.text ? (
           <div className="mx-auto mt-10 max-w-3xl text-center">
-            {section.title ? <h2 className={headline.h2}>{section.title}</h2> : null}
+            {section.title ? <h2>{section.title}</h2> : null}
             {section.text ? <p className="lede mx-auto mt-4 max-w-[40rem] text-balance">{section.text}</p> : null}
           </div>
         ) : null}
@@ -111,7 +111,7 @@ function TextImageSection({ section }: { section: SectionOf<"sectionTextImage"> 
     <Section>
       <Container className="grid gap-10 md:grid-cols-2 md:items-center md:gap-16">
         <div className={cn(imageLeft && "md:order-2")}>
-          {section.title ? <h2 className={cn("mb-5", headline.h2)}>{section.title}</h2> : null}
+          {section.title ? <h2 className="mb-5">{section.title}</h2> : null}
           <RichText value={section.body} size="lg" />
           {href && section.link?.label ? (
             <div className="mt-4">
@@ -139,8 +139,8 @@ function QuoteSection({ section }: { section: SectionOf<"sectionQuote"> }) {
     <Section>
       <Container>
         <figure className="mx-auto max-w-4xl text-center">
-          <blockquote className="text-balance font-serif text-[clamp(2rem,1.4rem+2.6vw,3.5rem)] italic leading-[1.12] tracking-[-0.015em] text-ink">{section.quote}</blockquote>
-          {section.source ? <figcaption className="eyebrow mt-5">{section.source}</figcaption> : null}
+          <blockquote className="text-balance text-[clamp(1.5rem,1.2rem+1.4vw,2.25rem)] font-medium leading-[1.25] tracking-[-0.025em] text-ink">{section.quote}</blockquote>
+          {section.source ? <figcaption className="mt-5 text-meta font-semibold text-gold-ink">{section.source}</figcaption> : null}
         </figure>
       </Container>
     </Section>
@@ -156,7 +156,6 @@ function GallerySection({ section }: { section: SectionOf<"sectionGallery"> }) {
         {title ? (
           <SectionHeading
             title={title}
-            eyebrow="Fotografije"
             action={
               section.gallery?.slug
                 ? {
@@ -206,8 +205,8 @@ export function PersonCard({
         </div>
       )}
       <div className="min-w-0">
-        <h3 className="text-[1.375rem] font-bold leading-snug tracking-[-0.035em] text-ink">{person.name}</h3>
-        {role ? <p className="eyebrow mt-0.5">{role}</p> : null}
+        <h3 className="text-ink">{person.name}</h3>
+        {role ? <p className="mt-0.5 text-small font-medium text-gold-ink">{role}</p> : null}
         <RichText value={person.bio} size="sm" className="mt-2 text-ink-2" />
         {person.showContact !== false && (person.email || person.phone) ? (
           <p className="mt-2 text-small">
@@ -299,8 +298,8 @@ async function ContactSection({ section }: { section: SectionOf<"sectionContact"
         <ContactBlock settings={settings} officeHoursOverride={period?.officeHoursNote} />
         {section.showForm ? (
           <div className={cn(tile, "mx-auto mt-5 max-w-2xl p-6 sm:p-10")}>
-            <h3 className="mb-6 text-[1.75rem] font-bold tracking-[-0.04em]">
-              Pišite <span className="accent">nam</span>
+            <h3 className="mb-6">
+              Pišite nam
             </h3>
             <ContactForm />
           </div>
@@ -315,7 +314,7 @@ async function EventsSection({ section }: { section: SectionOf<"sectionEvents"> 
   return (
     <Section>
       <Container>
-        <SectionHeading eyebrow="Dogodki" title={section.title ?? "Prihajajoči dogodki"} action={{ label: "Vsi dogodki", href: routes.events }} />
+        <SectionHeading title={section.title ?? "Prihajajoči dogodki"} action={{ label: "Vsi dogodki", href: routes.events }} />
         <EventList events={events} />
       </Container>
     </Section>
@@ -329,7 +328,7 @@ async function MassScheduleSection({ section }: { section: SectionOf<"sectionMas
   return (
     <Section>
       <Container>
-        <SectionHeading eyebrow="Bogoslužje" title={section.title ?? "Svete maše"} action={{ label: "Vse o svetih mašah", href: routes.masses }} />
+        <SectionHeading title={section.title ?? "Svete maše"} action={{ label: "Vse o svetih mašah", href: routes.masses }} />
         <div className="space-y-12">
           {regular.map((s) => (
             <ScheduleTable key={s._id} schedule={s} churchId={section.church?._id} showTitle={regular.length > 1} />
@@ -346,7 +345,7 @@ function CtaSection({ section, first }: { section: SectionOf<"sectionCta">; firs
     <Section tight={!first}>
       <Container>
         <div className="rounded-lg bg-[linear-gradient(165deg,var(--color-gold-soft)_0%,#fff_72%)] px-6 py-14 text-center shadow-soft sm:px-12 sm:py-20">
-          <h2 className={cn("mx-auto max-w-3xl", headline.h2)}>{section.title}</h2>
+          <h2 className="mx-auto max-w-3xl">{section.title}</h2>
           {section.text ? <p className="lede mx-auto mt-4 max-w-[40rem] text-balance">{section.text}</p> : null}
           {href && section.link?.label ? (
             <div className="mt-8">

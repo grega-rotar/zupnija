@@ -9,7 +9,7 @@
  *
  * Kinds beyond the contract's list (all mirror a Sanity field type):
  * - "number"   Sanity number (order, limit);
- * - "strings"  an array of plain strings (no _key), e.g. sacrament.requirements;
+ * - "strings"  an array of plain strings (no _key), e.g. a list of requirements;
  * - "images"   an array of imageWithAlt items (each with _key, _type "imageWithAlt");
  * - "geopoint" {_type:"geopoint", lat, lng}.
  * Extra keys: `when` shows a field only when a sibling has a value (link.internal
@@ -18,6 +18,7 @@
  */
 import { formatDate } from "@/lib/dates";
 import { pathForDocument } from "@/lib/routes";
+import { ARRANGE_HEADING, SACRAMENT_TABS } from "@/lib/sacraments/tabs";
 
 export const CONTENT_TYPES = [
   "settings",
@@ -32,7 +33,7 @@ export const CONTENT_TYPES = [
   "church",
   "person",
   "parishGroup",
-  "sacrament",
+  "sacramentsPage",
   "massSchedule",
   "prayerPage",
   "donationPurpose",
@@ -49,8 +50,8 @@ type Base = {
   help?: string;
   /** Sanity field group (TypeDef.groups); the form shows one titled group per name. */
   group?: string;
-  /** Shown (and validated) only while the sibling `field` equals `is`. */
-  when?: { field: string; is: string };
+  /** Shown (and validated) only while the sibling `field` equals `is` (a select's value, or a switch's true). */
+  when?: { field: string; is: string | boolean };
   /** Value for a new document. "@now" = current ISO datetime, "@today" = YYYY-MM-DD. */
   initial?: unknown;
 };
@@ -138,15 +139,6 @@ export const PERSON_ROLES = opts([
   ["office", "Tajništvo"],
   ["other", "Drugo"],
 ]);
-export const SACRAMENT_KINDS = opts([
-  ["baptism", "Krst"],
-  ["communion", "Prvo sveto obhajilo"],
-  ["confirmation", "Sveta birma"],
-  ["marriage", "Sveta poroka"],
-  ["confession", "Sveta spoved"],
-  ["anointing", "Bolniško maziljenje"],
-  ["funeral", "Pogreb"],
-]);
 export const CHURCH_KINDS = opts([
   ["parish", "Župnijska cerkev"],
   ["filial", "Podružnična cerkev"],
@@ -169,6 +161,28 @@ export const LITURGICAL_SEASONS = opts([
   ["pentecost", "Binkošti (rdeča)"],
   ["marian", "Marijin praznik (modra)"],
 ]);
+
+/** The groups' card icons (src/components/groups/icons/<value>.svg, from ZUP-13's skupine-ikone-v3). */
+export const GROUP_ICONS = opts([
+  ["zupnijski-pastoralni-svet", "Župnijski pastoralni svet"],
+  ["zupnijska-karitas", "Župnijska Karitas"],
+  ["molitvena-skupina", "Molitvena skupina"],
+  ["zakonska-skupina", "Zakonska skupina"],
+  ["mladinska-skupina", "Mladinska skupina"],
+  ["ministranti", "Ministranti"],
+  ["bralci-bozje-besede", "Bralci Božje besede"],
+  ["pritrkovalci", "Pritrkovalci"],
+  ["mladinski-pevski-zbor", "Mladinski pevski zbor"],
+  ["otroski-pevski-zbor", "Otroški pevski zbor"],
+  ["odrasli-pevski-zbor", "Odrasli pevski zbor"],
+  ["krasilci", "Krasilci"],
+  ["oratorijski-animatorji", "Oratorijski animatorji"],
+  ["verouk", "Verouk"],
+  ["oratorij", "Oratorij"],
+]);
+
+/** Where a prayer request goes when the group names no address (ZUP-25). */
+export const PRAYER_EMAIL_DEFAULT = "zupirnice@gmail.com";
 
 export const labelOf = (list: Option[], v: unknown) => list.find((o) => o.value === v)?.label;
 
@@ -208,7 +222,7 @@ const LINK_FIELDS: Field[] = [
     kind: "reference",
     name: "internal",
     label: "Stran",
-    to: ["page", "event", "article", "church", "sacrament", "parishGroup", "gallery", "announcement"],
+    to: ["page", "event", "article", "church", "parishGroup", "gallery", "announcement"],
     when: { field: "kind", is: "internal" },
     required: true,
   },
@@ -254,17 +268,6 @@ const OPENING_HOURS_ITEM: ArrayItem = {
   ],
 };
 
-const quote = (name: string, label: string, textMax: number, help?: string): Field => ({
-  kind: "object",
-  name,
-  label,
-  help,
-  fields: [
-    { kind: "text", name: "text", label: "Besedilo", rows: 2, max: textMax },
-    { kind: "string", name: "source", label: "Vir", max: 40 },
-  ],
-});
-
 const seo = (label = "Iskalniki in deljenje", group?: string, help?: string): Field => ({
   kind: "object",
   type: "seo",
@@ -287,9 +290,8 @@ const pageHeader = (name: string, title: string): Field => ({
   label: `Glava strani: ${title}`,
   group: "headers",
   fields: [
+    // Only the photo: the header shows the breadcrumbs and the title, no subline or quotation (ZUP-14).
     { kind: "image", name: "image", label: "Fotografija", help: "Vodoravna fotografija za ozadje naslova. Brez nje ima stran svetlo glavo." },
-    { kind: "string", name: "tagline", label: "Kratka vrstica pod naslovom", help: "Npr. »Skupaj pred Gospodom.«", max: 80 },
-    quote("quote", "Misel", 200),
   ],
 });
 
@@ -573,10 +575,9 @@ export const TYPES: Record<ContentType, TypeDef> = {
     titleField: "heroTitle",
     fields: [
       { kind: "image", name: "heroImage", label: "Glavna fotografija", required: true, help: "Velika fotografija na vrhu domače strani. Najbolje vodoravna, cerkev ali kraj." },
-      { kind: "string", name: "heroEyebrow", label: "Kratka vrstica nad naslovom", max: 40, help: "Neobvezno, npr. »Skupaj na poti vere«." },
+      // The photo carries only the title (ZUP-10): no line above it, no text or quotation under it.
       { kind: "string", name: "heroTitle", label: "Naslov", max: 60, help: "Če je prazno, se uporabi ime župnije." },
-      { kind: "text", name: "heroText", label: "Uvodno besedilo", rows: 3, max: 240, help: "Ena ali dve mirni povedi dobrodošlice. Brez oglaševalskega tona." },
-      quote("heroQuote", "Svetopisemska misel v naslovni sliki", 200, "Neobvezno. Kratek navedek in vir, npr. Mt 18,20."),
+      { kind: "text", name: "heroText", label: "Kratek opis domače strani", rows: 3, max: 240, help: "Za iskalnike in deljenje, kadar opis za iskalnike ni vpisan. Na strani se ne prikaže." },
       {
         kind: "object",
         name: "tile",
@@ -869,7 +870,7 @@ export const TYPES: Record<ContentType, TypeDef> = {
         group: "basic",
         required: true,
         max: 30,
-        help: "Uporabi se v urnikih in na majhnih zaslonih, npr. »Sv. Križ«.",
+        help: "Ime, ki ga stran prikazuje povsod: na karticah, v urnikih maš in na strani cerkve, npr. »Cerkev sv. Križa«.",
       },
       slug("name", 80, "basic"),
       { kind: "select", name: "kind", label: "Vrsta", group: "basic", options: CHURCH_KINDS, layout: "radio", required: true, initial: "filial" },
@@ -929,7 +930,7 @@ export const TYPES: Record<ContentType, TypeDef> = {
     area: "zupnija",
     orderable: true,
     titleField: "title",
-    subtitle: (d) => str(d.meetingSchedule),
+    subtitle: (d) => str(d.href) || str(d.meetingSchedule),
     fields: [
       {
         kind: "string",
@@ -940,10 +941,43 @@ export const TYPES: Record<ContentType, TypeDef> = {
         help: "Npr. »Mešani pevski zbor«, »Ministranti«, »Župnijska Karitas«.",
       },
       slug("title", 80),
-      { kind: "text", name: "summary", label: "Kratek opis", rows: 2, required: true, max: 200, help: "Ena ali dve povedi za seznam skupin." },
+      { kind: "select", name: "icon", label: "Ikona", options: GROUP_ICONS, help: "Prikazana na kartici v seznamu skupin in na strani skupine." },
+      { kind: "image", name: "cardImage", label: "Fotografija na kartici", help: "Neobvezno. Na kartici v seznamu skupin se prikaže namesto ikone." },
+      {
+        kind: "string",
+        name: "href",
+        label: "Kartica vodi na",
+        pattern: /^\/[a-z0-9\-/]*$/,
+        patternMessage: "Vpišite pot na tej strani, npr. »/verouk«.",
+        help: "Neobvezno. Za skupino, ki ima svojo stran drugje, npr. »/verouk«. Sicer kartica vodi na stran skupine.",
+      },
+      { kind: "text", name: "summary", label: "Kratek opis", rows: 2, max: 200, help: "Ena ali dve povedi za iskalnik in deljenje na družbenih omrežjih." },
       { kind: "richText", name: "description", label: "Predstavitev", variant: "full" },
       { kind: "string", name: "meetingSchedule", label: "Kdaj se srečujemo", help: "Npr. »Vsak četrtek ob 19.30« ali »Po dogovoru«." },
       { kind: "string", name: "location", label: "Kje", help: "Npr. »Župnijska dvorana« ali »Cerkev sv. Križa«." },
+      {
+        kind: "boolean",
+        name: "hideJoin",
+        label: "Skrij razdelek »Pridružite se«",
+        help: "Za skupine, ki se jim ne more pridružiti vsak (npr. ŽPS). Čas in kraj srečanj ostaneta prikazana.",
+      },
+      { kind: "string", name: "meetingsTitle", label: "Naslov namesto »Pridružite se«", max: 40, when: { field: "hideJoin", is: true }, help: "Ko je razdelek skrit, npr. »Seje«. Prazno: »Srečanja«." },
+      {
+        kind: "boolean",
+        name: "prayerRequests",
+        label: "Obrazec »Prošnja za molitev«",
+        help: "Anonimen obrazec pod predstavitvijo. Prošnje se ne shranijo, ampak gredo po e-pošti na spodnji naslov.",
+      },
+      { kind: "text", name: "prayerIntro", label: "Besedilo nad obrazcem", rows: 2, max: 400, when: { field: "prayerRequests", is: true } },
+      {
+        kind: "string",
+        name: "prayerEmail",
+        label: "Prošnje prejme",
+        when: { field: "prayerRequests", is: true },
+        format: "email",
+        patternMessage: EMAIL_MSG,
+        help: `E-pošta župnika (ne skupni naslov župnije). Prazno: ${PRAYER_EMAIL_DEFAULT}.`,
+      },
       { kind: "reference", name: "contactPerson", label: "Kontaktna oseba", to: ["person"] },
       { kind: "string", name: "contactName", label: "Kontakt (ime)", help: "Če kontaktna oseba ni med osebami." },
       { kind: "string", name: "email", label: "E-pošta", format: "email", patternMessage: EMAIL_MSG },
@@ -954,65 +988,42 @@ export const TYPES: Record<ContentType, TypeDef> = {
       { kind: "number", name: "order", label: "Vrstni red", initial: 10 },
       seo(),
     ],
-    publicPath: pathFor("parishGroup"),
+    publicPath: (d) => str(d.href) || pathFor("parishGroup")(d),
   },
 
-  sacrament: {
-    type: "sacrament",
-    label: "Zakrament",
+  // /zakramenti (ZUP-11, ZUP-12): the intro, then an optional image and two texts per tab (lib/sacraments/tabs.ts).
+  sacramentsPage: {
+    type: "sacramentsPage",
+    label: "Zakramenti",
     plural: "Zakramenti",
-    newLabel: "Nov zakrament",
+    newLabel: "Zakramenti",
     area: "zupnija",
-    orderable: true,
-    titleField: "title",
-    subtitle: (d) => labelOf(SACRAMENT_KINDS, d.kind) ?? "",
-    groups: [
-      { name: "basic", title: "Osnovno" },
-      { name: "process", title: "Postopek" },
-      { name: "seo", title: "Iskalniki" },
-    ],
+    singleton: true,
+    titleField: "intro",
     fields: [
-      { kind: "string", name: "title", label: "Naslov", group: "basic", required: true },
-      slug("title", 60, "basic"),
-      { kind: "select", name: "kind", label: "Vrsta", group: "basic", options: SACRAMENT_KINDS, required: true },
-      { kind: "text", name: "summary", label: "Kratek opis", rows: 2, group: "basic", required: true, max: 240 },
-      { kind: "image", name: "image", label: "Slika", group: "basic" },
-      { kind: "richText", name: "description", label: "Kaj je to", variant: "full", group: "basic" },
-      { kind: "reference", name: "contact", label: "Na koga se obrniti", to: ["person"], group: "basic" },
-      {
-        kind: "richText",
-        name: "contactNote",
-        label: "Kako se dogovoriti",
-        variant: "simple",
-        group: "basic",
-        help: "Npr. »Oglasite se v župnišču v času uradnih ur vsaj mesec dni prej.«",
-      },
-      { kind: "strings", name: "requirements", label: "Pogoji", group: "process", help: "Vsak pogoj v svojo vrstico." },
-      {
-        kind: "array",
-        name: "steps",
-        label: "Koraki",
-        group: "process",
-        help: "Postopek po vrsti, npr. 1. Prijava, 2. Priprava, 3. Obred.",
-        of: [
-          {
-            type: "step",
-            label: "Korak",
-            fields: [
-              { kind: "string", name: "title", label: "Korak", required: true },
-              { kind: "richText", name: "text", label: "Opis", variant: "simple" },
-            ],
-          },
-        ],
-      },
-      { kind: "strings", name: "documentsNeeded", label: "Potrebni dokumenti", group: "process", help: "Npr. »Krstni list«, »Potrdilo o civilni poroki«." },
-      { kind: "reference", name: "downloads", label: "Obrazci in dokumenti za prenos", to: ["parishDocument"], many: true, group: "process" },
-      { kind: "array", name: "faq", label: "Pogosta vprašanja", group: "process", of: [FAQ_ITEM] },
-      { kind: "array", name: "links", label: "Koristne povezave", group: "process", of: [LINK_ITEM] },
-      { kind: "number", name: "order", label: "Vrstni red", group: "basic", initial: 10 },
-      seo("Iskalniki in deljenje", "seo"),
+      { kind: "richText", name: "intro", label: "Uvod", variant: "full", help: "O bistvu zakramentov. Prikazano pod naslovom strani.", initial: placeholderText() },
+      ...SACRAMENT_TABS.map(
+        (t): Field => ({
+          kind: "object",
+          name: t.key,
+          label: t.label,
+          help: `Zavihek na naslovu /zakramenti#${t.key}.`,
+          initial: { about: placeholderText(), arrange: placeholderText() },
+          fields: [
+            { kind: "image", name: "image", label: "Slika", help: "Neobvezno. Brez slike je zavihek samo besedilo." },
+            { kind: "richText", name: "about", label: t.about, variant: "full" },
+            {
+              kind: "richText",
+              name: "arrange",
+              label: ARRANGE_HEADING,
+              variant: "full",
+              help: "V celih stavkih: kdaj in kje se oglasiti, kaj prinesti, elektronski naslov župnije.",
+            },
+          ],
+        }),
+      ),
     ],
-    publicPath: pathFor("sacrament"),
+    publicPath: () => "/zakramenti",
   },
 
   // /molitev and the homepage's "Pridite pred Najsvetejše" band (PRD US-012).
@@ -1097,6 +1108,11 @@ export const TYPES: Record<ContentType, TypeDef> = {
     publicPath: () => "/svete-mase",
   },
 };
+
+/** The placeholder the priest replaces with his text (ZUP-21): one paragraph, "vsebina". */
+export function placeholderText(): Doc[] {
+  return [{ _type: "block", _key: "vsebina", style: "normal", markDefs: [], children: [{ _type: "span", _key: "vsebina0", text: "vsebina", marks: [] }] }];
+}
 
 /** A document's title for lists and labels ("Brez naslova" when empty). */
 export function titleOf(def: TypeDef, doc: Doc): string {

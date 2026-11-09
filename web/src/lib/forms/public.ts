@@ -1,11 +1,11 @@
 /**
  * The public forms' shared helper (tasks/contract-complete.md, "Public forms").
- * Every form a visitor can send (Verouk enrolment, intention request, sacrament
- * enquiry, newsletter subscribe) goes through `submitPublicForm`:
+ * Every form a visitor can send (Verouk enrolment, intention request,
+ * newsletter subscribe) goes through `submitPublicForm`:
  *
  *   honeypot `website` filled  → { ok: true, message: thanks }, nothing stored
  *   zod validation fails       → { ok: false, message, fieldErrors } (Slovenian, per field)
- *   5 hits per 10 min per form and IP (rate_limit_hits) → { ok: false, message: TOO_MANY, status: 429 }
+ *   5 hits per 10 min per form and IP (rate_limit_hits; `limit` overrides) → { ok: false, message: TOO_MANY, status: 429 }
  *   otherwise                  → your `handle(data)` result
  *
  * API (keep it this small):
@@ -140,21 +140,24 @@ export function clientIp(h: Headers): string {
   return xff || "unknown";
 }
 
-const LIMIT = 5;
-const WINDOW_MS = 10 * 60 * 1000;
+export type RateLimit = { max: number; windowMs: number };
+/** The default: 5 per 10 minutes. A form may pass its own (the newsletter: 5 per hour). */
+const DEFAULT_LIMIT: RateLimit = { max: 5, windowMs: 10 * 60 * 1000 };
+/** Hits are kept this long, the longest window any form uses. */
+const KEEP_MS = 60 * 60 * 1000;
 
 /**
  * Records one hit for `form` from `ip` unless the limit is reached.
- * Returns false when the visitor already sent LIMIT in the window.
- * Rows older than the window are pruned on write.
+ * Returns false when the visitor already sent `max` in the window.
+ * Rows older than KEEP_MS are pruned on write.
  */
-async function takeHit(dbx: Db, form: string, ip: string): Promise<boolean> {
+async function takeHit(dbx: Db, form: string, ip: string, limit: RateLimit): Promise<boolean> {
   const r = schema.rateLimitHits;
   const key = `${form}:${ip}`;
-  const since = new Date(now().getTime() - WINDOW_MS);
-  await dbx.delete(r).where(lt(r.createdAt, since));
+  const since = new Date(now().getTime() - limit.windowMs);
+  await dbx.delete(r).where(lt(r.createdAt, new Date(now().getTime() - Math.max(KEEP_MS, limit.windowMs))));
   const recent = await dbx.select({ id: r.id }).from(r).where(and(eq(r.key, key), gte(r.createdAt, since)));
-  if (recent.length >= LIMIT) return false;
+  if (recent.length >= limit.max) return false;
   await dbx.insert(r).values({ key, createdAt: now() });
   return true;
 }
@@ -170,7 +173,7 @@ function firstErrors(error: z.ZodError): Record<string, string> {
 }
 
 export async function submitPublicForm<S extends z.ZodType>(opts: {
-  /** Short name for the rate limit key, e.g. "verouk", "namen", "zakrament", "newsletter". */
+  /** Short name for the rate limit key, e.g. "verouk", "namen", "newsletter". */
   form: string;
   schema: S;
   data: FormData | Record<string, unknown>;
@@ -180,6 +183,8 @@ export async function submitPublicForm<S extends z.ZodType>(opts: {
   handle: (data: z.output<S>) => Promise<FormResult>;
   /** Defaults to the current request's IP (next/headers). */
   ip?: string;
+  /** Defaults to 5 per 10 minutes per form and IP. */
+  limit?: RateLimit;
   dbx?: Db;
 }): Promise<FormResult> {
   const values = formValues(opts.data);
@@ -190,7 +195,7 @@ export async function submitPublicForm<S extends z.ZodType>(opts: {
   if (!parsed.success) return { ok: false, message: CHECK_FIELDS, fieldErrors: firstErrors(parsed.error), values };
 
   const ip = opts.ip ?? clientIp(await (await import("next/headers")).headers());
-  if (!(await takeHit(opts.dbx ?? defaultDb, opts.form, ip))) {
+  if (!(await takeHit(opts.dbx ?? defaultDb, opts.form, ip, opts.limit ?? DEFAULT_LIMIT))) {
     return { ok: false, message: TOO_MANY, fieldErrors: {}, values, status: 429 };
   }
 

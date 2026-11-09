@@ -28,19 +28,16 @@ export default async function EnrolmentPage() {
   return (
     <FormPage
       title="Vpis k verouku"
-      accent="verouku"
-      lede={`Za šolsko leto ${sy}. Vpis vzame nekaj minut, potrdilo dobite po e-pošti.`}
       crumbs={[{ label: "Verouk", href: routes.catechesis }, { label: "Vpis" }]}
-      eyebrow="Spletni vpis"
       heading={
         <>
-          Podatki o <span className="accent">otroku</span>
+          Podatki o otroku
         </>
       }
-      intro="Za vsakega otroka oddajte svoj vpis. Polja brez oznake so obvezna."
+      intro={`Za šolsko leto ${sy}. Za vsakega otroka oddajte svoj vpis, potrdilo dobite po e-pošti. Polja brez oznake so obvezna.`}
       aside={
         <>
-          <AsideTile eyebrow="Kako poteka" title="Po vpisu" warm>
+          <AsideTile title="Po vpisu" warm>
             <p>Potrdilo s številko vpisa pošljemo na e-poštne naslove staršev. Katehist se vam oglasi pred prvim srečanjem.</p>
             <p>
               Urnik skupin je na strani <TextLink href={routes.catechesis}>Verouk</TextLink>.

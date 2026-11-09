@@ -23,11 +23,6 @@ export async function declineIntentionRequest(requestId: number, note: string) {
   return run("mase", "intentionRequest.decline", { requestId, note: note.trim() || undefined });
 }
 
-/** "Označi kot rešeno" on a sacrament enquiry (Domov). */
-export async function resolveSacramentRequest(requestId: number) {
-  return run("zupnija", "sacramentRequest.resolve", { requestId });
-}
-
 /** The "Spletni vpis je odprt" switch on Verouk → Vpisi. */
 export async function setEnrolmentOpen(open: boolean) {
   return run("verouk", "enrolment.setOpen", { open });

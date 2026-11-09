@@ -38,22 +38,9 @@
   z-index: -1;
   background: linear-gradient(180deg, rgb(14 10 6 / 0.86) 0%, rgb(14 10 6 / 0.62) 34%, rgb(14 10 6 / 0.12) 62%, rgb(14 10 6 / 0) 74%, rgb(14 10 6 / 0.5) 100%);
 }
-.eye {
-  font-size: 13px;
-  font-weight: 600;
-  letter-spacing: -0.005em;
-  color: #e6c987;
-}
 .h2 {
   color: #fff;
-  font-size: clamp(44px, 6vw, 80px);
-  margin-top: 14px;
-  letter-spacing: -0.05em;
   text-wrap: balance;
-}
-.h2 em {
-  display: block;
-  margin-top: 0.04em;
 }
 .foot {
   display: flex;

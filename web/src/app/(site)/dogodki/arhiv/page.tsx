@@ -4,7 +4,7 @@ import { getPastEvents } from "@/lib/data/events";
 import { buildMetadata } from "@/lib/seo";
 import { routes } from "@/lib/routes";
 import { EventList } from "@/components/events/EventCard";
-import { Breadcrumbs, Container, PageHeader, Section } from "@/components/ui/primitives";
+import { Container, PageHeader, Section } from "@/components/ui/primitives";
 
 export async function generateMetadata(): Promise<Metadata> {
   const settings = await getSettings();
@@ -16,9 +16,7 @@ export default async function PastEventsPage() {
   return (
     <>
       <PageHeader
-        title="Pretekli dogodki"
-        accent="dogodki"
-        eyebrow={<Breadcrumbs items={[{ label: "Dogodki", href: routes.events }, { label: "Pretekli" }]} />}
+        title="Pretekli dogodki" crumbs={[{ label: "Dogodki", href: routes.events }, { label: "Pretekli" }]}
       />
       <Section>
         <Container>

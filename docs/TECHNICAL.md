@@ -403,8 +403,13 @@ throw-away credentials, and everything above is runtime-only.
 
 ### Newsletter and the outbox cron (PRD US-005)
 
-Visitors subscribe in the footer or the homepage tile (double opt-in:
-`/obvestila/potrdi?token=…`). Publishing a bulletin (`bulletin.publish`)
+Visitors subscribe in the footer (double opt-in, ZUP-19: the address stays
+`pending` and gets no bulletin until the link `/obvestila/potrdi?token=…` is
+opened; the token is random, single-use and valid 48 hours from its mail; at
+most one confirmation mail per address per 10 minutes; at most 5 signups per
+IP per hour plus a honeypot; the form answers the same for every address).
+Unconfirmed addresses are deleted 48 hours after their last mail by each run
+of `/api/cron/outbox`. Publishing a bulletin (`bulletin.publish`)
 queues one mail per active subscriber in the `outbox` table, once per bulletin
 (`bulletins.mailed_at`; undo keeps it, so a re-publish never mails again).
 Nothing is sent in the publish request. `/api/cron/outbox` sends what is due:
@@ -421,7 +426,8 @@ The host calls the route every 5 minutes (crontab of `deploy` on t4a):
 ```
 
 `X-Cron-Secret: $CRON_SECRET` works as well. The response is JSON
-(`{ sent, retry, failed, held, deferred }`).
+(`{ sent, retry, failed, held, deferred, deleted }`; `deleted` = unconfirmed
+addresses removed).
 
 ### claude-pool on t4a (once)
 
@@ -552,6 +558,30 @@ scripts/backup.sh
 - After this the Studio is no longer read by anything; edit content in the
   editor ("Spletna stran" in the sidebar, areas Vsebina strani and Župnija).
 - Locally: `DATABASE_URL=postgres://zupnija:dev@localhost:5433/zupnija UPLOAD_DIR=./.uploads node scripts/import-sanity-content.mjs`.
+- **Zakramenti (ZUP-11, ZUP-12):** /zakramenti reads the `sacramentsPage`
+  singleton (intro, and an optional image plus two texts per tab; the tabs
+  and their hashes are fixed in `src/lib/sacraments/tabs.ts`). Until the
+  priest first saves it, the page and the editor show the placeholder
+  "vsebina"; the import inserts the same document when it is missing. The old
+  `sacrament` documents are no longer imported or shown (rows already in the
+  database stay, unused), and every old `/zakramenti/<slug>`, including the
+  retired enquiry form `/zakramenti/povprasevanje`, answers 301 to its tab
+  (`src/app/(site)/zakramenti/[slug]/route.ts`). The `sacrament_requests`
+  table stays but nothing writes to it any more.
+
+**Groups** (`parishGroup`, /zupnija/skupine, "Skupine" in the main menu): a
+grid of cards in the editor's order. Each group picks an icon
+(`web/src/components/groups/icons/*.svg`, in the "Daruj" colour #7a5c1e) or
+a card photo; "Kartica vodi na" sends a card elsewhere (Verouk → /verouk, and
+/zupnija/skupine/verouk redirects there). "Skrij razdelek »Pridružite se«"
+leaves only when and where under its own title (ŽPS: "Seje"). The switch
+"Obrazec »Prošnja za molitev«" puts an anonymous form on the group's page
+(`web/src/lib/groups/prayerRequest.ts`): the request is mailed to
+"Prošnje prejme" (default zupirnice@gmail.com) with only its text and date;
+nothing is stored or logged, and the IP is used only by the shared rate limit
+(`rate_limit_hits`, 10-minute window). Migration `0004_groups_zup13` set up the
+16 groups, their icons and these switches on the imported data (it does
+nothing on an empty database, so the first import still runs there).
 
 ### Backups
 

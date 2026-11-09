@@ -40,7 +40,7 @@ export default async function IntentionsPage({ searchParams }: Props) {
 
   return (
     <>
-      <PageHeader title="Mašni nameni" accent="nameni" lede="Svete maše in nameni po dnevih. Nameni so vpisani za tekoči in prihodnji teden.">
+      <PageHeader title="Mašni nameni">
         <nav aria-label="Izbira tedna" className="mt-8 flex flex-wrap items-center justify-center gap-3">
           <Link href={routes.intentionsWeek(prev)} className={navButton}>
             <Icon name="arrow-left" size={16} />

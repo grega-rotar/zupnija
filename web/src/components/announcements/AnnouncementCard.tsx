@@ -32,7 +32,7 @@ export function AnnouncementRow({ item, compact }: { item: AnnouncementData; com
             {item.publishUntil ? <span>velja do {formatDate(dateOf(item.publishUntil))}</span> : null}
           </div>
         ) : null}
-        <h3 className={cn("font-bold leading-tight text-ink", compact ? "text-[1.25rem] tracking-[-0.03em]" : "text-[clamp(1.5rem,1.3rem+0.8vw,2rem)] tracking-[-0.04em]")}>
+        <h3 className={compact ? "text-h4" : undefined}>
           <Link href={routes.announcement(item.slug)} className="rounded-sm hover:text-gold-ink">
             {item.title}
           </Link>

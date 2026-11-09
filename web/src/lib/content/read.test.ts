@@ -12,7 +12,9 @@
  *    events resolve to null, a group's upcoming events are [] and the Verouk
  *    page's groups are [], and the Mass schedule's times come from
  *    mass_schedule_entries (compared without entries: title, dates and note);
- *  - search and the sitemap only list content types (events come from Postgres).
+ *  - search and the sitemap only list content types (events come from Postgres);
+ *  - the sacrament pages are retired (ZUP-11): their documents aren't imported,
+ *    /zakramenti reads the sacramentsPage document (src/lib/sacraments/page.test.ts).
  */
 import postgres from "postgres";
 import { afterAll, beforeAll, describe, expect, it } from "vitest";
@@ -20,7 +22,7 @@ import { resetDb } from "@/test/db";
 import * as data from "@/sanity/data";
 import exportFixture from "@/test/fixtures/sanity-export.json";
 import groq from "@/test/fixtures/groq-results.json";
-import { CONTENT_TYPES, importContent } from "../../../scripts/import-sanity-content-lib.mjs";
+import { CONTENT_TYPES, DEFAULT_DOCUMENTS, importContent } from "../../../scripts/import-sanity-content-lib.mjs";
 
 type J = Record<string, unknown>;
 const results = groq as unknown as Record<string, unknown>;
@@ -34,6 +36,9 @@ function normalise(v: unknown, key?: string): unknown {
   return v;
 }
 
+/** The fixture's documents the import takes (not the retired sacrament pages). */
+const imported = exportFixture.documents.filter((d) => CONTENT_TYPES.includes(d._type)).length;
+
 const sql = postgres(process.env.DATABASE_URL!, { max: 1, onnotice: () => {} });
 
 beforeAll(async () => {
@@ -41,7 +46,7 @@ beforeAll(async () => {
   const r = await importContent(sql, exportFixture as never, {
     store: async (a: { size?: number }) => ({ sha256: "0".repeat(64), size: a.size ?? 0 }),
   });
-  expect(r.inserted).toBe(exportFixture.documents.length);
+  expect(r.inserted).toBe(imported + DEFAULT_DOCUMENTS.length);
 });
 
 afterAll(async () => {
@@ -70,8 +75,6 @@ const calls: Record<string, (arg?: string) => Promise<unknown>> = {
   getPeople: () => data.getPeople(),
   getGroups: () => data.getGroups(),
   getGroup: (slug) => data.getGroup(slug!),
-  getSacraments: () => data.getSacraments(),
-  getSacrament: (slug) => data.getSacrament(slug!),
   getCatechesis: () => data.getCatechesis(),
   getDocuments: () => data.getDocuments(),
   getSpecialPeriod: (slug) => data.getSpecialPeriod(slug!),
@@ -80,7 +83,7 @@ const calls: Record<string, (arg?: string) => Promise<unknown>> = {
   getPage: (slug) => data.getPage(slug!),
 };
 
-const keys = Object.keys(results).filter((k) => !["now", "today"].includes(k) && !k.startsWith("search:") && k !== "getSitemapEntries");
+const keys = Object.keys(results).filter((k) => !["now", "today"].includes(k) && !k.startsWith("search:") && k !== "getSitemapEntries" && !k.startsWith("getSacrament"));
 
 describe("content read layer = GROQ", () => {
   it("the fixture's 'now' is TEST_NOW", () => {
@@ -90,7 +93,10 @@ describe("content read layer = GROQ", () => {
   it.each(keys)("%s", async (key) => {
     const [name, arg] = key.split(/:(.*)/);
     let expected = normalise(results[key]) as J | null;
-    if (name === "getGroup" && expected) expected = { ...expected, events: [] };
+    // Fields added in the editor (ZUP-13, ZUP-23, ZUP-25) are empty in the imported documents.
+    if (name === "getGroups") expected = (expected as unknown as J[]).map((g) => ({ ...g, icon: null, href: null, cardImage: null })) as never;
+    if (name === "getGroup" && expected)
+      expected = { ...expected, events: [], icon: null, href: null, hideJoin: false, meetingsTitle: null, prayerRequests: false, prayerIntro: null };
     if (name === "getCatechesis" && expected) expected = { ...expected, groups: [] };
     // The times live in mass_schedule_entries (empty here); title and note come from the imported document.
     if (name === "getCurrentSchedules") expected = (expected as unknown as J[]).map((x) => ({ ...x, entries: [] })) as never;
@@ -112,6 +118,6 @@ describe("content read layer = GROQ", () => {
 
   it("a second import changes nothing", async () => {
     const r = await importContent(sql, exportFixture as never, { store: async () => ({ sha256: "x", size: 0 }) });
-    expect(r).toMatchObject({ inserted: 0, updated: 0, unchanged: exportFixture.documents.length, media: 0 });
+    expect(r).toMatchObject({ inserted: 0, updated: 0, unchanged: imported, media: 0 });
   });
 });

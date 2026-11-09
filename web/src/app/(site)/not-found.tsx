@@ -1,15 +1,13 @@
 import Link from "next/link";
 import { routes } from "@/lib/routes";
-import { Button, Container, Section, headline } from "@/components/ui/primitives";
-import { cn } from "@/lib/utils";
+import { Button, Container, Section } from "@/components/ui/primitives";
 
 export default function NotFound() {
   return (
     <Section>
       <Container width="prose" className="flex flex-col items-center py-10 text-center lg:py-16">
-        <p className="eyebrow">Napaka 404</p>
-        <h1 className={cn("mt-3", headline.display)}>
-          Te strani <span className="accent">ni</span>
+        <h1>
+          Te strani ni
         </h1>
         <p className="lede mt-5 text-balance">
           Povezava je morda zastarela ali napačno zapisana. Kar iščete, je verjetno na eni od spodnjih strani.

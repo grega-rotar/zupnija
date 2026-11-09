@@ -11,7 +11,7 @@ import { PhotoGrid } from "@/components/gallery/PhotoGrid";
 import { ArticleCard } from "@/components/articles/ArticleCard";
 import { EventRow } from "@/components/events/EventCard";
 import { Share } from "@/components/share/Share";
-import { Breadcrumbs, Container, JsonLdScript, Section, SectionHeading, headline, tile } from "@/components/ui/primitives";
+import { Breadcrumbs, Container, JsonLdScript, Section, SectionHeading, tile } from "@/components/ui/primitives";
 import { cn } from "@/lib/utils";
 
 type Props = { params: Promise<{ slug: string }> };
@@ -54,13 +54,12 @@ export default async function ArticlePage({ params }: Props) {
       <article>
         <header className="pb-12 pt-10 sm:pt-14 lg:pb-16 lg:pt-20">
           <Container className="flex flex-col items-center text-center">
-            <Breadcrumbs className="mb-6 text-ink-3 [&_[aria-current]]:text-gold-ink" items={[{ label: "Novice", href: routes.news }, { label: article.title }]} />
-            <p className="eyebrow">
+            <Breadcrumbs className="mb-6 text-ink-3 [&_[aria-current]]:text-gold-ink" items={[{ label: "Domov", href: routes.home }, { label: "Novice", href: routes.news }, { label: article.title }]} />
+            <h1 className="max-w-4xl">{article.title}</h1>
+            <p className="mt-5 text-small font-medium text-ink-3">
               <time dateTime={article.publishedAt}>{formatDateLong(dateOf(article.publishedAt))}</time>
               {article.author ? <span> · {article.author.name}</span> : null}
             </p>
-            <h1 className={cn("mt-3 max-w-4xl", headline.display)}>{article.title}</h1>
-            {article.excerpt ? <p className="lede mx-auto mt-5 max-w-[40rem] text-balance lg:mt-6">{article.excerpt}</p> : null}
             <Share title={article.title} url={absoluteUrl(routes.article(slug), settings)} className="mt-6" />
           </Container>
         </header>
@@ -84,7 +83,7 @@ export default async function ArticlePage({ params }: Props) {
             <Attachments items={article.attachments} />
             {article.relatedEvent ? (
               <section className="mt-12">
-                <h2 className="eyebrow mb-3">Povezan dogodek</h2>
+                <h2 className="mb-4 text-h3">Povezan dogodek</h2>
                 <ul className={cn(tile, "overflow-hidden")}>
                   <EventRow event={article.relatedEvent} />
                 </ul>
@@ -96,7 +95,7 @@ export default async function ArticlePage({ params }: Props) {
         {article.gallery?.images?.length ? (
           <Section>
             <Container>
-              <SectionHeading eyebrow="Fotografije" title={article.gallery.title} action={{ label: "Odpri galerijo", href: routes.gallery(article.gallery.slug) }} />
+              <SectionHeading title={article.gallery.title} action={{ label: "Odpri galerijo", href: routes.gallery(article.gallery.slug) }} />
               <PhotoGrid images={article.gallery.images} title={article.gallery.title} />
             </Container>
           </Section>
@@ -106,7 +105,7 @@ export default async function ArticlePage({ params }: Props) {
       {article.related?.length ? (
         <Section>
           <Container>
-            <SectionHeading eyebrow="Novice" title="Iz življenja župnije" accent="življenja" action={{ label: "Vse novice", href: routes.news }} />
+            <SectionHeading title="Iz življenja župnije" action={{ label: "Vse novice", href: routes.news }} />
             <div className="grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
               {article.related.map((a) => (
                 <ArticleCard key={a._id} article={a} />

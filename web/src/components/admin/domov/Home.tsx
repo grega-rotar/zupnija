@@ -8,11 +8,8 @@ import { ApprovalsTask } from "./ApprovalsTask";
 import { AskTile } from "./AskTile";
 
 /** Domov, variant C of the prototype (vHome): greeting, hero, Na vrsti, Hitro, Urejeno. */
-export function Home({ v, isOwner, inbox }: { v: HomeView; isOwner: boolean; inbox?: React.ReactNode }) {
+export function Home({ v, isOwner }: { v: HomeView; isOwner: boolean }) {
   const tasks: React.ReactNode[] = [];
-
-  // Requests from the site's forms (components/admin/requests).
-  if (inbox) tasks.push(inbox);
 
   if (isOwner && v.approvals.length) tasks.push(<ApprovalsTask key="approve" rows={v.approvals} />);
 

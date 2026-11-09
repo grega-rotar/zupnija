@@ -54,7 +54,7 @@ export default async function RootLayout({ children }: { children: React.ReactNo
   const parishName = settings?.name || "Župnija Pirniče";
 
   return (
-    <html lang="sl" className={`${fontVariables} h-full`}>
+    <html lang="sl" className={`site ${fontVariables} h-full`}>
       <body className="flex min-h-full flex-col">
         <SkipLink />
         <UrgentBanner items={urgent} />

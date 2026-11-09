@@ -235,12 +235,7 @@ export const getGroup = cache(async (slug: string, stega = true) => {
   return read.readGroup(await store(), slug, nowIso());
 });
 
-export const getSacraments = cache(async () => read.readSacraments(await store()));
-
-export const getSacrament = cache(async (slug: string, stega = true) => {
-  void stega;
-  return read.readSacrament(await store(), slug);
-});
+export const getSacramentsPage = cache(async () => read.readSacramentsPage(await store()));
 
 export const getCatechesis = cache(async (stega = true) => {
   void stega;

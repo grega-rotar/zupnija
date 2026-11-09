@@ -29,7 +29,7 @@ export function ScheduleMatrix({ schedule, showTitle }: { schedule: Schedule; sh
     <div>
       {showTitle ? (
         <div className="mb-5 flex flex-wrap items-baseline gap-x-4 gap-y-1">
-          <h3 className="text-[1.5rem] font-bold tracking-[-0.035em]">{schedule.title}</h3>
+          <h3>{schedule.title}</h3>
           {range ? <p className="text-small text-ink-3">velja {range}</p> : null}
         </div>
       ) : null}

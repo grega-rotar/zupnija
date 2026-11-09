@@ -4,7 +4,7 @@ import { buildMetadata } from "@/lib/seo";
 import { routes } from "@/lib/routes";
 import { clean } from "@/lib/clean";
 import { PersonCard } from "@/components/sections/PageSections";
-import { Breadcrumbs, Container, EmptyState, PageHeader, Section, SectionHeading } from "@/components/ui/primitives";
+import { Container, EmptyState, PageHeader, Section, SectionHeading } from "@/components/ui/primitives";
 
 export async function generateMetadata(): Promise<Metadata> {
   const settings = await getSettings();
@@ -26,9 +26,7 @@ export default async function PeoplePage() {
   return (
     <>
       <PageHeader
-        title="Duhovniki in sodelavci"
-        accent="sodelavci"
-        eyebrow={<Breadcrumbs items={[{ label: "Župnija", href: routes.parish }, { label: "Duhovniki in sodelavci" }]} />}
+        title="Duhovniki in sodelavci" crumbs={[{ label: "Župnija", href: routes.parish }, { label: "Duhovniki in sodelavci" }]}
       />
       <Section>
         <Container>
@@ -42,7 +40,7 @@ export default async function PeoplePage() {
           ) : null}
           {staff.length ? (
             <div className={clergy.length ? "mt-24 lg:mt-40" : ""}>
-              <SectionHeading title="Sodelavci" accent="Sodelavci" eyebrow="Župnija" />
+              <SectionHeading title="Sodelavci" />
               <div className="grid gap-5 md:grid-cols-2">
                 {staff.map((p) => (
                   <PersonCard key={p._id} person={p} card />

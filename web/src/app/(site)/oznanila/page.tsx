@@ -63,7 +63,7 @@ export default async function AnnouncementsPage({ searchParams }: Props) {
 
   return (
     <>
-      <PageHero settings={settings} header="announcementsHeader" title="Oznanila župnije" accent="župnije" crumbs={[{ label: "Oznanila" }]} lede="Kar je trenutno pomembno v župniji." />
+      <PageHero settings={settings} header="announcementsHeader" title="Oznanila" crumbs={[{ label: "Oznanila" }]} />
 
       <Section>
         <Container>
@@ -111,7 +111,7 @@ export default async function AnnouncementsPage({ searchParams }: Props) {
                                 </span>
                               ) : null}
                             </div>
-                            <h2 className="mt-3 text-[1.5rem] font-bold leading-tight tracking-[-0.035em] text-ink sm:text-[1.75rem]">
+                            <h2 className="mt-3 text-ink text-h3">
                               <Link href={routes.announcement(a.slug)} className="rounded-sm hover:text-gold-ink">
                                 {a.title}
                               </Link>
@@ -155,10 +155,7 @@ export default async function AnnouncementsPage({ searchParams }: Props) {
             {/* Sidebar */}
             <aside className="space-y-5 lg:pt-[3.75rem]">
               <section aria-labelledby="oznanila-zupnije" className="rounded-lg bg-[linear-gradient(165deg,var(--color-gold-soft)_0%,#fff_72%)] p-6 shadow-soft sm:p-8">
-                <h2 id="oznanila-zupnije" className="eyebrow flex items-center gap-2">
-                  <Icon name="document" size={16} className="shrink-0" />
-                  Oznanila župnije
-                </h2>
+                <h2 id="oznanila-zupnije" className="text-h4">Oznanila župnije</h2>
                 {bulletin ? (
                   <>
                     <p className="mt-3 text-[2.25rem] font-bold leading-none tracking-[-0.045em] text-ink">{bulletinLabel(bulletin)}</p>
@@ -181,7 +178,7 @@ export default async function AnnouncementsPage({ searchParams }: Props) {
                 ) : null}
                 {olderBulletins.length ? (
                   <div className="mt-5 border-t border-stone/70 pt-4">
-                    <h3 className="text-meta font-semibold text-ink-3">Prejšnja oznanila</h3>
+                    <p className="text-meta font-semibold text-ink-3">Prejšnja oznanila</p>
                     <ul className="mt-2 flex flex-wrap gap-x-4 gap-y-1 text-small">
                       {olderBulletins.map((b) => (
                         <li key={b.id}>
@@ -197,15 +194,15 @@ export default async function AnnouncementsPage({ searchParams }: Props) {
 
               {home?.tile?.text ? (
                 <figure className="rounded-lg bg-surface px-7 py-9 text-center shadow-soft">
-                  <blockquote className="font-serif text-[1.5rem] italic leading-snug text-ink">{home.tile.text}</blockquote>
-                  {home.tile.source ? <figcaption className="eyebrow mt-3">{home.tile.source}</figcaption> : null}
+                  <blockquote className="text-[1.375rem] font-medium leading-snug tracking-[-0.02em] text-ink">{home.tile.text}</blockquote>
+                  {home.tile.source ? <figcaption className="mt-3 text-meta font-semibold text-gold-ink">{home.tile.source}</figcaption> : null}
                 </figure>
               ) : null}
 
               {events.length ? (
                 <div>
                   <div className="mb-2 flex items-center justify-between gap-4 px-2">
-                    <h2 className="text-[1.25rem] font-bold tracking-[-0.03em]">Prihajajoči dogodki</h2>
+                    <h2 className="text-h4">Prihajajoči dogodki</h2>
                     <TextLink href={routes.events}>Vsi</TextLink>
                   </div>
                   <ul className="overflow-hidden rounded-lg bg-surface shadow-soft">
@@ -240,7 +237,7 @@ export default async function AnnouncementsPage({ searchParams }: Props) {
                 <figure className="relative isolate min-h-[16rem] overflow-hidden rounded-lg bg-paper-3 text-paper shadow-soft">
                   <SanityImage image={home.tile.image} aspect={4 / 3} sizes="(min-width: 1024px) 24rem, 100vw" maxWidth={1000} decorative fill className="-z-20" imgClassName="[filter:saturate(.5)_sepia(.15)]" />
                   <div aria-hidden="true" className="absolute inset-0 -z-10 bg-[linear-gradient(180deg,rgb(14_10_6/0)_35%,rgb(14_10_6/0.75)_100%)]" />
-                  <figcaption className="absolute inset-x-0 bottom-0 p-6 font-serif text-[1.375rem] italic leading-snug">{settings.tagline}</figcaption>
+                  <figcaption className="absolute inset-x-0 bottom-0 p-6 text-[1.25rem] font-medium leading-snug tracking-[-0.02em]">{settings.tagline}</figcaption>
                 </figure>
               ) : null}
             </aside>

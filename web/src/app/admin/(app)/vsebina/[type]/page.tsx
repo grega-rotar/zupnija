@@ -15,7 +15,6 @@ const LEDE: Partial<Record<ContentType, string>> = {
   church: "Cerkve župnije, v vrstnem redu, kot so na strani.",
   person: "Duhovniki in sodelavci, kot so na strani Župnija.",
   parishGroup: "Zbori, skupine in dejavnosti.",
-  sacrament: "Zakramenti in kako se zanje dogovoriti.",
 };
 
 /** /vsebina/<type>: the list, or a singleton's form straight away. */

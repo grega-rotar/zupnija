@@ -23,7 +23,7 @@ export default async function SearchPage({ searchParams }: Props) {
 
   return (
     <>
-      <PageHeader title="Kaj iščete?" accent="iščete" eyebrow={<p className="eyebrow">Iskanje</p>}>
+      <PageHeader title="Kaj iščete?">
         <form action={routes.search} method="get" role="search" className="mt-8 flex w-full max-w-xl gap-2 rounded-full bg-surface p-1.5 shadow-soft">
           <label htmlFor="q" className="sr-only">
             Kaj iščete?
@@ -65,7 +65,7 @@ export default async function SearchPage({ searchParams }: Props) {
                         <Tag>{SEARCH_TYPE_LABEL[r._type] ?? r._type}</Tag>
                         {date ? <span>{date}</span> : null}
                       </div>
-                      <h2 className="mt-2 text-[1.25rem] font-bold leading-snug tracking-[-0.03em] text-ink">
+                      <h2 className="mt-2 text-ink text-h4">
                         {external ? (
                           <a href={href} className="rounded-sm hover:text-gold-ink">
                             {r.title}

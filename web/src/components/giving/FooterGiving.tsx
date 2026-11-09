@@ -17,7 +17,7 @@ export async function FooterGiving() {
         <UpnQr payload={giving.payload} />
       </Link>
       <div className="min-w-0">
-        <h2 className="text-[13px] font-semibold tracking-[-0.005em] text-ink">Darovi za župnijo</h2>
+        <h2 className="text-[0.875rem] tracking-[-0.01em] text-ink">Darovi za župnijo</h2>
         <p className="mt-1">
           TRR <span className="tnum whitespace-nowrap font-semibold text-ink">{giving.ibanGrouped}</span>
         </p>

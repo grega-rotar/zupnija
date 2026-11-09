@@ -10,7 +10,6 @@ import { clean } from "@/lib/clean";
 import { Attachments, RichText } from "@/components/sanity/RichText";
 import { EventRow } from "@/components/events/EventCard";
 import {
-  Breadcrumbs,
   Button,
   Container,
   JsonLdScript,
@@ -47,8 +46,7 @@ export default async function AnnouncementPage({ params }: Props) {
   return (
     <>
       <PageHeader
-        title={item.title}
-        eyebrow={<Breadcrumbs items={[{ label: "Oznanila", href: routes.announcements }, { label: item.title }]} />}
+        title={item.title} crumbs={[{ label: "Oznanila", href: routes.announcements }, { label: item.title }]}
       >
         <div className="mt-6 flex flex-wrap items-center justify-center gap-3 text-small font-medium text-ink-3">
           <time dateTime={item.publishFrom}>{formatDate(dateOf(item.publishFrom))}</time>
@@ -80,7 +78,7 @@ export default async function AnnouncementPage({ params }: Props) {
             <Attachments items={item.attachments} />
             {item.relatedEvent ? (
               <section className="mt-12">
-                <h2 className="eyebrow mb-3">Povezan dogodek</h2>
+                <h2 className="mb-4 text-h3">Povezan dogodek</h2>
                 <ul className="overflow-hidden rounded-lg bg-surface shadow-soft">
                   <EventRow event={item.relatedEvent} />
                 </ul>

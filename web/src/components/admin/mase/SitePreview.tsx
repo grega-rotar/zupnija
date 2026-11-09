@@ -18,8 +18,8 @@ export async function SitePreview({ date }: { date: IsoDate }) {
 
   return (
     <div className="site-preview">
-      <PageHeader title="Mašni nameni" lede="Svete maše in nameni po dnevih. Nameni so vpisani za tekoči in prihodnji teden.">
-        <p className="mt-8 min-w-0 font-serif text-h3 italic text-ink">
+      <PageHeader title="Mašni nameni">
+        <p className="mt-8 min-w-0 text-[1.375rem] font-bold tracking-[-0.035em] text-ink">
           {formatWeekSpan(week.from, week.to)}
           {isCurrent ? <span className="ml-2 text-small text-ink-3">ta teden</span> : null}
         </p>

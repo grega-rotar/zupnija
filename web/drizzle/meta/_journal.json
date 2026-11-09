@@ -29,6 +29,27 @@
       "when": 1793211546513,
       "tag": "0003_forms_newsletter",
       "breakpoints": true
+    },
+    {
+      "idx": 4,
+      "version": "7",
+      "when": 1794240775961,
+      "tag": "0004_groups_zup13",
+      "breakpoints": true
+    },
+    {
+      "idx": 5,
+      "version": "7",
+      "when": 1794240826306,
+      "tag": "0005_privacy_newsletter_zup19",
+      "breakpoints": true
+    },
+    {
+      "idx": 6,
+      "version": "7",
+      "when": 1794240827306,
+      "tag": "0006_church_names_zup14",
+      "breakpoints": true
     }
   ]
 }

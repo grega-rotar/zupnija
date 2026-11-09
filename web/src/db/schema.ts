@@ -384,7 +384,11 @@ export const newsletterSubscribers = pgTable("newsletter_subscribers", {
   id: serial("id").primaryKey(),
   email: text("email").notNull().unique(), // lower-cased
   status: subscriberStatusEnum("status").notNull().default("pending"),
-  token: text("token").notNull().unique(), // confirm + unsubscribe link
+  token: text("token").notNull().unique(), // unsubscribe link (every newsletter mail)
+  /** The confirmation link's single-use token; null once used (ZUP-19). */
+  confirmToken: text("confirm_token").unique(),
+  /** When the last confirmation mail went out: the link is valid 48 h from it, a new one at most every 10 min. */
+  confirmSentAt: ts("confirm_sent_at"),
   consentAt: ts("consent_at").notNull(),
   confirmedAt: ts("confirmed_at"),
   unsubscribedAt: ts("unsubscribed_at"),

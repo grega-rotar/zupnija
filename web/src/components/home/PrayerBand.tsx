@@ -29,9 +29,8 @@ export async function PrayerBand() {
         )}
         <div className={p.shade} aria-hidden="true" />
         <div>
-          <p className={p.eye}>{page.title || "Molitev in češčenje"}</p>
           <h2 className={cn(s.h2, p.h2)} id="molitev-h">
-            Pridite pred <em className="accent">Najsvetejše</em>
+            Pridite pred Najsvetejše
           </h2>
         </div>
         <div className={p.foot}>

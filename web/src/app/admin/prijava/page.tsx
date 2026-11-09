@@ -12,7 +12,7 @@ type Props = { searchParams: Promise<{ error?: string | string[] }> };
 
 /**
  * The editor's v4 language: the sidebar's translucent ground with the parish's
- * name and one headline (Inter 700, one serif italic phrase) beside the form
+ * name and one headline (Inter 700) beside the form
  * on a white tile.
  */
 export default async function LoginPage({ searchParams }: Props) {
@@ -30,7 +30,7 @@ export default async function LoginPage({ searchParams }: Props) {
         </div>
         <div>
           <blockquote className="max-w-[14ch] text-h2 font-bold md:text-h1">
-            Oznanila, maše in nameni <span className="accent">na enem mestu.</span>
+            Oznanila, maše in nameni na enem mestu.
           </blockquote>
         </div>
         <small className="text-meta text-ink-3">{host}</small>

@@ -114,12 +114,12 @@ export const saveAction = defineAction<SavePayload>({
 });
 
 // ── content.delete ──────────────────────────────────────────────────────────
-/** Titles of the documents that reference `id` anywhere. */
+/** Titles of the documents that reference `id` anywhere. Rows of a retired type (the old sacrament pages) don't count: nothing shows them. */
 async function referencedBy(tx: Tx, id: string): Promise<string[]> {
   const rows = await tx.select({ id: c.id, type: c.type, data: c.data }).from(c).where(ne(c.id, id));
   const mentions = (v: unknown): boolean =>
     Array.isArray(v) ? v.some(mentions) : v && typeof v === "object" ? (v as Doc)._ref === id || Object.values(v).some(mentions) : false;
-  return rows.filter((r) => mentions(r.data)).map((r) => (r.type in TYPES ? titleFor(r.type as ContentType, r.data) : r.id));
+  return rows.filter((r) => r.type in TYPES && mentions(r.data)).map((r) => titleFor(r.type as ContentType, r.data));
 }
 
 export const deleteAction = defineAction<{ id: string }>({
