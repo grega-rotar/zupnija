@@ -408,8 +408,8 @@ export const PAGE_QUERY = defineQuery(/* groq */ `
       _type == "sectionChurches" => {
         title,
         "churches": select(
-          count(churches) > 0 => churches[]->{ ${churchRefFragment}, kind, dedication, summary, image { ${imageFragment} } },
-          *[_type == "church"] | order(order asc){ ${churchRefFragment}, kind, dedication, summary, image { ${imageFragment} } }
+          count(churches) > 0 => churches[]->{ ${churchRefFragment}, kind, dedication, summary, address, image { ${imageFragment} } },
+          *[_type == "church"] | order(order asc){ ${churchRefFragment}, kind, dedication, summary, address, image { ${imageFragment} } }
         )
       },
       _type == "sectionFaq" => { title, items[]{ _key, question, answer } },

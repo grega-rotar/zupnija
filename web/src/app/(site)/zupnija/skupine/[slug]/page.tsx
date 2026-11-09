@@ -12,7 +12,7 @@ import { EventList } from "@/components/events/EventCard";
 import { PersonCard } from "@/components/sections/PageSections";
 import { GroupIcon } from "@/components/groups/GroupIcon";
 import { PrayerRequestForm } from "@/components/groups/PrayerRequestForm";
-import { Breadcrumbs, Container, JsonLdScript, MetaRow, PageHeader, Section, SectionHeading, TextLink } from "@/components/ui/primitives";
+import { Container, JsonLdScript, MetaRow, PageHeader, Section, SectionHeading, TextLink } from "@/components/ui/primitives";
 
 type Props = { params: Promise<{ slug: string }> };
 
@@ -49,7 +49,7 @@ export default async function GroupPage({ params }: Props) {
     <>
       <PageHeader
         title={group.title}
-        eyebrow={<Breadcrumbs items={[{ label: "Župnija", href: routes.parish }, { label: "Skupine", href: routes.groups }, { label: group.title }]} />}
+        crumbs={[{ label: "Župnija", href: routes.parish }, { label: "Skupine", href: routes.groups }, { label: group.title }]}
       />
       <Section>
         <Container width={hasBox ? "content" : "prose"} className={cn(hasBox && "grid gap-12 lg:grid-cols-[minmax(0,7fr)_minmax(0,5fr)] lg:gap-16")}>

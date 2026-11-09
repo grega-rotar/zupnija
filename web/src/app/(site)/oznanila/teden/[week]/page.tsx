@@ -52,10 +52,9 @@ export default async function BulletinWeekPage({ params }: Props) {
     return (
       <>
         <PageHeader
-          title={`Svete maše ${span}`}
-          lede="Za ta teden ni objavljenih oznanil."
-          eyebrow={<Breadcrumbs items={[{ label: "Oznanila", href: routes.announcements }, { label: span }]} />}
-        />
+          title={`Svete maše ${span}`} crumbs={[{ label: "Oznanila", href: routes.announcements }, { label: span }]}>
+          <p className="mt-5 text-small font-medium text-ink-3">Za ta teden ni objavljenih oznanil.</p>
+        </PageHeader>
         <Section>
           <Container>
             <div className="grid gap-5 md:grid-cols-2 xl:grid-cols-3">

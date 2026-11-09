@@ -68,7 +68,7 @@ export default async function SpecialPeriodPage({ params }: Props) {
       {period.schedule?.entries?.length ? (
         <Section>
           <Container>
-            <SectionHeading eyebrow="Bogoslužje" title="Svete maše" accent="maše" action={{ label: "Vse svete maše", href: routes.masses }} />
+            <SectionHeading title="Svete maše" action={{ label: "Vse svete maše", href: routes.masses }} />
             <ScheduleTable schedule={{ ...period.schedule, replacesRegular: null }} />
           </Container>
         </Section>
@@ -77,7 +77,7 @@ export default async function SpecialPeriodPage({ params }: Props) {
       {period.events?.length ? (
         <Section>
           <Container>
-            <SectionHeading eyebrow="Dogodki" title="Kaj se pripravlja" accent="pripravlja" />
+            <SectionHeading title="Kaj se pripravlja" />
             <EventList events={period.events} />
           </Container>
         </Section>
@@ -86,7 +86,7 @@ export default async function SpecialPeriodPage({ params }: Props) {
       {period.announcements?.length ? (
         <Section>
           <Container>
-            <SectionHeading eyebrow="Oznanila" title="Kaj je novega" accent="novega" />
+            <SectionHeading title="Kaj je novega" />
             <AnnouncementList items={period.announcements} />
           </Container>
         </Section>

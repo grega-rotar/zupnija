@@ -5,7 +5,7 @@ import { routes } from "@/lib/routes";
 import { ARRANGE_HEADING } from "@/lib/sacraments/tabs";
 import { RichText, type PortableTextValue } from "@/components/sanity/RichText";
 import { SanityImage, hasImage } from "@/components/sanity/SanityImage";
-import { Breadcrumbs, Container, PageHeader, Section, headline } from "@/components/ui/primitives";
+import { Container, PageHeader, Section, headline } from "@/components/ui/primitives";
 import { SacramentTabs } from "./SacramentTabs";
 
 export async function generateMetadata(): Promise<Metadata> {
@@ -29,7 +29,7 @@ export default async function SacramentsPage() {
   const page = await getSacramentsPage();
   return (
     <>
-      <PageHeader title="Zakramenti" eyebrow={<Breadcrumbs items={[{ label: "Župnija", href: routes.parish }, { label: "Zakramenti" }]} />} />
+      <PageHeader title="Zakramenti" crumbs={[{ label: "Župnija", href: routes.parish }, { label: "Zakramenti" }]} />
       <Section>
         <Container>
           {page.intro?.length ? <RichText value={page.intro as PortableTextValue} size="lg" className="mx-auto mb-14 max-w-[46rem] lg:mb-20" /> : null}

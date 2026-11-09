@@ -43,6 +43,13 @@
       "when": 1794240826306,
       "tag": "0005_privacy_newsletter_zup19",
       "breakpoints": true
+    },
+    {
+      "idx": 6,
+      "version": "7",
+      "when": 1794240827306,
+      "tag": "0006_church_names_zup14",
+      "breakpoints": true
     }
   ]
 }

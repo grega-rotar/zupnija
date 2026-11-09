@@ -30,7 +30,7 @@ export default async function CatechesisPage() {
 
   return (
     <>
-      <PageHero settings={settings} header="catechesisHeader" title={page?.title || "Verouk"} lede={page?.schoolYear ? `Veroučno leto ${page.schoolYear}` : undefined}>
+      <PageHero settings={settings} header="catechesisHeader" title={page?.title || "Verouk"}>
         {page?.notice?.length ? (
           <Notice className="mx-auto mt-8 text-left">
             <RichText value={page.notice} />
@@ -40,14 +40,14 @@ export default async function CatechesisPage() {
 
       <Section>
         <Container>
-          <SectionHeading eyebrow="Verouk" title="Urnik skupin" accent="skupin" />
+          <SectionHeading title="Urnik skupin" lede={page?.schoolYear ? `Veroučno leto ${page.schoolYear}` : undefined} />
           {groups.length ? (
             <Card padded={false} className="px-6 py-2 sm:px-8">
               {/* Phones: one card per group. */}
               <ul className="divide-y divide-stone/70 md:hidden">
                 {groups.map((g) => (
                   <li key={g._id} className="py-4">
-                    <h3 className="text-[1.125rem] font-bold tracking-[-0.025em] text-ink">{g.title}</h3>
+                    <h3 className="text-ink text-h4">{g.title}</h3>
                     <dl className="mt-1.5 grid grid-cols-[5.5rem_1fr] gap-x-3 gap-y-1 text-small">
                       <dt className="text-ink-3">Termin</dt>
                       <dd className="text-ink">{sessionsLine(g.sessions)}</dd>
@@ -126,7 +126,7 @@ export default async function CatechesisPage() {
               <RichText value={page?.intro} size="lg" />
               {page?.enrollment?.length ? (
                 <section className="mt-10">
-                  <h2 className="mb-4 text-[2rem] font-bold tracking-[-0.045em]">Vpis</h2>
+                  <h2 className="mb-4 text-h3">Vpis</h2>
                   <RichText value={page.enrollment} />
                 </section>
               ) : null}

@@ -23,7 +23,7 @@ export default async function GenericPage({ params }: Props) {
 
   return (
     <>
-      <PageHeader title={page.title} lede={page.intro} />
+      <PageHeader title={page.title} />
       <PageSections sections={page.sections} />
       <JsonLdScript data={breadcrumbJsonLd([{ name: page.title, path: routes.page(slug) }], settings)} />
     </>

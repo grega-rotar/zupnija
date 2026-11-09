@@ -80,7 +80,6 @@
     letter-spacing: -0.02em;
   }
   .rt-gi {
-    font-family: var(--font-serif, Georgia, serif);
     font-weight: 400;
     font-size: 1.25rem;
   }

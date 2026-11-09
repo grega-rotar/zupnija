@@ -3,7 +3,7 @@ import { getChurches, getSettings } from "@/sanity/data";
 import { buildMetadata } from "@/lib/seo";
 import { routes } from "@/lib/routes";
 import { ChurchCard } from "@/components/churches/ChurchCard";
-import { Breadcrumbs, Container, EmptyState, PageHeader, Section } from "@/components/ui/primitives";
+import { Container, EmptyState, PageHeader, Section } from "@/components/ui/primitives";
 
 export async function generateMetadata(): Promise<Metadata> {
   const settings = await getSettings();
@@ -20,10 +20,7 @@ export default async function ChurchesPage() {
   return (
     <>
       <PageHeader
-        title="Naše cerkve"
-        accent="cerkve"
-        lede="Župnijska cerkev in podružnice. Pri vsaki najdete urnik svetih maš, naslov in dostop."
-        eyebrow={<Breadcrumbs items={[{ label: "Župnija", href: routes.parish }, { label: "Cerkve" }]} />}
+        title="Naše cerkve" crumbs={[{ label: "Župnija", href: routes.parish }, { label: "Cerkve" }]}
       />
       <Section>
         <Container>

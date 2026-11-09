@@ -7,7 +7,7 @@ import { routes } from "@/lib/routes";
 import { formatDateLong } from "@/lib/dates";
 import { RichText } from "@/components/sanity/RichText";
 import { PhotoGrid } from "@/components/gallery/PhotoGrid";
-import { Breadcrumbs, Container, PageHeader, Section } from "@/components/ui/primitives";
+import { Container, PageHeader, Section } from "@/components/ui/primitives";
 
 type Props = { params: Promise<{ slug: string }> };
 
@@ -32,8 +32,7 @@ export default async function GalleryPage({ params }: Props) {
   return (
     <>
       <PageHeader
-        title={gallery.title}
-        eyebrow={<Breadcrumbs items={[{ label: "Galerije", href: routes.galleries }, { label: gallery.title }]} />}
+        title={gallery.title} crumbs={[{ label: "Galerije", href: routes.galleries }, { label: gallery.title }]}
       >
         <p className="mt-5 text-small font-medium text-ink-3">
           <time dateTime={gallery.date}>{formatDateLong(gallery.date)}</time>

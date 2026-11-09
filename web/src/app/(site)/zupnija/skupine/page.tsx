@@ -5,7 +5,7 @@ import { routes } from "@/lib/routes";
 import { GroupCard } from "@/components/groups/GroupCard";
 import { GroupSearch } from "@/components/groups/GroupSearch";
 import { groupSearchText, queryParam } from "@/components/groups/groupSearch";
-import { Breadcrumbs, Container, EmptyState, PageHeader, Section } from "@/components/ui/primitives";
+import { Container, EmptyState, PageHeader, Section } from "@/components/ui/primitives";
 
 export async function generateMetadata(): Promise<Metadata> {
   const settings = await getSettings();
@@ -24,7 +24,7 @@ export default async function GroupsPage({ searchParams }: Props) {
   const [groups, { q }] = await Promise.all([getGroups(), searchParams]);
   return (
     <>
-      <PageHeader title="Skupine" eyebrow={<Breadcrumbs items={[{ label: "Župnija", href: routes.parish }, { label: "Skupine" }]} />} />
+      <PageHeader title="Skupine" crumbs={[{ label: "Župnija", href: routes.parish }, { label: "Skupine" }]} />
       <Section>
         <Container>
           {groups.length ? (

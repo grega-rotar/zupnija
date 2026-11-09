@@ -1,21 +1,20 @@
 import Link from "next/link";
 import type { CHURCHES_QUERY_RESULT } from "@/sanity/types.generated";
-import { CHURCH_KIND_LABEL } from "@/lib/labels";
-import { clean } from "@/lib/clean";
+import { churchPlace } from "@/lib/churches";
 import { routes } from "@/lib/routes";
 import { SanityImage, hasImage, ImagePlaceholder } from "@/components/sanity/SanityImage";
 import { Icon } from "@/components/ui/Icon";
 
-type Church = Pick<CHURCHES_QUERY_RESULT[number], "_id" | "name" | "shortName" | "slug" | "kind" | "image"> & { summary?: string | null };
+type Church = Pick<CHURCHES_QUERY_RESULT[number], "_id" | "name" | "shortName" | "slug" | "address" | "image">;
 
 /**
  * Church tile (the homepage's "Naše cerkve"): a tall desaturated photograph
- * with the name set on a warm shade, and a small glass arrow.
+ * with the church's name and, under it, its village (ZUP-15), on a warm
+ * shade, and a small glass arrow.
  */
-export function ChurchCard({ church, priority, line }: { church: Church; priority?: boolean; line?: string | null }) {
+export function ChurchCard({ church, priority }: { church: Church; priority?: boolean }) {
   const title = church.shortName || church.name;
-  // The short name on the photo; the full name (or the kind) under it.
-  const sub = line ?? (title !== church.name ? church.name : (CHURCH_KIND_LABEL[clean(church.kind)] ?? "Cerkev"));
+  const sub = churchPlace(church.address);
   return (
     <Link
       href={routes.church(church.slug)}
@@ -41,7 +40,7 @@ export function ChurchCard({ church, priority, line }: { church: Church; priorit
         className="absolute inset-0 -z-10 bg-[linear-gradient(180deg,rgb(246_239_223/0.34)_0%,rgb(246_239_223/0)_36%,rgb(14_10_6/0)_44%,rgb(14_10_6/0.8)_100%)]"
       />
       <div className="min-w-0 flex-1 pr-2">
-        <h3 className="text-[1.875rem] font-bold leading-[1.05] tracking-[-0.04em] text-paper">{title}</h3>
+        <h3 className="text-paper">{title}</h3>
         {sub ? <p className="mt-1.5 text-small leading-snug text-paper/90">{sub}</p> : null}
       </div>
       <span

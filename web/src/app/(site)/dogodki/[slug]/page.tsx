@@ -10,7 +10,7 @@ import { EVENT_CATEGORY_LABEL } from "@/lib/labels";
 import { RichText } from "@/components/sanity/RichText";
 import { DateLeaf } from "@/components/events/EventCard";
 import { Icon, type IconName } from "@/components/ui/Icon";
-import { Breadcrumbs, Container, JsonLdScript, Section, Tag, TextLink, headline, tile } from "@/components/ui/primitives";
+import { Breadcrumbs, Container, JsonLdScript, Section, Tag, TextLink, tile } from "@/components/ui/primitives";
 import { cn } from "@/lib/utils";
 import { eventIcsPath, eventToCal } from "@/lib/calendar/feed";
 import { AddToCalendar } from "@/components/share/AddToCalendar";
@@ -64,12 +64,12 @@ export default async function EventPage({ params }: Props) {
             className="mb-6 text-ink-3 [&_[aria-current]]:text-gold-ink"
             items={[{ label: "Domov", href: routes.home }, { label: "Dogodki", href: routes.events }, { label: event.title }]}
           />
-          <div className="flex flex-wrap items-center justify-center gap-2">
+          <h1 className="max-w-5xl">{event.title}</h1>
+          <div className="mt-6 flex flex-wrap items-center justify-center gap-2">
             <Tag tone="gold">{EVENT_CATEGORY_LABEL[clean(event.category) ?? "other"]}</Tag>
             {isPast ? <Tag>Dogodek je minil</Tag> : null}
           </div>
-          <h1 className={cn("mt-5 max-w-5xl", headline.display)}>{event.title}</h1>
-          <ul className="mt-8 flex flex-wrap justify-center gap-2 text-[0.9375rem] font-semibold text-ink">
+          <ul className="mt-4 flex flex-wrap justify-center gap-2 text-[0.9375rem] font-semibold text-ink">
             <Meta icon="calendar">
               <time dateTime={event.start}>{multiDay ? formatDateSpan(startDate, endDate!) : formatDayHeading(startDate, true)}</time>
             </Meta>
@@ -86,8 +86,7 @@ export default async function EventPage({ params }: Props) {
       <Section>
         <Container className="grid gap-5 lg:grid-cols-[minmax(0,7fr)_minmax(0,5fr)]">
           <div className={cn(tile, "self-start p-6 sm:p-10")}>
-            <p className="eyebrow">Opis</p>
-            <div className="mt-4">
+            <div>
               {event.description?.length ? <RichText value={event.description} size="lg" /> : <p className="text-body text-ink-2">Podrobnosti bodo objavljene.</p>}
             </div>
           </div>
@@ -95,7 +94,7 @@ export default async function EventPage({ params }: Props) {
             <div className={cn(tile, "p-6 sm:p-8")}>
               <div className="flex items-center gap-5">
                 <DateLeaf start={event.start} end={event.end} />
-                <h2 className="text-[1.5rem] font-bold leading-tight tracking-[-0.035em]">Praktične informacije</h2>
+                <h2 className="text-h3">Praktične informacije</h2>
               </div>
               <dl className="mt-6 space-y-4 border-t border-stone/70 pt-5 text-body">
                 <div>
@@ -120,8 +119,8 @@ export default async function EventPage({ params }: Props) {
             </div>
             {home?.tile?.text ? (
               <figure className="rounded-lg bg-[linear-gradient(165deg,var(--color-gold-soft)_0%,#fff_72%)] p-8 text-center shadow-soft">
-                <blockquote className="font-serif text-[1.5rem] italic leading-snug text-ink">{home.tile.text}</blockquote>
-                {home.tile.source ? <figcaption className="eyebrow mt-3">{home.tile.source}</figcaption> : null}
+                <blockquote className="text-[1.375rem] font-medium leading-snug tracking-[-0.02em] text-ink">{home.tile.text}</blockquote>
+                {home.tile.source ? <figcaption className="mt-3 text-meta font-semibold text-gold-ink">{home.tile.source}</figcaption> : null}
               </figure>
             ) : null}
           </aside>

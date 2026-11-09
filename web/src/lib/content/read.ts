@@ -754,6 +754,7 @@ const churchTile = (s: Store, c: Doc) => ({
   kind: nul(c.kind),
   dedication: nul(c.dedication),
   summary: nul(c.summary),
+  address: nul(c.address),
   image: image(s, c.image),
 });
 

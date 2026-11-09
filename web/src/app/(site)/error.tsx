@@ -1,8 +1,7 @@
 "use client";
 
 import { useEffect } from "react";
-import { Button, Container, Section, buttonClassName, headline } from "@/components/ui/primitives";
-import { cn } from "@/lib/utils";
+import { Button, Container, Section, buttonClassName } from "@/components/ui/primitives";
 
 export default function ErrorPage({ error, reset }: { error: Error & { digest?: string }; reset: () => void }) {
   useEffect(() => {
@@ -12,9 +11,8 @@ export default function ErrorPage({ error, reset }: { error: Error & { digest?: 
   return (
     <Section>
       <Container width="prose" className="flex flex-col items-center py-10 text-center lg:py-16">
-        <p className="eyebrow">Napaka</p>
-        <h1 className={cn("mt-3", headline.display)}>
-          Nekaj je šlo <span className="accent">narobe</span>
+        <h1>
+          Nekaj je šlo narobe
         </h1>
         <p className="lede mt-5 text-balance">
           Strani trenutno ne moremo prikazati. Poskusite znova; če se napaka ponavlja, nas pokličite ali pišite.

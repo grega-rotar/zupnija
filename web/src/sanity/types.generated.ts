@@ -4277,6 +4277,7 @@ export type PAGE_QUERY_RESULT = {
           kind: "chapel" | "filial" | "parish";
           dedication: string | null;
           summary: string | null;
+          address: Address | null;
           image: {
             asset: {
               _id: string;

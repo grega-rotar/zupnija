@@ -8,7 +8,7 @@ import { textBlocks } from "@/lib/data/text";
 import { DayCard } from "@/components/masses/MassList";
 import { EventList, type EventCardData } from "@/components/events/EventCard";
 import { Icon } from "@/components/ui/Icon";
-import { TextLink, buttonClassName, headline, tile } from "@/components/ui/primitives";
+import { TextLink, buttonClassName, tile } from "@/components/ui/primitives";
 import { cn } from "@/lib/utils";
 
 type Props = {
@@ -56,8 +56,7 @@ export function BulletinView({ bulletin, massDays, massHeading = "Svete maše in
   return (
     <article>
       <header className="mx-auto mb-10 flex max-w-3xl flex-col items-center text-center lg:mb-14">
-        <p className="eyebrow">Oznanila župnije Pirniče</p>
-        <Heading className={cn("mt-3.5", headingLevel === "h1" ? headline.display : headline.h2)}>{bulletinLabel(bulletin)}</Heading>
+        <Heading>{bulletinLabel(bulletin)}</Heading>
         {bulletin.issue ? <p className="lede mt-4">{bulletin.issue}</p> : null}
         {bulletin.pdfUrl ? (
           <a href={bulletin.pdfUrl} className={cn(buttonClassName(), "mt-7")}>
@@ -71,20 +70,20 @@ export function BulletinView({ bulletin, massDays, massHeading = "Svete maše in
         <div className={cn(tile, "min-w-0 self-start p-6 sm:p-10")}>
           {bulletin.article ? (
             <section className="mb-12">
-              {bulletin.article.title ? <Sub className="text-[clamp(1.75rem,1.5rem+1vw,2.25rem)] font-bold leading-tight tracking-[-0.045em]">{bulletin.article.title}</Sub> : null}
+              {bulletin.article.title ? <Sub className="text-h3">{bulletin.article.title}</Sub> : null}
               <RichText value={textBlocks(bulletin.article.text, `a${bulletin.id}`)} className="mt-4" />
             </section>
           ) : null}
 
           {bulletin.prayerIntention ? (
             <section className="mb-12 rounded-md bg-gold-soft p-6 sm:p-7">
-              <p className="eyebrow">Molitveni namen</p>
-              {bulletin.prayerIntention.title ? <Sub className="mt-2 font-serif text-[1.5rem] font-normal italic leading-snug text-ink">{bulletin.prayerIntention.title}</Sub> : null}
+              <Sub className="text-h4">Molitveni namen</Sub>
+              {bulletin.prayerIntention.title ? <p className="mt-2 text-[1.25rem] font-medium leading-snug tracking-[-0.02em] text-ink">{bulletin.prayerIntention.title}</p> : null}
               <p className="mt-2 text-body text-ink-2">{bulletin.prayerIntention.text}</p>
             </section>
           ) : null}
 
-          <Sub className="mb-2 text-[1.5rem] font-bold tracking-[-0.035em]">Obvestila</Sub>
+          <Sub className="mb-2 text-h3">Obvestila</Sub>
           {items.length ? (
             <ol className="divide-y divide-stone/70">
               {items.map((item, i) => (
@@ -105,7 +104,7 @@ export function BulletinView({ bulletin, massDays, massHeading = "Svete maše in
 
           {events.length ? (
             <section className="mt-12">
-              <Sub className="mb-4 text-[1.5rem] font-bold tracking-[-0.035em]">Srečanja in dogodki</Sub>
+              <Sub className="mb-4 text-h3">Srečanja in dogodki</Sub>
               <EventList events={events} />
             </section>
           ) : null}
@@ -114,8 +113,7 @@ export function BulletinView({ bulletin, massDays, massHeading = "Svete maše in
         <aside className={cn(tile, "min-w-0 self-start p-6 sm:p-8")}>
           <div className="flex items-center justify-between gap-4">
             <div>
-              <p className="eyebrow">Svete maše in nameni</p>
-              <Sub className="mt-1 text-[1.5rem] font-bold tracking-[-0.035em]">{massHeading}</Sub>
+              <Sub className="text-h3">{massHeading}</Sub>
             </div>
             {massDays[0] ? <TextLink href={routes.intentionsWeek(massDays[0].date)}>Odpri teden</TextLink> : null}
           </div>

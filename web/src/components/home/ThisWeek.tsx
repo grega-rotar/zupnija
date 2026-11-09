@@ -23,9 +23,8 @@ export function ThisWeek({ date, liturgy, event, bulletin, week }: Props) {
   return (
     <section className={cn(s.wrap, s.sec)} aria-labelledby="teden-h">
       <div className={cn(s.open, s.reveal)} data-reveal>
-        <p className={s.eye}>{formatDayHeading(date)}</p>
         <h2 className={s.h2} id="teden-h">
-          Ta teden <em className="accent">v župniji</em>
+          Ta teden v župniji
         </h2>
         <p className={s.subl}>Bogoslužni dan, naslednji dogodek, oznanila in svete maše do nedelje.</p>
       </div>

@@ -1,8 +1,6 @@
 import Link from "next/link";
 import type { UPCOMING_EVENTS_QUERY_RESULT } from "@/sanity/types.generated";
 import { dateOf, formatDayNumber, formatMonthShort, formatTime, formatWeekdayShort, timeOf, formatDateSpan } from "@/lib/dates";
-import { EVENT_CATEGORY_LABEL } from "@/lib/labels";
-import { clean } from "@/lib/clean";
 import { routes } from "@/lib/routes";
 import { cn } from "@/lib/utils";
 import { SanityImage, hasImage, ImagePlaceholder } from "@/components/sanity/SanityImage";
@@ -50,8 +48,7 @@ export function EventRow({ event }: { event: EventCardData }) {
       >
         <DateLeaf start={event.start} end={event.end} />
         <div className="min-w-0">
-          <p className="eyebrow">{EVENT_CATEGORY_LABEL[clean(event.category) ?? "other"]}</p>
-          <h3 className="mt-1 text-[1.25rem] font-bold leading-snug tracking-[-0.03em] text-ink">{event.title}</h3>
+          <h3 className="text-h4">{event.title}</h3>
           <p className="mt-1 text-small text-ink-2">
             <span className="tnum">{whenLine(event)}</span>
             {where ? <span> · {where}</span> : null}
@@ -89,8 +86,7 @@ export function EventCard({ event, priority }: { event: EventCardData; priority?
       <div className="flex items-start gap-4 px-7 pb-7 pt-6">
         <DateLeaf start={event.start} end={event.end} />
         <div className="min-w-0">
-          <p className="eyebrow">{EVENT_CATEGORY_LABEL[clean(event.category) ?? "other"]}</p>
-          <h3 className="mt-1 text-[1.25rem] font-bold leading-snug tracking-[-0.03em] text-ink">{event.title}</h3>
+          <h3 className="text-h4">{event.title}</h3>
           <p className="mt-1 text-small text-ink-2">
             <span className="tnum">{whenLine(event)}</span>
             {where ? <span> · {where}</span> : null}

@@ -1,6 +1,7 @@
 import Link from "next/link";
 import type { CHURCHES_QUERY_RESULT, HOME_ARTICLES_QUERY_RESULT, SETTINGS_QUERY_RESULT } from "@/sanity/types.generated";
 import { dateOf, formatDayMonth } from "@/lib/dates";
+import { churchPlace } from "@/lib/churches";
 import { routes } from "@/lib/routes";
 import { cn } from "@/lib/utils";
 import { SanityImage, hasImage, ImagePlaceholder } from "@/components/sanity/SanityImage";
@@ -22,9 +23,8 @@ export function News({ articles }: { articles: HOME_ARTICLES_QUERY_RESULT }) {
   return (
     <section className={cn(s.wrap, s.sec)} aria-labelledby="novice-h">
       <div className={cn(s.open, s.reveal)} data-reveal>
-        <p className={s.eye}>Novice</p>
         <h2 className={s.h2} id="novice-h">
-          Iz <em className="accent">življenja</em> župnije
+          Iz življenja župnije
         </h2>
         <Link className={s.more} href={routes.news}>
           Vse novice <Arrow />
@@ -54,20 +54,17 @@ export function News({ articles }: { articles: HOME_ARTICLES_QUERY_RESULT }) {
   );
 }
 
-type Church = Pick<CHURCHES_QUERY_RESULT[number], "_id" | "name" | "shortName" | "slug" | "dedication" | "image">;
+type Church = Pick<CHURCHES_QUERY_RESULT[number], "_id" | "name" | "shortName" | "slug" | "address" | "image">;
 
-/** "Naše cerkve": the churches as photographs. */
+/** "Naše cerkve": the churches as photographs, each with its name and its village (ZUP-15). */
 export function Churches({ churches }: { churches: Church[] }) {
   if (!churches.length) return null;
-  const n = churches.length;
   return (
     <section className={cn(s.wrap, s.sec)} aria-labelledby="cerkve-h">
       <div className={cn(s.open, s.reveal)} data-reveal>
-        <p className={s.eye}>Cerkve</p>
         <h2 className={s.h2} id="cerkve-h">
-          Naše <em className="accent">cerkve</em>
+          Naše cerkve
         </h2>
-        <p className={s.subl}>{n === 3 ? "Tri cerkve" : n === 2 ? "Dve cerkvi" : `${n} cerkva`} pod Šmarno goro.</p>
       </div>
       <div className={s.churches}>
         {churches.slice(0, 3).map((c) => (
@@ -79,7 +76,7 @@ export function Churches({ churches }: { churches: Church[] }) {
             ) : null}
             <div className={s.txt}>
               <h3>{c.shortName || c.name}</h3>
-              <p>{c.shortName && c.name !== c.shortName ? c.name : c.dedication}</p>
+              {churchPlace(c.address) ? <p>{churchPlace(c.address)}</p> : null}
             </div>
             <span className={s.arr} aria-hidden="true">
               <Arrow size={15} />

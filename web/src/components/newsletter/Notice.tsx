@@ -1,6 +1,6 @@
 import { Button, Container, Section, headline } from "@/components/ui/primitives";
-import { routes } from "@/lib/routes";
 import { cn } from "@/lib/utils";
+import { routes } from "@/lib/routes";
 
 /**
  * The confirm and unsubscribe pages' message (/obvestila/potrdi, /obvestila/odjavljeni),

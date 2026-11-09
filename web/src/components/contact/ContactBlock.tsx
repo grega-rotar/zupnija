@@ -27,7 +27,7 @@ export function ContactBlock({ settings, officeHoursOverride, className, showPas
   return (
     <div className={cn("grid gap-5 md:grid-cols-2", className)}>
       <div className="rounded-lg bg-surface p-6 shadow-soft sm:p-8">
-        <h3 className="text-[1.5rem] font-bold tracking-[-0.035em]">Župnišče</h3>
+        <h3>Župnišče</h3>
         <div className="mt-4 space-y-3">
           {addressLine ? (
             <MetaRow icon="pin">
@@ -108,7 +108,7 @@ export function ContactBlock({ settings, officeHoursOverride, className, showPas
       </div>
 
       <div className="rounded-lg bg-surface p-6 shadow-soft sm:p-8">
-        <h3 className="text-[1.5rem] font-bold tracking-[-0.035em]">Uradne ure</h3>
+        <h3>Uradne ure</h3>
         {officeHoursOverride ? (
           <p className="mt-4 rounded-md bg-gold-soft px-4 py-3 text-body text-ink">{officeHoursOverride}</p>
         ) : null}

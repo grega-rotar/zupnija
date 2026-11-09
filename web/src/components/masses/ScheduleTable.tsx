@@ -39,7 +39,7 @@ export function ScheduleTable({ schedule, churchId, churchImages, showTitle = tr
     <div>
       {showTitle ? (
         <div className="mb-6 flex flex-wrap items-baseline gap-x-4 gap-y-1">
-          <h3 className="text-[1.5rem] font-bold tracking-[-0.035em]">{schedule.title}</h3>
+          <h3>{schedule.title}</h3>
           {range ? <p className="text-small text-ink-3">velja {range}</p> : null}
         </div>
       ) : null}
@@ -57,7 +57,7 @@ export function ScheduleTable({ schedule, churchId, churchImages, showTitle = tr
               ) : null}
               <div className={compact ? undefined : "p-6 sm:p-7"}>
                 {!compact ? (
-                  <h4 id={`urnik-${schedule._id}-${church._id}`} className="text-[1.375rem] font-bold leading-tight tracking-[-0.035em]">
+                  <h4 id={`urnik-${schedule._id}-${church._id}`} className="text-h4">
                     <Link href={routes.church(church.slug)} className="hover:underline">
                       {church.name}
                     </Link>
