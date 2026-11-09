@@ -50,8 +50,8 @@ type Base = {
   help?: string;
   /** Sanity field group (TypeDef.groups); the form shows one titled group per name. */
   group?: string;
-  /** Shown (and validated) only while the sibling `field` equals `is`. */
-  when?: { field: string; is: string };
+  /** Shown (and validated) only while the sibling `field` equals `is` (a select's value, or a switch's true). */
+  when?: { field: string; is: string | boolean };
   /** Value for a new document. "@now" = current ISO datetime, "@today" = YYYY-MM-DD. */
   initial?: unknown;
 };
@@ -161,6 +161,28 @@ export const LITURGICAL_SEASONS = opts([
   ["pentecost", "Binkošti (rdeča)"],
   ["marian", "Marijin praznik (modra)"],
 ]);
+
+/** The groups' card icons (src/components/groups/icons/<value>.svg, from ZUP-13's skupine-ikone-v3). */
+export const GROUP_ICONS = opts([
+  ["zupnijski-pastoralni-svet", "Župnijski pastoralni svet"],
+  ["zupnijska-karitas", "Župnijska Karitas"],
+  ["molitvena-skupina", "Molitvena skupina"],
+  ["zakonska-skupina", "Zakonska skupina"],
+  ["mladinska-skupina", "Mladinska skupina"],
+  ["ministranti", "Ministranti"],
+  ["bralci-bozje-besede", "Bralci Božje besede"],
+  ["pritrkovalci", "Pritrkovalci"],
+  ["mladinski-pevski-zbor", "Mladinski pevski zbor"],
+  ["otroski-pevski-zbor", "Otroški pevski zbor"],
+  ["odrasli-pevski-zbor", "Odrasli pevski zbor"],
+  ["krasilci", "Krasilci"],
+  ["oratorijski-animatorji", "Oratorijski animatorji"],
+  ["verouk", "Verouk"],
+  ["oratorij", "Oratorij"],
+]);
+
+/** Where a prayer request goes when the group names no address (ZUP-25). */
+export const PRAYER_EMAIL_DEFAULT = "zupirnice@gmail.com";
 
 export const labelOf = (list: Option[], v: unknown) => list.find((o) => o.value === v)?.label;
 
@@ -921,7 +943,7 @@ export const TYPES: Record<ContentType, TypeDef> = {
     area: "zupnija",
     orderable: true,
     titleField: "title",
-    subtitle: (d) => str(d.meetingSchedule),
+    subtitle: (d) => str(d.href) || str(d.meetingSchedule),
     fields: [
       {
         kind: "string",
@@ -932,10 +954,43 @@ export const TYPES: Record<ContentType, TypeDef> = {
         help: "Npr. »Mešani pevski zbor«, »Ministranti«, »Župnijska Karitas«.",
       },
       slug("title", 80),
-      { kind: "text", name: "summary", label: "Kratek opis", rows: 2, required: true, max: 200, help: "Ena ali dve povedi za seznam skupin." },
+      { kind: "select", name: "icon", label: "Ikona", options: GROUP_ICONS, help: "Prikazana na kartici v seznamu skupin in na strani skupine." },
+      { kind: "image", name: "cardImage", label: "Fotografija na kartici", help: "Neobvezno. Na kartici v seznamu skupin se prikaže namesto ikone." },
+      {
+        kind: "string",
+        name: "href",
+        label: "Kartica vodi na",
+        pattern: /^\/[a-z0-9\-/]*$/,
+        patternMessage: "Vpišite pot na tej strani, npr. »/verouk«.",
+        help: "Neobvezno. Za skupino, ki ima svojo stran drugje, npr. »/verouk«. Sicer kartica vodi na stran skupine.",
+      },
+      { kind: "text", name: "summary", label: "Kratek opis", rows: 2, max: 200, help: "Ena ali dve povedi za iskalnik in deljenje na družbenih omrežjih." },
       { kind: "richText", name: "description", label: "Predstavitev", variant: "full" },
       { kind: "string", name: "meetingSchedule", label: "Kdaj se srečujemo", help: "Npr. »Vsak četrtek ob 19.30« ali »Po dogovoru«." },
       { kind: "string", name: "location", label: "Kje", help: "Npr. »Župnijska dvorana« ali »Cerkev sv. Križa«." },
+      {
+        kind: "boolean",
+        name: "hideJoin",
+        label: "Skrij razdelek »Pridružite se«",
+        help: "Za skupine, ki se jim ne more pridružiti vsak (npr. ŽPS). Čas in kraj srečanj ostaneta prikazana.",
+      },
+      { kind: "string", name: "meetingsTitle", label: "Naslov namesto »Pridružite se«", max: 40, when: { field: "hideJoin", is: true }, help: "Ko je razdelek skrit, npr. »Seje«. Prazno: »Srečanja«." },
+      {
+        kind: "boolean",
+        name: "prayerRequests",
+        label: "Obrazec »Prošnja za molitev«",
+        help: "Anonimen obrazec pod predstavitvijo. Prošnje se ne shranijo, ampak gredo po e-pošti na spodnji naslov.",
+      },
+      { kind: "text", name: "prayerIntro", label: "Besedilo nad obrazcem", rows: 2, max: 400, when: { field: "prayerRequests", is: true } },
+      {
+        kind: "string",
+        name: "prayerEmail",
+        label: "Prošnje prejme",
+        when: { field: "prayerRequests", is: true },
+        format: "email",
+        patternMessage: EMAIL_MSG,
+        help: `E-pošta župnika (ne skupni naslov župnije). Prazno: ${PRAYER_EMAIL_DEFAULT}.`,
+      },
       { kind: "reference", name: "contactPerson", label: "Kontaktna oseba", to: ["person"] },
       { kind: "string", name: "contactName", label: "Kontakt (ime)", help: "Če kontaktna oseba ni med osebami." },
       { kind: "string", name: "email", label: "E-pošta", format: "email", patternMessage: EMAIL_MSG },
@@ -946,7 +1001,7 @@ export const TYPES: Record<ContentType, TypeDef> = {
       { kind: "number", name: "order", label: "Vrstni red", initial: 10 },
       seo(),
     ],
-    publicPath: pathFor("parishGroup"),
+    publicPath: (d) => str(d.href) || pathFor("parishGroup")(d),
   },
 
   // /zakramenti (ZUP-11, ZUP-12): the intro, then an optional image and two texts per tab (lib/sacraments/tabs.ts).

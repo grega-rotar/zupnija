@@ -9,6 +9,7 @@ const links: NavLink[] = [
   { label: "Dogodki", href: routes.events },
   { label: "Zakramenti", href: routes.sacraments },
   { label: "Verouk", href: routes.catechesis },
+  { label: "Skupine", href: routes.groups },
   { label: "Župnija", href: routes.parish },
   { label: "Kontakt", href: routes.contact },
 ];
@@ -19,13 +20,13 @@ const more: NavLink[] = [
   { label: "Novice", href: routes.news },
   { label: "Galerije", href: routes.galleries },
   { label: "Cerkve", href: routes.churches },
-  { label: "Skupine", href: routes.groups },
   { label: "Dokumenti", href: routes.documents },
   { label: "Iskanje", href: routes.search },
 ];
 
 /**
- * Floating pill navigation: brand, seven links, "Daruj". "Molitev" takes
+ * Floating pill navigation: brand, eight links, "Daruj". "Skupine" (ZUP-13)
+ * has no dropdown; it leads to the grid of groups. "Molitev" takes
  * Verouk's place in the pill while /molitev has items (US-012); Verouk then
  * moves to the phone menu.
  */

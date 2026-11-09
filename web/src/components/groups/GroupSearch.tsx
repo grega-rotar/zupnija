@@ -9,7 +9,7 @@ import { filterByQuery } from "./groupSearch";
 export type GroupSearchRow = { id: string; text: string; node: ReactNode };
 
 /**
- * "Išči skupino ali dejavnost" above the group tiles (US-012). Filters as
+ * "Išči skupino ali dejavnost" above the group cards (US-012, ZUP-13). Filters as
  * you type and keeps the query in the URL (`?q=zbor`), so a reload or a
  * shared link shows the same cards; the server renders the first state from
  * `?q=` too. Without JavaScript the field submits as a GET form.
@@ -63,7 +63,7 @@ export function GroupSearch({ rows, initialQuery, action }: { rows: GroupSearchR
       </form>
 
       {visible.length ? (
-        <ul className="grid gap-5 md:grid-cols-2">
+        <ul className="grid grid-cols-2 gap-3 sm:grid-cols-3 sm:gap-5 lg:grid-cols-4">
           {visible.map((r) => (
             <Fragment key={r.id}>{r.node}</Fragment>
           ))}

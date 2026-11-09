@@ -93,7 +93,10 @@ describe("content read layer = GROQ", () => {
   it.each(keys)("%s", async (key) => {
     const [name, arg] = key.split(/:(.*)/);
     let expected = normalise(results[key]) as J | null;
-    if (name === "getGroup" && expected) expected = { ...expected, events: [] };
+    // Fields added in the editor (ZUP-13, ZUP-23, ZUP-25) are empty in the imported documents.
+    if (name === "getGroups") expected = (expected as unknown as J[]).map((g) => ({ ...g, icon: null, href: null, cardImage: null })) as never;
+    if (name === "getGroup" && expected)
+      expected = { ...expected, events: [], icon: null, href: null, hideJoin: false, meetingsTitle: null, prayerRequests: false, prayerIntro: null };
     if (name === "getCatechesis" && expected) expected = { ...expected, groups: [] };
     // The times live in mass_schedule_entries (empty here); title and note come from the imported document.
     if (name === "getCurrentSchedules") expected = (expected as unknown as J[]).map((x) => ({ ...x, entries: [] })) as never;

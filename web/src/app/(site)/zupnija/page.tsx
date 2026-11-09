@@ -1,12 +1,11 @@
 import type { Metadata } from "next";
-import { getChurches, getGroups, getPage, getPeople, getSettings } from "@/sanity/data";
+import { getChurches, getPage, getPeople, getSettings } from "@/sanity/data";
 import { buildMetadata } from "@/lib/seo";
 import { routes } from "@/lib/routes";
 import { PageSections, PersonCard } from "@/components/sections/PageSections";
 import { ChurchCard } from "@/components/churches/ChurchCard";
-import { GroupRow } from "@/components/groups/GroupRow";
 import { PageHero } from "@/components/layout/PageHero";
-import { Container, Section, SectionHeading } from "@/components/ui/primitives";
+import { Container, Section, SectionHeading, TextLink } from "@/components/ui/primitives";
 
 /** Editors can enrich this page by creating a page with the slug »o-zupniji«. */
 const ABOUT_SLUG = "o-zupniji";
@@ -23,13 +22,7 @@ export async function generateMetadata(): Promise<Metadata> {
 }
 
 export default async function ParishPage() {
-  const [settings, page, churches, people, groups] = await Promise.all([
-    getSettings(),
-    getPage(ABOUT_SLUG),
-    getChurches(),
-    getPeople(),
-    getGroups(),
-  ]);
+  const [settings, page, churches, people] = await Promise.all([getSettings(), getPage(ABOUT_SLUG), getChurches(), getPeople()]);
 
   const clergy = people.filter((p) => ["pastor", "assistant", "helper", "deacon"].includes(p.role));
 
@@ -67,18 +60,13 @@ export default async function ParishPage() {
         </Section>
       ) : null}
 
-      {groups.length ? (
-        <Section>
-          <Container>
-            <SectionHeading eyebrow="Skupine" title="Župnija živi po ljudeh" accent="po ljudeh" action={{ label: "Vse skupine", href: routes.groups }} />
-            <ul className="grid gap-5 md:grid-cols-2">
-              {groups.slice(0, 6).map((g) => (
-                <GroupRow key={g._id} group={g} />
-              ))}
-            </ul>
-          </Container>
-        </Section>
-      ) : null}
+      {/* Only the way to the groups (ZUP-26); "Skupine" in the main menu leads to the same page. */}
+      <Section>
+        <Container className="flex flex-col items-center text-center">
+          <SectionHeading title="Župnija živi po ljudeh" className="mb-3 lg:mb-4" />
+          <TextLink href={routes.groups}>Vse skupine</TextLink>
+        </Container>
+      </Section>
     </>
   );
 }

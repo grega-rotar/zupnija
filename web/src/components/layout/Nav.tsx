@@ -18,9 +18,14 @@ type Props = {
   give: NavLink;
 };
 
-function isActive(pathname: string, href: string) {
+function matches(pathname: string, href: string) {
   if (href === "/") return pathname === "/";
   return pathname === href || pathname.startsWith(`${href}/`);
+}
+
+/** The menu entry for this page: the longest href that matches, so /zupnija/skupine marks "Skupine", not "Župnija" too. */
+function activeHref(pathname: string, links: NavLink[]): string | undefined {
+  return links.filter((l) => matches(pathname, l.href)).sort((a, b) => b.href.length - a.href.length)[0]?.href;
 }
 
 /**
@@ -63,6 +68,7 @@ export function Nav({ parishName, links, more, give }: Props) {
   }, [open]);
 
   const solid = !home || scrolled || open;
+  const active = activeHref(pathname, [...links, ...more]);
 
   return (
     <>
@@ -78,7 +84,7 @@ export function Nav({ parishName, links, more, give }: Props) {
             <ul className={s.links}>
               {links.map((l) => (
                 <li key={l.href}>
-                  <Link href={l.href} aria-current={isActive(pathname, l.href) ? "page" : undefined}>
+                  <Link href={l.href} aria-current={l.href === active ? "page" : undefined}>
                     {l.label}
                   </Link>
                 </li>
@@ -100,7 +106,7 @@ export function Nav({ parishName, links, more, give }: Props) {
             <ul>
               {links.map((l) => (
                 <li key={l.href}>
-                  <Link href={l.href} aria-current={isActive(pathname, l.href) ? "page" : undefined}>
+                  <Link href={l.href} aria-current={l.href === active ? "page" : undefined}>
                     {l.label}
                   </Link>
                 </li>
@@ -109,7 +115,7 @@ export function Nav({ parishName, links, more, give }: Props) {
             <ul className={s.minor}>
               {more.map((l) => (
                 <li key={l.href}>
-                  <Link href={l.href} aria-current={isActive(pathname, l.href) ? "page" : undefined}>
+                  <Link href={l.href} aria-current={l.href === active ? "page" : undefined}>
                     {l.label}
                   </Link>
                 </li>
