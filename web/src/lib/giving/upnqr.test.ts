@@ -248,4 +248,9 @@ describe("the parish's UPN card (ZUP-17)", () => {
       payerIban: "",
     });
   });
+
+  it("fills the payer's side when given", () => {
+    const f = parseUpnQr(buildUpnQr({ ...PARISH, amount: 20.5, payer: { name: "Janez Novak", street: "Vikrška 5", city: "1215 Medvode" } }));
+    expect([f.payerName, f.payerStreet, f.payerCity, f.amount]).toEqual(["Janez Novak", "Vikrška 5", "1215 Medvode", "00000002050"]);
+  });
 });

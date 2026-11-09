@@ -50,6 +50,8 @@ export type UpnQrInput = {
   reference?: string | null;
   /** Payment deadline (YYYY-MM-DD), optional. */
   deadline?: string | null;
+  /** The payer's side, when the visitor fills it in on the card (UpnSlip). */
+  payer?: { name?: string | null; street?: string | null; city?: string | null };
 };
 
 /** The 20 fields of a payload, in order (1-based in the specification). */
@@ -138,9 +140,9 @@ export function buildUpnQr(input: UpnQrInput): string {
     "", // deposit
     "", // withdrawal
     "", // payer reference
-    "", // payer name
-    "", // payer street
-    "", // payer city
+    upnText(input.payer?.name, MAX[5]),
+    upnText(input.payer?.street, MAX[6]),
+    upnText(input.payer?.city, MAX[7]),
     upnAmount(input.amount),
     "", // payment date
     "", // urgent
