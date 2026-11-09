@@ -80,16 +80,16 @@ describe("content.save", () => {
   });
 
   it("replaces an imported document and keeps its id; undo restores the Sanity version", async () => {
-    const before = await row("sacrament-krst");
-    const doc = { ...before.data, title: "Sveti krst" };
-    const r = await perform(users.ana, "content.save", { id: "sacrament-krst", type: "sacrament", data: doc });
+    const before = await row("church-sv-tomaz");
+    const doc = { ...before.data, name: "Cerkev sv. Tomaža" };
+    const r = await perform(users.ana, "content.save", { id: "church-sv-tomaz", type: "church", data: doc });
     expect(r.status).toBe("applied");
-    expect((await data.getSacrament("krst"))?.title).toBe("Sveti krst");
-    expect((await row("sacrament-krst")).updatedAt > before.updatedAt).toBe(true);
+    expect((await data.getChurch("sv-tomaz"))?.name).toBe("Cerkev sv. Tomaža");
+    expect((await row("church-sv-tomaz")).updatedAt > before.updatedAt).toBe(true);
     const [h] = await db.select().from(schema.history);
-    expect(h).toMatchObject({ section: "zupnija", label: "Sprememba: Sveti krst" });
+    expect(h).toMatchObject({ section: "zupnija", label: "Sprememba: Cerkev sv. Tomaža" });
     await undo(users.ana, (r as { historyId: number }).historyId);
-    expect(await row("sacrament-krst")).toEqual(before);
+    expect(await row("church-sv-tomaz")).toEqual(before);
   });
 
   it("refuses a slug that another document of the type has", async () => {
@@ -135,7 +135,9 @@ describe("content.delete / reorder / publish", () => {
   });
 
   it("refuses to delete what is referenced, and only the owner deletes", async () => {
-    await expect(perform(users.blaz, "content.delete", { id: "person-blaz-jezersek" })).rejects.toThrow(/^Na to se sklicuje: .*Krst/);
+    await expect(perform(users.blaz, "content.delete", { id: "person-blaz-jezersek" })).rejects.toThrow(/^Na to se sklicuje: .*Verouk/);
+    // A row of a retired type (an old sacrament page, ZUP-11) is shown nowhere, so it doesn't hold a document.
+    await db.insert(schema.content).values({ id: "sacrament-krst", type: "sacrament", slug: "krst", data: { _id: "sacrament-krst", _type: "sacrament", links: [{ internal: { _ref: "article-roznovenska-mati-bozja" } }] } });
     await expect(perform(users.tine, "content.delete", { id: "article-roznovenska-mati-bozja" })).rejects.toBeInstanceOf(ForbiddenError);
     const r = await perform(users.blaz, "content.delete", { id: "article-roznovenska-mati-bozja" });
     expect(r.status).toBe("applied");
@@ -153,19 +155,19 @@ describe("content.delete / reorder / publish", () => {
   });
 
   it("hides a document from the site and shows it again", async () => {
-    await perform(users.ana, "content.publish", { id: "sacrament-pogreb", published: false });
-    expect((await data.getSacraments()).map((s) => s.slug)).not.toContain("pogreb");
-    expect(await data.getSacrament("pogreb")).toBeNull();
-    await perform(users.ana, "content.publish", { id: "sacrament-pogreb", published: true });
-    expect((await data.getSacraments()).map((s) => s.slug)).toContain("pogreb");
+    await perform(users.ana, "content.publish", { id: "church-sv-tomaz", published: false });
+    expect((await data.getChurches()).map((c) => c.slug)).not.toContain("sv-tomaz");
+    expect(await data.getChurch("sv-tomaz")).toBeNull();
+    await perform(users.ana, "content.publish", { id: "church-sv-tomaz", published: true });
+    expect((await data.getChurches()).map((c) => c.slug)).toContain("sv-tomaz");
   });
 
   it("a re-import keeps documents edited in the editor", async () => {
-    const doc = { ...(await row("sacrament-krst")).data, title: "Sveti krst" };
-    await perform(users.blaz, "content.save", { id: "sacrament-krst", type: "sacrament", data: doc });
+    const doc = { ...(await row("church-sv-tomaz")).data, name: "Cerkev sv. Tomaža" };
+    await perform(users.blaz, "content.save", { id: "church-sv-tomaz", type: "church", data: doc });
     const r = await importContent(sql, exportFixture as never, { store: async () => ({ sha256: "x", size: 0 }) });
-    expect(r.kept).toEqual(["sacrament-krst"]);
-    expect((await row("sacrament-krst")).data.title).toBe("Sveti krst");
+    expect(r.kept).toEqual(["church-sv-tomaz"]);
+    expect((await row("church-sv-tomaz")).data.name).toBe("Cerkev sv. Tomaža");
   });
 });
 

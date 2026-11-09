@@ -2,6 +2,8 @@
  * Every public URL on the site is built here so that a rename touches one
  * file. Slovenian paths are part of the product.
  */
+import { oldSacramentPath } from "@/lib/sacraments/tabs";
+
 export const routes = {
   home: "/",
   masses: "/svete-mase",
@@ -28,7 +30,8 @@ export const routes = {
   groups: "/zupnija/skupine",
   group: (slug: string) => `/zupnija/skupine/${slug}`,
   sacraments: "/zakramenti",
-  sacrament: (slug: string) => `/zakramenti/${slug}`,
+  /** One tab of /zakramenti ("krst", "pogreb" …: lib/sacraments/tabs.ts). */
+  sacramentTab: (key: string) => `/zakramenti#${key}`,
   catechesis: "/verouk",
   prayer: "/molitev",
   readings: "/berila",
@@ -72,7 +75,8 @@ export function pathForDocument(type: string, slug: string | null | undefined): 
     case "church":
       return routes.church(slug);
     case "sacrament":
-      return routes.sacrament(slug);
+      // The retired sacrament pages (before ZUP-11) are tabs of /zakramenti now.
+      return oldSacramentPath(slug);
     case "parishGroup":
       return routes.group(slug);
     case "gallery":

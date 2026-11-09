@@ -17,7 +17,7 @@ export const CONTENT_TYPES = [
   "church",
   "person",
   "parishGroup",
-  "sacrament",
+  // Not "sacrament": its pages were replaced by the tabs of /zakramenti (ZUP-11), see DEFAULT_DOCUMENTS.
   "parishDocument",
   "gallery",
   "specialPeriod",
@@ -26,7 +26,26 @@ export const CONTENT_TYPES = [
 ];
 
 /** Singletons: one row each, with the type as id. */
-export const SINGLETON_TYPES = ["settings", "homePage", "catechesisPage"];
+export const SINGLETON_TYPES = ["settings", "homePage", "catechesisPage", "sacramentsPage"];
+
+/** "vsebina", the placeholder the priest replaces (ZUP-21); = placeholderText() in src/lib/content/fields.ts. */
+const placeholder = () => [
+  { _type: "block", _key: "vsebina", style: "normal", markDefs: [], children: [{ _type: "span", _key: "vsebina0", text: "vsebina", marks: [] }] },
+];
+const tab = () => ({ about: placeholder(), arrange: placeholder() });
+
+/**
+ * Documents Sanity never had, inserted when missing (never changed after): the /zakramenti page
+ * (ZUP-11, ZUP-12), the same as the editor's new document (a test checks they agree).
+ */
+export const DEFAULT_DOCUMENTS = [
+  {
+    _id: "sacramentsPage",
+    _type: "sacramentsPage",
+    intro: placeholder(),
+    ...Object.fromEntries(["krst", "obhajilo", "birma", "spoved", "zakon", "maziljenje", "katehumenat", "pogreb"].map((k) => [k, tab()])),
+  },
+];
 
 /** GROQ: every published document of the content types (with $types = CONTENT_TYPES). */
 export const DOCS_QUERY = `*[_type in $types && !(_id in path("drafts.**"))] | order(_type asc, _id asc)`;
@@ -80,6 +99,12 @@ export function contentRow(doc) {
     created_at: at,
     updated_at: at,
   };
+}
+
+/** The content row for one of DEFAULT_DOCUMENTS (a singleton: no slug, sort 0). */
+function defaultRow(doc) {
+  const at = new Date();
+  return { id: doc._id, type: doc._type, slug: null, data: doc, published: true, sort: 0, created_by: null, created_at: at, updated_at: at };
 }
 
 /** "image-<sha1>-800x600-jpg" → { kind, sha1, width, height, ext }. */
@@ -163,6 +188,11 @@ export async function importContent(sql, { documents, assets }, { store, force =
           await tx`update content set ${tx(rest)} where id = ${id}`;
           result.updated++;
         }
+      }
+      for (const doc of DEFAULT_DOCUMENTS) {
+        // An editor's version (any row with this id) always wins.
+        const done = await tx`insert into content ${tx(defaultRow(doc))} on conflict (id) do nothing returning id`;
+        result.inserted += done.length;
       }
       if (dryRun) throw ROLLBACK;
     });
