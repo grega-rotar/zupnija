@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import { notFound } from "next/navigation";
 import { getSacramentsPage, getSettings } from "@/sanity/data";
 import { buildMetadata } from "@/lib/seo";
 import { routes } from "@/lib/routes";
@@ -9,6 +10,7 @@ import { Container, PageHeader, Section, headline } from "@/components/ui/primit
 import { SacramentTabs } from "./SacramentTabs";
 
 export async function generateMetadata(): Promise<Metadata> {
+  if (!PUBLISHED) return {};
   const settings = await getSettings();
   return buildMetadata({
     settings,
@@ -25,7 +27,11 @@ export async function generateMetadata(): Promise<Metadata> {
  * and how to arrange it in Pirniče. Everything comes from the sacramentsPage
  * document the priest edits in the editor (Spletna stran → Zakramenti).
  */
+/** Off the public site for now (the content stays in the editor); flip to true to bring it back. */
+const PUBLISHED = false;
+
 export default async function SacramentsPage() {
+  if (!PUBLISHED) notFound();
   const page = await getSacramentsPage();
   return (
     <>

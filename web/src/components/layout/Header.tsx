@@ -7,7 +7,6 @@ const links: NavLink[] = [
   { label: "Maše", href: routes.masses },
   { label: "Oznanila", href: routes.announcements },
   { label: "Dogodki", href: routes.events },
-  { label: "Zakramenti", href: routes.sacraments },
   { label: "Verouk", href: routes.catechesis },
   { label: "Skupine", href: routes.groups },
   { label: "Župnija", href: routes.parish },

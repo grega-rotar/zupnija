@@ -10,7 +10,7 @@ import { AttachmentLink, RichText } from "@/components/sanity/RichText";
 import { SanityImage, hasImage } from "@/components/sanity/SanityImage";
 import { PersonCard } from "@/components/sections/PageSections";
 import { PageHero } from "@/components/layout/PageHero";
-import { Button, Card, Container, EmptyState, Notice, Section, SectionHeading, TextLink } from "@/components/ui/primitives";
+import { Button, Card, Container, EmptyState, Notice, Section, SectionHeading } from "@/components/ui/primitives";
 
 export async function generateMetadata(): Promise<Metadata> {
   const [settings, data] = await Promise.all([getSettings(), getCatechesis(false)]);
@@ -153,9 +153,6 @@ export default async function CatechesisPage() {
                   </ul>
                 </div>
               ) : null}
-              <p className="px-2 text-small text-ink-2">
-                Priprava na prvo sveto obhajilo in birmo: <TextLink href={routes.sacraments}>zakramenti</TextLink>
-              </p>
             </aside>
           </Container>
         </Section>
