@@ -116,7 +116,6 @@ export const navigation: NavItem[] = [
       { label: "Cerkve", href: routes.churches },
       { label: "Duhovniki in sodelavci", href: routes.people },
       { label: "Skupine", href: routes.groups },
-      { label: "Zakramenti", href: routes.sacraments },
       { label: "Dokumenti", href: routes.documents },
     ],
   },

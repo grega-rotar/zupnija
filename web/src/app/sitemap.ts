@@ -15,7 +15,6 @@ const STATIC: { path: string; priority: number; changeFrequency: MetadataRoute.S
   { path: routes.churches, priority: 0.7, changeFrequency: "monthly" },
   { path: routes.people, priority: 0.5, changeFrequency: "monthly" },
   { path: routes.groups, priority: 0.5, changeFrequency: "monthly" },
-  { path: routes.sacraments, priority: 0.8, changeFrequency: "monthly" },
   { path: routes.catechesis, priority: 0.8, changeFrequency: "monthly" },
   { path: routes.documents, priority: 0.4, changeFrequency: "monthly" },
   { path: routes.contact, priority: 0.8, changeFrequency: "monthly" },
