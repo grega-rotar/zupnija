@@ -1,22 +1,6 @@
-import { cn } from "@/lib/utils";
 import { SubscribeForm } from "./SubscribeForm";
-import s from "./newsletter.module.css";
 
-/** The homepage's "Oznanila po e-pošti" tile, next to the giving tile (#darovi). */
-export function NewsletterTile({ className }: { className?: string }) {
-  return (
-    <div className={cn(s.tile, className)} id="oznanila-po-e-posti">
-      <p className={s.kick}>Oznanila</p>
-      <h3 className={s.gt}>
-        Oznanila <em className="accent">po e-pošti</em>
-      </h3>
-      <p className={s.gp}>Enkrat na mesec, ko izidejo. Nič drugega.</p>
-      <SubscribeForm />
-    </div>
-  );
-}
-
-/** The footer's line: the same form, without the tile. */
+/** The footer's "Oznanila po e-pošti" on every page: the only signup (ZUP-17 removed the homepage tile). */
 export function FooterSubscribe() {
   return (
     <div className="max-w-[440px]">

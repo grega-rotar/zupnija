@@ -403,8 +403,13 @@ throw-away credentials, and everything above is runtime-only.
 
 ### Newsletter and the outbox cron (PRD US-005)
 
-Visitors subscribe in the footer or the homepage tile (double opt-in:
-`/obvestila/potrdi?token=…`). Publishing a bulletin (`bulletin.publish`)
+Visitors subscribe in the footer (double opt-in, ZUP-19: the address stays
+`pending` and gets no bulletin until the link `/obvestila/potrdi?token=…` is
+opened; the token is random, single-use and valid 48 hours from its mail; at
+most one confirmation mail per address per 10 minutes; at most 5 signups per
+IP per hour plus a honeypot; the form answers the same for every address).
+Unconfirmed addresses are deleted 48 hours after their last mail by each run
+of `/api/cron/outbox`. Publishing a bulletin (`bulletin.publish`)
 queues one mail per active subscriber in the `outbox` table, once per bulletin
 (`bulletins.mailed_at`; undo keeps it, so a re-publish never mails again).
 Nothing is sent in the publish request. `/api/cron/outbox` sends what is due:
@@ -421,7 +426,8 @@ The host calls the route every 5 minutes (crontab of `deploy` on t4a):
 ```
 
 `X-Cron-Secret: $CRON_SECRET` works as well. The response is JSON
-(`{ sent, retry, failed, held, deferred }`).
+(`{ sent, retry, failed, held, deferred, deleted }`; `deleted` = unconfirmed
+addresses removed).
 
 ### claude-pool on t4a (once)
 

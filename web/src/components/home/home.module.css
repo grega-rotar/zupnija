@@ -876,69 +876,30 @@ a.tile:hover {
 }
 
 /* ---------- give ---------- */
+/* One full-width UPN card (components/giving/UpnSlip.tsx), then "Vse o darovih". */
 .give {
-  display: grid;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
   gap: 20px;
-  /* Giving and the newsletter side by side, as in the prototype; stacked on phones. */
-  grid-template-columns: repeat(auto-fit, minmax(min(100%, 440px), 1fr));
-  align-items: stretch;
   max-width: 1240px;
   margin: 0 auto;
 }
-.giveTile {
-  background: var(--surface);
-  border-radius: var(--r);
-  box-shadow: 0 0 0 1px var(--line), var(--sh);
-  padding: 44px;
-  display: flex;
-  flex-direction: column;
+.give > :first-child {
+  align-self: stretch;
 }
-.kick {
-  font-size: 13px;
+.giveMore {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  min-height: 44px;
+  font-size: 15px;
   font-weight: 600;
-  color: var(--ink3);
-  letter-spacing: -0.005em;
+  color: var(--accentInk) !important;
+  text-underline-offset: 4px;
 }
-.gt {
-  font-size: 32px;
-  font-weight: 700;
-  letter-spacing: -0.04em;
-  line-height: 1.08;
-  margin-top: 10px;
-  text-wrap: balance;
-}
-.gp {
-  font-size: 17px;
-  color: var(--ink2);
-  margin-top: 12px;
-  line-height: 1.5;
-  max-width: 520px;
-}
-.trr {
-  margin-top: auto;
-  padding-top: 24px;
-  display: flex;
-  flex-wrap: wrap;
-  gap: 14px 36px;
-  align-items: flex-end;
-}
-.trr dl {
-  margin: 0;
-  display: flex;
-  flex-wrap: wrap;
-  gap: 14px 36px;
-}
-.trr dt {
-  font-size: 12px;
-  font-weight: 600;
-  color: var(--ink3);
-}
-.trr dd {
-  margin: 2px 0 0;
-  font-size: 17px;
-  font-weight: 600;
-  letter-spacing: -0.01em;
-  font-variant-numeric: tabular-nums;
+.giveMore:hover {
+  text-decoration: underline !important;
 }
 
 /* ---------- responsive ---------- */
@@ -1015,12 +976,6 @@ a.tile:hover {
   }
   .dock .widget {
     padding: 22px 22px 20px;
-  }
-  .giveTile {
-    padding: 28px;
-  }
-  .gt {
-    font-size: 28px;
   }
 }
 @media (prefers-reduced-motion: reduce) {

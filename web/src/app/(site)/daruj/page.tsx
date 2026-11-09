@@ -6,9 +6,8 @@ import { buildMetadata } from "@/lib/seo";
 import { routes } from "@/lib/routes";
 import { formatDate } from "@/lib/dates";
 import { RichText } from "@/components/sanity/RichText";
-import { BankDetails } from "@/components/giving/BankDetails";
 import { QrCard } from "@/components/giving/UpnQr";
-import { CopyButton } from "@/components/share/CopyButton";
+import { UpnSlip } from "@/components/giving/UpnSlip";
 import { Breadcrumbs, Container, PageHeader, Section, SectionHeading, tile } from "@/components/ui/primitives";
 import { cn } from "@/lib/utils";
 
@@ -25,9 +24,9 @@ export async function generateMetadata(): Promise<Metadata> {
 const euro = new Intl.NumberFormat("sl-SI", { style: "currency", currency: "EUR", maximumFractionDigits: 2, minimumFractionDigits: 0 });
 
 /**
- * /daruj (US-009): the parish's UPN QR and bank details from Nastavitve →
- * Darovi, then one QR per "Namen darovanja" with its own amount. The
- * design is the "Podprite župnijo" tile of tasks/proto-v4/partials/c.html.
+ * /daruj (US-009): the parish's filled-in UPN with its QR from Nastavitve →
+ * Darovi (the same card as the homepage's "Podprite župnijo", ZUP-17), then
+ * one QR per "Namen darovanja" with its own amount.
  * Without an IBAN the page does not exist.
  */
 export default async function GivingPage() {
@@ -45,25 +44,16 @@ export default async function GivingPage() {
 
       <Section>
         <Container>
-          <div className={cn(tile, "mx-auto flex max-w-[52rem] flex-col-reverse gap-8 p-7 sm:p-11 md:flex-row md:items-center md:gap-10")}>
-            <div className="flex min-w-0 flex-1 flex-col self-stretch">
-              <p className="text-[13px] font-semibold tracking-[-0.005em] text-ink-3">Darovi</p>
-              <h2 className="mt-2.5 text-[1.75rem] font-bold leading-[1.08] tracking-[-0.04em] text-balance sm:text-[2rem]">
-                Dar z <em className="accent">UPN QR</em>
-              </h2>
+          <div className="mx-auto max-w-[62rem]">
+            <UpnSlip giving={giving} headingLevel="h2" />
+            <div className="mx-auto mt-8 max-w-[42rem] text-center text-ink-2">
               {giving.intro?.length ? (
-                <RichText value={giving.intro} className="mt-3 text-ink-2" />
+                <RichText value={giving.intro} />
               ) : (
-                <p className="mt-3 max-w-[22.5rem] text-[1.0625rem] leading-normal text-ink-2">
-                  V bančni aplikaciji izberite »Plačaj s QR« in skenirajte kodo. Znesek vpišete sami.
-                </p>
+                <p className="text-[1.0625rem] leading-normal">V bančni aplikaciji izberite »Plačaj s QR« in skenirajte kodo. Znesek vpišete sami.</p>
               )}
-              <BankDetails giving={giving} className="mt-5" />
-              <div className="mt-5">
-                <CopyButton text={giving.iban} label="Kopiraj IBAN" done="IBAN je kopiran." />
-              </div>
+              {giving.bic ? <p className="tnum mt-2 text-small text-ink-3">BIC banke prejemnika: {giving.bic}</p> : null}
             </div>
-            <QrCard payload={giving.payload} className="self-center" />
           </div>
         </Container>
       </Section>

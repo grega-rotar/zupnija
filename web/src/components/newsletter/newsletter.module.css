@@ -1,38 +1,4 @@
-/* "Oznanila po e-pošti" (tasks/proto-v4/partials/c.html: .c-news, .c-field, .c-fine). */
-.tile {
-  background: radial-gradient(120% 100% at 100% 0%, #f6ead0 0%, #fbf6ec 45%, #fff 80%);
-  border-radius: 28px;
-  box-shadow: 0 0 0 1px rgb(14 14 16 / 0.07), 0 1px 1px rgb(0 0 0 / 0.03), 0 8px 32px rgb(0 0 0 / 0.06);
-  padding: 44px;
-  display: flex;
-  flex-direction: column;
-}
-.kick {
-  font-size: 13px;
-  font-weight: 600;
-  letter-spacing: -0.005em;
-  color: var(--color-gold-ink);
-}
-.tile .gt {
-  font-size: 32px;
-  font-weight: 700;
-  letter-spacing: -0.04em;
-  line-height: 1.08;
-  margin-top: 10px;
-  text-wrap: balance;
-}
-.tile .gp {
-  font-size: 17px;
-  color: var(--color-ink-2);
-  margin-top: 12px;
-  line-height: 1.5;
-  max-width: 360px;
-}
-.tile .form {
-  margin-top: auto;
-  padding-top: 28px;
-}
-
+/* "Oznanila po e-pošti" in the footer (tasks/proto-v4/partials/c.html: .c-field, .c-fine). */
 .form {
   position: relative;
 }
@@ -104,6 +70,29 @@
   margin-top: 12px;
   padding-left: 22px;
 }
+/* Stays in the DOM while empty, so screen readers announce the answer. */
+.form .result {
+  margin-top: 6px;
+}
+.form .result:empty {
+  margin: 0;
+}
+.link {
+  color: var(--color-ink-2);
+  font-weight: 600;
+  text-decoration: underline;
+  text-decoration-color: rgb(31 28 24 / 0.25);
+  text-underline-offset: 3px;
+}
+.link:hover {
+  color: var(--color-ink);
+  text-decoration-color: currentColor;
+}
+.link:focus-visible {
+  outline: 2px solid var(--color-gold);
+  outline-offset: 2px;
+  border-radius: 3px;
+}
 .form .ok {
   color: var(--color-ink);
   font-weight: 500;
@@ -120,13 +109,19 @@
   overflow: hidden;
 }
 
+/* The whole placeholder fits on a phone; the typed text stays 16px (no iOS zoom). */
+@media (max-width: 440px) {
+  .field input {
+    padding-left: 12px;
+  }
+  .field input::placeholder {
+    font-size: 14px;
+  }
+  .btn {
+    padding: 0 16px;
+  }
+}
 @media (max-width: 620px) {
-  .tile {
-    padding: 28px;
-  }
-  .tile .gt {
-    font-size: 28px;
-  }
   .form .label,
   .form .msg {
     padding-left: 0;

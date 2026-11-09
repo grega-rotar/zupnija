@@ -38,6 +38,8 @@ export const routes = {
   donate: "/daruj",
   calendarFeed: "/koledar.ics",
   search: "/iskanje",
+  /** "Izjava o varstvu osebnih podatkov" (ZUP-18): the page document with slug "zasebnost". */
+  privacy: "/zasebnost",
   specialPeriod: (slug: string) => `/obdobje/${slug}`,
   page: (slug: string) => `/${slug}`,
 } as const;
