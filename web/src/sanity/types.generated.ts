@@ -3065,10 +3065,31 @@ export type GROUPS_QUERY_RESULT = Array<{
   _id: string;
   title: string;
   slug: string;
-  summary: string;
+  summary: string | null;
   meetingSchedule: string | null;
   location: string | null;
   image: {
+    asset: {
+      _id: string;
+      url: string;
+      metadata: {
+        lqip: string | null;
+        dimensions: {
+          width: number;
+          height: number;
+          aspectRatio: number;
+        } | null;
+      } | null;
+    } | null;
+    alt: string | null;
+    caption: string | null;
+    hotspot: SanityImageHotspot | null;
+    crop: SanityImageCrop | null;
+  } | null;
+  // Added in the editor (ZUP-13); not in the GROQ query.
+  icon: string | null;
+  href: string | null;
+  cardImage: {
     asset: {
       _id: string;
       url: string;
@@ -3095,7 +3116,7 @@ export type GROUP_QUERY_RESULT = {
   _id: string;
   title: string;
   slug: string;
-  summary: string;
+  summary: string | null;
   description: Array<
     | {
         _key: string;
@@ -3348,6 +3369,13 @@ export type GROUP_QUERY_RESULT = {
     } | null;
     noIndex: boolean | false;
   };
+  // Added in the editor (ZUP-13, ZUP-23, ZUP-25); not in the GROQ query.
+  icon: string | null;
+  href: string | null;
+  hideJoin: boolean;
+  meetingsTitle: string | null;
+  prayerRequests: boolean;
+  prayerIntro: string | null;
 } | null;
 
 // Source: ../web/src/sanity/queries/content.ts

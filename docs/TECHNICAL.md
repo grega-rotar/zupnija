@@ -553,6 +553,20 @@ scripts/backup.sh
   editor ("Spletna stran" in the sidebar, areas Vsebina strani and Župnija).
 - Locally: `DATABASE_URL=postgres://zupnija:dev@localhost:5433/zupnija UPLOAD_DIR=./.uploads node scripts/import-sanity-content.mjs`.
 
+**Groups** (`parishGroup`, /zupnija/skupine, "Skupine" in the main menu): a
+grid of cards in the editor's order. Each group picks an icon
+(`web/src/components/groups/icons/*.svg`, in the "Daruj" colour #7a5c1e) or
+a card photo; "Kartica vodi na" sends a card elsewhere (Verouk → /verouk, and
+/zupnija/skupine/verouk redirects there). "Skrij razdelek »Pridružite se«"
+leaves only when and where under its own title (ŽPS: "Seje"). The switch
+"Obrazec »Prošnja za molitev«" puts an anonymous form on the group's page
+(`web/src/lib/groups/prayerRequest.ts`): the request is mailed to
+"Prošnje prejme" (default zupirnice@gmail.com) with only its text and date;
+nothing is stored or logged, and the IP is used only by the shared rate limit
+(`rate_limit_hits`, 10-minute window). Migration `0004_groups_zup13` set up the
+16 groups, their icons and these switches on the imported data (it does
+nothing on an empty database, so the first import still runs there).
+
 ### Backups
 
 `scripts/backup.sh` (copied to `/srv/zupnija/scripts/` by every deploy) writes

@@ -8,7 +8,7 @@ import type { RefOption } from "@/app/admin/(app)/vsebina/queries";
 import { Icon } from "@/components/admin/Icon";
 import { useToast } from "@/components/admin/Toast";
 import { Button } from "@/components/admin/ui";
-import { slugify, titleOf, TYPES, type ContentType, type Doc, type Field } from "@/lib/content/fields";
+import { isShown, slugify, titleOf, TYPES, type ContentType, type Doc, type Field } from "@/lib/content/fields";
 import { FormProvider } from "./context";
 import { sameDoc, serverErrorPath, validateDoc, type Errors } from "./doc";
 import { FieldList, FieldView } from "./FieldView";
@@ -308,7 +308,7 @@ export function ContentForm({ type, id, doc: initial, published: initialPublishe
                     type={b.object.type}
                   />
                 ) : (
-                  b.fields.map((f) => <FieldView key={f.name} field={f} value={doc[f.name]} onChange={(v) => change(f.name, v)} path={[f.name]} parent={doc} />)
+                  b.fields.filter((f) => isShown(f, doc)).map((f) => <FieldView key={f.name} field={f} value={doc[f.name]} onChange={(v) => change(f.name, v)} path={[f.name]} parent={doc} />)
                 )}
               </div>
             </section>

@@ -603,6 +603,9 @@ export function readGroups(s: Store): T.GROUPS_QUERY_RESULT {
     meetingSchedule: nul(d.meetingSchedule),
     location: nul(d.location),
     image: image(s, d.image),
+    icon: nul(d.icon),
+    href: nul(d.href),
+    cardImage: image(s, d.cardImage),
   })) as J;
 }
 
@@ -629,7 +632,20 @@ export function readGroup(s: Store, slug: string, now: string): T.GROUP_QUERY_RE
       .slice(0, 4)
       .map((e) => eventCard(s, e)),
     ...seo(s, d),
+    icon: nul(d.icon),
+    href: nul(d.href),
+    hideJoin: d.hideJoin === true,
+    meetingsTitle: nul(d.meetingsTitle),
+    prayerRequests: d.prayerRequests === true,
+    prayerIntro: nul(d.prayerIntro),
   })) as J;
+}
+
+/** Where a group's prayer requests go (ZUP-25): null unless the group has the form switched on. */
+export function readPrayerRecipient(s: Store, slug: string): { email: string | null } | null {
+  const d = bySlug(s, "parishGroup", slug);
+  if (!isObj(d) || d.prayerRequests !== true) return null;
+  return { email: typeof d.prayerEmail === "string" && d.prayerEmail.trim() ? d.prayerEmail.trim() : null };
 }
 
 // ───────────────────────── Sacraments ─────────────────────────
