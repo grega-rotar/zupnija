@@ -1,11 +1,16 @@
-# check (lint, typecheck, tests, build) -> image (+ Studio to sanity.studio). Nothing deploys to a server from here: the t4a server no longer hosts this app.
-name: ci
+# check (lint, typecheck, tests, build) -> image -> deploy to t4a (+ Studio to sanity.studio), see docs/TECHNICAL.md "Deployment".
+# Rollback: run by hand with `tag` = an older sha; that skips check and image.
+name: deploy
 
 on:
   push:
     branches: [main]
   pull_request:
   workflow_dispatch:
+    inputs:
+      tag:
+        description: "Deploy this existing image tag (git sha) instead of building"
+        required: false
 
 env:
   IMAGE: ghcr.io/grega-rotar/zupnija-web
@@ -15,6 +20,7 @@ env:
 
 jobs:
   check:
+    if: ${{ !inputs.tag }}
     runs-on: ubuntu-latest
     strategy:
       matrix:
@@ -61,7 +67,7 @@ jobs:
           DATABASE_URL: postgres://build:build@127.0.0.1:1/build
 
   image:
-    if: ${{ github.event_name != 'pull_request' }}
+    if: ${{ github.event_name != 'pull_request' && !inputs.tag }}
     needs: check
     runs-on: ubuntu-latest
     permissions:
@@ -90,6 +96,59 @@ jobs:
           cache-from: type=gha
           cache-to: type=gha,mode=max
 
+  deploy:
+    if: ${{ github.event_name != 'pull_request' && !cancelled() && !failure() }}
+    needs: image
+    runs-on: ubuntu-latest
+    concurrency: deploy
+    permissions:
+      contents: read
+      packages: read
+    env:
+      TAG: ${{ inputs.tag || github.sha }}
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+      # Two merges close together: the older run can get the deploy slot last and roll main back.
+      # So a push deploys only if it is still the newest main (a manual `tag` rollback always deploys).
+      - name: Still the newest main?
+        id: newest
+        if: ${{ !inputs.tag }}
+        run: |
+          head=$(git ls-remote origin refs/heads/main | cut -f1)
+          if [ "$head" != "$GITHUB_SHA" ]; then
+            echo "::notice::main is at $head now, skipping the deploy of $GITHUB_SHA"
+            echo "stale=true" >> "$GITHUB_OUTPUT"
+          fi
+      - name: SSH key
+        if: steps.newest.outputs.stale != 'true'
+        run: |
+          install -m 700 -d ~/.ssh
+          echo "${{ secrets.DEPLOY_SSH_KEY }}" > ~/.ssh/id_ed25519
+          echo "${{ secrets.DEPLOY_KNOWN_HOSTS }}" > ~/.ssh/known_hosts
+          chmod 600 ~/.ssh/id_ed25519
+      - name: Copy compose.yml and the backup scripts
+        if: steps.newest.outputs.stale != 'true'
+        run: scp -r infra/compose.yml scripts deploy@${{ secrets.DEPLOY_HOST }}:/srv/zupnija/
+      # The job's own token logs in for the pull (works while the GHCR package is private), in a
+      # docker config of its own so the expired token never breaks other apps' pulls on the server.
+      - name: Pull and restart
+        if: steps.newest.outputs.stale != 'true'
+        run: |
+          ssh deploy@${{ secrets.DEPLOY_HOST }} "cd /srv/zupnija && export IMAGE_TAG=$TAG DOCKER_CONFIG=/srv/zupnija/.docker \
+            && echo '${{ secrets.GITHUB_TOKEN }}' | docker login ghcr.io -u '${{ github.actor }}' --password-stdin \
+            && docker compose pull && docker compose up -d --remove-orphans; rc=\$?; docker logout ghcr.io; docker image prune -af; exit \$rc"
+      - name: Wait for the site and /api/health
+        if: steps.newest.outputs.stale != 'true'
+        run: |
+          for i in $(seq 1 30); do
+            if curl -fsS --max-time 5 "$SITE_URL/api/health" && curl -fsS --max-time 5 -o /dev/null "$SITE_URL/"; then exit 0; fi
+            sleep 2
+          done
+          echo "$SITE_URL did not come up within 60 s"
+          exit 1
+
+  # Studio is hosted by Sanity (<name>.sanity.studio), not on t4a. Off until the first
+  # `npx sanity deploy` by hand has set deployment.appId in studio/sanity.cli.ts.
   studio:
     if: ${{ github.event_name == 'push' && vars.STUDIO_DEPLOY == 'true' }}
     needs: check
