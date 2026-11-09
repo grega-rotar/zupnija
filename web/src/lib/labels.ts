@@ -24,15 +24,6 @@ export const PERSON_ROLE_LABEL: Record<string, string> = {
   other: "Sodelavec",
 };
 
-export const SACRAMENT_KIND_LABEL: Record<string, string> = {
-  baptism: "Krst",
-  communion: "Prvo sveto obhajilo",
-  confirmation: "Sveta birma",
-  marriage: "Sveta poroka",
-  confession: "Sveta spoved",
-  anointing: "Bolniško maziljenje",
-  funeral: "Pogreb",
-};
 
 export const CHURCH_KIND_LABEL: Record<string, string> = {
   parish: "Župnijska cerkev",

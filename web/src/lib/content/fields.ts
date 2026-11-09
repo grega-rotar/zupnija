@@ -9,7 +9,7 @@
  *
  * Kinds beyond the contract's list (all mirror a Sanity field type):
  * - "number"   Sanity number (order, limit);
- * - "strings"  an array of plain strings (no _key), e.g. sacrament.requirements;
+ * - "strings"  an array of plain strings (no _key), e.g. a list of requirements;
  * - "images"   an array of imageWithAlt items (each with _key, _type "imageWithAlt");
  * - "geopoint" {_type:"geopoint", lat, lng}.
  * Extra keys: `when` shows a field only when a sibling has a value (link.internal
@@ -18,6 +18,7 @@
  */
 import { formatDate } from "@/lib/dates";
 import { pathForDocument } from "@/lib/routes";
+import { ARRANGE_HEADING, SACRAMENT_TABS } from "@/lib/sacraments/tabs";
 
 export const CONTENT_TYPES = [
   "settings",
@@ -32,7 +33,7 @@ export const CONTENT_TYPES = [
   "church",
   "person",
   "parishGroup",
-  "sacrament",
+  "sacramentsPage",
   "massSchedule",
   "prayerPage",
   "donationPurpose",
@@ -138,15 +139,6 @@ export const PERSON_ROLES = opts([
   ["office", "Tajništvo"],
   ["other", "Drugo"],
 ]);
-export const SACRAMENT_KINDS = opts([
-  ["baptism", "Krst"],
-  ["communion", "Prvo sveto obhajilo"],
-  ["confirmation", "Sveta birma"],
-  ["marriage", "Sveta poroka"],
-  ["confession", "Sveta spoved"],
-  ["anointing", "Bolniško maziljenje"],
-  ["funeral", "Pogreb"],
-]);
 export const CHURCH_KINDS = opts([
   ["parish", "Župnijska cerkev"],
   ["filial", "Podružnična cerkev"],
@@ -208,7 +200,7 @@ const LINK_FIELDS: Field[] = [
     kind: "reference",
     name: "internal",
     label: "Stran",
-    to: ["page", "event", "article", "church", "sacrament", "parishGroup", "gallery", "announcement"],
+    to: ["page", "event", "article", "church", "parishGroup", "gallery", "announcement"],
     when: { field: "kind", is: "internal" },
     required: true,
   },
@@ -957,62 +949,39 @@ export const TYPES: Record<ContentType, TypeDef> = {
     publicPath: pathFor("parishGroup"),
   },
 
-  sacrament: {
-    type: "sacrament",
-    label: "Zakrament",
+  // /zakramenti (ZUP-11, ZUP-12): the intro, then an optional image and two texts per tab (lib/sacraments/tabs.ts).
+  sacramentsPage: {
+    type: "sacramentsPage",
+    label: "Zakramenti",
     plural: "Zakramenti",
-    newLabel: "Nov zakrament",
+    newLabel: "Zakramenti",
     area: "zupnija",
-    orderable: true,
-    titleField: "title",
-    subtitle: (d) => labelOf(SACRAMENT_KINDS, d.kind) ?? "",
-    groups: [
-      { name: "basic", title: "Osnovno" },
-      { name: "process", title: "Postopek" },
-      { name: "seo", title: "Iskalniki" },
-    ],
+    singleton: true,
+    titleField: "intro",
     fields: [
-      { kind: "string", name: "title", label: "Naslov", group: "basic", required: true },
-      slug("title", 60, "basic"),
-      { kind: "select", name: "kind", label: "Vrsta", group: "basic", options: SACRAMENT_KINDS, required: true },
-      { kind: "text", name: "summary", label: "Kratek opis", rows: 2, group: "basic", required: true, max: 240 },
-      { kind: "image", name: "image", label: "Slika", group: "basic" },
-      { kind: "richText", name: "description", label: "Kaj je to", variant: "full", group: "basic" },
-      { kind: "reference", name: "contact", label: "Na koga se obrniti", to: ["person"], group: "basic" },
-      {
-        kind: "richText",
-        name: "contactNote",
-        label: "Kako se dogovoriti",
-        variant: "simple",
-        group: "basic",
-        help: "Npr. »Oglasite se v župnišču v času uradnih ur vsaj mesec dni prej.«",
-      },
-      { kind: "strings", name: "requirements", label: "Pogoji", group: "process", help: "Vsak pogoj v svojo vrstico." },
-      {
-        kind: "array",
-        name: "steps",
-        label: "Koraki",
-        group: "process",
-        help: "Postopek po vrsti, npr. 1. Prijava, 2. Priprava, 3. Obred.",
-        of: [
-          {
-            type: "step",
-            label: "Korak",
-            fields: [
-              { kind: "string", name: "title", label: "Korak", required: true },
-              { kind: "richText", name: "text", label: "Opis", variant: "simple" },
-            ],
-          },
-        ],
-      },
-      { kind: "strings", name: "documentsNeeded", label: "Potrebni dokumenti", group: "process", help: "Npr. »Krstni list«, »Potrdilo o civilni poroki«." },
-      { kind: "reference", name: "downloads", label: "Obrazci in dokumenti za prenos", to: ["parishDocument"], many: true, group: "process" },
-      { kind: "array", name: "faq", label: "Pogosta vprašanja", group: "process", of: [FAQ_ITEM] },
-      { kind: "array", name: "links", label: "Koristne povezave", group: "process", of: [LINK_ITEM] },
-      { kind: "number", name: "order", label: "Vrstni red", group: "basic", initial: 10 },
-      seo("Iskalniki in deljenje", "seo"),
+      { kind: "richText", name: "intro", label: "Uvod", variant: "full", help: "O bistvu zakramentov. Prikazano pod naslovom strani.", initial: placeholderText() },
+      ...SACRAMENT_TABS.map(
+        (t): Field => ({
+          kind: "object",
+          name: t.key,
+          label: t.label,
+          help: `Zavihek na naslovu /zakramenti#${t.key}.`,
+          initial: { about: placeholderText(), arrange: placeholderText() },
+          fields: [
+            { kind: "image", name: "image", label: "Slika", help: "Neobvezno. Brez slike je zavihek samo besedilo." },
+            { kind: "richText", name: "about", label: t.about, variant: "full" },
+            {
+              kind: "richText",
+              name: "arrange",
+              label: ARRANGE_HEADING,
+              variant: "full",
+              help: "V celih stavkih: kdaj in kje se oglasiti, kaj prinesti, elektronski naslov župnije.",
+            },
+          ],
+        }),
+      ),
     ],
-    publicPath: pathFor("sacrament"),
+    publicPath: () => "/zakramenti",
   },
 
   // /molitev and the homepage's "Pridite pred Najsvetejše" band (PRD US-012).
@@ -1097,6 +1066,11 @@ export const TYPES: Record<ContentType, TypeDef> = {
     publicPath: () => "/svete-mase",
   },
 };
+
+/** The placeholder the priest replaces with his text (ZUP-21): one paragraph, "vsebina". */
+export function placeholderText(): Doc[] {
+  return [{ _type: "block", _key: "vsebina", style: "normal", markDefs: [], children: [{ _type: "span", _key: "vsebina0", text: "vsebina", marks: [] }] }];
+}
 
 /** A document's title for lists and labels ("Brez naslova" when empty). */
 export function titleOf(def: TypeDef, doc: Doc): string {

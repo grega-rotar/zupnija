@@ -84,7 +84,7 @@ export function GeopointField({ field, value, onChange, path }: FieldProps<GeoLi
   );
 }
 
-/** A list of short lines (sacrament requirements, documents needed): plain strings, no keys. */
+/** A list of short lines (requirements, documents needed): plain strings, no keys. */
 export function StringsField({ field, value, onChange, path }: FieldProps<StringsLike>) {
   const { id, error } = useFieldError(path);
   const list = Array.isArray(value) ? (value as string[]) : [];

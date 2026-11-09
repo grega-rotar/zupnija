@@ -29,7 +29,7 @@ const SITE: Array<[ContentType, string, IconName]> = [
   ["church", "Cerkve", "church"],
   ["parishGroup", "Skupine", "users"],
   ["person", "Duhovniki", "user"],
-  ["sacrament", "Zakramenti", "chalice"],
+  ["sacramentsPage", "Zakramenti", "chalice"],
   ["catechesisPage", "Verouk (stran)", "book"],
   ["massSchedule", "Urnik maš (opomba)", "cal"],
   ["prayerPage", "Molitev", "star"],

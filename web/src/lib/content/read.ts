@@ -22,6 +22,8 @@ import { cache } from "react";
 import { asc, eq } from "drizzle-orm";
 import { db, schema } from "@/db";
 import { cached } from "@/lib/data/cache";
+import { SACRAMENT_TABS, type SacramentTab } from "@/lib/sacraments/tabs";
+import { initialDoc, TYPES } from "./fields";
 import { dataset, projectId } from "@/sanity/env";
 import type * as T from "@/sanity/types.generated";
 
@@ -634,38 +636,24 @@ export function readGroup(s: Store, slug: string, now: string): T.GROUP_QUERY_RE
 
 // ───────────────────────── Sacraments ─────────────────────────
 
-const sacramentsInOrder = (s: Store) => order(ofType(s, "sacrament"), [(d) => sortOf(s, d), "asc"], [(d) => d.title, "asc"]);
+export type SacramentTabContent = SacramentTab & { image: NonNullable<T.HOME_PAGE_QUERY_RESULT>["heroImage"]; aboutText: J; arrangeText: J };
+export type SacramentsPageDoc = { intro: J; tabs: SacramentTabContent[] };
 
-export function readSacraments(s: Store): T.SACRAMENTS_QUERY_RESULT {
-  return sacramentsInOrder(s).map((d) => ({
-    _id: d._id,
-    title: nul(d.title),
-    slug: slugOf(d),
-    kind: nul(d.kind),
-    summary: nul(d.summary),
-    image: image(s, d.image),
-  })) as J;
-}
-
-export function readSacrament(s: Store, slug: string): T.SACRAMENT_QUERY_RESULT {
-  return proj(bySlug(s, "sacrament", slug), (d) => ({
-    _id: d._id,
-    title: nul(d.title),
-    slug: slugOf(d),
-    kind: nul(d.kind),
-    summary: nul(d.summary),
-    image: image(s, d.image),
-    description: blockContent(s, d.description),
-    contact: proj(deref(s, d.contact), (p) => personRef(s, p)),
-    contactNote: nul(d.contactNote),
-    requirements: nul(d.requirements),
-    steps: each(d.steps, (x) => pick(x, "_key", "title", "text")),
-    documentsNeeded: nul(d.documentsNeeded),
-    downloads: docRefs(s, d.downloads, ["_id", "title", "description"], ["url", "extension", "size"]),
-    faq: each(d.faq, (x) => pick(x, "_key", "question", "answer")),
-    links: linkItems(s, d.links),
-    ...seo(s, d),
-  })) as J;
+/**
+ * /zakramenti (ZUP-11, ZUP-12): the sacramentsPage singleton, every tab in
+ * SACRAMENT_TABS order. Until the priest first saves it, the editor's initial
+ * document ("vsebina" everywhere, no images) stands in.
+ */
+export function readSacramentsPage(s: Store): SacramentsPageDoc {
+  const row = s.byId.get("sacramentsPage")?.data;
+  const d: Doc = row && row._type === "sacramentsPage" ? row : initialDoc(TYPES.sacramentsPage);
+  return {
+    intro: blockContent(s, d.intro),
+    tabs: SACRAMENT_TABS.map((t) => {
+      const o: Doc = isObj(d[t.key]) ? d[t.key] : {};
+      return { ...t, image: image(s, o.image) as J, aboutText: blockContent(s, o.about), arrangeText: blockContent(s, o.arrange) };
+    }),
+  };
 }
 
 // ───────────────────────── Catechesis ─────────────────────────
@@ -843,7 +831,7 @@ export function readPrayerPage(s: Store): PrayerPageDoc | null {
 
 // ───────────────────────── Search & sitemap ─────────────────────────
 
-const SEARCH_TYPES = ["announcement", "event", "article", "page", "church", "sacrament", "parishGroup", "gallery", "parishDocument"];
+const SEARCH_TYPES = ["announcement", "event", "article", "page", "church", "parishGroup", "gallery", "parishDocument"];
 
 /** The words GROQ's `match` sees in a text: lower-cased runs of letters and digits. */
 const words = (text: string) => text.toLowerCase().match(/[\p{L}\p{N}]+/gu) ?? [];
@@ -882,7 +870,7 @@ export function readSearch(s: Store, patterns: string[]): T.SEARCH_QUERY_RESULT 
     })) as J;
 }
 
-const SITEMAP_TYPES = ["page", "event", "article", "church", "sacrament", "parishGroup", "gallery", "announcement", "specialPeriod"];
+const SITEMAP_TYPES = ["page", "event", "article", "church", "parishGroup", "gallery", "announcement", "specialPeriod"];
 
 export function readSitemapEntries(s: Store): T.SITEMAP_QUERY_RESULT {
   return s.rows

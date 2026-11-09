@@ -4,7 +4,7 @@ import { routes } from "@/lib/routes";
 
 /**
  * The frame of a public request form (Verouk enrolment, intention request,
- * sacrament enquiry): the light centered header, then a white form tile with
+ * newsletter): the light centered header, then a white form tile with
  * a quieter column of notes beside it (below it on phones).
  */
 export function FormPage({

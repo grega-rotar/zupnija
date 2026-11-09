@@ -552,6 +552,16 @@ scripts/backup.sh
 - After this the Studio is no longer read by anything; edit content in the
   editor ("Spletna stran" in the sidebar, areas Vsebina strani and Župnija).
 - Locally: `DATABASE_URL=postgres://zupnija:dev@localhost:5433/zupnija UPLOAD_DIR=./.uploads node scripts/import-sanity-content.mjs`.
+- **Zakramenti (ZUP-11, ZUP-12):** /zakramenti reads the `sacramentsPage`
+  singleton (intro, and an optional image plus two texts per tab; the tabs
+  and their hashes are fixed in `src/lib/sacraments/tabs.ts`). Until the
+  priest first saves it, the page and the editor show the placeholder
+  "vsebina"; the import inserts the same document when it is missing. The old
+  `sacrament` documents are no longer imported or shown (rows already in the
+  database stay, unused), and every old `/zakramenti/<slug>`, including the
+  retired enquiry form `/zakramenti/povprasevanje`, answers 301 to its tab
+  (`src/app/(site)/zakramenti/[slug]/route.ts`). The `sacrament_requests`
+  table stays but nothing writes to it any more.
 
 ### Backups
 

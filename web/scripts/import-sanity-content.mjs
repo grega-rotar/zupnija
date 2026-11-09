@@ -1,7 +1,8 @@
 // Imports the website content from Sanity into Postgres (docs/TECHNICAL.md §8, "Website content"):
 // every published settings, homePage, catechesisPage, page, article, announcement, church, person,
-// parishGroup, sacrament, parishDocument, gallery and specialPeriod document into `content`, and every
-// image and file they reference into `media` (the bytes under UPLOAD_DIR/media/). Reads Sanity's public
+// parishGroup, parishDocument, gallery and specialPeriod document into `content` (plus DEFAULT_DOCUMENTS,
+// the /zakramenti page, when missing), and every image and file they reference into `media` (the bytes
+// under UPLOAD_DIR/media/). Reads Sanity's public
 // API (no token, read-only). Contract: tasks/contract-content.md.
 //
 //   docker compose exec web node web/scripts/import-sanity-content.mjs          # production

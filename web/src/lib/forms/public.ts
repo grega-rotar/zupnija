@@ -1,7 +1,7 @@
 /**
  * The public forms' shared helper (tasks/contract-complete.md, "Public forms").
- * Every form a visitor can send (Verouk enrolment, intention request, sacrament
- * enquiry, newsletter subscribe) goes through `submitPublicForm`:
+ * Every form a visitor can send (Verouk enrolment, intention request,
+ * newsletter subscribe) goes through `submitPublicForm`:
  *
  *   honeypot `website` filled  → { ok: true, message: thanks }, nothing stored
  *   zod validation fails       → { ok: false, message, fieldErrors } (Slovenian, per field)
@@ -170,7 +170,7 @@ function firstErrors(error: z.ZodError): Record<string, string> {
 }
 
 export async function submitPublicForm<S extends z.ZodType>(opts: {
-  /** Short name for the rate limit key, e.g. "verouk", "namen", "zakrament", "newsletter". */
+  /** Short name for the rate limit key, e.g. "verouk", "namen", "newsletter". */
   form: string;
   schema: S;
   data: FormData | Record<string, unknown>;
