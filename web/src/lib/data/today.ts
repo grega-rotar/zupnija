@@ -214,7 +214,7 @@ export function massesUntilSunday(days: MassDay[], date: IsoDate): WeekAheadDay[
         masses: d.masses.map((m) => ({
           key: m.key,
           label: formatTime(m.time),
-          church: (m.church?.shortName ?? "").replace(/ cerkev$/, ""),
+          church: (m.church?.shortName ?? "").replace(/ cerkev$/, "").replace(/^Cerkev /, ""),
           cancelled: m.status === "cancelled",
         })),
       };
